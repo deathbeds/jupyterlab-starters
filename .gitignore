@@ -12,3 +12,4 @@ dist/
 envs/
 lib/
 node_modules/
+_*.d.ts

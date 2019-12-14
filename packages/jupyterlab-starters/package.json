@@ -24,6 +24,7 @@
     "url": "https://github.com/deathbeds/jupyterlab-starters.git"
   },
   "scripts": {
+    "build:pre": "json2ts ../../src/jupyter_starters/schema/v1.json --unreachableDefinitions | prettier --stdin-filepath _v1.d.ts > src/_v1.d.ts",
     "bundle": "npm pack .",
     "clean": "rimraf lib",
     "lab:link": "jupyter labextension link . --no-build"
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@jupyterlab/application": "1",
     "@jupyterlab/launcher": "1",
+    "json-schema-to-typescript": "^8.0.0",
     "react": "*",
     "rimraf": "~2.6.2",
     "typescript": "~3.7.2"

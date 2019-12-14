@@ -1,4 +1,6 @@
-envs/
-node_modules/
-lib/
+.mypy_cache/
+*.egg-info/
 dist/
+envs/
+lib/
+node_modules/
