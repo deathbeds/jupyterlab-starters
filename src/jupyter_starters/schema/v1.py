@@ -13,3 +13,7 @@ _STARTER = dict(SCHEMA)
 _STARTER["anyOf"] = [{"$ref": "#/definitions/starter"}]
 
 STARTER = json_validator(_STARTER)
+
+_STARTERS = dict(SCHEMA)
+_STARTERS["anyOf"] = [{"$ref": "#/definitions/starters"}]
+STARTERS = json_validator(_STARTERS)

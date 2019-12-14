@@ -1,6 +1,6 @@
 """ manager, for starters
 """
-# pylint: disable=no-self-use
+# pylint: disable=no-self-use,unsubscriptable-object
 import base64
 
 import traitlets as T
@@ -9,6 +9,9 @@ from notebook.services.contents.manager import ContentsManager
 from notebook.utils import url_path_join as ujoin
 from traitlets.config import LoggingConfigurable
 
+from .schema.v1 import STARTERS
+from .trait_types import Schema
+
 
 class StarterManager(LoggingConfigurable):
     """ handlers starting starters
@@ -16,7 +19,7 @@ class StarterManager(LoggingConfigurable):
 
     contents_manager = T.Instance(ContentsManager)
 
-    starters = T.Dict()
+    starters = Schema(validator=STARTERS)
 
     @T.default("starters")
     def _default_starters(self):
