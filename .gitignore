@@ -1,6 +1,9 @@
 __pycache__/
 .ipynb_checkpoints/
+.mypy_cache
+.pytest_cache
 .vscode/
+.yarn-packages/
 *.egg-info
 *.log
 *.tgz
@@ -9,4 +12,3 @@ dist/
 envs/
 lib/
 node_modules/
-.yarn-packages/

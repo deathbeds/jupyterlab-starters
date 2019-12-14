@@ -3,6 +3,8 @@ name: jupyterlab-starters
 commands:
   lab:
     unix: jupyter lab --no-brower --debug
+  lint:
+    unix: python scripts/lint.py
 
 env_specs:
   default:
@@ -10,6 +12,7 @@ env_specs:
       - jupyterlab-starters
     packages:
       - black
+      - flake8
       - isort
       - mypy
       - pylint

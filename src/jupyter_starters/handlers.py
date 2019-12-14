@@ -1,31 +1,52 @@
 """ tornado handler for managing and communicating with language servers
 """
+# pylint: disable=abstract-method
+from typing import TYPE_CHECKING
+
 from notebook.base.handlers import IPythonHandler
 from notebook.utils import url_path_join as ujoin
 
 from .types import NS
 
+if TYPE_CHECKING:
+    from .manager import StarterManager
+
 
 class BaseHandler(IPythonHandler):
-    manager = None
+    """ common base handlers
+    """
 
-    def initialize(self, manager):
+    manager = None  # type: StarterManager
+
+    def initialize(self, manager) -> None:
+        """ capture the manager
+        """
         self.manager = manager
 
 
 class StartersHandler(BaseHandler):
-    async def get(self):
-        starters = await self.manager.starters()
+    """ serves the available starters
+    """
+
+    async def get(self) -> None:
+        """ return the starters
+        """
+        starters = self.manager.starters
 
         self.finish({"starters": starters})
 
 
 class StarterHandler(BaseHandler):
-    async def post(self, starter, path):
+    """ acts on a single starters
+    """
+
+    async def post(self, starter, path) -> None:
+        """ start a starter
+        """
         self.finish(await self.manager.start(starter, path))
 
 
-def add_handlers(nbapp, manager):
+def add_handlers(nbapp, manager) -> None:
     """ Add starter routes to the notebook server web application
     """
 
@@ -35,6 +56,10 @@ def add_handlers(nbapp, manager):
         ".*",
         [
             (ujoin(nbapp.base_url, NS), StartersHandler, opts),
-            (ujoin(nbapp.base_url, NS, "(?P<starter>.*?)", "(?P<path>.*?)"), StarterHandler, opts),
+            (
+                ujoin(nbapp.base_url, NS, "(?P<starter>.*?)", "(?P<path>.*?)"),
+                StarterHandler,
+                opts,
+            ),
         ],
     )

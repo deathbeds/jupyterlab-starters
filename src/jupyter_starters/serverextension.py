@@ -1,9 +1,5 @@
 """ serverextension for starters
 """
-import json
-
-import traitlets
-
 from .handlers import add_handlers
 from .manager import StarterManager
 
