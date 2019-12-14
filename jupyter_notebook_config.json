@@ -3,7 +3,7 @@
     "starters": {
       "whitepaper-single": {
         "type": "copy",
-        "label": "Simple Whitepaper (One)",
+        "label": "Whitepaper Notebook",
         "description": "A reusable notebook for proposing research",
         "src": "examples/whitepaper-single.ipynb",
         "commands": [
@@ -23,7 +23,7 @@
       },
       "whitepaper-multiple": {
         "type": "copy",
-        "label": "Simple Whitepaper (Many)",
+        "label": "Whitepaper Folder",
         "description": "Some reusable notebooks for proposing research",
         "src": "examples/whitepaper-multiple",
         "commands": [

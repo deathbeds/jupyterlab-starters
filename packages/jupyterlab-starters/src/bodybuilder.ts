@@ -13,6 +13,7 @@ export class BodyBuilder extends Widget {
 
   constructor(options: BodyBuilder.IOptions) {
     super(options);
+    this.layout = new BoxLayout();
     this._context = options.context;
     this._continue = new Signal<BodyBuilder, IStartContext>(this);
     const { label, icon } = this._context.starter;
@@ -21,22 +22,23 @@ export class BodyBuilder extends Widget {
     this.title.label = label;
     this.title.iconClass = icon || DEFAULT_ICON_CLASS;
 
-    const layout = (this.layout = new BoxLayout());
     this._form = new SchemaForm(this._context.starter.schema, {
       liveValidate: true
     });
 
-    layout.addWidget(this._form);
-    layout.addWidget(this.makeButton());
-    console.log('started');
+    this.boxLayout.addWidget(this._form);
+    this.boxLayout.addWidget(this.makeButton());
+  }
+
+  get boxLayout() {
+    return this.layout as BoxLayout;
   }
 
   makeButton() {
     const node = document.createElement('button');
-    node.textContent = 'OK';
+    node.textContent = 'START';
 
     node.addEventListener('click', () => {
-      console.log('clicking');
       const value = this._form.getValue();
       if (value.errors && value.errors.length) {
         return;
@@ -50,13 +52,11 @@ export class BodyBuilder extends Widget {
     const button = new Widget({ node });
     button.addClass('jp-mod-styled');
     button.addClass('jp-mod-accept');
+    button.addClass(`${CLASS_NAME}-accept`);
 
     return button;
   }
 
-  get boxLayout() {
-    return this.layout as BoxLayout;
-  }
 
   get continue() {
     return this._continue;

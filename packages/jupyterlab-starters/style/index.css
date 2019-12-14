@@ -1,7 +1,25 @@
+:root {
+  --jp-starters-btn-height: calc(2 * var(--jp-ui-font-size3));
+}
 .jp-StartersDefaultIcon {
   background-image: url('./icons/starter.svg');
 }
 
 .jp-Starters-BodyBuilder {
   padding: var(--jp-notebook-padding);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.jp-Starters-BodyBuilder .jp-SchemaForm {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.jp-Starters-BodyBuilder-accept {
+  flex: 0;
+  min-height: var(--jp-starters-btn-height);
+  max-height: var(--jp-starters-btn-height);
+  height: var(--jp-starters-btn-height);
 }

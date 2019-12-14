@@ -42,24 +42,20 @@ const plugin: JupyterFrontEndPlugin<void> = {
         const { starter, name, cwd, body } = context;
 
         if (starter.schema && !body) {
-          console.log('spawning builder');
           const content = new BodyBuilder({ manager, context });
           const main = new MainAreaWidget({ content });
           app.shell.add(main, 'main', { mode: 'split-right' });
           content.continue.connect(async (builder, context) => {
-            console.log('re-executing');
             await commands.execute(CommandIDs.start, context as any);
-            console.log('hooray');
+            main.dispose();
           });
         } else {
-          console.log('actually executing');
           await manager.start(name, cwd, body);
           if (starter.commands) {
             for (const cmd of starter.commands) {
               await commands.execute(cmd.id, cmd.args);
             }
           }
-          console.log('double hooray');
         }
       },
       label: (args: any) => args.starter.label,
