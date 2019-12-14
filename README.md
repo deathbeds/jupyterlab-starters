@@ -2,6 +2,8 @@
 
 ~~Parameterized~~ file and directory starters for JupyterLab.
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/deathbeds/jupyterlab-starters/master?urlpath=lab)
+
 # What's a starter?
 
 - [x] A single file
