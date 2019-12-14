@@ -1,13 +1,15 @@
 import { URLExt } from '@jupyterlab/coreutils';
 import { Signal } from '@phosphor/signaling';
 import { ServerConnection } from '@jupyterlab/services';
-import { IStarterManager, IStarters } from './tokens';
+import { IStarterManager } from './tokens';
+
+import * as V1 from './_v1';
 
 import { API } from './tokens';
 
 export class StarterManager implements IStarterManager {
   private _changed: Signal<IStarterManager, void>;
-  private _starters: IStarters = {};
+  private _starters: V1.Starters = {};
   private _serverSettings = ServerConnection.makeSettings();
 
   constructor() {
@@ -18,7 +20,7 @@ export class StarterManager implements IStarterManager {
     return this._changed;
   }
 
-  get starters(): IStarters {
+  get starters(): V1.Starters {
     return { ...this._starters };
   }
 
@@ -32,7 +34,8 @@ export class StarterManager implements IStarterManager {
       {},
       this._serverSettings
     );
-    this._starters = (await response.json())['starters'] as IStarters;
+    const content = (await response.json()) as V1.AllStartersServerResponse;
+    this._starters = content.starters;
     this._changed.emit(void 0);
   }
 
@@ -45,6 +48,6 @@ export class StarterManager implements IStarterManager {
       this._serverSettings
     );
     const result = await response.json();
-    console.log(result);
+    console.log('TODO', result);
   }
 }
