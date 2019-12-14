@@ -1,3 +1,7 @@
 .jp-StartersDefaultIcon {
   background-image: url('./icons/starter.svg');
 }
+
+.jp-Starters-BodyBuilder {
+  padding: var(--jp-notebook-padding);
+}

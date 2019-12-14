@@ -1,8 +1,3 @@
-/*-----------------------------------------------------------------------------
-| Copyright (c) Jupyter Development Team.
-| Distributed under the terms of the Modified BSD License.
-|----------------------------------------------------------------------------*/
-
 .jp-SchemaForm .array-item-move-up::before {
   content: var(--jp-schema-form-up);
 }

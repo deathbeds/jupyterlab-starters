@@ -1,8 +1,3 @@
-/*-----------------------------------------------------------------------------
-| Copyright (c) Jupyter Development Team.
-| Distributed under the terms of the Modified BSD License.
-|----------------------------------------------------------------------------*/
-
 .jp-SchemaForm .errors {
   order: 999;
   color: var(--jp-warn-color0);

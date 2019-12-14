@@ -3,7 +3,7 @@
     "starters": {
       "whitepaper-single": {
         "type": "copy",
-        "label": "Whitepaper (One)",
+        "label": "Simple Whitepaper (One)",
         "description": "A reusable notebook for proposing research",
         "src": "examples/whitepaper-single.ipynb",
         "commands": [
@@ -23,7 +23,7 @@
       },
       "whitepaper-multiple": {
         "type": "copy",
-        "label": "Whitepaper (Many)",
+        "label": "Simple Whitepaper (Many)",
         "description": "Some reusable notebooks for proposing research",
         "src": "examples/whitepaper-multiple",
         "commands": [
@@ -34,6 +34,27 @@
             }
           }
         ]
+      },
+      "whitepaper-named": {
+        "type": "copy",
+        "label": "Named Whitepaper",
+        "description": "A renamed whitepaper",
+        "src": "examples/whitepaper-single.ipynb",
+        "dest": "#/dest",
+        "schema": {
+          "title": "A Named whitepaper",
+          "description": "A whitepaper that already has a name",
+          "type": "object",
+          "required": ["dest"],
+          "properties": {
+            "dest": {
+              "title": "File name",
+              "description": "the new name of the file",
+              "type": "string",
+              "pattern": ".ipynb$"
+            }
+          }
+        }
       }
     }
   }

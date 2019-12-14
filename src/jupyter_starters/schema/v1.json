@@ -42,6 +42,9 @@
               "$ref": "#/definitions/starter-copy"
             },
             {
+              "$ref": "#/definitions/starter-copy-with-dest"
+            },
+            {
               "$ref": "#/definitions/starter-command"
             }
           ]
@@ -67,8 +70,18 @@
           "items": {
             "$ref": "#/definitions/command"
           }
+        },
+        "schema": {
+          "description": "JSON schema for a body to pass",
+          "type": "object",
+          "$ref": "#/definitions/json-schema"
         }
       }
+    },
+    "json-schema": {
+      "title": "JSON Schema",
+      "description": "presently under-defined because of toolchain",
+      "type": "object"
     },
     "command": {
       "title": "Post-Starter Command",
@@ -95,6 +108,23 @@
           "enum": ["copy"]
         }
       }
+    },
+    "starter-copy-with-dest": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/starter-copy"
+        },
+        {
+          "required": ["dest", "schema"],
+          "properties": {
+            "dest": {
+              "description": "a JSON pointer to a field in body conforming to the schema for the destination",
+              "type": "string",
+              "format": "json-pointer"
+            }
+          }
+        }
+      ]
     },
     "starter-command": {
       "title": "Command Starter",

@@ -4,6 +4,7 @@ import {
 } from '@jupyterlab/application';
 import { ILauncher } from '@jupyterlab/launcher';
 import { IIconRegistry } from '@jupyterlab/ui-components';
+import { MainAreaWidget } from '@jupyterlab/apputils';
 
 import '../style/index.css';
 
@@ -11,11 +12,15 @@ import DEFAULT_ICON_SVG from '!!raw-loader!../style/icons/starter.svg';
 
 import { StarterManager } from './manager';
 
-import { NS, CommandIDs } from './tokens';
-
-export const DEFAULT_ICON_NAME = `${NS}-default`;
-export const DEFAULT_ICON_CLASS = `jp-StartersDefaultIcon`;
-export const CATEGORY = 'Starters';
+import {
+  NS,
+  CommandIDs,
+  DEFAULT_ICON_NAME,
+  DEFAULT_ICON_CLASS,
+  CATEGORY,
+  IStartContext
+} from './tokens';
+import { BodyBuilder } from './bodybuilder';
 
 const plugin: JupyterFrontEndPlugin<void> = {
   id: `${NS}:plugin`,
@@ -29,17 +34,32 @@ const plugin: JupyterFrontEndPlugin<void> = {
     const { commands } = app;
     const manager = new StarterManager();
     const icon = { name: DEFAULT_ICON_NAME, svg: DEFAULT_ICON_SVG };
-    console.log(icon);
     icons.addIcon(icon);
 
-    commands.addCommand(CommandIDs.copy, {
+    commands.addCommand(CommandIDs.start, {
       execute: async (args: any) => {
-        console.log(args);
-        await manager.copy(args.name, args.cwd);
-        if (args.starter.commands) {
-          for (const cmd of args.starter.commands) {
-            await commands.execute(cmd.id, cmd.args);
+        const context = (args as any) as IStartContext;
+        const { starter, name, cwd, body } = context;
+
+        if (starter.schema && !body) {
+          console.log('spawning builder');
+          const content = new BodyBuilder({ manager, context });
+          const main = new MainAreaWidget({ content });
+          app.shell.add(main, 'main', { mode: 'split-right' });
+          content.continue.connect(async (builder, context) => {
+            console.log('re-executing');
+            await commands.execute(CommandIDs.start, context as any);
+            console.log('hooray');
+          });
+        } else {
+          console.log('actually executing');
+          await manager.start(name, cwd, body);
+          if (starter.commands) {
+            for (const cmd of starter.commands) {
+              await commands.execute(cmd.id, cmd.args);
+            }
           }
+          console.log('double hooray');
         }
       },
       label: (args: any) => args.starter.label,
@@ -51,7 +71,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       const { starters } = manager;
       for (const name in starters) {
         launcher.add({
-          command: CommandIDs.copy,
+          command: CommandIDs.start,
           args: { name, starter: starters[name] },
           category: CATEGORY
         });
