@@ -2,7 +2,7 @@
 """
 from pathlib import Path
 
-from .._json import loads, json_validator
+from .._json import json_validator, loads
 
 HERE = Path(__file__).parent
 

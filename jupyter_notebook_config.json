@@ -1,0 +1,12 @@
+{
+  "StarterManager": {
+    "starters": {
+      "whitepaper": {
+        "type": "copy",
+        "label": "Whitepaper",
+        "description": "A reusable structure for proposing research",
+        "src": "examples/whitepaper.ipynb"
+      }
+    }
+  }
+}

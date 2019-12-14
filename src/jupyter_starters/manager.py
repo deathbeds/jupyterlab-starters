@@ -5,7 +5,6 @@ import base64
 
 import traitlets as T
 from notebook import _tz as tz
-from notebook.services.contents.manager import ContentsManager
 from notebook.utils import url_path_join as ujoin
 from traitlets.config import LoggingConfigurable
 
@@ -17,9 +16,13 @@ class StarterManager(LoggingConfigurable):
     """ handlers starting starters
     """
 
-    contents_manager = T.Instance(ContentsManager)
+    starters = Schema(validator=STARTERS).tag(config=True)
 
-    starters = Schema(validator=STARTERS)
+    @property
+    def contents_manager(self):
+        """ use the contents manager from parent
+        """
+        return self.parent.contents_manager
 
     @T.default("starters")
     def _default_starters(self):
