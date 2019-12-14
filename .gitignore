@@ -1,0 +1,12 @@
+__pycache__/
+.ipynb_checkpoints/
+.vscode/
+*.egg-info
+*.log
+*.tgz
+build/
+dist/
+envs/
+lib/
+node_modules/
+.yarn-packages/

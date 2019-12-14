@@ -1,0 +1,24 @@
+name: jupyterlab-starters
+
+commands:
+  lab:
+    unix: jupyter lab --no-brower --debug
+
+env_specs:
+  default:
+    inherit_from:
+      - jupyterlab-starters
+    packages:
+      - black
+      - isort
+      - mypy
+      - pylint
+
+  jupyterlab-starters:
+    channels:
+      - conda-forge
+      - defaults
+    packages:
+      - jupyterlab >=1.2.4,<1.3
+      - nodejs >=11,<12
+      - python >=3.7,<3.8.0a0

@@ -1,0 +1,45 @@
+{
+  "name": "@deathbeds/jupyterlab-starters",
+  "version": "0.1.0",
+  "description": "Parameterized files and folders for JupyterLab",
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
+  "homepage": "https://github.com/deathbeds/jupyterlab-starters",
+  "bugs": {
+    "url": "https://github.com/deathbeds/jupyterlab-starters/issues"
+  },
+  "license": "BSD-3-Clause",
+  "author": "dead pixels collective",
+  "files": [
+    "{lib,style}/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf,css}",
+    "LICENSE"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deathbeds/jupyterlab-starters.git"
+  },
+  "scripts": {
+    "bundle": "npm pack .",
+    "clean": "rimraf lib",
+    "lab:link": "jupyter labextension link . --no-build"
+  },
+  "peerDependencies": {
+    "@jupyterlab/application": "1",
+    "@jupyterlab/launcher": "1"
+  },
+  "devDependencies": {
+    "@jupyterlab/application": "1",
+    "@jupyterlab/launcher": "1",
+    "react": "*",
+    "rimraf": "~2.6.2",
+    "typescript": "~3.7.2"
+  },
+  "jupyterlab": {
+    "extension": "lib/plugin.js"
+  }
+}
