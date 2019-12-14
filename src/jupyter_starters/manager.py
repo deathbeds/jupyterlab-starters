@@ -2,6 +2,7 @@
 """
 # pylint: disable=no-self-use,unsubscriptable-object,fixme
 import base64
+import urllib.parse
 from pathlib import Path
 
 import traitlets as T
@@ -11,6 +12,8 @@ from traitlets.config import LoggingConfigurable
 
 from .schema.v1 import STARTERS
 from .trait_types import Schema
+
+IGNORE_PATTERNS = [".ipynb_checkpoints"]
 
 
 class StarterManager(LoggingConfigurable):
@@ -50,8 +53,12 @@ class StarterManager(LoggingConfigurable):
 
         if root.is_dir():
             for src in sorted(root.rglob("*")):
+                src_uri = src.as_uri()
+                if any([ignore in src_uri for ignore in IGNORE_PATTERNS]):
+                    continue
                 await self.save_one(
-                    src, ujoin(dest, src.as_uri().replace(root_uri, ""))
+                    src,
+                    urllib.parse.unquote(ujoin(dest, src_uri.replace(root_uri, ""))),
                 )
 
         return {"starter": starter, "path": dest}

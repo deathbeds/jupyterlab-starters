@@ -1,11 +1,11 @@
 {
   "StarterManager": {
     "starters": {
-      "whitepaper": {
+      "whitepaper-single": {
         "type": "copy",
-        "label": "Whitepaper",
-        "description": "A reusable structure for proposing research",
-        "src": "examples/whitepaper.ipynb",
+        "label": "Whitepaper (One)",
+        "description": "A reusable notebook for proposing research",
+        "src": "examples/whitepaper-single.ipynb",
         "commands": [
           {
             "id": "application:set-mode",
@@ -16,7 +16,21 @@
           {
             "id": "filebrowser:open-path",
             "args": {
-              "path": "whitepaper.ipynb"
+              "path": "whitepaper-single.ipynb"
+            }
+          }
+        ]
+      },
+      "whitepaper-multiple": {
+        "type": "copy",
+        "label": "Whitepaper (Many)",
+        "description": "Some reusable notebooks for proposing research",
+        "src": "examples/whitepaper-multiple",
+        "commands": [
+          {
+            "id": "filebrowser:open-path",
+            "args": {
+              "path": "whitepaper-multiple/00 Introduction.ipynb"
             }
           }
         ]
