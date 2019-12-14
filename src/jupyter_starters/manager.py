@@ -33,14 +33,21 @@ class StarterManager(LoggingConfigurable):
     async def start(self, starter, path):
         """ start a starter
         """
-        root = self.starters[starter]["root"]
+        spec = self.starters[starter]
+
+        if spec["type"] == "copy":
+            root = spec["src"]
+        else:
+            raise NotImplemented(spec["type"])
+
         root_uri = root.as_uri()
         dest = ujoin(path, starter)
 
         await self.save_one(root, dest)
 
-        for src in sorted(root.rglob("*")):
-            await self.save_one(src, ujoin(dest, src.as_uri().replace(root_uri, "")))
+        if root.is_dir():
+            for src in sorted(root.rglob("*")):
+                await self.save_one(src, ujoin(dest, src.as_uri().replace(root_uri, "")))
 
         return {"starter": starter, "path": dest}
 
