@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "anyOf": [
+    {
+      "$ref": "#/definitions/all-starters"
+    }
+  ],
+  "definitions": {
+    "all-starters": {
+      "title": "All Starters Server Response",
+      "type": "object",
+      "required": [
+        "starters"
+      ],
+      "properties": {
+        "starters": {
+          "$ref": "#/definitions/starters"
+        }
+      }
+    },
+    "starters": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "$ref": "#/defintions/starter"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/defintions/starter"
+      }
+    },
+    "starter": {
+      "title": "Starter",
+      "allOf": [
+        {
+          "$ref": "#/definitions/starter-meta"
+        },
+        {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/starter-command"
+            },
+            {
+              "$ref": "#/definitions/starter-copy"
+            },
+            {
+              "$ref": "#/definitions/starter-command"
+            }
+          ]
+        }
+      ]
+    },
+    "starter-meta": {
+      "title": "Starter Meta",
+      "type": "object",
+      "required": [
+        "label",
+        "description"
+      ],
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        }
+      }
+    },
+    "starter-copy": {
+      "title": "Simple Copy Starter",
+      "required": [
+        "src", "type"
+      ],
+      "properties": {
+        "src": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "copy"
+          ]
+        }
+      }
+    },
+    "starter-command": {
+      "title": "Command Starter",
+      "required": [
+        "argv",
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "command"
+          ]
+        },
+        "argv": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

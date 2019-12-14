@@ -7,5 +7,5 @@ from .manager import StarterManager
 def load_jupyter_server_extension(nbapp):
     """ create a StarterManager and add handlers
     """
-    manager = StarterManager(contents_manager=nbapp.contents_manager)
+    manager = StarterManager(contents_manager=nbapp.contents_manager, parent=nbapp)
     add_handlers(nbapp, manager)

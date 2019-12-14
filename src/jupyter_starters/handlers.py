@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING
 from notebook.base.handlers import IPythonHandler
 from notebook.utils import url_path_join as ujoin
 
+from ._json import JsonSchemaException
+from .schema.v1 import ALL_STARTERS
 from .types import NS
 
 if TYPE_CHECKING:
@@ -31,9 +33,14 @@ class StartersHandler(BaseHandler):
     async def get(self) -> None:
         """ return the starters
         """
-        starters = self.manager.starters
+        response = {"starters": self.manager.starters}
 
-        self.finish({"starters": starters})
+        try:
+            ALL_STARTERS(response)
+        except JsonSchemaException as err:
+            self.manager.log.warn(f"[starter] invalid response: {err}")
+
+        self.finish(response)
 
 
 class StarterHandler(BaseHandler):

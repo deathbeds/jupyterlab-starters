@@ -12,6 +12,6 @@ charset = utf-8
 indent_style = space
 indent_size = 4
 
-[*.{css,ts,tsx}]
+[*.{css,ts,tsx,json,yml}]
 indent_style = space
 indent_size = 2
