@@ -1,0 +1,61 @@
+/*-----------------------------------------------------------------------------
+| Copyright (c) Jupyter Development Team.
+| Distributed under the terms of the Modified BSD License.
+|----------------------------------------------------------------------------*/
+
+.jp-SchemaForm {
+  overflow-y: auto;
+}
+
+.jp-SchemaForm .rjsf {
+  display: flex;
+  flex-direction: column;
+}
+
+.jp-SchemaForm > form {
+  padding: var(--jp-ui-font-size1);
+}
+
+.jp-SchemaForm fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.jp-SchemaForm button[type='submit'] {
+  display: none;
+}
+
+.jp-SchemaForm .control-label,
+.jp-SchemaForm legend {
+  margin: 0;
+  padding: 0;
+  margin-bottom: calc(var(--jp-ui-font-size1) / 2);
+  font-weight: bold;
+  display: block;
+}
+
+.jp-SchemaForm .form-group {
+  margin-bottom: var(--jp-ui-font-size1);
+  width: 100%;
+  position: relative;
+}
+
+.jp-SchemaForm .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.jp-SchemaForm .field-description {
+  font-style: italic;
+  margin-bottom: calc(var(--jp-ui-font-size1) / 2);
+  color: var(--jp-ui-font-color2);
+}
+
+.jp-SchemaForm .required {
+  font-size: var(--jp-ui-font-size3);
+  color: var(--jp-warn-color1);
+  font-weight: 800;
+  position: absolute;
+  margin-left: 0.1em;
+  margin-top: -0.1em;
+}

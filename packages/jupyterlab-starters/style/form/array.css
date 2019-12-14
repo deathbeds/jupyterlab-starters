@@ -1,0 +1,87 @@
+/*-----------------------------------------------------------------------------
+| Copyright (c) Jupyter Development Team.
+| Distributed under the terms of the Modified BSD License.
+|----------------------------------------------------------------------------*/
+
+.jp-SchemaForm .array-item-move-up::before {
+  content: var(--jp-schema-form-up);
+}
+
+.jp-SchemaForm .array-item-move-down::before {
+  content: var(--jp-schema-form-down);
+}
+
+.jp-SchemaForm .array-item-remove::before {
+  content: var(--jp-schema-form-remove);
+}
+
+.jp-SchemaForm .array-item-remove {
+  content: var(--jp-schema-form-remove);
+}
+
+.jp-SchemaForm .array-item-add button::before {
+  content: var(--jp-schema-form-add);
+}
+
+.jp-SchemaForm .array-item-add button {
+  background-color: var(--jp-brand-color2);
+  color: var(--jp-ui-inverse-font-color0);
+}
+
+.jp-SchemaForm .array-item-add button:hover {
+  background-color: var(--jp-brand-color1);
+  color: var(--jp-ui-inverse-font-color0);
+}
+
+.jp-SchemaForm .array-item-toolbox {
+  opacity: 0.5;
+}
+
+.jp-SchemaForm .array-item:hover > .array-item-toolbox {
+  opacity: 1;
+}
+
+.jp-SchemaForm .array-item-toolbox .btn-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.jp-SchemaForm .array-item-toolbox .btn:hover:not([disabled]) {
+  background-color: var(--jp-layout-color3);
+}
+
+.jp-SchemaForm .array-item-toolbox .btn.array-item-remove:hover {
+  background-color: var(--jp-warn-color2);
+  color: var(--jp-ui-inverse-font-color0);
+}
+
+.jp-SchemaForm .array-item-toolbox .btn {
+  margin-bottom: calc(var(--jp-ui-font-size1) / 2);
+}
+
+.jp-SchemaForm .array-item-toolbox .btn[disabled] {
+  opacity: 0.1;
+  cursor: default;
+}
+
+.jp-SchemaForm .array-item {
+  display: flex;
+  position: relative;
+}
+.jp-SchemaForm .array-item:not(:last-child) {
+  border-bottom: var(--jp-border-width) solid var(--jp-border-color0);
+  margin-bottom: var(--jp-ui-font-size1);
+  padding-bottom: var(--jp-ui-font-size1);
+}
+
+.jp-SchemaForm .array-item div:first-child {
+  flex: 1;
+  order: 2;
+}
+
+.jp-SchemaForm .array-item-toolbox {
+  flex: 0;
+  padding-right: var(--jp-ui-font-size1);
+  margin-bottom: calc(var(--jp-ui-font-size1) / 2);
+  order: 1;
+}

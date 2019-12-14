@@ -1,0 +1,79 @@
+/*-----------------------------------------------------------------------------
+| Copyright (c) Jupyter Development Team.
+| Distributed under the terms of the Modified BSD License.
+|----------------------------------------------------------------------------*/
+
+.jp-SchemaForm input[type='text'],
+.jp-SchemaForm input[type='number'],
+.jp-SchemaForm input[type='date'],
+.jp-SchemaForm input[type='datetime-local'],
+.jp-SchemaForm input[type='url'],
+.jp-SchemaForm input[type='email'],
+.jp-SchemaForm input[type='file'],
+.jp-SchemaForm input[type='password'],
+.jp-SchemaForm input[type='color'],
+.jp-SchemaForm textarea {
+  box-sizing: border-box;
+  border: var(--jp-border-width) solid var(--jp-border-color1);
+  background-color: var(--jp-layout-color0);
+  color: var(--jp-ui-font-color0);
+  font-size: var(--jp-ui-font-size2);
+  min-width: 0;
+  outline: none !important;
+  padding: 2px 7px;
+  width: 100%;
+}
+
+.jp-SchemaForm input[type='text']:focus,
+.jp-SchemaForm input[type='number']:focus,
+.jp-SchemaForm input[type='date']:focus,
+.jp-SchemaForm input[type='datetime-local']:focus,
+.jp-SchemaForm input[type='url']:focus,
+.jp-SchemaForm input[type='email']:focus,
+.jp-SchemaForm input[type='file']:focus,
+.jp-SchemaForm input[type='password']:focus,
+.jp-SchemaForm input[type='color']:focus,
+.jp-SchemaForm textarea:focus {
+  border-color: var(--md-blue-500);
+  background-color: var(--jp-layout-color0);
+  box-shadow: inset 0 0 4px var(--md-blue-300);
+}
+
+.jp-SchemaForm select {
+  width: 100%;
+  font-size: var(--jp-ui-font-size1);
+  background: var(--jp-input-background);
+  color: var(--jp-ui-font-color0);
+  padding: calc(var(--jp-ui-font-size1) / 2);
+  padding-right: var(--jp-ui-font-size3);
+  background-image: var(--jp-ui-select-caret);
+  background-repeat: no-repeat;
+  background-position: 99% center;
+  background-size: 18px;
+  border: var(--jp-border-width) solid var(--jp-input-border-color);
+  border-radius: 0px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.jp-SchemaForm select[multiple] {
+  padding: 0;
+  background: none;
+}
+
+.jp-SchemaForm select:focus {
+  border: var(--jp-border-width) solid var(--jp-brand-color1);
+}
+
+.jp-SchemaForm fieldset button {
+  font-size: var(--jp-ui-font-size2);
+  padding: calc(var(--jp-ui-font-size1) / 2);
+  background-color: var(--jp-layout-color2);
+  color: var(--jp-ui-font-color1);
+  border: var(--jp-border-width) solid transparent;
+  cursor: pointer;
+  min-width: calc(var(--jp-ui-font-size1) * 1.6);
+  font-weight: bold;
+}

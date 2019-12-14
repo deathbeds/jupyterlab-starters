@@ -1,0 +1,43 @@
+/*-----------------------------------------------------------------------------
+| Copyright (c) Jupyter Development Team.
+| Distributed under the terms of the Modified BSD License.
+|----------------------------------------------------------------------------*/
+
+.jp-SchemaForm .errors {
+  order: 999;
+  color: var(--jp-warn-color0);
+}
+
+.jp-SchemaForm .errors h3 {
+  margin: 0;
+}
+
+.jp-SchemaForm .errors ul,
+.jp-SchemaForm .errors li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.jp-SchemaForm .has-error > input[type='text'],
+.jp-SchemaForm .has-error > input[type='number'],
+.jp-SchemaForm .has-error > input[type='date'],
+.jp-SchemaForm .has-error > input[type='datetime-local'],
+.jp-SchemaForm .has-error > input[type='url'],
+.jp-SchemaForm .has-error > input[type='email'],
+.jp-SchemaForm .has-error > input[type='file'],
+.jp-SchemaForm .has-error > input[type='password'],
+.jp-SchemaForm .has-error > input[type='color'],
+.jp-SchemaForm .has-error > textarea {
+  border: solid 1px var(--jp-warn-color1);
+}
+
+.jp-SchemaForm .field .error-detail {
+  list-style: none;
+  color: var(--jp-warn-color0);
+  margin: 0;
+  padding: 0;
+}
+.jp-SchemaForm .field .error-detail li {
+  margin-top: calc(var(--jp-ui-font-size1) / 2);
+}
