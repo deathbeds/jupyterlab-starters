@@ -57,7 +57,6 @@ export class BodyBuilder extends Widget {
     return button;
   }
 
-
   get continue() {
     return this._continue;
   }
