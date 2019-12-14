@@ -2,6 +2,7 @@
 """
 # pylint: disable=no-self-use,unsubscriptable-object
 import base64
+from pathlib import Path
 
 import traitlets as T
 from notebook import _tz as tz
@@ -36,12 +37,14 @@ class StarterManager(LoggingConfigurable):
         spec = self.starters[starter]
 
         if spec["type"] == "copy":
-            root = spec["src"]
+            root = Path(spec["src"]).resolve()
         else:
             raise NotImplemented(spec["type"])
 
         root_uri = root.as_uri()
-        dest = ujoin(path, starter)
+
+        # TODO: parametrize name
+        dest = ujoin(path, root.name)
 
         await self.save_one(root, dest)
 
