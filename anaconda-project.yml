@@ -2,7 +2,7 @@ name: jupyterlab-starters
 
 commands:
   lab:
-    unix: jupyter lab --no-brower --debug
+    unix: jupyter lab --no-browser --debug
   lint:
     unix: python scripts/lint.py
 
