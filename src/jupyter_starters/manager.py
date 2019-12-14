@@ -1,6 +1,6 @@
 """ manager, for starters
 """
-# pylint: disable=no-self-use,unsubscriptable-object
+# pylint: disable=no-self-use,unsubscriptable-object,fixme
 import base64
 from pathlib import Path
 
@@ -39,7 +39,7 @@ class StarterManager(LoggingConfigurable):
         if spec["type"] == "copy":
             root = Path(spec["src"]).resolve()
         else:
-            raise NotImplemented(spec["type"])
+            raise NotImplementedError(spec["type"])
 
         root_uri = root.as_uri()
 
@@ -50,7 +50,9 @@ class StarterManager(LoggingConfigurable):
 
         if root.is_dir():
             for src in sorted(root.rglob("*")):
-                await self.save_one(src, ujoin(dest, src.as_uri().replace(root_uri, "")))
+                await self.save_one(
+                    src, ujoin(dest, src.as_uri().replace(root_uri, ""))
+                )
 
         return {"starter": starter, "path": dest}
 
