@@ -34,17 +34,17 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     commands.addCommand(CommandIDs.copy, {
       execute: async (args: any) => {
+        console.log(args);
         await manager.copy(args.name, args.cwd);
+        if (args.starter.commands) {
+          for (const cmd of args.starter.commands) {
+            await commands.execute(cmd.id, cmd.args);
+          }
+        }
       },
-      label: (args: any) => {
-        return manager.starter(args.name).label;
-      },
-      caption: (args: any) => {
-        return manager.starter(args.name).description;
-      },
-      iconClass: (args: any) => {
-        return manager.starter(args.name).icon || DEFAULT_ICON_CLASS;
-      }
+      label: (args: any) => args.starter.label,
+      caption: (args: any) => args.starter.description,
+      iconClass: (args: any) => args.starter.icon || DEFAULT_ICON_CLASS
     });
 
     manager.changed.connect(() => {
@@ -52,7 +52,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       for (const name in starters) {
         launcher.add({
           command: CommandIDs.copy,
-          args: { name },
+          args: { name, starter: starters[name] },
           category: CATEGORY
         });
       }

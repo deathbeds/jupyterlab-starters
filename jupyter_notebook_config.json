@@ -5,7 +5,21 @@
         "type": "copy",
         "label": "Whitepaper",
         "description": "A reusable structure for proposing research",
-        "src": "examples/whitepaper.ipynb"
+        "src": "examples/whitepaper.ipynb",
+        "commands": [
+          {
+            "id": "application:set-mode",
+            "args": {
+              "mode": "single-document"
+            }
+          },
+          {
+            "id": "filebrowser:open-path",
+            "args": {
+              "path": "whitepaper.ipynb"
+            }
+          }
+        ]
       }
     }
   }
