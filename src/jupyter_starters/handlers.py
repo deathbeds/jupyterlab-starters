@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from notebook.base.handlers import IPythonHandler
 from notebook.utils import url_path_join as ujoin
 
-from ._json import JsonSchemaException
+from ._json import JsonSchemaException, loads
 from .schema.v1 import ALL_STARTERS
 from .types import NS
 
@@ -50,7 +50,12 @@ class StarterHandler(BaseHandler):
     async def post(self, starter, path) -> None:
         """ start a starter
         """
-        self.finish(await self.manager.start(starter, path))
+        body = None
+
+        if self.request.body:
+            body = loads(self.request.body)
+
+        self.finish(await self.manager.start(starter, path, body))
 
 
 def add_handlers(nbapp, manager) -> None:

@@ -118,9 +118,8 @@
           "required": ["dest", "schema"],
           "properties": {
             "dest": {
-              "description": "a JSON pointer to a field in body conforming to the schema for the destination",
-              "type": "string",
-              "format": "json-pointer"
+              "description": "A name to copy to: Jinja will be applied with `body` as the context",
+              "type": "string"
             }
           }
         }

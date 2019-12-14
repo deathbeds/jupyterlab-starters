@@ -5,6 +5,7 @@ import base64
 import urllib.parse
 from pathlib import Path
 
+import jinja2
 import traitlets as T
 from notebook import _tz as tz
 from notebook.utils import url_path_join as ujoin
@@ -21,6 +22,9 @@ class StarterManager(LoggingConfigurable):
     """
 
     starters = Schema(validator=STARTERS).tag(config=True)
+    jinja_env = T.Instance(jinja2.Environment)
+    jinja_env_extensions = T.Dict()
+    extra_jinja_env_extensions = T.Dict({}).tag(config=True)
 
     @property
     def contents_manager(self):
@@ -28,15 +32,26 @@ class StarterManager(LoggingConfigurable):
         """
         return self.parent.contents_manager
 
+    @T.default("jinja_env_extensions")
+    def _default_env_extensions(self):
+        extensions = {"jinja2_time.TimeExtension": True}
+        extensions.update(self.extra_jinja_env_extensions)
+        return [ext for ext, enabled in extensions.items() if enabled]
+
+    @T.default("jinja_env")
+    def _default_env(self):
+        return jinja2.Environment(extensions=self.jinja_env_extensions)
+
     @T.default("starters")
     def _default_starters(self):
         """ default starters
         """
         return {}
 
-    async def start(self, starter, path):
+    async def start(self, starter, path, body):
         """ start a starter
         """
+        self.log.error(f"BODY {body}")
         spec = self.starters[starter]
 
         if spec["type"] == "copy":
@@ -46,8 +61,13 @@ class StarterManager(LoggingConfigurable):
 
         root_uri = root.as_uri()
 
-        # TODO: parametrize name
-        dest = ujoin(path, root.name)
+        dest_tmpl_str = spec.get("dest")
+
+        if dest_tmpl_str is not None:
+            dest_tmpl = self.jinja_env.from_string(dest_tmpl_str)
+            dest = ujoin(path, dest_tmpl.render(**(body or {})))
+        else:
+            dest = ujoin(path, root.name)
 
         await self.save_one(root, dest)
 

@@ -40,7 +40,7 @@
         "label": "Named Whitepaper",
         "description": "A renamed whitepaper",
         "src": "examples/whitepaper-single.ipynb",
-        "dest": "#/dest",
+        "dest": "{% now 'local' %} {{ dest }} Whitepaper.ipynb",
         "schema": {
           "title": "A Named whitepaper",
           "description": "A whitepaper that already has a name",
@@ -48,10 +48,10 @@
           "required": ["dest"],
           "properties": {
             "dest": {
-              "title": "File name",
-              "description": "the new name of the file",
+              "title": "Topic",
+              "description": "the topic of the whitepaper",
               "type": "string",
-              "pattern": ".ipynb$"
+              "default": "Unimagined"
             }
           }
         }
