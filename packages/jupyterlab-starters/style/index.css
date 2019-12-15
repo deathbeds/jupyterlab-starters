@@ -36,10 +36,15 @@
 
 .jp-Starters-BodyBuilder-buttons button {
   flex: 1;
-  margin: var(--jp-ui-font-size1);
+  margin-left: var(--jp-notebook-padding);
+}
+
+.jp-Starters-BodyBuilder-buttons button:first-child {
+  margin-left: 0;
 }
 
 .jp-Starters-BodyBuilder .jp-SchemaForm > .panel.panel-danger.errors {
+  padding: var(--jp-notebook-padding);
   position: absolute;
   bottom: 0;
   background-color: var(--jp-layout-color1);

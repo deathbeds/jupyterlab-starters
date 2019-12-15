@@ -1,6 +1,6 @@
 {
   "StarterManager": {
-    "starters": {
+    "extra_starters": {
       "whitepaper-single": {
         "type": "copy",
         "label": "Whitepaper Notebook",
