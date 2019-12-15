@@ -7,6 +7,7 @@ parameters:
     - name: ThreeSeven
       spec: '>=3.7,<3.8.0a0'
   env_update: conda env update -n jupyterlab-starters --file env-test.yml --quiet
+  jlpm: jlpm --no-optional --prefer-offline
 
 jobs:
   - ${{ each platform in parameters.platforms }}:
@@ -25,10 +26,10 @@ jobs:
               - script: ${{ parameters.env_update }} || ${{ parameters.env_update }} || ${{ parameters.env_update }}
                 displayName: update conda environment with test dependencies
 
-              - script: ${{ platform.activate }} jupyterlab-starters && jlpm || jlpm || jlpm
+              - script: ${{ platform.activate }} jupyterlab-starters && ${{ parameters.jlpm }} || ${{ parameters.jlpm }} || ${{ parameters.jlpm }}
                 displayName: install npm dependencies
 
-              - script: ${{ platform.activate }} jupyterlab-starters && jlpm build:schema
+              - script: ${{ platform.activate }} jupyterlab-starters && jlpm build:pre
                 displayName: build schema so linting can complete
 
               - script: ${{ platform.activate }} jupyterlab-starters && jlpm lint:check
