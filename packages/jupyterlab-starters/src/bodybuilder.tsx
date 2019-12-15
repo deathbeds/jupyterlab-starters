@@ -25,7 +25,7 @@ export class BuilderButtons extends VDomRenderer<BuilderButtons.Model> {
           onClick={this.onDone}
           className={`${CSS.JP.styled} ${CSS.JP.warn}`}
         >
-          DONE
+          CANCEL
         </button>
         <button
           disabled={hasErrors}
