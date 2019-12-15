@@ -10,9 +10,12 @@ FAIL = 1
 ROOT = Path(__file__).parent.parent
 
 PY_SRC = list((ROOT / "src").rglob("*.py"))
-SCRIPTS = list((ROOT / "scripts").rglob("*.py"))
+PY_SCRIPTS = list((ROOT / "scripts").rglob("*.py"))
+PY_ATEST = list((ROOT / "atest").rglob("*.py"))
 
-ALL_PY = [*PY_SRC, *SCRIPTS]
+ALL_PY = [*PY_SRC, *PY_SCRIPTS, *PY_ATEST]
+
+ALL_ROBOT = list((ROOT / "atest").rglob("*.robot"))
 
 
 def lint():
@@ -27,6 +30,7 @@ def lint():
                 ["flake8", *ALL_PY],
                 ["pylint", *ALL_PY],
                 ["mypy", *PY_SRC],
+                ["python", "-m", "robot.tidy", "--inplace", *ALL_ROBOT],
             ],
         )
     )

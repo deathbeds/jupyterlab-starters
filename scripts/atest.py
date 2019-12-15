@@ -15,9 +15,13 @@ OUT = ATEST / "output"
 OS = platform.system()
 PY = "".join(map(str, sys.version_info[:2]))
 
+OK = 0
+
 
 def atest(attempt=0):
-
+    """ run the acceptance tests once
+    """
+    # pylint: disable=broad-except
     stem = "_".join([OS, PY, str(attempt)]).replace(".", "_").lower()
     out_dir = OUT / stem
 
@@ -54,14 +58,19 @@ def atest(attempt=0):
     return robot.run_cli(list(map(str, args)), exit=False)
 
 
-if __name__ == "__main__":
+def attempt_atest(retries=int(os.environ.get("ATEST_RETRIES") or "0")):
+    """ try acceptance tests a few times
+    """
     attempt = 0
-    rc = -1
+    code = -1
 
-    retries = int(os.environ.get("ATEST_RETRIES") or "0")
-    while rc != 0 and attempt <= retries:
+    while code != OK and attempt <= retries:
         attempt += 1
         print("attempt {} of {}...".format(attempt, retries + 1))
-        rc = atest(attempt)
+        code = atest(attempt)
 
-    sys.exit(rc)
+    return code
+
+
+if __name__ == "__main__":
+    sys.exit(attempt_atest())
