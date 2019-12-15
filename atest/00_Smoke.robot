@@ -9,7 +9,3 @@ Lab Version
     ${config} =  Evaluate  __import__("json").loads("""${script}""")
     Set Global Variable    ${PAGE CONFIG}    ${config}
     Set Global Variable    ${LAB VERSION}    ${config["appVersion"]}
-
-Root URI
-    [Documentation]  the rootUri should be set in the page config
-    Should Not Be Empty    ${PAGE CONFIG["rootUri"]}
