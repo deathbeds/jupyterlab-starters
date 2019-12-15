@@ -2,11 +2,18 @@ import { JSONObject } from '@phosphor/coreutils';
 import { Signal } from '@phosphor/signaling';
 import { URLExt } from '@jupyterlab/coreutils';
 import { ServerConnection } from '@jupyterlab/services';
-import { IStarterManager } from './tokens';
+import { IIconRegistry, IconRegistry } from '@jupyterlab/ui-components';
+import {
+  IStarterManager,
+  DEFAULT_ICON_CLASS,
+  DEFAULT_ICON_NAME
+} from './tokens';
 
 import * as V1 from './_v1';
 
 import { API } from './tokens';
+
+import DEFAULT_ICON_SVG from '!!raw-loader!../style/icons/starter.svg';
 
 const { makeRequest, makeSettings } = ServerConnection;
 
@@ -14,9 +21,13 @@ export class StarterManager implements IStarterManager {
   private _changed: Signal<IStarterManager, void>;
   private _starters: V1.Starters = {};
   private _serverSettings = makeSettings();
+  private _icons: IIconRegistry;
 
-  constructor() {
+  constructor(options: IStarterManager.IOptions) {
+    this._icons = options.icons;
     this._changed = new Signal<IStarterManager, void>(this);
+    const icon = { name: DEFAULT_ICON_NAME, svg: DEFAULT_ICON_SVG };
+    this._icons.addIcon(icon);
   }
 
   get changed() {
@@ -47,5 +58,24 @@ export class StarterManager implements IStarterManager {
     const response = await makeRequest(url, init, this._serverSettings);
     const result = await response.json();
     return result;
+  }
+
+  iconClass(name: string, starter: V1.Starter) {
+    const icon = `${name}-starter`;
+
+    if (this._icons.contains(icon)) {
+      return IconRegistry.iconClassName(icon);
+    }
+
+    if (!starter.icon) {
+      return DEFAULT_ICON_CLASS;
+    }
+
+    this._icons.addIcon({
+      name: icon,
+      svg: starter.icon
+    });
+
+    return IconRegistry.iconClassName(icon);
   }
 }

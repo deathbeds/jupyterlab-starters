@@ -1,7 +1,6 @@
 import { JSONObject } from '@phosphor/coreutils';
 import { PageConfig, URLExt } from '@jupyterlab/coreutils';
-import { ILauncher } from '@jupyterlab/launcher';
-import { CommandRegistry } from '@phosphor/commands';
+import { IIconRegistry } from '@jupyterlab/ui-components';
 import { ISignal } from '@phosphor/signaling';
 
 import * as V1 from './_v1';
@@ -17,6 +16,7 @@ export interface IStarterManager {
   changed: ISignal<IStarterManager, void>;
   starters: V1.Starters;
   starter(name: string): V1.Starter;
+  iconClass(name: string, starter: V1.Starter): string;
   fetch(): Promise<void>;
   start(
     name: string,
@@ -27,8 +27,7 @@ export interface IStarterManager {
 
 export namespace IStarterManager {
   export interface IOptions {
-    launcher: ILauncher;
-    commands: CommandRegistry;
+    icons: IIconRegistry;
   }
 }
 

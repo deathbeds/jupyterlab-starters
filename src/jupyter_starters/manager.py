@@ -83,7 +83,7 @@ class StarterManager(LoggingConfigurable):
                     src,
                     urllib.parse.unquote(ujoin(dest, src_uri.replace(root_uri, ""))),
                 )
-
+        # TODO: add to schema, normalize
         return {"starter": starter, "path": dest}
 
     async def save_one(self, src, dest):

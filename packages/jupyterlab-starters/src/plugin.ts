@@ -8,15 +8,11 @@ import { MainAreaWidget } from '@jupyterlab/apputils';
 
 import '../style/index.css';
 
-import DEFAULT_ICON_SVG from '!!raw-loader!../style/icons/starter.svg';
-
 import { StarterManager } from './manager';
 
 import {
   NS,
   CommandIDs,
-  DEFAULT_ICON_NAME,
-  DEFAULT_ICON_CLASS,
   CATEGORY,
   IStartContext,
   IStarterManager
@@ -33,9 +29,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     icons: IIconRegistry
   ) => {
     const { commands } = app;
-    const manager: IStarterManager = new StarterManager();
-    const icon = { name: DEFAULT_ICON_NAME, svg: DEFAULT_ICON_SVG };
-    icons.addIcon(icon);
+    const manager: IStarterManager = new StarterManager({ icons });
 
     commands.addCommand(CommandIDs.start, {
       execute: async (args: any) => {
@@ -66,7 +60,10 @@ const plugin: JupyterFrontEndPlugin<void> = {
       },
       label: (args: any) => args.starter.label,
       caption: (args: any) => args.starter.description,
-      iconClass: (args: any) => args.starter.icon || DEFAULT_ICON_CLASS
+      iconClass: (args: any) => {
+        const context = (args as any) as IStartContext;
+        return manager.iconClass(context.name, context.starter);
+      }
     });
 
     manager.changed.connect(() => {
