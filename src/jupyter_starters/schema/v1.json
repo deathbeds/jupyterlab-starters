@@ -46,6 +46,9 @@
             },
             {
               "$ref": "#/definitions/starter-command"
+            },
+            {
+              "$ref": "#/definitions/starter-python"
             }
           ]
         }
@@ -110,6 +113,7 @@
       }
     },
     "starter-copy-with-dest": {
+      "title": "Copy with Destination Starter",
       "allOf": [
         {
           "$ref": "#/definitions/starter-copy"
@@ -127,6 +131,7 @@
     },
     "starter-command": {
       "title": "Command Starter",
+      "description": "Not implemented",
       "required": ["argv", "type"],
       "properties": {
         "type": {
@@ -138,6 +143,22 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "starter-python": {
+      "title": "Python Starter",
+      "description": "Invokes an importable python function (multiple times)",
+      "required": ["type", "callable", "schema"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["python"]
+        },
+        "callable": {
+          "description": "a python function that accepts the `body`",
+          "type": "string",
+          "pattern": "[a-zA-Z_][a-zA-Z_\\d\\.]*:[a-zA-Z_][a-zA-Z_\\d]*"
         }
       }
     }

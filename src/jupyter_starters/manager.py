@@ -14,7 +14,14 @@ from traitlets.config import LoggingConfigurable
 from .schema.v1 import STARTERS
 from .trait_types import Schema
 
-IGNORE_PATTERNS = [".ipynb_checkpoints"]
+from .py_starters.cookiecutter import COOKIECUTTER_STARTER
+
+
+IGNORE_PATTERNS = [".ipynb_checkpoints", "node_modules", "envs"]
+
+DEAFULT_STARTERS = {
+    "cookiecutter": COOKIECUTTER_STARTER
+}
 
 
 class StarterManager(LoggingConfigurable):
@@ -50,21 +57,28 @@ class StarterManager(LoggingConfigurable):
     def _default_starters(self):
         """ default starters
         """
-        return {}
+        return dict(DEAFULT_STARTERS)
 
-    async def start(self, starter, path, body):
+    async def start(self, name, path, body):
         """ start a starter
         """
-        spec = self.starters[starter]
+        starter = self.starters[name]
+        starter_type = starter["type"]
 
-        if spec["type"] == "copy":
-            root = Path(spec["src"]).resolve()
-        else:
-            raise NotImplementedError(spec["type"])
+        if starter_type == "copy":
+            return await self._start_copy(name, starter, path, body)
+
+        if starter_type == "python":
+            return await self._start_python(starter, path, body)
+
+        raise NotImplementedError(starter["type"])
+
+    async def _start_copy(self, name, starter, path, body):
+        root = Path(starter["src"]).resolve()
 
         root_uri = root.as_uri()
 
-        dest_tmpl_str = spec.get("dest")
+        dest_tmpl_str = starter.get("dest")
 
         if dest_tmpl_str is not None:
             dest_tmpl = self.jinja_env.from_string(dest_tmpl_str)
@@ -84,7 +98,11 @@ class StarterManager(LoggingConfigurable):
                     urllib.parse.unquote(ujoin(dest, src_uri.replace(root_uri, ""))),
                 )
         # TODO: add to schema, normalize
-        return {"starter": starter, "path": dest}
+        return {"name": name, "starter": starter, "path": dest}
+
+    async def _start_python(self, starter, path, body):
+        func = T.import_item(starter["callable"])
+        return await func(path, body)
 
     async def save_one(self, src, dest):
         """ use the contents manager to write a single file/folder
