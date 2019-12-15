@@ -27,6 +27,35 @@
         "$ref": "#/definitions/starter"
       }
     },
+    "start-response": {
+      "title": "StartResponse",
+      "type": "object",
+      "required": ["name", "path", "starter", "body", "status"],
+      "properties": {
+        "starter": {
+          "$ref": "#/definitions/starter"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["error", "continuing", "done"]
+        },
+        "name": {
+          "type": "string"
+        },
+        "body": {
+          "type": "object"
+        },
+        "path": {
+          "type": "string"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "starter": {
       "title": "Starter",
       "allOf": [

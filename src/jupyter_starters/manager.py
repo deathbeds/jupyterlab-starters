@@ -103,7 +103,13 @@ class StarterManager(LoggingConfigurable):
                     urllib.parse.unquote(ujoin(dest, src_uri.replace(root_uri, ""))),
                 )
         # TODO: add to schema, normalize
-        return {"name": name, "starter": starter, "path": dest}
+        return {
+            "body": body,
+            "name": name,
+            "path": dest,
+            "starter": starter,
+            "status": "done",
+        }
 
     async def _start_python(self, name, starter, path, body):
         func = T.import_item(starter["callable"])

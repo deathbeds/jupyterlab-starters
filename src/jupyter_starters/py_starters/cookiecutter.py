@@ -96,7 +96,13 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
     new_starter["schema"]["required"] += ["cookiecutter"]
     new_starter["schema"]["properties"]["cookiecutter"] = schema
 
-    return {"starter": starter, "path": path, "body": body}
+    return {
+        "body": body,
+        "name": name,
+        "path": path,
+        "starter": new_starter,
+        "status": "continuing",
+    }
 
 
 def cookiecutter_to_schema(cookiecutter):
