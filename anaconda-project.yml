@@ -5,6 +5,8 @@ commands:
     unix: jupyter lab --no-browser --debug
   lint:
     unix: python scripts/lint.py
+  atest:
+    unix: python scripts/atest.py
 
 env_specs:
   default:
@@ -12,10 +14,13 @@ env_specs:
       - jupyterlab-starters
     packages:
       - black
+      - firefox
       - flake8
+      - geckodriver
       - isort
       - mypy
       - pylint
+      - robotframework-seleniumlibrary
 
   jupyterlab-starters:
     channels:

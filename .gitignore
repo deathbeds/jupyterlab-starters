@@ -1,4 +1,5 @@
 __pycache__/
+_*.d.ts
 .ipynb_checkpoints/
 .mypy_cache
 .pytest_cache
@@ -7,9 +8,9 @@ __pycache__/
 *.egg-info
 *.log
 *.tgz
+atest/output/
 build/
 dist/
 envs/
 lib/
 node_modules/
-_*.d.ts
