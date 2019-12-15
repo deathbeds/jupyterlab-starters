@@ -18,7 +18,8 @@ import {
   DEFAULT_ICON_NAME,
   DEFAULT_ICON_CLASS,
   CATEGORY,
-  IStartContext
+  IStartContext,
+  IStarterManager
 } from './tokens';
 import { BodyBuilder } from './bodybuilder';
 
@@ -32,7 +33,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     icons: IIconRegistry
   ) => {
     const { commands } = app;
-    const manager = new StarterManager();
+    const manager: IStarterManager = new StarterManager();
     const icon = { name: DEFAULT_ICON_NAME, svg: DEFAULT_ICON_SVG };
     icons.addIcon(icon);
 
@@ -45,17 +46,22 @@ const plugin: JupyterFrontEndPlugin<void> = {
           const content = new BodyBuilder({ manager, context });
           const main = new MainAreaWidget({ content });
           app.shell.add(main, 'main', { mode: 'split-right' });
-          content.continue.connect(async (builder, context) => {
+          content.start.connect(async (builder, context) => {
             await commands.execute(CommandIDs.start, context as any);
             main.dispose();
           });
         } else {
-          await manager.start(name, cwd, body);
+          const response = await manager.start(name, cwd, body);
+
           if (starter.commands) {
             for (const cmd of starter.commands) {
               await commands.execute(cmd.id, cmd.args);
             }
           }
+
+          await commands.execute('filebrowser:open-path', {
+            path: response.path
+          });
         }
       },
       label: (args: any) => args.starter.label,

@@ -1,11 +1,12 @@
 :root {
-  --jp-starters-btn-height: calc(2 * var(--jp-ui-font-size3));
+  --jp-starters-btn-height: calc(3 * var(--jp-ui-font-size3));
 }
 .jp-StartersDefaultIcon {
   background-image: url('./icons/starter.svg');
 }
 
 .jp-Starters-BodyBuilder {
+  background-color: var(--jp-layout-color0);
   padding: var(--jp-notebook-padding);
   display: flex;
   flex-direction: column;
@@ -15,11 +16,35 @@
 .jp-Starters-BodyBuilder .jp-SchemaForm {
   overflow-y: auto;
   flex: 1;
+  max-height: 100%;
 }
 
-.jp-Starters-BodyBuilder-accept {
+.jp-Starters-BodyBuilder-buttons {
   flex: 0;
   min-height: var(--jp-starters-btn-height);
   max-height: var(--jp-starters-btn-height);
   height: var(--jp-starters-btn-height);
+  display: flex;
+  flex-direction: column;
+}
+
+.jp-Starters-BodyBuilder-buttons > div {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+}
+
+.jp-Starters-BodyBuilder-buttons button {
+  flex: 1;
+  margin: var(--jp-ui-font-size1);
+}
+
+.jp-Starters-BodyBuilder .jp-SchemaForm > .panel.panel-danger.errors {
+  position: absolute;
+  bottom: 0;
+  background-color: var(--jp-layout-color1);
+  border: solid 1px var(--jp-warn-color0);
+  right: 0;
+  left: 0;
+  z-index: 1;
 }

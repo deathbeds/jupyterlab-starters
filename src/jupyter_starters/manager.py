@@ -55,7 +55,6 @@ class StarterManager(LoggingConfigurable):
     async def start(self, starter, path, body):
         """ start a starter
         """
-        self.log.error(f"BODY {body}")
         spec = self.starters[starter]
 
         if spec["type"] == "copy":

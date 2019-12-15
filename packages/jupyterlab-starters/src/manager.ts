@@ -46,6 +46,6 @@ export class StarterManager implements IStarterManager {
     const url = URLExt.join(API, name, contentsPath);
     const response = await makeRequest(url, init, this._serverSettings);
     const result = await response.json();
-    console.log('TODO', result);
+    return result;
   }
 }

@@ -1,5 +1,6 @@
 .jp-SchemaForm {
   overflow-y: auto;
+  color: var(--jp-ui-font-color1);
 }
 
 .jp-SchemaForm .rjsf {
