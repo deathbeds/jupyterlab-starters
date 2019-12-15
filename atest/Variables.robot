@@ -14,4 +14,4 @@ ${CSS LAUNCH SECTION}    css:.jp-CookiecutterStarterIcon.jp-Launcher-sectionIcon
 ${CSS LAUNCH CARD}    css:[data-category\="Starters"]
 ${CSS LAUNCH CARD NOTEBOOK}    ${CSS LAUNCH CARD}\[title\="A reusable notebook for proposing research"]
 ${CSS LAUNCH CARD FOLDER}    ${CSS LAUNCH CARD}\[title\="Some reusable notebooks for proposing research"]
-${XP FILE TREE ITEM}    xpath://div[contains(@class, 'jp-DirListing-itemText']
+${XP FILE TREE ITEM}    xpath://span[contains(@class, 'jp-DirListing-itemText')]
