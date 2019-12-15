@@ -3,6 +3,9 @@
   "anyOf": [
     {
       "$ref": "#/definitions/all-starters"
+    },
+    {
+      "$ref": "#/definitions/start-response"
     }
   ],
   "definitions": {

@@ -54,14 +54,19 @@ export class StarterManager implements IStarterManager {
     this._changed.emit(void 0);
   }
 
-  async start(name: string, contentsPath: string, body?: JSONObject) {
+  async start(
+    name: string,
+    _starter: V1.Starter,
+    contentsPath: string,
+    body?: JSONObject
+  ) {
     const init = { method: 'POST' } as RequestInit;
     if (body) {
       init.body = JSON.stringify(body);
     }
     const url = URLExt.join(API, name, contentsPath);
     const response = await makeRequest(url, init, this._serverSettings);
-    const result = await response.json();
+    const result = (await response.json()) as V1.StartResponse;
     return result;
   }
 

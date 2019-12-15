@@ -71,14 +71,16 @@ class StarterManager(LoggingConfigurable):
         starter_type = starter["type"]
 
         if starter_type == "copy":
-            return await self._start_copy(name, starter, path, body)
+            return await self.start_copy(name, starter, path, body)
 
         if starter_type == "python":
-            return await self._start_python(name, starter, path, body)
+            return await self.start_python(name, starter, path, body)
 
         raise NotImplementedError(starter["type"])
 
-    async def _start_copy(self, name, starter, path, body):
+    async def start_copy(self, name, starter, path, body):
+        """ start a copy starter
+        """
         root = Path(starter["src"]).resolve()
 
         root_uri = root.as_uri()
@@ -111,13 +113,17 @@ class StarterManager(LoggingConfigurable):
             "status": "done",
         }
 
-    async def _start_python(self, name, starter, path, body):
+    async def start_python(self, name, starter, path, body):
+        """ start a python starter
+        """
         func = T.import_item(starter["callable"])
         return await func(name, starter, path, body, self)
 
     async def save_one(self, src, dest):
         """ use the contents manager to write a single file/folder
         """
+        # pylint: disable=broad-except
+
         stat = src.stat()
         is_dir = src.is_dir()
 
@@ -135,4 +141,16 @@ class StarterManager(LoggingConfigurable):
             size=stat.st_size,
         )
 
-        self.contents_manager.save(model, dest)
+        allow_hidden = None
+
+        if hasattr(self.contents_manager, "allow_hidden"):
+            allow_hidden = self.contents_manager.allow_hidden
+            self.contents_manager.allow_hidden = True
+
+        try:
+            self.contents_manager.save(model, dest)
+        except Exception as err:
+            self.log.error(f"Couldn't save {dest}: {err}")
+        finally:
+            if allow_hidden is not None:
+                self.contents_manager.allow_hidden = allow_hidden

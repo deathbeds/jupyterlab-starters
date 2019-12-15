@@ -2,14 +2,20 @@
 """
 # pylint: disable=cyclic-import
 
+import re
 from copy import deepcopy
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import TYPE_CHECKING, Any, Dict, Text
 
-DEFAULT_TEMPLATE = "https://github.com/audreyr/cookiecutter-pypackage.git"
+from notebook.utils import url_path_join as ujoin
+
+from .._json import JsonSchemaException, json_validator
 
 if TYPE_CHECKING:
     from ..manager import StarterManager  # noqa
+
+DEFAULT_TEMPLATE = "https://github.com/audreyr/cookiecutter-pypackage.git"
 
 
 def cookiecutter_starters():
@@ -51,16 +57,13 @@ def cookiecutter_starters():
 async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
     """ run cookiecutter
     """
+    # pylint: disable=cyclic-import,broad-except,too-many-locals,unused-variable
     template = body["template"]
     checkout = body["checkout"] or None
 
     cookiecutter = __import__("cookiecutter.main")
 
-    manager.log.warn(f"{name} starting checkout")
-
     config_dict = cookiecutter.main.get_user_config()
-
-    manager.log.warn(f"config_dict {config_dict}")
 
     repo_dir, cleanup = cookiecutter.main.determine_repo_dir(
         template=template,
@@ -71,38 +74,81 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
         password=None,
     )
 
-    manager.log.warn(f"repo_dir {repo_dir} cleanup {cleanup}")
-
     context_file = Path(repo_dir) / "cookiecutter.json"
 
-    context = cookiecutter.main.generate_context(
+    base_context = cookiecutter.main.generate_context(
         context_file=str(context_file),
         default_context=config_dict["default_context"],
         extra_context={},
     )
 
-    manager.log.warn(f"context {context}")
-
-    # prompt the user to manually configure at the command line.
-    # except when 'no-input' flag is set
-    # context['cookiecutter'] = prompt_for_config(context, no_input)
-
-    # include template dir or url in the context dict
-    # context["cookiecutter"]["_template"] = template
-
-    schema = cookiecutter_to_schema(context["cookiecutter"])
+    schema = cookiecutter_to_schema(base_context["cookiecutter"])
 
     new_starter = deepcopy(starter)
     new_starter["schema"]["required"] += ["cookiecutter"]
     new_starter["schema"]["properties"]["cookiecutter"] = schema
 
-    return {
-        "body": body,
-        "name": name,
-        "path": path,
-        "starter": new_starter,
-        "status": "continuing",
-    }
+    validator = json_validator(new_starter["schema"])
+
+    valid = False
+
+    try:
+        validator(body)
+        valid = True
+    except JsonSchemaException as err:
+        manager.log.debug(f"validator {err}")
+
+    if not valid:
+        return {
+            "body": body,
+            "name": name,
+            "path": path,
+            "starter": new_starter,
+            "status": "continuing",
+        }
+
+    with TemporaryDirectory() as tmpd:
+        final_context = {"cookiecutter": body["cookiecutter"]}
+        final_context["cookiecutter"]["_template"] = template
+        try:
+            result = cookiecutter.main.generate_files(
+                repo_dir=repo_dir,
+                context=final_context,
+                overwrite_if_exists=True,
+                output_dir=tmpd,
+            )
+            manager.log.debug(f"result {result}")
+
+            roots = sorted(Path(tmpd).glob("*"))
+            for root in roots:
+                await manager.start_copy(
+                    "cookiecutter-copy",
+                    {
+                        "label": "Copy Cookiecutter",
+                        "description": "just copies whatever cookiecutter did",
+                        "src": str(root),
+                    },
+                    path,
+                    {},
+                )
+
+            return {
+                "body": body,
+                "name": name,
+                "path": ujoin(path, roots[0].name),
+                "starter": new_starter,
+                "status": "done",
+            }
+        except Exception as err:
+            manager.log.warn(f"cookiecutter error: {err}")
+            return {
+                "body": body,
+                "name": name,
+                "path": path,
+                "starter": new_starter,
+                "status": "continuing",
+                "errors": [str(err)],
+            }
 
 
 def cookiecutter_to_schema(cookiecutter):
@@ -118,23 +164,35 @@ def cookiecutter_to_schema(cookiecutter):
     schema["properties"] = properties = {}
 
     for field, value in cookiecutter.items():
+        title = field.replace("_", " ").replace("-", " ").title()
         if isinstance(value, str):
             if value in bools:
-                properties[field] = {"type": "boolean", "default": bools[value]}
+                properties[field] = {
+                    "type": "boolean",
+                    "default": bools[value],
+                    "title": title,
+                }
                 continue
 
-            properties[field] = {"type": "string", "default": value}
+            value_no_tmpl = re.sub(r"{[%{].*?[%}]}", "", value)
+
+            properties[field] = {
+                "type": "string",
+                "description": f"default: {value}",
+                "default": value_no_tmpl,
+                "title": title,
+                "minLength": 1,
+            }
             continue
 
         if isinstance(value, dict):
-            properties[field] = {"enum": list(value.keys())}
+            enum = list(value.keys())
+            properties[field] = {"enum": enum, "default": enum[0], "title": title}
             continue
 
         if isinstance(value, list):
-            properties[field] = {"enum": value}
+            properties[field] = {"enum": value, "default": value[0], "title": title}
             continue
-
-        print(field, value)
 
     schema["required"] = sorted(list(schema["properties"].keys()))
     return schema

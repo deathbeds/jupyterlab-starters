@@ -20,9 +20,10 @@ export interface IStarterManager {
   fetch(): Promise<void>;
   start(
     name: string,
-    contentsPath: string,
+    starter: V1.Starter,
+    path: string,
     body?: JSONObject
-  ): Promise<IStartResponse>;
+  ): Promise<V1.StartResponse>;
 }
 
 export namespace IStarterManager {
@@ -40,9 +41,4 @@ export interface IStartContext {
   name: string;
   cwd: string;
   body: JSONObject;
-}
-
-export interface IStartResponse {
-  path: string;
-  name: string;
 }
