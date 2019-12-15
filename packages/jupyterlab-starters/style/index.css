@@ -7,7 +7,6 @@
 
 .jp-Starters-BodyBuilder {
   background-color: var(--jp-layout-color0);
-  padding: var(--jp-notebook-padding);
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -17,10 +16,12 @@
   overflow-y: auto;
   flex: 1;
   max-height: 100%;
+  padding: var(--jp-notebook-padding);
 }
 
 .jp-Starters-BodyBuilder-buttons {
   flex: 0;
+  padding: var(--jp-notebook-padding);
   min-height: var(--jp-starters-btn-height);
   max-height: var(--jp-starters-btn-height);
   height: var(--jp-starters-btn-height);
@@ -36,14 +37,20 @@
 
 .jp-Starters-BodyBuilder-buttons button {
   flex: 1;
-  margin: var(--jp-ui-font-size1);
+  margin-left: var(--jp-notebook-padding);
+  height: unset;
+}
+
+.jp-Starters-BodyBuilder-buttons button:first-child {
+  margin-left: 0;
 }
 
 .jp-Starters-BodyBuilder .jp-SchemaForm > .panel.panel-danger.errors {
+  padding: var(--jp-notebook-padding);
   position: absolute;
   bottom: 0;
   background-color: var(--jp-layout-color1);
-  border: solid 1px var(--jp-warn-color0);
+  border-top: solid 1px var(--jp-warn-color0);
   right: 0;
   left: 0;
   z-index: 1;

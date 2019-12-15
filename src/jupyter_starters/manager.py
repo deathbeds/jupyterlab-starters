@@ -4,6 +4,7 @@
 import base64
 import urllib.parse
 from pathlib import Path
+from typing import List, Text
 
 import jinja2
 import traitlets as T
@@ -11,17 +12,19 @@ from notebook import _tz as tz
 from notebook.utils import url_path_join as ujoin
 from traitlets.config import LoggingConfigurable
 
+from .py_starters.cookiecutter import cookiecutter_starters
 from .schema.v1 import STARTERS
 from .trait_types import Schema
 
-IGNORE_PATTERNS = [".ipynb_checkpoints"]
+IGNORE_PATTERNS = [".ipynb_checkpoints", "node_modules", "envs"]
 
 
 class StarterManager(LoggingConfigurable):
     """ handlers starting starters
     """
 
-    starters = Schema(validator=STARTERS).tag(config=True)
+    starters = Schema(validator=STARTERS)
+    extra_starters = Schema(default_value={}, validator=STARTERS).tag(config=True)
     jinja_env = T.Instance(jinja2.Environment)
     jinja_env_extensions = T.Dict()
     extra_jinja_env_extensions = T.Dict({}).tag(config=True)
@@ -50,21 +53,39 @@ class StarterManager(LoggingConfigurable):
     def _default_starters(self):
         """ default starters
         """
-        return {}
+        starters = {}
+        starters.update(cookiecutter_starters())
+        starters.update(self.extra_starters)
+        return starters
 
-    async def start(self, starter, path, body):
+    @property
+    def starter_names(self) -> List[Text]:
+        """ convenience method to get names of starters
+        """
+        return sorted(dict(self.starters).keys())
+
+    async def start(self, name, path, body):
         """ start a starter
         """
-        spec = self.starters[starter]
+        starter = self.starters[name]
+        starter_type = starter["type"]
 
-        if spec["type"] == "copy":
-            root = Path(spec["src"]).resolve()
-        else:
-            raise NotImplementedError(spec["type"])
+        if starter_type == "copy":
+            return await self.start_copy(name, starter, path, body)
+
+        if starter_type == "python":
+            return await self.start_python(name, starter, path, body)
+
+        raise NotImplementedError(starter["type"])
+
+    async def start_copy(self, name, starter, path, body):
+        """ start a copy starter
+        """
+        root = Path(starter["src"]).resolve()
 
         root_uri = root.as_uri()
 
-        dest_tmpl_str = spec.get("dest")
+        dest_tmpl_str = starter.get("dest")
 
         if dest_tmpl_str is not None:
             dest_tmpl = self.jinja_env.from_string(dest_tmpl_str)
@@ -84,11 +105,25 @@ class StarterManager(LoggingConfigurable):
                     urllib.parse.unquote(ujoin(dest, src_uri.replace(root_uri, ""))),
                 )
         # TODO: add to schema, normalize
-        return {"starter": starter, "path": dest}
+        return {
+            "body": body,
+            "name": name,
+            "path": dest,
+            "starter": starter,
+            "status": "done",
+        }
+
+    async def start_python(self, name, starter, path, body):
+        """ start a python starter
+        """
+        func = T.import_item(starter["callable"])
+        return await func(name, starter, path, body, self)
 
     async def save_one(self, src, dest):
         """ use the contents manager to write a single file/folder
         """
+        # pylint: disable=broad-except
+
         stat = src.stat()
         is_dir = src.is_dir()
 
@@ -106,4 +141,16 @@ class StarterManager(LoggingConfigurable):
             size=stat.st_size,
         )
 
-        self.contents_manager.save(model, dest)
+        allow_hidden = None
+
+        if hasattr(self.contents_manager, "allow_hidden"):
+            allow_hidden = self.contents_manager.allow_hidden
+            self.contents_manager.allow_hidden = True
+
+        try:
+            self.contents_manager.save(model, dest)
+        except Exception as err:
+            self.log.error(f"Couldn't save {dest}: {err}")
+        finally:
+            if allow_hidden is not None:
+                self.contents_manager.allow_hidden = allow_hidden

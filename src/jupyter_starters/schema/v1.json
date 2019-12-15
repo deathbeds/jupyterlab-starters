@@ -3,6 +3,9 @@
   "anyOf": [
     {
       "$ref": "#/definitions/all-starters"
+    },
+    {
+      "$ref": "#/definitions/start-response"
     }
   ],
   "definitions": {
@@ -27,6 +30,35 @@
         "$ref": "#/definitions/starter"
       }
     },
+    "start-response": {
+      "title": "StartResponse",
+      "type": "object",
+      "required": ["name", "path", "starter", "body", "status"],
+      "properties": {
+        "starter": {
+          "$ref": "#/definitions/starter"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["error", "continuing", "done"]
+        },
+        "name": {
+          "type": "string"
+        },
+        "body": {
+          "type": "object"
+        },
+        "path": {
+          "type": "string"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "starter": {
       "title": "Starter",
       "allOf": [
@@ -46,6 +78,9 @@
             },
             {
               "$ref": "#/definitions/starter-command"
+            },
+            {
+              "$ref": "#/definitions/starter-python"
             }
           ]
         }
@@ -110,6 +145,7 @@
       }
     },
     "starter-copy-with-dest": {
+      "title": "Copy with Destination Starter",
       "allOf": [
         {
           "$ref": "#/definitions/starter-copy"
@@ -127,6 +163,7 @@
     },
     "starter-command": {
       "title": "Command Starter",
+      "description": "Not implemented",
       "required": ["argv", "type"],
       "properties": {
         "type": {
@@ -138,6 +175,22 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "starter-python": {
+      "title": "Python Starter",
+      "description": "Invokes an importable python function (multiple times)",
+      "required": ["type", "callable", "schema"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["python"]
+        },
+        "callable": {
+          "description": "a python function that accepts the `body`",
+          "type": "string",
+          "pattern": "[a-zA-Z_\\d\\.]"
         }
       }
     }

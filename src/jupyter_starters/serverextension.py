@@ -9,3 +9,4 @@ def load_jupyter_server_extension(nbapp):
     """
     manager = StarterManager(parent=nbapp)
     add_handlers(nbapp, manager)
+    nbapp.log.info(f"""[💡] starters: {", ".join(manager.starter_names)}""")

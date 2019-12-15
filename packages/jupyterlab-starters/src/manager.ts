@@ -14,6 +14,7 @@ import * as V1 from './_v1';
 import { API } from './tokens';
 
 import DEFAULT_ICON_SVG from '!!raw-loader!../style/icons/starter.svg';
+import COOKIECUTTER_SVG from '!!raw-loader!../style/icons/cookiecutter.svg';
 
 const { makeRequest, makeSettings } = ServerConnection;
 
@@ -27,7 +28,11 @@ export class StarterManager implements IStarterManager {
     this._icons = options.icons;
     this._changed = new Signal<IStarterManager, void>(this);
     const icon = { name: DEFAULT_ICON_NAME, svg: DEFAULT_ICON_SVG };
-    this._icons.addIcon(icon);
+    const cookiecutter = {
+      name: 'cookiecutter-starter',
+      svg: COOKIECUTTER_SVG
+    };
+    this._icons.addIcon(icon, cookiecutter);
   }
 
   get changed() {
@@ -49,14 +54,19 @@ export class StarterManager implements IStarterManager {
     this._changed.emit(void 0);
   }
 
-  async start(name: string, contentsPath: string, body?: JSONObject) {
+  async start(
+    name: string,
+    _starter: V1.Starter,
+    contentsPath: string,
+    body?: JSONObject
+  ) {
     const init = { method: 'POST' } as RequestInit;
     if (body) {
       init.body = JSON.stringify(body);
     }
     const url = URLExt.join(API, name, contentsPath);
     const response = await makeRequest(url, init, this._serverSettings);
-    const result = await response.json();
+    const result = (await response.json()) as V1.StartResponse;
     return result;
   }
 

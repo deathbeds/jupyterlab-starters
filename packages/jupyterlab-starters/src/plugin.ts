@@ -18,6 +18,7 @@ import {
   IStarterManager
 } from './tokens';
 import { BodyBuilder } from './bodybuilder';
+import * as V1 from './_v1';
 
 const plugin: JupyterFrontEndPlugin<void> = {
   id: `${NS}:plugin`,
@@ -37,15 +38,37 @@ const plugin: JupyterFrontEndPlugin<void> = {
         const { starter, name, cwd, body } = context;
 
         if (starter.schema && !body) {
-          const content = new BodyBuilder({ manager, context });
+          const content = new BodyBuilder({ manager, context, name });
           const main = new MainAreaWidget({ content });
           app.shell.add(main, 'main', { mode: 'split-right' });
-          content.start.connect(async (builder, context) => {
-            await commands.execute(CommandIDs.start, context as any);
-            main.dispose();
+          content.model.start.connect(async (builder, context) => {
+            const response = (await commands.execute(
+              CommandIDs.start,
+              context as any
+            )) as V1.StartResponse;
+            switch (response.status) {
+              case 'done':
+                main.dispose();
+                await commands.execute('filebrowser:open-path', {
+                  path: response.path
+                });
+                break;
+              case 'continuing':
+                content.model.context = {
+                  starter: response.starter,
+                  name: response.name,
+                  body: response.body,
+                  cwd: response.path
+                };
+                break;
+              default:
+                console.error(`Unknown status ${response.status}`, response);
+            }
           });
+        } else if (starter.schema && body) {
+          return await manager.start(name, starter, cwd, body);
         } else {
-          const response = await manager.start(name, cwd, body);
+          const response = await manager.start(name, starter, cwd, body);
 
           if (starter.commands) {
             for (const cmd of starter.commands) {
