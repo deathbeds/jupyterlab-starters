@@ -57,13 +57,8 @@ jobs:
               - script: ${{ platform.activate }} jupyterlab-starters && jlpm lerna run bundle
                 displayName: build npm bundles
 
-              - script: ${{ platform.activate }} jupyterlab-starters && cd dist && python -m pip install jupyter_starters-$(PY_JLS_VERSION)-py3-none-any.whl --no-deps
+              - script: ${{ platform.activate }} jupyterlab-starters && cd dist && python -m pip install jupyter_starters-$(PY_JLST_VERSION)-py3-none-any.whl --no-deps
                 displayName: install python wheel
-
-              - task: PublishCodeCoverageResults@1
-                inputs:
-                  codeCoverageTool: Cobertura
-                  summaryFileLocation: 'packages/**/coverage/cobertura-coverage.xml'
 
               - script: ${{ platform.activate }} jupyterlab-starters && jupyter serverextension list
                 displayName: list server extensions

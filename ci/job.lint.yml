@@ -25,9 +25,6 @@ jobs:
               - script: ${{ parameters.env_update }} || ${{ parameters.env_update }} || ${{ parameters.env_update }}
                 displayName: update conda environment with test dependencies
 
-              - script: ${{ platform.activate }} jupyterlab-starters && python scripts/integrity.py
-                displayName: check integrity of package versions
-
               - script: ${{ platform.activate }} jupyterlab-starters && jlpm || jlpm || jlpm
                 displayName: install npm dependencies
 
