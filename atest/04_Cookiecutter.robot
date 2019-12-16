@@ -25,5 +25,5 @@ Happy Path
     Double Click Element    ${index ipynb}
     Wait Until Kernel
     Wait Until Page Contains Element    id:My-Next-Little-Idea
-    Click Element    ${NOTEBOOK SAVE}
+    Save Notebook
     Capture Page Screenshot    cookiecutter-3.png

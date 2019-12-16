@@ -1,7 +1,6 @@
 """ some more traits
 """
 # pylint: disable=broad-except,unused-argument
-import six
 import traitlets
 
 from ._json import JsonSchemaException

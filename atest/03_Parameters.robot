@@ -28,5 +28,5 @@ Parameter Notebook
     Wait Until Kernel
     Capture Page Screenshot    notebook-0.png
     Wait Until Page Contains Element    id:My-Next-Big-Idea
-    Click Element    ${NOTEBOOK SAVE}
+    Save Notebook
     Capture Page Screenshot    notebook-1.png

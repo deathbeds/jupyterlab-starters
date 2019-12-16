@@ -132,3 +132,8 @@ Wait Until Kernel
     [Arguments]    ${kernel}=Python 3
     [Documentation]    Wait for a kernel to be ready
     Wait Until Element Contains    css:.jp-Toolbar-kernelName    ${kernel}
+
+Save Notebook
+    [Documentation]    Save the notebook
+    Click Element    ${NOTEBOOK SAVE}
+    Sleep    0.5s
