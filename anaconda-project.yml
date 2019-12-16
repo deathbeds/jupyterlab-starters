@@ -4,7 +4,7 @@ commands:
   lab:
     unix: jupyter lab --no-browser --debug
   lint:
-    unix: python scripts/lint.py
+    unix: python scripts/lint.py && jlpm lint
   atest:
     unix: python scripts/atest.py
 

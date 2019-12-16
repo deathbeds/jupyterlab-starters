@@ -1,0 +1,14 @@
+name: jupyterlab-starters
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - firefox
+  - flake8 >=3.5
+  - geckodriver
+  - jupyterlab {lab}
+  - nodejs
+  - python {python}
+  - robotframework-seleniumlibrary

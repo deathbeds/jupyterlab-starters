@@ -46,6 +46,16 @@
     "typescript": "~3.7.2"
   },
   "jupyterlab": {
+    "discovery": {
+      "server": {
+        "base": {
+          "name": "jupyter_starters"
+        },
+        "managers": [
+          "pip"
+        ]
+      }
+    },
     "extension": "lib/plugin.js"
   }
 }

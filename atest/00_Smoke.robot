@@ -9,9 +9,3 @@ Lab Version
     ${config} =    Evaluate    __import__("json").loads("""${script}""")
     Set Global Variable    ${PAGE CONFIG}    ${config}
     Set Global Variable    ${LAB VERSION}    ${config["appVersion"]}
-
-Launcher
-    Page Should Contain Element    ${CSS LAUNCH SECTION}
-    Scroll Element Into View    ${CSS LAUNCH SECTION}
-    Scroll Element Into View    ${CSS LAUNCH CARD}
-    Capture Page Screenshot    launcher.png

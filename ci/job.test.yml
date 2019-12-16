@@ -1,0 +1,91 @@
+parameters:
+  platforms:
+    - name: Linux
+      vmImage: ubuntu-16.04
+      activate: source activate
+    - name: MacOSX
+      vmImage: macos-10.13
+      activate: source activate
+    - name: Windows
+      vmImage: vs2017-win2016
+      activate: call activate
+  pythons:
+    - name: ThreeSix
+      spec: '>=3.6,<3.7.0a0'
+      lab: '>=1.1,<1.2.0a0'
+    - name: ThreeSeven
+      spec: '>=3.7,<3.8.0a0'
+      lab: '>=1.2.3,<1.3.0a0'
+  env_update: conda env update -n jupyterlab-starters --file env-test.yml --quiet
+  lab_ext: jupyter labextension install --no-build $(FIRST_PARTY_LABEXTENSIONS)
+
+jobs:
+  - ${{ each platform in parameters.platforms }}:
+      - ${{ each python in parameters.pythons}}:
+          - job: ${{ platform.name }}${{ python.name }}
+            pool:
+              vmImage: ${{ platform.vmImage }}
+            steps:
+              - template: steps.conda.yml
+                parameters:
+                  name: ${{ platform.name }}
+
+              - script: ${{ platform.activate }} && cd ci && python env_template.py "${{ python.spec }}" "${{ python.lab }}"
+                displayName: update environment with python and lab version
+
+              - script: ${{ parameters.env_update }} || ${{ parameters.env_update }} || ${{ parameters.env_update }}
+                displayName: update conda environment with test dependencies
+
+              - script: conda info && conda list -n jupyterlab-starters
+                displayName: list conda packages and info
+
+              - task: CacheBeta@0
+                inputs:
+                  key: yarn | $(Agent.OS) | yarn.lock
+                  path: $(YARN_CACHE_FOLDER)
+                displayName: restore cached yarn packages
+
+              - script: ${{ platform.activate }} jupyterlab-starters && jlpm || jlpm || jlpm
+                displayName: install npm dependencies
+
+              - script: ${{ platform.activate }} jupyterlab-starters && jlpm build
+                displayName: build typescript
+
+              - script: ${{ platform.activate }} jupyterlab-starters && python setup.py sdist bdist_wheel
+                displayName: build python distributions
+
+              - script: ${{ platform.activate }} jupyterlab-starters && jlpm lerna run bundle
+                displayName: build npm bundles
+
+              - script: ${{ platform.activate }} jupyterlab-starters && cd dist && python -m pip install jupyter_starters-$(PY_JLST_VERSION)-py3-none-any.whl --no-deps
+                displayName: install python wheel
+
+              - script: ${{ platform.activate }} jupyterlab-starters && jupyter serverextension list
+                displayName: list server extensions
+
+              - script: ${{ platform.activate }} jupyterlab-starters && ${{ parameters.lab_ext }} || ${{ parameters.lab_ext }} || ${{ parameters.lab_ext }}
+                displayName: install labextensions
+
+              - script: ${{ platform.activate }} jupyterlab-starters && jupyter lab build || jupyter lab build --debug || jupyter lab build --debug
+                displayName: build lab
+
+              - script: ${{ platform.activate }} jupyterlab-starters && jupyter labextension list
+                displayName: list labextensions
+
+              - script: ${{ platform.activate }} jupyterlab-starters && python scripts/atest.py
+                displayName: run browser tests
+
+              - task: PublishTestResults@2
+                displayName: publish browser test results
+                inputs:
+                  testResultsFiles: atest/output/*.xunit.xml
+                  testRunTitle: 'Robot ${{ platform.name }}${{ python.name }}'
+                  mergeTestResults: true
+                condition: always()
+
+              - task: PublishPipelineArtifact@0
+                displayName: publish browser test output
+                inputs:
+                  targetPath: atest/output
+                  artifactName: Robot ${{ platform.name }}${{ python.name }} $(Build.BuildId)
+                condition: always()

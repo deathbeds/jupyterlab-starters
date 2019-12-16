@@ -1,0 +1,36 @@
+parameters:
+  platforms:
+    - name: Linux
+      vmImage: ubuntu-16.04
+      activate: source activate
+  pythons:
+    - name: ThreeSeven
+      spec: '>=3.7,<3.8.0a0'
+  env_update: conda env update -n jupyterlab-starters --file env-test.yml --quiet
+  jlpm: jlpm --no-optional --prefer-offline
+
+jobs:
+  - ${{ each platform in parameters.platforms }}:
+      - ${{ each python in parameters.pythons}}:
+          - job: Lint
+            pool:
+              vmImage: ${{ platform.vmImage }}
+            steps:
+              - template: steps.conda.yml
+                parameters:
+                  name: ${{ platform.name }}
+
+              - script: ${{ platform.activate }} && cd ci && python env_template.py "${{ python.spec }}" ">=1,<2"
+                displayName: update environment with python version
+
+              - script: ${{ parameters.env_update }} || ${{ parameters.env_update }} || ${{ parameters.env_update }}
+                displayName: update conda environment with test dependencies
+
+              - script: ${{ platform.activate }} jupyterlab-starters && ${{ parameters.jlpm }} || ${{ parameters.jlpm }} || ${{ parameters.jlpm }}
+                displayName: install npm dependencies
+
+              - script: ${{ platform.activate }} jupyterlab-starters && jlpm build
+                displayName: build so linting can complete
+
+              - script: ${{ platform.activate }} jupyterlab-starters && jlpm lint:check
+                displayName: lint frontend
