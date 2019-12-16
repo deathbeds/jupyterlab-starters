@@ -9,6 +9,9 @@ FOR_REAL = bool(os.environ.get("FOR_REAL", "0"))
 def upload():
     """ upload releases
     """
+    if not FOR_REAL:
+        print("Not uploading FOR_REAL: set the environment variable for a real release")
+
     pypi_registry = (
         "https://test.pypi.org/legacy/" if FOR_REAL else "https://test.pypi.org/legacy/"
     )
