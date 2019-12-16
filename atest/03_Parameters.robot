@@ -4,11 +4,15 @@ Suite Setup       Setup Suite For Screenshots    parameters
 Resource          Keywords.robot
 Library           String
 
+*** Variables ***
+${CSS TOPIC}      css:input[label="Topic"]
+
 *** Test Cases ***
 Cancel
     [Documentation]    Does the cancel button work?
     Click Element    ${CSS LAUNCH CARD NOTEBOOK PARAM}
     Wait Until Page Contains Element    ${CSS BODYBUILDER}
+    Really Input Text    ${CSS TOPIC}    cancel
     Capture Page Screenshot    cancel-0.png
     Wait Until Keyword Succeeds    3x    0.5s    Cancel Starter Form
     Capture Page Screenshot    cancel-1.png
@@ -17,10 +21,7 @@ Parameter Notebook
     [Documentation]    Can we start a single notebook with parameters?
     Click Element    ${CSS LAUNCH CARD NOTEBOOK PARAM}
     ${topic} =    Generate Random String
-    ${topic css} =    Set Variable    css:input[label\="Topic"]
-    Wait Until Page Contains Element    ${topic css}
-    Click Element    ${topic css}
-    Really Input Text    css:input[label\="Topic"]    ${topic}
+    Really Input Text    ${CSS TOPIC}    ${topic}
     Advance Starter Form
     Wait Until Page Contains Element    ${XP FILE TREE ITEM}\[contains(text(), '${topic} Whitepaper.ipynb')]
     Wait Until Kernel

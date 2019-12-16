@@ -133,6 +133,8 @@ Really Input Text
 Input and Check Text
     [Arguments]    ${locator}    ${text}
     [Documentation]    Input (and check) text was entered
+    Wait Until Page Contains Element    ${locator}
+    Click Element    ${locator}
     Input Text    ${locator}    ${text}
     Sleep    0.5s
     Element Attribute Value Should Be    ${locator}    value    ${text}
