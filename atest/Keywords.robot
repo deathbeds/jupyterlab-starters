@@ -146,9 +146,10 @@ Wait Until Kernel
 
 Save Notebook
     [Documentation]    Save the notebook
-    Click Element    ${NOTEBOOK SAVE}
+    Click Element    ${CSS NOTEBOOK SAVE}
     Sleep    0.5s
 
 Accept Default Dialog Option
     [Documentation]    Accept a dialog, if it exists
-    Run Keyword and Ignore Error    Click Element    css:.jp-Dialog .jp-mod-accept
+    ${el} =    Get WebElements    ${CSS DIALOG OK}
+    Run Keyword If    ${el.__len__()}    Click Element    ${CSS DIALOG OK}
