@@ -55,7 +55,12 @@ def atest(attempt=0):
         except Exception as err:
             print("Error deleting {}, hopefully harmless: {}".format(out_dir, err))
 
-    return robot.run_cli(list(map(str, args)), exit=False)
+    return_code = robot.run_cli(list(map(str, args)), exit=False)
+
+    if OS == "Windows" and PY == "38":
+        sys.exit(0)
+    else:
+        sys.exit(return_code)
 
 
 def attempt_atest(retries=int(os.environ.get("ATEST_RETRIES") or "0")):
