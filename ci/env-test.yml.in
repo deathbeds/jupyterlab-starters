@@ -6,12 +6,8 @@ channels:
 
 dependencies:
   - firefox
-  - flake8 >=3.5
   - geckodriver
   - jupyterlab {lab}
   - nodejs
-  - pytest
-  - pytest-azurepipelines
   - python {python}
   - robotframework-seleniumlibrary
-  - ruamel_yaml

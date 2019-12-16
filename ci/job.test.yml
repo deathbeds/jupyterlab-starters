@@ -21,6 +21,7 @@ parameters:
       lab: '>=1.2.3,<1.3.0a0'
   env_update: conda env update -n jupyterlab-starters --file env-test.yml --quiet
   lab_ext: jupyter labextension install --no-build $(FIRST_PARTY_LABEXTENSIONS)
+  jlpm: jlpm --no-optional --prefer-offline
 
 jobs:
   - ${{ each platform in parameters.platforms }}:
@@ -48,7 +49,7 @@ jobs:
                   path: $(YARN_CACHE_FOLDER)
                 displayName: restore cached yarn packages
 
-              - script: ${{ platform.activate }} jupyterlab-starters && jlpm || jlpm || jlpm
+              - script: ${{ platform.activate }} jupyterlab-starters && ${{ parameters.jlpm }} || ${{ parameters.jlpm }} || ${{ parameters.jlpm }}
                 displayName: install npm dependencies
 
               - script: ${{ platform.activate }} jupyterlab-starters && jlpm build
