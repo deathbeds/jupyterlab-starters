@@ -2,7 +2,7 @@
 
 > _Parameterized file and directory starters for JupyterLab._
 
-[![badge-binder][]][binder] [![badge-ci][]][ci] [![license][]](./LICENSE)
+[![badge-binder][]][binder] [![badge-ci][]][ci] [![roadmap-badge][]][roadmap] [![changelog-badge][]][changelog] ![python-badge][] ![jupyterlab-badge][] [![license-badge][]][license]
 
 ## What's a starter?
 
@@ -16,7 +16,7 @@
 
 ## Installing
 
-> _TBD: for the time being, try a [development install](./CONTRIBUTING.md)._
+> _TBD: for the time being, try a [development install][contributing]._
 
 ## Configuring
 
@@ -64,4 +64,12 @@ Don't like what you see here? Try these other approaches:
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
 [notebook-config]: https://jupyter-notebook.readthedocs.io/en/stable/config.html
 [launcher]: https://jupyterlab.readthedocs.io/en/stable/user/files.html#creating-files-and-activities
-[license]: https://img.shields.io/github/license/deathbeds/jupyterlab-starters
+[license-badge]: https://img.shields.io/github/license/deathbeds/jupyterlab-starters
+[roadmap-badge]: https://img.shields.io/badge/docs-roadmap-purple
+[changelog-badge]: https://img.shields.io/badge/docs-changelog-purple
+[jupyterlab-badge]: https://img.shields.io/badge/jupyterlab-1.x-orange?logo=jupyter
+[python-badge]: https://img.shields.io/badge/python-3.6+-blue?logo=python
+[roadmap]: https://github.com/deathbeds/jupyterlab-starters/tree/master/ROADMAP.md
+[changelog]: https://github.com/deathbeds/jupyterlab-starters/tree/master/CHANGELOG.md
+[contributing]: https://github.com/deathbeds/jupyterlab-starters/tree/master/CONTRIBUTING.md
+[license]: https://github.com/deathbeds/jupyterlab-starters/tree/master/LICENSE
