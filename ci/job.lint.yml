@@ -23,10 +23,6 @@ jobs:
       - script: git diff || echo "no changes"
         displayName: show changes
 
-      - script: |-
-          [ -n "$(git diff)" ] && exit 1
-        displayName: check for clean files
-
       - script: source activate jupyterlab-starters && ${{ parameters.jlpm }} || ${{ parameters.jlpm }} || ${{ parameters.jlpm }}
         displayName: install npm dependencies
 
