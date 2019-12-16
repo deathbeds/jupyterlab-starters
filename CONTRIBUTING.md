@@ -41,7 +41,7 @@ anaconda-project run atest
 
 > _You have to run against a "clean" lab, e.g. `postBuild`_
 
-## Hacking
+## hacking
 
 ```bash
 anaconda-project run jlpm watch
