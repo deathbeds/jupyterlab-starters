@@ -4,6 +4,8 @@
 
 [![badge-binder][]][binder] [![badge-ci][]][ci] [![roadmap-badge][]][roadmap] [![changelog-badge][]][changelog] ![python-badge][] ![jupyterlab-badge][] [![license-badge][]][license]
 
+![screenshot][]
+
 ## What's a starter?
 
 - [x] A single file
@@ -73,3 +75,4 @@ Don't like what you see here? Try these other approaches:
 [changelog]: https://github.com/deathbeds/jupyterlab-starters/tree/master/CHANGELOG.md
 [contributing]: https://github.com/deathbeds/jupyterlab-starters/tree/master/CONTRIBUTING.md
 [license]: https://github.com/deathbeds/jupyterlab-starters/tree/master/LICENSE
+[screenshot]: https://raw.githubusercontent.com/deathbeds/jupyterlab-starters/master/docs/screenshot.png
