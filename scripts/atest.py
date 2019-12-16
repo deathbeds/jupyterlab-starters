@@ -44,6 +44,7 @@ def atest(attempt=0):
         f"PY:{PY}",
         "--noncritical",
         "ospy:windows38",
+        "--xunitskipnoncritical",
         *sys.argv[1:],
         ATEST,
     ]

@@ -77,8 +77,12 @@ def the_meta_package():
 )
 def test_ci_variables(name, version):
     """ are CI variables right?
+        npm includes a -
     """
-    assert PIPE_VARS[name] == version
+    if name.startswith("JS"):
+        assert PIPE_VARS[name].replace("-", "") == version
+    else:
+        assert PIPE_VARS[name] == version
 
 
 @pytest.mark.parametrize(
