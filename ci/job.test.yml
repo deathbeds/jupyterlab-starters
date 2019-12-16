@@ -43,12 +43,6 @@ jobs:
               - script: conda info && conda list -n jupyterlab-starters
                 displayName: list conda packages and info
 
-              - task: CacheBeta@0
-                inputs:
-                  key: yarn | $(Agent.OS) | yarn.lock
-                  path: $(YARN_CACHE_FOLDER)
-                displayName: restore cached yarn packages
-
               - script: ${{ platform.activate }} jupyterlab-starters && ${{ parameters.jlpm }} || ${{ parameters.jlpm }} || ${{ parameters.jlpm }}
                 displayName: install npm dependencies
 
