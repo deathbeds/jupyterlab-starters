@@ -1,9 +1,9 @@
 # CHANGELOG
 
-## @deathbeds/jupyter-starters 0.1.0 (unreleased)
+## `@deathbeds/jupyterlab-starters 0.1.0` (unreleased)
 
 - initial implementation
 
-## jupyter_starters 0.1.0 (unreleased)
+## `jupyter_starters 0.1.0` (unreleased)
 
 - initial implementation

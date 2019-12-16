@@ -1,5 +1,5 @@
 {
-  "name": "@deathbeds/jupyterlab-starter-metapackage",
+  "name": "@deathbeds/metapackage-jupyterlab-starters",
   "version": "0.1.0",
   "description": "JupyterLab Starters - Meta Package",
   "homepage": "https://github.com/deathbeds/jupyterlab-starters",

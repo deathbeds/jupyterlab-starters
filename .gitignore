@@ -1,8 +1,8 @@
 __pycache__/
 _*.d.ts
 .ipynb_checkpoints/
-.mypy_cache
-.pytest_cache
+.mypy_cache/
+.pytest_cache/
 .vscode/
 .yarn-packages/
 *.egg-info

@@ -10,5 +10,8 @@ dependencies:
   - geckodriver
   - jupyterlab {lab}
   - nodejs
+  - pytest
+  - pytest-azurepipelines
   - python {python}
   - robotframework-seleniumlibrary
+  - ruamel_yaml

@@ -5,6 +5,8 @@ commands:
     unix: jupyter lab --no-browser --debug
   lint:
     unix: python scripts/lint.py && jlpm lint
+  integrity:
+    unix: python scripts/integrity.py
   atest:
     unix: python scripts/atest.py
   release:
@@ -24,7 +26,9 @@ env_specs:
       - isort
       - mypy
       - pylint
+      - pytest
       - robotframework-seleniumlibrary
+      - ruamel_yaml
       - twine >=1.11.0
       - wheel >=0.31.0
 
