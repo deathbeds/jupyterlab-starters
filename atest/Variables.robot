@@ -6,12 +6,12 @@ ${BASE}           /@est/
 ${HEADLESS}       1
 ${CMD PALETTE INPUT}    css:.p-CommandPalette-input
 ${CMD PALETTE ITEM ACTIVE}    css:.p-CommandPalette-item.p-mod-active
-${JLAB XP TOP}    //div[@id='jp-top-panel']
-${JLAB XP MENU ITEM LABEL}    //div[@class='p-Menu-itemLabel']
-${JLAB XP MENU LABEL}    //div[@class='p-MenuBar-itemLabel']
-${JLAB CSS VERSION}    css:.jp-About-version
 ${XP LAUNCH SECTION}    xpath://h2[contains(@class, 'jp-Launcher-sectionTitle')][contains(text(), 'Starters')]
 ${CSS LAUNCH CARD}    css:[data-category\="Starters"]
 ${CSS LAUNCH CARD NOTEBOOK}    ${CSS LAUNCH CARD}\[title\="A reusable notebook for proposing research"]
+${CSS LAUNCH CARD NOTEBOOK PARAM}    ${CSS LAUNCH CARD}\[title\="A renamed whitepaper"]
 ${CSS LAUNCH CARD FOLDER}    ${CSS LAUNCH CARD}\[title\="Some reusable notebooks for proposing research"]
 ${XP FILE TREE ITEM}    xpath://span[contains(@class, 'jp-DirListing-itemText')]
+${CSS BODYBUILDER}    css:.jp-Starters-BodyBuilder
+${CSS BODYBUILDER ACCEPT}    css:.jp-Starters-BodyBuilder-buttons .jp-mod-accept
+${CSS BODYBUILDER CANCEL}    css:.jp-Starters-BodyBuilder-buttons .jp-mod-warn

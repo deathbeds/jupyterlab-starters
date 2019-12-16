@@ -1,4 +1,5 @@
 *** Settings ***
+Documentation     All the tests
 Suite Setup       Setup Server and Browser
 Suite Teardown    Tear Down Everything
 Test Setup        Reset Application State
