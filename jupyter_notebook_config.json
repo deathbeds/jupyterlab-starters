@@ -1,5 +1,8 @@
 {
   "StarterManager": {
+    "extra_jinja_env_extensions": {
+      "jinja2_time.TimeExtension": true
+    },
     "extra_starters": {
       "whitepaper-single": {
         "type": "copy",

@@ -37,7 +37,7 @@ class StarterManager(LoggingConfigurable):
 
     @T.default("jinja_env_extensions")
     def _default_env_extensions(self):
-        extensions = {"jinja2_time.TimeExtension": True}
+        extensions = {}
         extensions.update(self.extra_jinja_env_extensions)
         return extensions
 
