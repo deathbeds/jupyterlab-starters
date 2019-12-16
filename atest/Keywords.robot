@@ -119,6 +119,12 @@ Advance Starter Form
     Wait Until Page Contains Element    ${CSS BODYBUILDER ACCEPT}
     Click Element    ${CSS BODYBUILDER ACCEPT}
 
+Cancel Starter Form
+    [Documentation]    Clicks the cancle in a starter form
+    Wait Until Page Contains Element    ${CSS BODYBUILDER CANCEL}
+    Click Element    ${CSS BODYBUILDER CANCEL}
+    Wait Until Page Does Not Contain Element    ${CSS BODYBUILDER}
+
 Really Input Text
     [Arguments]    ${locator}    ${text}
     [Documentation]    Really make sure some text is set
@@ -142,4 +148,5 @@ Save Notebook
     Sleep    0.5s
 
 Accept Default Dialog Option
+    [Documentation]    Accept a dialog, if it exists
     Run Keyword and Ignore Error    Click Element    css:.jp-Dialog .jp-mod-accept

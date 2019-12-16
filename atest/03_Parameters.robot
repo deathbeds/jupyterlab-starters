@@ -10,9 +10,7 @@ Cancel
     Click Element    ${CSS LAUNCH CARD NOTEBOOK PARAM}
     Wait Until Page Contains Element    ${CSS BODYBUILDER}
     Capture Page Screenshot    cancel-0.png
-    Wait Until Page Contains Element    ${CSS BODYBUILDER CANCEL}
-    Click Element    ${CSS BODYBUILDER CANCEL}
-    Wait Until Page Does Not Contain Element    ${CSS BODYBUILDER}
+    Wait Until Keyword Succeeds    3x    0.5s    Cancel Starter Form
     Capture Page Screenshot    cancel-1.png
 
 Parameter Notebook

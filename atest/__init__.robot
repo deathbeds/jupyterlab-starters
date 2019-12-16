@@ -2,6 +2,6 @@
 Documentation     All the tests
 Suite Setup       Setup Server and Browser
 Suite Teardown    Tear Down Everything
-Test Teardown     Reset Application State
+Test Setup        Reset Application State
 Force Tags        os:${OS.lower()}    py:${PY}    ospy:${OS.lower()}${PY}
 Resource          Keywords.robot
