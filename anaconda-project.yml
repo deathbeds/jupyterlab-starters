@@ -7,6 +7,8 @@ commands:
     unix: python scripts/lint.py && jlpm lint
   atest:
     unix: python scripts/atest.py
+  release:
+    unix: python scripts/release.py
 
 env_specs:
   default:
