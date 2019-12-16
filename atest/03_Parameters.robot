@@ -22,9 +22,11 @@ Parameter Notebook
     ${topic css} =    Set Variable    css:input[label\="Topic"]
     Wait Until Page Contains Element    ${topic css}
     Click Element    ${topic css}
-    Input Text    css:input[label\="Topic"]    ${topic}
+    Really Input Text    css:input[label\="Topic"]    ${topic}
     Advance Starter Form
     Wait Until Page Contains Element    ${XP FILE TREE ITEM}\[contains(text(), '${topic} Whitepaper.ipynb')]
+    Wait Until Kernel
+    Capture Page Screenshot    notebook-0.png
     Wait Until Page Contains Element    id:My-Next-Big-Idea
     Click Element    ${NOTEBOOK SAVE}
-    Capture Page Screenshot    notebook.png
+    Capture Page Screenshot    notebook-1.png

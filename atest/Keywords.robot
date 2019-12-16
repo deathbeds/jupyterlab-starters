@@ -115,3 +115,20 @@ Advance Starter Form
     [Documentation]    Clicks the accept in a starter form
     Wait Until Page Contains Element    ${CSS BODYBUILDER ACCEPT}
     Click Element    ${CSS BODYBUILDER ACCEPT}
+
+Really Input Text
+    [Arguments]    ${locator}    ${text}
+    [Documentation]    Really make sure some text is set
+    Wait Until Keyword Succeeds    3x    200ms    Input and Check Text    ${locator}    ${text}
+
+Input and Check Text
+    [Arguments]    ${locator}    ${text}
+    [Documentation]    Input (and check) text was entered
+    Input Text    ${locator}    ${text}
+    Sleep    0.5s
+    Element Attribute Value Should Be    ${locator}    value    ${text}
+
+Wait Until Kernel
+    [Arguments]    ${kernel}=Python 3
+    [Documentation]    Wait for a kernel to be ready
+    Wait Until Element Contains    css:.jp-Toolbar-kernelName    ${kernel}

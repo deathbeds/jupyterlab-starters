@@ -8,9 +8,11 @@ Simple Notebook
     [Documentation]    Can we start a single notebook?
     Click Element    ${CSS LAUNCH CARD NOTEBOOK}
     Wait Until Created    ${HOME}${/}whitepaper-single.ipynb
+    Capture Page Screenshot    notebook-0.png
+    Wait Until Kernel
     Wait Until Page Contains Element    id:My-Next-Big-Idea
     Click Element    ${NOTEBOOK SAVE}
-    Capture Page Screenshot    notebook.png
+    Capture Page Screenshot    notebook-1.png
 
 Simple Folder
     [Documentation]    Can we start a folder?

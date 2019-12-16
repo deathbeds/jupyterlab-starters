@@ -14,7 +14,7 @@ Happy Path
     Wait Until Page Contains Element    ${template css}
     Capture Page Screenshot    cookiecutter-0.png
     Click Element    ${template css}
-    Input Text    ${template css}    ./examples/cookiecutter
+    Really Input Text    ${template css}    ./examples/cookiecutter
     Advance Starter Form
     Capture Page Screenshot    cookiecutter-1.png
     Wait Until Page Contains Element    ${size css}
@@ -23,6 +23,7 @@ Happy Path
     Wait Until Page Contains Element    ${index ipynb}
     Capture Page Screenshot    cookiecutter-2.png
     Double Click Element    ${index ipynb}
+    Wait Until Kernel
     Wait Until Page Contains Element    id:My-Next-Little-Idea
     Click Element    ${NOTEBOOK SAVE}
     Capture Page Screenshot    cookiecutter-3.png
