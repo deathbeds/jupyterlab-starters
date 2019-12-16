@@ -74,8 +74,12 @@ Close JupyterLab
 Reset Application State
     [Documentation]    Try to get a clean slate
     Lab Command    Close All Tabs
+    Sleep    0.5s
+    Run Keyword and Ignore Error    Click Element    css:.jp-Dialog .jp-mod-warn
     Ensure All Kernels Are Shut Down
     Lab Command    Reset Application State
+    Sleep    0.5s
+    Run Keyword and Ignore Error    Click Element    css:.jp-Dialog .jp-mod-warn
     Wait For Splash
     Lab Command    Close All Tabs
 
