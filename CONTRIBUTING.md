@@ -60,3 +60,10 @@ anaconda-project run lab --watch
 ```bash
 anaconda-project run lint
 ```
+
+## releasing
+
+```bash
+anaconda-project run release
+anaconda-project run upload
+```

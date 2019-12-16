@@ -27,7 +27,8 @@
     "build:pre": "json2ts ../../src/jupyter_starters/schema/v1.json --unreachableDefinitions | prettier --stdin-filepath _v1.d.ts > src/_v1.d.ts",
     "bundle": "npm pack .",
     "clean": "rimraf lib",
-    "lab:link": "jupyter labextension link . --no-build"
+    "lab:link": "jupyter labextension link . --no-build",
+    "upload": "jlpm publish ."
   },
   "dependencies": {
     "react-jsonschema-form": "~1.8.0"

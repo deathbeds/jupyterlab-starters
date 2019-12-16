@@ -22,7 +22,8 @@
     "test": "lerna run --stream --concurrency=1 test",
     "prettier": "prettier --write '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",
     "tslint": "tslint --fix -c tslint.json --project tsconfigbase.json 'packages/**/*{.ts,.tsx}'",
-    "tslint:check": "tslint -c tslint.json --project tsconfigbase.json 'packages/**/*{.ts,.tsx}'"
+    "tslint:check": "tslint -c tslint.json --project tsconfigbase.json 'packages/**/*{.ts,.tsx}'",
+    "upload": "lerna run upload"
   },
   "workspaces": {
     "packages": [
