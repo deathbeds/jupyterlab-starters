@@ -20,7 +20,7 @@ jobs:
       - script: source activate jupyterlab-starters && python scripts/lint.py
         displayName: lint backend
 
-      - script: git diff
+      - script: git diff || echo "no changes"
         displayName: show changes
 
       - script: |-
