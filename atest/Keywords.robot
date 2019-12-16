@@ -35,6 +35,7 @@ Setup Server and Browser
 Setup Suite For Screenshots
     [Arguments]    ${folder}
     [Documentation]    Set a screenshot folder, and tag with JupyterLab version
+    Pass Execution If    not "${LAB VERSION}"    Couldn't determine JupyterLab version
     Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots${/}${folder}
     Set Tags    lab:${LAB VERSION}
 

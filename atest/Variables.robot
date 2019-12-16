@@ -1,4 +1,5 @@
 *** Variables ***
+${LAB VERSION}    ${EMPTY}
 ${SPLASH}         id:jupyterlab-splash
 # to help catch hard-coded paths
 ${BASE}           /@est/
