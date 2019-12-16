@@ -10,7 +10,7 @@ __import__("setuptools").setup(
     data_files=[
         (
             "etc/jupyter/jupyter_notebook_config.d",
-            ["py_src/jupyter_lsp/etc/jupyter-starters-serverextension.json"],
+            ["src/jupyter_lsp/etc/jupyter-starters-serverextension.json"],
         )
     ],
 
