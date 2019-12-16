@@ -5,8 +5,8 @@ channels:
   - defaults
 
 dependencies:
+  - cookiecutter
   - firefox
-  - flake8 >=3.5
   - geckodriver
   - jupyterlab {lab}
   - nodejs

@@ -8,6 +8,7 @@ Library           ./ports.py
 
 *** Keywords ***
 Setup Server and Browser
+    [Documentation]    Start JupyterLab and open in a browser
     ${port} =    Get Unused Port
     Set Global Variable    ${PORT}    ${port}
     Set Global Variable    ${URL}    http://localhost:${PORT}${BASE}
@@ -33,14 +34,18 @@ Setup Server and Browser
 
 Setup Suite For Screenshots
     [Arguments]    ${folder}
+    [Documentation]    Set a screenshot folder, and tag with JupyterLab version
+    Pass Execution If    not "${LAB VERSION}"    Couldn't determine JupyterLab version
     Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots${/}${folder}
     Set Tags    lab:${LAB VERSION}
 
 Initialize User Settings
+    [Documentation]    Make a directory for user settings
     Set Suite Variable    ${SETTINGS DIR}    ${OUTPUT DIR}${/}user-settings    children=${True}
     Create File    ${SETTINGS DIR}${/}@jupyterlab${/}codemirror-extension${/}commands.jupyterlab-settings    {"styleActiveLine": true}
 
 Tear Down Everything
+    [Documentation]    Try to clean everything up
     Close All Browsers
     Evaluate    __import__("urllib.request").request.urlopen("${URL}api/shutdown?token=${TOKEN}", data=[])
     Wait For Process    ${SERVER}    timeout=30s
@@ -48,11 +53,13 @@ Tear Down Everything
     Terminate All Processes    kill=${True}
 
 Wait For Splash
+    [Documentation]    Wait for the JupyterLab splash screen, and de-instrument window close
     Wait Until Page Contains Element    ${SPLASH}    timeout=180s
     Wait Until Page Does Not Contain Element    ${SPLASH}    timeout=180s
     Execute Javascript    window.onbeforeunload \= function (){}
 
 Open JupyterLab
+    [Documentation]    Open JupyterLab in Firefox
     Set Environment Variable    MOZ_HEADLESS    ${HEADLESS}
     ${firefox} =    Which    firefox
     ${geckodriver} =    Which    geckodriver
@@ -62,63 +69,88 @@ Open JupyterLab
     Wait For Splash
 
 Close JupyterLab
+    [Documentation]    Just close all the browsers
     Close All Browsers
 
 Reset Application State
+    [Documentation]    Try to get a clean slate
     Lab Command    Close All Tabs
     Ensure All Kernels Are Shut Down
-    Lab Command    Reset Application State
+    Wait Until Keyword Succeeds    3x    0.5s    Lab Command    Reset Application State
     Wait For Splash
-    Lab Command    Close All Tabs
+    Wait Until Keyword Succeeds    3x    0.5s    Lab Command    Close All Tabs
 
 Ensure All Kernels Are Shut Down
+    [Documentation]    Kill all the kernels
     Enter Command Name    Shut Down All Kernels
     ${els} =    Get WebElements    ${CMD PALETTE ITEM ACTIVE}
     Run Keyword If    ${els.__len__()}    Click Element    ${CMD PALETTE ITEM ACTIVE}
     Run Keyword If    ${els.__len__()}    Click Element    css:.jp-mod-accept.jp-mod-warn
 
 Open Command Palette
+    [Documentation]    Open the command pallete
     Press Keys    id:main    ${ACCEL}+SHIFT+c
     Wait Until Page Contains Element    ${CMD PALETTE INPUT}
     Click Element    ${CMD PALETTE INPUT}
 
 Enter Command Name
     [Arguments]    ${cmd}
+    [Documentation]    Start a command
     Open Command Palette
     Input Text    ${CMD PALETTE INPUT}    ${cmd}
 
 Lab Command
     [Arguments]    ${cmd}
+    [Documentation]    Run a JupyterLab command by description
+    Accept Default Dialog Option
     Enter Command Name    ${cmd}
     Wait Until Page Contains Element    ${CMD PALETTE ITEM ACTIVE}
     Click Element    ${CMD PALETTE ITEM ACTIVE}
+    Sleep    0.5s
+    Accept Default Dialog Option
 
 Which
     [Arguments]    ${cmd}
+    [Documentation]    Find a shell command
     ${path} =    Evaluate    __import__("shutil").which("${cmd}")
     [Return]    ${path}
 
-Click JupyterLab Menu
-    [Arguments]    ${label}
-    [Documentation]    Click a top-level JupyterLab menu bar item with by ``label``,
-    ...    e.g. File, Help, etc.
-    ${xpath} =    Set Variable    ${JLAB XP TOP}${JLAB XP MENU LABEL}\[text() = '${label}']
-    Wait Until Page Contains Element    ${xpath}
-    Mouse Over    ${xpath}
-    Click Element    ${xpath}
+Advance Starter Form
+    [Documentation]    Clicks the accept in a starter form
+    Wait Until Page Contains Element    ${CSS BODYBUILDER ACCEPT}
+    Click Element    ${CSS BODYBUILDER ACCEPT}
 
-Click JupyterLab Menu Item
-    [Arguments]    ${label}
-    [Documentation]    Click a currently-visible JupyterLab menu item by ``label``.
-    ${item} =    Set Variable    ${JLAB XP MENU ITEM LABEL}\[text() = '${label}']
-    Wait Until Page Contains Element    ${item}
-    Mouse Over    ${item}
-    Click Element    ${item}
+Cancel Starter Form
+    [Documentation]    Clicks the cancle in a starter form
+    Wait Until Page Contains Element    ${CSS BODYBUILDER CANCEL}
+    Click Element    ${CSS BODYBUILDER CANCEL}
+    Wait Until Page Does Not Contain Element    ${CSS BODYBUILDER}
 
-Open With JupyterLab Menu
-    [Arguments]    ${menu}    @{submenus}
-    [Documentation]    Click into a ``menu``, then a series of ``submenus``
-    Click JupyterLab Menu    ${menu}
-    FOR    ${submenu}    IN    @{submenus}
-        Click JupyterLab Menu Item    ${submenu}
-    END
+Really Input Text
+    [Arguments]    ${locator}    ${text}
+    [Documentation]    Really make sure some text is set
+    Wait Until Keyword Succeeds    3x    200ms    Input and Check Text    ${locator}    ${text}
+
+Input and Check Text
+    [Arguments]    ${locator}    ${text}
+    [Documentation]    Input (and check) text was entered
+    Wait Until Page Contains Element    ${locator}
+    Click Element    ${locator}
+    Input Text    ${locator}    ${text}
+    Sleep    0.5s
+    Element Attribute Value Should Be    ${locator}    value    ${text}
+
+Wait Until Kernel
+    [Arguments]    ${kernel}=Python 3
+    [Documentation]    Wait for a kernel to be ready
+    Wait Until Element Contains    css:.jp-Toolbar-kernelName    ${kernel}
+
+Save Notebook
+    [Documentation]    Save the notebook
+    Click Element    ${CSS NOTEBOOK SAVE}
+    Sleep    0.5s
+
+Accept Default Dialog Option
+    [Documentation]    Accept a dialog, if it exists
+    ${el} =    Get WebElements    ${CSS DIALOG OK}
+    Run Keyword If    ${el.__len__()}    Click Element    ${CSS DIALOG OK}

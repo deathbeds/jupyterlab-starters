@@ -22,6 +22,8 @@ def combine():
         OUT,
         "--output",
         "output.xml",
+        "--noncritical",
+        "ospy:windows38",
         *sys.argv[1:],
         *OUT.glob("*.robot.xml"),
     ]

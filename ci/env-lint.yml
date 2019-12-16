@@ -1,0 +1,19 @@
+name: jupyterlab-starters
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - black
+  - flake8
+  - isort
+  - jupyterlab >=1,<2.0.0a0
+  - mypy
+  - nodejs
+  - pylint
+  - pytest-azurepipelines
+  - python >=3.8,<3.9.0a0
+  - robotframework
+  - robotframework-lint
+  - ruamel_yaml

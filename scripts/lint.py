@@ -17,6 +17,14 @@ ALL_PY = [*PY_SRC, *PY_SCRIPTS, *PY_ATEST]
 
 ALL_ROBOT = list((ROOT / "atest").rglob("*.robot"))
 
+RFLINT_RULES = [
+    "LineTooLong:200",
+    "TooFewKeywordSteps:0",
+    "TooManyTestSteps:30",
+]
+
+RFLINT = sum([["--configure", rule] for rule in RFLINT_RULES], [])
+
 
 def lint():
     """ get that linty fresh feeling
@@ -31,6 +39,7 @@ def lint():
                 ["pylint", *ALL_PY],
                 ["mypy", *PY_SRC],
                 ["python", "-m", "robot.tidy", "--inplace", *ALL_ROBOT],
+                ["rflint", *RFLINT, *ALL_ROBOT],
             ],
         )
     )

@@ -19,6 +19,7 @@ export class BodyBuilder extends Widget {
   constructor(options: BodyBuilder.IOptions) {
     super(options);
     this.model = new BodyBuilder.Model(options);
+    this.model.done = () => this.dispose();
     this.layout = new BoxLayout();
     this._context = options.context;
     const { label } = this._context.starter;
@@ -39,6 +40,13 @@ export class BodyBuilder extends Widget {
 
   get boxLayout() {
     return this.layout as BoxLayout;
+  }
+
+  dispose() {
+    super.dispose();
+    if (!this.isDisposed) {
+      this.model.dispose();
+    }
   }
 
   makeButtons() {
@@ -65,6 +73,7 @@ export namespace BodyBuilder {
 
     private _start: Signal<Model, IStartContext>;
     private _manager: IStarterManager;
+    private _done: Function;
 
     constructor(options: IOptions) {
       super();
@@ -93,10 +102,17 @@ export namespace BodyBuilder {
     }
 
     set form(form) {
+      if (this._form) {
+        this._form.stateChanged.disconnect(this._change, this);
+      }
       this._form = form;
-      form.stateChanged.connect(() => this.stateChanged.emit(void 0));
+      form.stateChanged.connect(this._change, this);
       this.stateChanged.emit(void 0);
     }
+
+    private _change = () => {
+      this.stateChanged.emit(void 0);
+    };
 
     onStart() {
       if (this._form.errors && this._form.errors.length) {
@@ -108,8 +124,16 @@ export namespace BodyBuilder {
       });
     }
 
+    get done() {
+      return this._done;
+    }
+
+    set done(done) {
+      this._done = done;
+    }
+
     onDone() {
-      this.dispose();
+      this._done && this._done();
     }
 
     get iconClass() {
