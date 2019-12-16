@@ -1,5 +1,5 @@
 parameters:
-  jlpm: jlpm --no-optional --prefer-offline
+  jlpm: jlpm --no-optional --prefer-offline --frozen-lockfile
   env_update: conda env update -n jupyterlab-starters --file ci/env-lint.yml --quiet
 
 jobs:
