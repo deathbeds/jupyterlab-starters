@@ -74,14 +74,10 @@ Close JupyterLab
 Reset Application State
     [Documentation]    Try to get a clean slate
     Lab Command    Close All Tabs
-    Sleep    0.5s
-    Run Keyword and Ignore Error    Click Element    css:.jp-Dialog .jp-mod-warn
     Ensure All Kernels Are Shut Down
-    Lab Command    Reset Application State
-    Sleep    0.5s
-    Run Keyword and Ignore Error    Click Element    css:.jp-Dialog .jp-mod-warn
+    Wait Until Keyword Succeeds    3x    0.5s    Lab Command    Reset Application State
     Wait For Splash
-    Lab Command    Close All Tabs
+    Wait Until Keyword Succeeds    3x    0.5s    Lab Command    Close All Tabs
 
 Ensure All Kernels Are Shut Down
     [Documentation]    Kill all the kernels
@@ -105,9 +101,12 @@ Enter Command Name
 Lab Command
     [Arguments]    ${cmd}
     [Documentation]    Run a JupyterLab command by description
+    Accept Default Dialog Option
     Enter Command Name    ${cmd}
     Wait Until Page Contains Element    ${CMD PALETTE ITEM ACTIVE}
     Click Element    ${CMD PALETTE ITEM ACTIVE}
+    Sleep    0.5s
+    Accept Default Dialog Option
 
 Which
     [Arguments]    ${cmd}
@@ -141,3 +140,6 @@ Save Notebook
     [Documentation]    Save the notebook
     Click Element    ${NOTEBOOK SAVE}
     Sleep    0.5s
+
+Accept Default Dialog Option
+    Run Keyword and Ignore Error    Click Element    css:.jp-Dialog .jp-mod-accept
