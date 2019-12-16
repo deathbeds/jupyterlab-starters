@@ -10,7 +10,7 @@
   },
   "private": true,
   "scripts": {
-    "bootstrap": "jlpm --no-optional --prefer-offline && lerna bootstrap && jlpm lint && jlpm clean && jlpm build",
+    "bootstrap": "jlpm --ignore-optional --prefer-offline --frozen-lockfile && lerna bootstrap && jlpm lint && jlpm clean && jlpm build",
     "build": "lerna run build:pre && lerna run build",
     "watch": "lerna run --parallel watch",
     "bundle": "lerna run --parallel bundle",
