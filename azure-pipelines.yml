@@ -12,8 +12,8 @@ variables:
   PYTHONUNBUFFERED: 1
   ATEST_RETRIES: 2
 
-  PY_JLST_VERSION: 0.1.0a0
-  JS_JLST_VERSION: 0.1.0-a0
+  PY_JLST_VERSION: 0.1.1a0
+  JS_JLST_VERSION: 0.1.1-a0
 
   FIRST_PARTY_LABEXTENSIONS: >-
     packages/jupyterlab-starters/deathbeds-jupyterlab-starters-$(JS_JLST_VERSION).tgz

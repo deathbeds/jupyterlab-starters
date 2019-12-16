@@ -2,7 +2,8 @@
 
 > _Parameterized file and directory starters for JupyterLab._
 
-[![badge-binder][]][binder] [![badge-ci][]][ci] [![roadmap-badge][]][roadmap] [![changelog-badge][]][changelog] ![python-badge][] ![jupyterlab-badge][] [![license-badge][]][license]
+[![badge-binder][]][binder] [![badge-ci][]][ci] [![pypi-badge][]][pypi] [![npm-badge][]][npm]
+[![roadmap-badge][]][roadmap] [![changelog-badge][]][changelog] ![python-badge][] ![jupyterlab-badge][] [![license-badge][]][license]
 
 ![screenshot][]
 
@@ -18,7 +19,12 @@
 
 ## Installing
 
-> _TBD: for the time being, try a [development install][contributing]._
+> _You'll need `jupyterlab >=1,<2`, `python >=3.6`, and `nodejs >=8`_
+
+```bash
+pip install --pre jupyter_starters
+jupyter labextension install @deathbeds/jupyterlab-starters
+```
 
 ## Configuring
 
@@ -76,3 +82,7 @@ Don't like what you see here? Try these other approaches:
 [contributing]: https://github.com/deathbeds/jupyterlab-starters/tree/master/CONTRIBUTING.md
 [license]: https://github.com/deathbeds/jupyterlab-starters/tree/master/LICENSE
 [screenshot]: https://raw.githubusercontent.com/deathbeds/jupyterlab-starters/master/docs/screenshot.png
+[pypi-badge]: https://img.shields.io/pypi/v/jupyter-starters
+[pypi]: https://pypi.org/project/jupyter-starters
+[npm-badge]: https://img.shields.io/npm/v/deathbeds/jupyterlab-starters
+[npm]: https://www.npmjs.com/package/@deathbeds/jupyterlab-starters
