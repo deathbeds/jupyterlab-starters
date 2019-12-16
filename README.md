@@ -34,21 +34,18 @@ They will be merged from bottom to top, and the directory where you launch your
 The very simplest is `copy`, which will copy a file or folder to the location
 it is launched from in the JupyterLab [Launcher][].
 
-```yaml
+```json
 {
-  'StarterManager':
-    {
-      'extra_starters':
-        {
-          'whitepaper-single':
-            {
-              'type': 'copy',
-              'label': 'Whitepaper Notebook',
-              'description': 'A reusable notebook for proposing research',
-              'src': 'examples/whitepaper-single.ipynb',
-            },
-        },
-    },
+  "StarterManager": {
+    "extra_starters": {
+      "whitepaper-single": {
+        "type": "copy",
+        "label": "Whitepaper Notebook",
+        "description": "A reusable notebook for proposing research",
+        "src": "examples/whitepaper-single.ipynb"
+      }
+    }
+  }
 }
 ```
 
