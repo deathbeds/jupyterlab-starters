@@ -23,6 +23,12 @@ jobs:
       - script: git diff || echo "no changes"
         displayName: show changes
 
+      - task: CacheBeta@0
+        inputs:
+          key: yarn | $(Agent.OS) | yarn.lock
+          path: $(YARN_CACHE_FOLDER)
+        displayName: restore cached yarn packages
+
       - script: source activate jupyterlab-starters && ${{ parameters.jlpm }} || ${{ parameters.jlpm }} || ${{ parameters.jlpm }}
         displayName: install npm dependencies
 
