@@ -3,6 +3,7 @@
 # pylint: disable=cyclic-import
 
 import re
+import shutil
 from copy import deepcopy
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -46,7 +47,6 @@ def cookiecutter_starters():
                         "title": "Checkout",
                         "description": "The branch, tag or commit ID to use",
                         "type": "string",
-                        "default": "master",
                     },
                 },
             },
@@ -59,7 +59,8 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
     """
     # pylint: disable=cyclic-import,broad-except,too-many-locals,unused-variable
     template = body["template"]
-    checkout = body["checkout"] or None
+    checkout = body.get("checkout") or None
+    manager.log.debug(f"🍪 body: {body}")
 
     cookiecutter = __import__("cookiecutter.main")
 
@@ -74,6 +75,8 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
         password=None,
     )
 
+    manager.log.debug(f"🍪 repo_dir: {repo_dir}")
+
     context_file = Path(repo_dir) / "cookiecutter.json"
 
     base_context = cookiecutter.main.generate_context(
@@ -82,7 +85,11 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
         extra_context={},
     )
 
+    manager.log.debug(f"🍪 base_context: {base_context}")
+
     schema = cookiecutter_to_schema(base_context["cookiecutter"])
+
+    manager.log.debug(f"🍪 schema: {schema}")
 
     new_starter = deepcopy(starter)
     new_starter["schema"]["required"] += ["cookiecutter"]
@@ -96,7 +103,7 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
         validator(body)
         valid = True
     except JsonSchemaException as err:
-        manager.log.debug(f"validator {err}")
+        manager.log.debug(f"🍪 validator: {err}")
 
     if not valid:
         return {
@@ -132,6 +139,9 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
                     {},
                 )
 
+            if cleanup:
+                shutil.rmtree(repo_dir)
+
             return {
                 "body": body,
                 "name": name,
@@ -140,7 +150,9 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
                 "status": "done",
             }
         except Exception as err:
-            manager.log.warn(f"cookiecutter error: {err}")
+            manager.log.exception(f"🍪 error")
+            if cleanup:
+                shutil.rmtree(repo_dir)
             return {
                 "body": body,
                 "name": name,

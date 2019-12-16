@@ -110,3 +110,8 @@ Which
     [Documentation]    Find a shell command
     ${path} =    Evaluate    __import__("shutil").which("${cmd}")
     [Return]    ${path}
+
+Advance Starter Form
+    [Documentation]    Clicks the accept in a starter form
+    Wait Until Page Contains Element    ${CSS BODYBUILDER ACCEPT}
+    Click Element    ${CSS BODYBUILDER ACCEPT}

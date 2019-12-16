@@ -1,8 +1,9 @@
+.ipynb_checkpoints/
 .mypy_cache/
 .pytest_cache/
 *.egg-info/
+atest/
 dist/
 envs/
 lib/
 node_modules/
-atest/
