@@ -16,3 +16,4 @@ ${XP FILE TREE ITEM}    xpath://span[contains(@class, 'jp-DirListing-itemText')]
 ${CSS BODYBUILDER}    css:.jp-Starters-BodyBuilder
 ${CSS BODYBUILDER ACCEPT}    css:.jp-Starters-BodyBuilder-buttons .jp-mod-accept
 ${CSS BODYBUILDER CANCEL}    css:.jp-Starters-BodyBuilder-buttons .jp-mod-warn
+${NOTEBOOK SAVE}    css:[data-icon="save"]

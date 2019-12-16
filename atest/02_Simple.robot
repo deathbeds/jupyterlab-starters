@@ -9,6 +9,7 @@ Simple Notebook
     Click Element    ${CSS LAUNCH CARD NOTEBOOK}
     Wait Until Created    ${HOME}${/}whitepaper-single.ipynb
     Wait Until Page Contains Element    id:My-Next-Big-Idea
+    Click Element    ${NOTEBOOK SAVE}
     Capture Page Screenshot    notebook.png
 
 Simple Folder

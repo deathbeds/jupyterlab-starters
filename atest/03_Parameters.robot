@@ -26,4 +26,5 @@ Parameter Notebook
     Advance Starter Form
     Wait Until Page Contains Element    ${XP FILE TREE ITEM}\[contains(text(), '${topic} Whitepaper.ipynb')]
     Wait Until Page Contains Element    id:My-Next-Big-Idea
+    Click Element    ${NOTEBOOK SAVE}
     Capture Page Screenshot    notebook.png

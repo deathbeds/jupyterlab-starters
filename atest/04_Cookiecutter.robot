@@ -24,4 +24,5 @@ Happy Path
     Capture Page Screenshot    cookiecutter-2.png
     Double Click Element    ${index ipynb}
     Wait Until Page Contains Element    id:My-Next-Little-Idea
+    Click Element    ${NOTEBOOK SAVE}
     Capture Page Screenshot    cookiecutter-3.png
