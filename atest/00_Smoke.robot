@@ -11,7 +11,7 @@ Lab Version
     Set Global Variable    ${LAB VERSION}    ${config["appVersion"]}
 
 Launcher
-    Page Should Contain Element    ${CSS LAUNCH SECTION}
+    Wait Until Page Contains Element    ${CSS LAUNCH SECTION}
     Scroll Element Into View    ${CSS LAUNCH SECTION}
     Scroll Element Into View    ${CSS LAUNCH CARD}
     Capture Page Screenshot    launcher.png
