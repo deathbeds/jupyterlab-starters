@@ -42,6 +42,8 @@ def atest(attempt=0):
         f"OS:{OS}",
         "--variable",
         f"PY:{PY}",
+        "--noncritical",
+        "ospy:windows38",
         *sys.argv[1:],
         ATEST,
     ]
@@ -55,12 +57,7 @@ def atest(attempt=0):
         except Exception as err:
             print("Error deleting {}, hopefully harmless: {}".format(out_dir, err))
 
-    return_code = robot.run_cli(list(map(str, args)), exit=False)
-
-    if OS == "Windows" and PY == "38":
-        sys.exit(0)
-    else:
-        sys.exit(return_code)
+    return robot.run_cli(list(map(str, args)), exit=False)
 
 
 def attempt_atest(retries=int(os.environ.get("ATEST_RETRIES") or "0")):
