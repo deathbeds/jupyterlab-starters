@@ -76,6 +76,9 @@ jobs:
               - script: ${{ platform.activate }} jupyterlab-starters && jupyter labextension list
                 displayName: list labextensions
 
+              - script: ${{ platform.activate }} jupyterlab-starters && conda remove --force nodejs
+                displayName: uninstall node to avoid build checks
+
               - script: ${{ platform.activate }} jupyterlab-starters && python scripts/atest.py
                 displayName: run browser tests
 
