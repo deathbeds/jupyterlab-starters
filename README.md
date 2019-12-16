@@ -31,7 +31,7 @@ jupyter --paths
 They will be merged from bottom to top, and the directory where you launch your
 `notebook` server wins, making it easy to check in to version control.
 
-The very simplest is `copy`, which will copy a file or folder to the location
+The very simplest starter, `copy`, will copy a file or folder to the location
 it is launched from in the JupyterLab [Launcher][].
 
 ```json
