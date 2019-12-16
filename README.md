@@ -4,7 +4,7 @@
 
 [![badge-binder][]][binder] [![badge-ci][]][ci]
 
-# What's a starter?
+## What's a starter?
 
 - [x] A single file
 - [x] A directory
@@ -13,6 +13,10 @@
 - [ ] A shell script
 
 ... that shows up in your JupyterLab at the click of a button
+
+## Installation
+
+> _TBD: for the time being, try a [development install](./CONTRIBUTING.md)._
 
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
 [badge-binder]: https://mybinder.org/badge_logo.svg
