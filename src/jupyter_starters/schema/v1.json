@@ -68,16 +68,10 @@
         {
           "anyOf": [
             {
-              "$ref": "#/definitions/starter-command"
-            },
-            {
               "$ref": "#/definitions/starter-copy"
             },
             {
               "$ref": "#/definitions/starter-copy-with-dest"
-            },
-            {
-              "$ref": "#/definitions/starter-command"
             },
             {
               "$ref": "#/definitions/starter-python"
@@ -160,23 +154,6 @@
           }
         }
       ]
-    },
-    "starter-command": {
-      "title": "Command Starter",
-      "description": "Not implemented",
-      "required": ["argv", "type"],
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": ["command"]
-        },
-        "argv": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
     },
     "starter-python": {
       "title": "Python Starter",
