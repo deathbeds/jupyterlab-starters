@@ -1,8 +1,8 @@
 # CHANGELOG
 
-## `@deathbeds/jupyterlab-starters 0.1.1a0` (unpublished)
+## `jupyter_starters 0.1.0a1`
 
-## `jupyter_starters 0.1.1a0` (unpublished)
+- add more sources of config
 
 ## `@deathbeds/jupyterlab-starters 0.1.0a0`
 
