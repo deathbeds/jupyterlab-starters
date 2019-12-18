@@ -13,6 +13,7 @@
 - [x] A directory
 - [x] A python function
 - [x] A [cookiecutter][]
+- [x] A notebook
 - [ ] A shell script
 
 ... that shows up in your JupyterLab at the click of a button
