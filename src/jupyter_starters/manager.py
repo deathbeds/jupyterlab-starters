@@ -1,24 +1,31 @@
 """ manager, for starters
 """
-# pylint: disable=no-self-use,unsubscriptable-object,fixme
+# pylint: disable=no-self-use,unsubscriptable-object,fixme,bad-continuation
 import base64
-import urllib.parse
 from pathlib import Path
 from typing import List, Text
+from urllib.parse import unquote
 
 import jinja2
 import traitlets as T
 from jupyter_core.paths import jupyter_config_path
 from notebook import _tz as tz
 from notebook.services.config import ConfigManager
-from notebook.utils import url_path_join as ujoin
+from notebook.utils import maybe_future, url_path_join as ujoin
 from traitlets.config import LoggingConfigurable
 
 from .py_starters.cookiecutter import cookiecutter_starters
 from .schema.v1 import STARTERS
 from .trait_types import Schema
 
-IGNORE_PATTERNS = [".ipynb_checkpoints", "node_modules", "envs"]
+# default patterns to ignore
+DEFAULT_IGNORE_PATTERNS = [
+    "__pycache__",
+    ".git",
+    ".ipynb_checkpoints",
+    "*.pyc",
+    "node_modules",
+]
 
 
 class StarterManager(LoggingConfigurable):
@@ -112,16 +119,13 @@ class StarterManager(LoggingConfigurable):
 
         await self.save_one(root, dest)
 
-        if root.is_dir():
-            for src in sorted(root.rglob("*")):
-                src_uri = src.as_uri()
-                if any([ignore in src_uri for ignore in IGNORE_PATTERNS]):
-                    continue
-                await self.save_one(
-                    src,
-                    urllib.parse.unquote(ujoin(dest, src_uri.replace(root_uri, ""))),
-                )
-        # TODO: add to schema, normalize
+        for child in iter_not_ignored(
+            root, starter.get("ignore", DEFAULT_IGNORE_PATTERNS)
+        ):
+            await self.save_one(
+                child, unquote(ujoin(dest, child.as_uri().replace(root_uri, ""))),
+            )
+
         return {
             "body": body,
             "name": name,
@@ -165,9 +169,27 @@ class StarterManager(LoggingConfigurable):
             self.contents_manager.allow_hidden = True
 
         try:
-            self.contents_manager.save(model, dest)
+            await maybe_future(self.contents_manager.save(model, dest))
         except Exception as err:
             self.log.error(f"Couldn't save {dest}: {err}")
         finally:
             if allow_hidden is not None:
                 self.contents_manager.allow_hidden = allow_hidden
+
+
+def iter_not_ignored(root, ignore_patterns):
+    """ yield all children under a root that do not match the ignore patterns
+    """
+    if root.is_dir():
+        ignored = set()
+        for src in sorted(root.rglob("*")):
+            if ignored & set(src.parents):
+                continue
+
+            root_rel = src.relative_to(root)
+
+            if any(root_rel.match(pattern) for pattern in ignore_patterns):
+                ignored.add(src)
+                continue
+
+            yield src

@@ -20,3 +20,12 @@ Simple Folder
     Wait Until Created    ${HOME}${/}whitepaper-multiple
     Wait Until Page Contains Element    ${XP FILE TREE ITEM}\[contains(text(), '00 Introduction.ipynb')]
     Capture Page Screenshot    folder.png
+
+Folder Ignoring
+    [Documentation]    Will it ignore paths?
+    Create File    ..${/}examples${/}whitepaper-multiple${/}node_modules${/}foo.txt
+    Click Element    ${CSS LAUNCH CARD FOLDER}
+    Wait Until Created    ${HOME}${/}whitepaper-multiple
+    Wait Until Page Contains Element    ${XP FILE TREE ITEM}\[contains(text(), '00 Introduction.ipynb')]
+    Page Should Not Contain Element    ${XP FILE TREE ITEM}\[contains(text(), 'node_modules')]
+    Capture Page Screenshot    ignored.png
