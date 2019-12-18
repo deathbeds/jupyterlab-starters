@@ -9,7 +9,7 @@ import {
   DEFAULT_ICON_NAME
 } from './tokens';
 
-import * as V1 from './_v1';
+import * as SCHEMA from './_schema';
 
 import { API } from './tokens';
 
@@ -20,7 +20,7 @@ const { makeRequest, makeSettings } = ServerConnection;
 
 export class StarterManager implements IStarterManager {
   private _changed: Signal<IStarterManager, void>;
-  private _starters: V1.Starters = {};
+  private _starters: SCHEMA.Starters = {};
   private _serverSettings = makeSettings();
   private _icons: IIconRegistry;
 
@@ -39,7 +39,7 @@ export class StarterManager implements IStarterManager {
     return this._changed;
   }
 
-  get starters(): V1.Starters {
+  get starters(): SCHEMA.Starters {
     return { ...this._starters };
   }
 
@@ -49,14 +49,14 @@ export class StarterManager implements IStarterManager {
 
   async fetch() {
     const response = await makeRequest(API, {}, this._serverSettings);
-    const content = (await response.json()) as V1.AllStartersServerResponse;
+    const content = (await response.json()) as SCHEMA.AllStartersServerResponse;
     this._starters = content.starters;
     this._changed.emit(void 0);
   }
 
   async start(
     name: string,
-    _starter: V1.Starter,
+    _starter: SCHEMA.Starter,
     contentsPath: string,
     body?: JSONObject
   ) {
@@ -66,11 +66,11 @@ export class StarterManager implements IStarterManager {
     }
     const url = URLExt.join(API, name, contentsPath);
     const response = await makeRequest(url, init, this._serverSettings);
-    const result = (await response.json()) as V1.StartResponse;
+    const result = (await response.json()) as SCHEMA.StartResponse;
     return result;
   }
 
-  iconClass(name: string, starter: V1.Starter) {
+  iconClass(name: string, starter: SCHEMA.Starter) {
     const icon = `${name}-starter`;
 
     if (this._icons.contains(icon)) {

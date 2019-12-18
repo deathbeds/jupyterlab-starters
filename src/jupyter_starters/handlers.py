@@ -7,7 +7,7 @@ from notebook.base.handlers import IPythonHandler
 from notebook.utils import url_path_join as ujoin
 
 from ._json import JsonSchemaException, loads
-from .schema.v1 import ALL_STARTERS
+from .schema.v2 import ALL_STARTERS
 from .types import NS
 
 if TYPE_CHECKING:

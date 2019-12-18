@@ -15,7 +15,7 @@ from notebook.utils import maybe_future, url_path_join as ujoin
 from traitlets.config import LoggingConfigurable
 
 from .py_starters.cookiecutter import cookiecutter_starters
-from .schema.v1 import STARTERS
+from .schema.v2 import STARTERS
 from .trait_types import Schema
 
 # default patterns to ignore

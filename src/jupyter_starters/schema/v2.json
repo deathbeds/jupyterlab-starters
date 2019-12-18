@@ -12,10 +12,14 @@
     "all-starters": {
       "title": "All Starters Server Response",
       "type": "object",
-      "required": ["starters"],
+      "required": ["starters", "version"],
       "properties": {
         "starters": {
           "$ref": "#/definitions/starters"
+        },
+        "version": {
+          "type": "string",
+          "enum": ["2"]
         }
       }
     },
