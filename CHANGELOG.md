@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## `jupyter_starters 0.2.0a0`
+
+## `@deathbeds/jupyterlab-starters 0.2.0a0`
+
 ## `jupyter_starters 0.1.0a2`
 
 - add ignore patterns to schema

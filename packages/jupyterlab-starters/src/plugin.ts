@@ -18,7 +18,7 @@ import {
   IStarterManager
 } from './tokens';
 import { BodyBuilder } from './bodybuilder';
-import * as V1 from './_v1';
+import * as SCHEMA from '_schema';
 
 const plugin: JupyterFrontEndPlugin<void> = {
   id: `${NS}:plugin`,
@@ -45,7 +45,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
             const response = (await commands.execute(
               CommandIDs.start,
               context as any
-            )) as V1.StartResponse;
+            )) as SCHEMA.StartResponse;
             switch (response.status) {
               case 'done':
                 main.dispose();

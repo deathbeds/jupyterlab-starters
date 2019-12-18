@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-starters",
-  "version": "0.1.0a2",
+  "version": "0.2.0a0",
   "description": "Parameterized files and folders for JupyterLab",
   "keywords": [
     "jupyter",
@@ -24,7 +24,7 @@
     "url": "https://github.com/deathbeds/jupyterlab-starters.git"
   },
   "scripts": {
-    "build:pre": "json2ts ../../src/jupyter_starters/schema/v1.json --unreachableDefinitions | prettier --stdin-filepath _v1.d.ts > src/_v1.d.ts",
+    "build:pre": "json2ts ../../src/jupyter_starters/schema/v2.json --unreachableDefinitions | prettier --stdin-filepath _schema.d.ts > src/_schema.d.ts",
     "bundle": "npm pack .",
     "clean": "rimraf lib",
     "lab:link": "jupyter labextension link . --no-build",

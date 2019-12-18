@@ -3,7 +3,7 @@ import { PageConfig, URLExt } from '@jupyterlab/coreutils';
 import { IIconRegistry } from '@jupyterlab/ui-components';
 import { ISignal } from '@phosphor/signaling';
 
-import * as V1 from './_v1';
+import * as SCHEMA from '_schema';
 
 export const NS = 'starters';
 export const API = URLExt.join(PageConfig.getBaseUrl(), 'starters');
@@ -14,16 +14,16 @@ export const CATEGORY = 'Starters';
 
 export interface IStarterManager {
   changed: ISignal<IStarterManager, void>;
-  starters: V1.Starters;
-  starter(name: string): V1.Starter;
-  iconClass(name: string, starter: V1.Starter): string;
+  starters: SCHEMA.Starters;
+  starter(name: string): SCHEMA.Starter;
+  iconClass(name: string, starter: SCHEMA.Starter): string;
   fetch(): Promise<void>;
   start(
     name: string,
-    starter: V1.Starter,
+    starter: SCHEMA.Starter,
     path: string,
     body?: JSONObject
-  ): Promise<V1.StartResponse>;
+  ): Promise<SCHEMA.StartResponse>;
 }
 
 export namespace IStarterManager {
@@ -37,7 +37,7 @@ export namespace CommandIDs {
 }
 
 export interface IStartContext {
-  starter: V1.Starter;
+  starter: SCHEMA.Starter;
   name: string;
   cwd: string;
   body: JSONObject;
