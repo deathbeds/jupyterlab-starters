@@ -18,7 +18,7 @@ import {
   IStarterManager
 } from './tokens';
 import { BodyBuilder } from './bodybuilder';
-import * as SCHEMA from '_schema';
+import * as SCHEMA from './_schema';
 
 const plugin: JupyterFrontEndPlugin<void> = {
   id: `${NS}:plugin`,

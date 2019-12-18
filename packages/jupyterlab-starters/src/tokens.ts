@@ -3,7 +3,7 @@ import { PageConfig, URLExt } from '@jupyterlab/coreutils';
 import { IIconRegistry } from '@jupyterlab/ui-components';
 import { ISignal } from '@phosphor/signaling';
 
-import * as SCHEMA from '_schema';
+import * as SCHEMA from './_schema';
 
 export const NS = 'starters';
 export const API = URLExt.join(PageConfig.getBaseUrl(), 'starters');

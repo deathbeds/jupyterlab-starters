@@ -9,7 +9,7 @@ import {
   DEFAULT_ICON_NAME
 } from './tokens';
 
-import * as SCHEMA from '_schema';
+import * as SCHEMA from './_schema';
 
 import { API } from './tokens';
 
