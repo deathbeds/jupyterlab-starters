@@ -8,7 +8,9 @@ from typing import List, Text
 
 import jinja2
 import traitlets as T
+from jupyter_core.paths import jupyter_config_path
 from notebook import _tz as tz
+from notebook.services.config import ConfigManager
 from notebook.utils import url_path_join as ujoin
 from traitlets.config import LoggingConfigurable
 
@@ -24,9 +26,11 @@ class StarterManager(LoggingConfigurable):
     """
 
     starters = Schema(validator=STARTERS)
-    extra_starters = Schema(default_value={}, validator=STARTERS).tag(config=True)
     jinja_env = T.Instance(jinja2.Environment)
     jinja_env_extensions = T.Dict()
+    config_dict = T.Dict()
+
+    extra_starters = Schema(default_value={}, validator=STARTERS).tag(config=True)
     extra_jinja_env_extensions = T.Dict({}).tag(config=True)
 
     @property
@@ -37,7 +41,10 @@ class StarterManager(LoggingConfigurable):
 
     @T.default("jinja_env_extensions")
     def _default_env_extensions(self):
+        """ get env extensions from extras and config
+        """
         extensions = {}
+        extensions.update(self.config_dict.get("extra_jinja_env_extensions", {}))
         extensions.update(self.extra_jinja_env_extensions)
         return extensions
 
@@ -49,12 +56,22 @@ class StarterManager(LoggingConfigurable):
             ]
         )
 
+    @T.default("config_dict")
+    def _default_config_dict(self):
+        """ load merged config from more jupyter_notebook_config.d files
+
+            re-uses notebook loading machinery to look through more locations
+        """
+        manager = ConfigManager(read_config_path=jupyter_config_path())
+        return manager.get("jupyter_notebook_config").get("StarterManager", {})
+
     @T.default("starters")
     def _default_starters(self):
         """ default starters
         """
         starters = {}
         starters.update(cookiecutter_starters())
+        starters.update(self.config_dict.get("extra_starters", {}))
         starters.update(self.extra_starters)
         return starters
 
