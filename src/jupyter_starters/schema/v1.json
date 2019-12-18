@@ -100,6 +100,11 @@
             "$ref": "#/definitions/command"
           }
         },
+        "ignore": {
+          "description": "glob patterns to ignore (will also ignore children)",
+          "type": "array",
+          "items": { "type": "string" }
+        },
         "schema": {
           "description": "JSON schema for a body to pass",
           "type": "object",
