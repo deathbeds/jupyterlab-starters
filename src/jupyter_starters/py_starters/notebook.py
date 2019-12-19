@@ -1,5 +1,7 @@
 """ use a notebook as a starter
 """
+# pylint: disable=duplicate-code,too-many-locals
+
 import tempfile
 from collections import defaultdict
 from pathlib import Path
@@ -14,7 +16,7 @@ from .._json import JsonSchemaException, json_validator, loads
 NBFORMAT_KEY = "jupyter_starters"
 
 
-def response_from_notebook(src, manager):
+def response_from_notebook(src):
     """ load a path and return the metadata
     """
     nbp = Path(src).resolve()
@@ -55,7 +57,7 @@ async def notebook_starter(name, starter, path, body, manager):
         with patch("os.environ", fake_env):
             executor.preprocess(notebook_node, {"metadata": {"path": tmpdir}})
 
-        nb_response = response_from_notebook(tmp_nb, manager)
+        nb_response = response_from_notebook(tmp_nb)
 
         validator = json_validator(nb_response["starter"]["schema"])
 
@@ -65,7 +67,7 @@ async def notebook_starter(name, starter, path, body, manager):
             validator(body)
             nb_response.update(status="done")
         except JsonSchemaException as err:
-            manager.log.debug(f"🍪 validator: {err}")
+            manager.log.debug(f"validator: {err}")
 
         if nb_response["status"] == "done":
             roots = sorted(tdp.glob("*"))
@@ -74,16 +76,7 @@ async def notebook_starter(name, starter, path, body, manager):
                 if root == tmp_nb:
                     continue
                 first_copied = root
-                await manager.start_copy(
-                    "notebook-copy",
-                    {
-                        "label": "Copy Notebook Output",
-                        "description": "just copies whatever notebook did",
-                        "src": str(root),
-                    },
-                    path,
-                    {},
-                )
+                await manager.just_copy(root, path)
             nb_response.update(path=ujoin(path, first_copied.name))
 
         return nb_response

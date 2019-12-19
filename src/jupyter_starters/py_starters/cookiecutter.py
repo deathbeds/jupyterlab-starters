@@ -1,6 +1,6 @@
 """ a starter that runs cookiecutter
 """
-# pylint: disable=cyclic-import
+# pylint: disable=cyclic-import,duplicate-code
 
 import re
 import shutil
@@ -128,16 +128,7 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
 
             roots = sorted(Path(tmpd).glob("*"))
             for root in roots:
-                await manager.start_copy(
-                    "cookiecutter-copy",
-                    {
-                        "label": "Copy Cookiecutter",
-                        "description": "just copies whatever cookiecutter did",
-                        "src": str(root),
-                    },
-                    path,
-                    {},
-                )
+                await manager.just_copy(root, path)
 
             if cleanup:
                 shutil.rmtree(repo_dir)

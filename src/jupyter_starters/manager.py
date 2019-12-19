@@ -86,11 +86,15 @@ class StarterManager(LoggingConfigurable):
 
     @property
     def starters(self):
+        """ augment notebook starters
+
+            TODO: caching
+        """
         starters = {}
         for name, starter in dict(self._starters).items():
             starters[name] = deepcopy(starter)
             if starter["type"] == "notebook":
-                response = response_from_notebook(starter["src"], self)
+                response = response_from_notebook(starter["src"])
                 starters[name].update(response["starter"])
         return starters
 
@@ -116,6 +120,20 @@ class StarterManager(LoggingConfigurable):
             return await self.start_notebook(name, starter, path, body)
 
         raise NotImplementedError(starter["type"])
+
+    async def just_copy(self, root, path):
+        """ just copy, with some dummy values
+        """
+        await self.start_copy(
+            "just-copy",
+            {
+                "label": "Copy Something",
+                "description": "just copies whatever",
+                "src": str(root),
+            },
+            path,
+            {},
+        )
 
     async def start_copy(self, name, starter, path, body):
         """ start a copy starter

@@ -12,19 +12,14 @@
     "all-starters": {
       "title": "All Starters Server Response",
       "type": "object",
-      "required": [
-        "starters",
-        "version"
-      ],
+      "required": ["starters", "version"],
       "properties": {
         "starters": {
           "$ref": "#/definitions/starters"
         },
         "version": {
           "type": "string",
-          "enum": [
-            "2"
-          ]
+          "enum": ["2"]
         }
       }
     },
@@ -42,24 +37,14 @@
     "start-response": {
       "title": "StartResponse",
       "type": "object",
-      "required": [
-        "name",
-        "path",
-        "starter",
-        "body",
-        "status"
-      ],
+      "required": ["name", "path", "starter", "body", "status"],
       "properties": {
         "starter": {
           "$ref": "#/definitions/starter"
         },
         "status": {
           "type": "string",
-          "enum": [
-            "error",
-            "continuing",
-            "done"
-          ]
+          "enum": ["error", "continuing", "done"]
         },
         "name": {
           "type": "string"
@@ -105,10 +90,7 @@
     "starter-meta": {
       "title": "Starter Meta",
       "type": "object",
-      "required": [
-        "label",
-        "description"
-      ],
+      "required": ["label", "description"],
       "properties": {
         "label": {
           "type": "string"
@@ -147,9 +129,7 @@
     "command": {
       "title": "Post-Starter Command",
       "type": "object",
-      "required": [
-        "id"
-      ],
+      "required": ["id"],
       "properties": {
         "id": {
           "type": "string"
@@ -161,19 +141,14 @@
     },
     "starter-copy": {
       "title": "Copy Starter",
-      "required": [
-        "src",
-        "type"
-      ],
+      "required": ["src", "type"],
       "properties": {
         "src": {
           "type": "string"
         },
         "type": {
           "type": "string",
-          "enum": [
-            "copy"
-          ]
+          "enum": ["copy"]
         }
       }
     },
@@ -184,10 +159,7 @@
           "$ref": "#/definitions/starter-copy"
         },
         {
-          "required": [
-            "dest",
-            "schema"
-          ],
+          "required": ["dest", "schema"],
           "properties": {
             "dest": {
               "description": "A name to copy to: Jinja will be applied with `body` as the context",
@@ -201,16 +173,11 @@
       "title": "Notebook Starter",
       "description": "Uses a notebook as both the configuration object (in `#/metadata/jupyter-starters`) and execution",
       "type": "object",
-      "required": [
-        "type",
-        "src"
-      ],
+      "required": ["type", "src"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "notebook"
-          ]
+          "enum": ["notebook"]
         },
         "src": {
           "type": "string"
@@ -220,17 +187,11 @@
     "starter-python": {
       "title": "Python Starter",
       "description": "Invokes an importable python function (multiple times)",
-      "required": [
-        "type",
-        "callable",
-        "schema"
-      ],
+      "required": ["type", "callable", "schema"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "python"
-          ]
+          "enum": ["python"]
         },
         "callable": {
           "description": "a python function that accepts the `body`",
