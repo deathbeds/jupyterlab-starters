@@ -4,6 +4,12 @@
       "jinja2_time.TimeExtension": true
     },
     "extra_starters": {
+      "notebook-starter": {
+        "type": "notebook",
+        "src": "./examples/Starter Notebook.ipynb",
+        "label": "Starter Notebook",
+        "description": "A notebook that is also a starter"
+      },
       "whitepaper-single": {
         "type": "copy",
         "label": "Whitepaper Notebook",

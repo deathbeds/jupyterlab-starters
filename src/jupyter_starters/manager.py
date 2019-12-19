@@ -2,6 +2,7 @@
 """
 # pylint: disable=no-self-use,unsubscriptable-object,fixme,bad-continuation
 import base64
+from copy import deepcopy
 from pathlib import Path
 from typing import List, Text
 from urllib.parse import unquote
@@ -15,6 +16,7 @@ from notebook.utils import maybe_future, url_path_join as ujoin
 from traitlets.config import LoggingConfigurable
 
 from .py_starters.cookiecutter import cookiecutter_starters
+from .py_starters.notebook import notebook_starter, response_from_notebook
 from .schema.v2 import STARTERS
 from .trait_types import Schema
 
@@ -32,7 +34,7 @@ class StarterManager(LoggingConfigurable):
     """ handlers starting starters
     """
 
-    starters = Schema(validator=STARTERS)
+    _starters = Schema(validator=STARTERS)
     jinja_env = T.Instance(jinja2.Environment)
     jinja_env_extensions = T.Dict()
     config_dict = T.Dict()
@@ -72,7 +74,7 @@ class StarterManager(LoggingConfigurable):
         manager = ConfigManager(read_config_path=jupyter_config_path())
         return manager.get("jupyter_notebook_config").get("StarterManager", {})
 
-    @T.default("starters")
+    @T.default("_starters")
     def _default_starters(self):
         """ default starters
         """
@@ -80,6 +82,16 @@ class StarterManager(LoggingConfigurable):
         starters.update(cookiecutter_starters())
         starters.update(self.config_dict.get("extra_starters", {}))
         starters.update(self.extra_starters)
+        return starters
+
+    @property
+    def starters(self):
+        starters = {}
+        for name, starter in dict(self._starters).items():
+            starters[name] = deepcopy(starter)
+            if starter["type"] == "notebook":
+                response = response_from_notebook(starter["src"], self)
+                starters[name].update(response["starter"])
         return starters
 
     @property
@@ -99,6 +111,9 @@ class StarterManager(LoggingConfigurable):
 
         if starter_type == "python":
             return await self.start_python(name, starter, path, body)
+
+        if starter_type == "notebook":
+            return await self.start_notebook(name, starter, path, body)
 
         raise NotImplementedError(starter["type"])
 
@@ -139,6 +154,11 @@ class StarterManager(LoggingConfigurable):
         """
         func = T.import_item(starter["callable"])
         return await func(name, starter, path, body, self)
+
+    async def start_notebook(self, name, starter, path, body):
+        """ delegate running the notebook to a thread
+        """
+        return await notebook_starter(name, starter, path, body, self)
 
     async def save_one(self, src, dest):
         """ use the contents manager to write a single file/folder
