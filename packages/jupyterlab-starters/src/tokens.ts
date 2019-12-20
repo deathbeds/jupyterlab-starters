@@ -34,6 +34,7 @@ export namespace IStarterManager {
 
 export namespace CommandIDs {
   export const start = `${NS}:start`;
+  export const notebookMeta = `${NS}:notebook-meta`;
 }
 
 export interface IStartContext {

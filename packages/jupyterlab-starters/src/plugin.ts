@@ -6,6 +6,8 @@ import { ILauncher } from '@jupyterlab/launcher';
 import { IIconRegistry } from '@jupyterlab/ui-components';
 import { MainAreaWidget } from '@jupyterlab/apputils';
 
+import { NotebookPanel, INotebookTracker } from '@jupyterlab/notebook';
+
 import '../style/index.css';
 
 import { StarterManager } from './manager';
@@ -15,19 +17,22 @@ import {
   CommandIDs,
   CATEGORY,
   IStartContext,
-  IStarterManager
+  IStarterManager,
+  DEFAULT_ICON_CLASS
 } from './tokens';
 import { BodyBuilder } from './bodybuilder';
+import { NotebookStarter } from './notebookbutton';
 import * as SCHEMA from './_schema';
 
 const plugin: JupyterFrontEndPlugin<void> = {
   id: `${NS}:plugin`,
-  requires: [ILauncher, IIconRegistry],
+  requires: [ILauncher, IIconRegistry, INotebookTracker],
   autoStart: true,
   activate: (
     app: JupyterFrontEnd,
     launcher: ILauncher,
-    icons: IIconRegistry
+    icons: IIconRegistry,
+    notebooks: INotebookTracker
   ) => {
     const { commands } = app;
     const manager: IStarterManager = new StarterManager({ icons });
@@ -88,6 +93,28 @@ const plugin: JupyterFrontEndPlugin<void> = {
         return manager.iconClass(context.name, context.starter);
       }
     });
+
+    commands.addCommand(CommandIDs.notebookMeta, {
+      execute: (args: any) => {
+        const notebook: NotebookPanel = args.current || notebooks.currentWidget;
+        console.log(notebook);
+      },
+      caption: (args: any) => {
+        const notebook: NotebookPanel = args.current || notebooks.currentWidget;
+        if (!notebook) {
+          return '';
+        }
+        return `Configure ${notebook.title.label.replace(
+          /.ipynb$/,
+          ''
+        )} as Starter`;
+      },
+      iconClass: DEFAULT_ICON_CLASS
+    });
+
+    const notebookbutton = new NotebookStarter({ commands });
+
+    app.docRegistry.addWidgetExtension('Notebook', notebookbutton);
 
     manager.changed.connect(() => {
       const { starters } = manager;
