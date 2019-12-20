@@ -7,7 +7,7 @@ from notebook.base.handlers import IPythonHandler
 from notebook.utils import url_path_join as ujoin
 
 from ._json import JsonSchemaException, loads
-from .schema.v2 import ALL_STARTERS
+from .schema.v2 import ALL_STARTERS, VERSION
 from .types import NS
 
 if TYPE_CHECKING:
@@ -33,7 +33,7 @@ class StartersHandler(BaseHandler):
     async def get(self) -> None:
         """ return the starters
         """
-        response = {"starters": self.manager.starters}
+        response = {"version": VERSION, "starters": self.manager.starters}
 
         try:
             ALL_STARTERS(response)

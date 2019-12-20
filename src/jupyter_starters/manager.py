@@ -38,6 +38,7 @@ class StarterManager(LoggingConfigurable):
     jinja_env = T.Instance(jinja2.Environment)
     jinja_env_extensions = T.Dict()
     config_dict = T.Dict()
+    kernel_dirs = T.Dict({})
 
     extra_starters = Schema(default_value={}, validator=STARTERS).tag(config=True)
     extra_jinja_env_extensions = T.Dict({}).tag(config=True)
@@ -47,6 +48,12 @@ class StarterManager(LoggingConfigurable):
         """ use the contents manager from parent
         """
         return self.parent.contents_manager
+
+    @property
+    def kernel_manager(self):
+        """ use the kernel manager from parent
+        """
+        return self.parent.kernel_manager
 
     @T.default("jinja_env_extensions")
     def _default_env_extensions(self):

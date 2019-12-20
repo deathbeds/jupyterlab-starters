@@ -1,19 +1,24 @@
 """ use a notebook as a starter
 """
 # pylint: disable=duplicate-code,too-many-locals
-
+import asyncio
+import shutil
 import tempfile
-from collections import defaultdict
 from pathlib import Path
-from unittest.mock import patch
 
-import nbformat
-from nbconvert.preprocessors import ExecutePreprocessor
-from notebook.utils import url_path_join as ujoin
+from notebook.utils import maybe_future, url_path_join as ujoin
 
-from .._json import JsonSchemaException, json_validator, loads
+from .._json import JsonSchemaException, dumps, json_validator, loads
 
 NBFORMAT_KEY = "jupyter_starters"
+MAGIC_NOTEBOOK_NAME = "_jupyter_starter_.ipynb"
+DEFAULT_MSG = {
+    "silent": False,
+    "store_history": False,
+    "user_expressions": {},
+    "allow_stdin": False,
+    "stop_on_error": True,
+}
 
 
 def response_from_notebook(src):
@@ -22,6 +27,16 @@ def response_from_notebook(src):
     nbp = Path(src).resolve()
     nbjson = loads(nbp.read_text())
     return response_from_nbjson(nbjson)
+
+
+def kernel_for_path(src):
+    """ get the kernel.
+
+        TODO: do better on account of freaky names
+    """
+    nbp = Path(src).resolve()
+    nbjson = loads(nbp.read_text())
+    return nbjson["metadata"]["kernelspec"]["name"]
 
 
 def response_from_nbjson(nbjson):
@@ -36,47 +51,123 @@ def starter_from_nbjson(nbjson):
     return response_from_nbjson(nbjson).get("starter", {})
 
 
+async def get_kernel_and_tmpdir(name, starter, manager):
+    """ use the manager to get a kernel and working directory
+    """
+    if name not in manager.kernel_dirs:
+        kernel_name = kernel_for_path(starter["src"])
+        tmpdir = tempfile.mkdtemp()
+        manager.kernel_dirs[name] = [
+            await maybe_future(
+                manager.kernel_manager.start_kernel(cwd=tmpdir, kernel_name=kernel_name)
+            ),
+            tmpdir,
+        ]
+    kernel_id, tmpdir = manager.kernel_dirs[name]
+    kernel = manager.kernel_manager.get_kernel(kernel_id)
+    return kernel, tmpdir
+
+
+async def stop_kernel(name, manager):
+    """ stop the kernel (and clean the tmpdir)
+    """
+    kernel_id, tmpdir = manager.kernel_dirs.pop(name, [None, None])
+    if kernel_id:
+        manager.kernel_manager.shutdown_kernel(kernel_id, now=True)
+        shutil.rmtree(tmpdir)
+
+
 async def notebook_starter(name, starter, path, body, manager):
     """ (re)runs a notebook until its schema is correct
     """
-    nbp = Path(starter["src"]).resolve()
-    nbjson = nbp.read_text()
-    notebook_node = nbformat.reads(nbjson, as_version=4)
-    notebook_node.metadata.jupyter_starters.body = body
-    kernel_name = notebook_node.metadata.kernelspec.name
-    executor = ExecutePreprocessor(timeout=600, kernel_name=kernel_name)
 
-    fake_env = defaultdict(str)
+    kernel, tmpdir = await get_kernel_and_tmpdir(name, starter, manager)
 
-    with tempfile.TemporaryDirectory() as tmpdir:
-        tdp = Path(tmpdir)
-        tmp_nb = tdp / "_starter.ipynb"
-        tmp_nb.write_text(nbformat.writes(notebook_node))
-        fake_env["STARTER_NOTEBOOK"] = str(tmp_nb)
+    tmp_nb = await ensure_notebook(starter, body, tmpdir)
 
-        with patch("os.environ", fake_env):
-            executor.preprocess(notebook_node, {"metadata": {"path": tmpdir}})
+    nbjson = loads(tmp_nb.read_text())
 
-        nb_response = response_from_notebook(tmp_nb)
+    await run_cells(nbjson, kernel)
 
-        validator = json_validator(nb_response["starter"]["schema"])
+    nb_response = response_from_notebook(tmp_nb)
 
-        nb_response.update(body=body, name=name, path=path, status="continuing")
+    nb_response.update(body=body, name=name, path=path, status="continuing")
 
-        try:
-            validator(body)
-            nb_response.update(status="done")
-        except JsonSchemaException as err:
-            manager.log.debug(f"validator: {err}")
+    validator = json_validator(nb_response["starter"]["schema"])
 
-        if nb_response["status"] == "done":
-            roots = sorted(tdp.glob("*"))
-            first_copied = None
-            for root in roots:
-                if root == tmp_nb:
-                    continue
-                first_copied = root
-                await manager.just_copy(root, path)
+    try:
+        validator(body)
+        nb_response.update(status="done")
+    except JsonSchemaException as err:
+        manager.log.debug(f"[not valid]: {err}")
+
+    if nb_response["status"] == "done":
+        first_copied = await copy_files(tmp_nb, path, manager)
+        if first_copied:
             nb_response.update(path=ujoin(path, first_copied.name))
+        await stop_kernel(name, manager)
 
-        return nb_response
+    return nb_response
+
+
+async def ensure_notebook(starter, body, tmpdir):
+    """ ensure a notebook exists in a temporary directory
+    """
+    nbp = Path(starter["src"]).resolve()
+
+    tdp = Path(tmpdir)
+    tmp_nb = tdp / MAGIC_NOTEBOOK_NAME
+
+    if tmp_nb.exists():
+        tmp_nb.unlink()
+
+    nbjson = loads(nbp.read_text())
+    nbjson["metadata"].setdefault(NBFORMAT_KEY, {})["body"] = body
+    tmp_nb.write_text(dumps(nbjson))
+    return tmp_nb
+
+
+async def copy_files(tmp_nb, path, manager):
+    """ handle retrieving the files from the temporary directory
+    """
+    first_copied = None
+
+    for root in sorted(tmp_nb.parent.glob("*")):
+        if root == tmp_nb:
+            continue
+        first_copied = root
+        await manager.just_copy(root, path)
+
+    return first_copied
+
+
+async def run_cells(nbjson, kernel):
+    """ actually run the cells
+    """
+    futures = dict()
+
+    shell = kernel.connect_shell()
+    listening = True
+
+    def on_recv(msg):
+        if not listening:
+            return
+        _ident, smsg = kernel.session.feed_identities(msg)
+        msg = kernel.session.deserialize(smsg)
+        if msg["msg_type"] == "execute_reply":
+            if msg["content"]["status"] == "ok":
+                futures[msg["parent_header"]["msg_id"]].set_result(msg)
+
+    shell.on_recv(on_recv)
+
+    for cell in nbjson["cells"]:
+        if cell["cell_type"] == "code":
+            code = "".join(cell["source"])
+            msg = kernel.session.send(
+                shell, "execute_request", content={"code": code, **DEFAULT_MSG},
+            )
+            futures[msg["msg_id"]] = asyncio.Future()
+
+    results = await asyncio.gather(*futures.values(), return_exceptions=True)
+    listening = False
+    return results
