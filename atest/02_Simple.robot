@@ -1,12 +1,13 @@
 *** Settings ***
 Documentation     Simple
 Suite Setup       Setup Suite For Screenshots    simple
+Force Tags        example:simple
 Resource          Keywords.robot
 
 *** Test Cases ***
 Simple Notebook
     [Documentation]    Can we start a single notebook?
-    Click Element    ${CSS LAUNCH CARD NOTEBOOK}
+    Click Element    ${CSS LAUNCH CARD SINGLE}
     Wait Until Created    ${HOME}${/}whitepaper-single.ipynb
     Capture Page Screenshot    notebook-0.png
     Wait Until Kernel

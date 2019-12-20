@@ -1,6 +1,7 @@
 *** Settings ***
 Documentation     Parameters
 Suite Setup       Setup Suite For Screenshots    parameters
+Force Tags        example:params
 Resource          Keywords.robot
 Library           String
 
@@ -10,7 +11,7 @@ ${CSS TOPIC}      css:input[label="Topic"]
 *** Test Cases ***
 Cancel
     [Documentation]    Does the cancel button work?
-    Click Element    ${CSS LAUNCH CARD NOTEBOOK PARAM}
+    Click Element    ${CSS LAUNCH CARD PARAM}
     Wait Until Page Contains Element    ${CSS BODYBUILDER}
     Really Input Text    ${CSS TOPIC}    cancel
     Capture Page Screenshot    cancel-0.png
@@ -19,7 +20,7 @@ Cancel
 
 Parameter Notebook
     [Documentation]    Can we start a single notebook with parameters?
-    Click Element    ${CSS LAUNCH CARD NOTEBOOK PARAM}
+    Click Element    ${CSS LAUNCH CARD PARAM}
     ${topic} =    Generate Random String
     Really Input Text    ${CSS TOPIC}    ${topic}
     Advance Starter Form

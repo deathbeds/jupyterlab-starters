@@ -1,6 +1,7 @@
 *** Settings ***
 Documentation     Launcher
 Suite Setup       Setup Suite For Screenshots    launcher
+Force Tags        launcher
 Resource          Keywords.robot
 
 *** Test Cases ***
