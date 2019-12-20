@@ -46,14 +46,17 @@ export class SchemaForm<T extends JSONValue> extends VDomRenderer<
     const className = `${SCHEMA_FORM_CLASS} ${props.className || ''}`.trim();
 
     const finalProps = {
-      // assure a default prefix
-      idPrefix: this._idPrefix,
       // props from model
       ...props,
+      // assure a default prefix
+      idPrefix: this._idPrefix,
       schema,
       formData,
       // overload classname
       className,
+      validate: (formData: T, errors: rjsf.AjvError[]) => {
+        return errors;
+      },
       // overload onChange
       onChange: (evt: rjsf.IChangeEvent<T>, err?: rjsf.ErrorSchema) => {
         this.onChange(evt, err);
@@ -64,8 +67,14 @@ export class SchemaForm<T extends JSONValue> extends VDomRenderer<
       }
     };
 
+    setTimeout(this._observeErrors, 100);
+
     return <Form {...finalProps} />;
   }
+
+  _observeErrors = () => {
+    this.model.errorsObserved = !!this.node.querySelector('.errors');
+  };
 
   /**
    * Handle the change of a form by the user and update the model
@@ -76,6 +85,7 @@ export class SchemaForm<T extends JSONValue> extends VDomRenderer<
       this.model.errors = errors;
       this.model.formData = formData;
     }
+    this.model.stateChanged.emit(void 0);
   }
 
   /**
@@ -161,6 +171,17 @@ export namespace SchemaForm {
       return this._props;
     }
 
+    get errorsObserved() {
+      return this._errorsObserved;
+    }
+
+    set errorsObserved(errorsObserved) {
+      if (errorsObserved !== this._errorsObserved) {
+        this._errorsObserved = errorsObserved;
+        this.stateChanged.emit(void 0);
+      }
+    }
+
     /**
      * Set the props for the form
      */
@@ -173,6 +194,7 @@ export namespace SchemaForm {
     private _errors: rjsf.AjvError[] = [];
     private _schema: JSONObject;
     private _props: Partial<rjsf.FormProps<T>>;
+    private _errorsObserved = false;
   }
 }
 

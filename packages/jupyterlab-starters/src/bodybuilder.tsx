@@ -107,7 +107,7 @@ export namespace BodyBuilder {
       }
       this._form = form;
       form.stateChanged.connect(this._change, this);
-      this.stateChanged.emit(void 0);
+      this._change();
     }
 
     private _change = () => {
@@ -150,7 +150,8 @@ export class BuilderButtons extends VDomRenderer<BodyBuilder.Model> {
   }
 
   protected render() {
-    const hasErrors = (this.model.form?.errors || []).length > 0;
+    const { form } = this.model;
+    const hasErrors = !!(!form || form.errors.length || form.errorsObserved);
 
     return (
       <div>
