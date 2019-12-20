@@ -4,6 +4,7 @@
 import asyncio
 import shutil
 import tempfile
+from collections import defaultdict
 from pathlib import Path
 
 from notebook.utils import maybe_future, url_path_join as ujoin
@@ -87,7 +88,7 @@ async def notebook_starter(name, starter, path, body, manager):
 
     nbjson = loads(tmp_nb.read_text())
 
-    await run_cells(nbjson, kernel)
+    await run_cells(nbjson, kernel, manager)
 
     nb_response = response_from_notebook(tmp_nb)
 
@@ -141,24 +142,42 @@ async def copy_files(tmp_nb, path, manager):
     return first_copied
 
 
-async def run_cells(nbjson, kernel):
+async def run_cells(nbjson, kernel, manager):
     """ actually run the cells
     """
     futures = dict()
+    pubs = defaultdict(list)
 
     shell = kernel.connect_shell()
+    iopub = kernel.connect_iopub()
     listening = True
 
-    def on_recv(msg):
+    def on_shell(msg):
         if not listening:
             return
         _ident, smsg = kernel.session.feed_identities(msg)
         msg = kernel.session.deserialize(smsg)
         if msg["msg_type"] == "execute_reply":
-            if msg["content"]["status"] == "ok":
-                futures[msg["parent_header"]["msg_id"]].set_result(msg)
+            status = msg["content"]["status"]
+            parent_id = msg["parent_header"]["msg_id"]
+            futures[parent_id].set_result(msg)
 
-    shell.on_recv(on_recv)
+            if status not in ["ok", "busy"]:
+                manager.log.error(f"[{status}]: {msg}")
+                manager.log.error(pubs[parent_id])
+
+    shell.on_recv(on_shell)
+
+    def on_iopub(msg):
+        if not listening:
+            return
+        _ident, smsg = kernel.session.feed_identities(msg)
+        msg = kernel.session.deserialize(smsg)
+        parent_id = msg.get("parent_header", {}).get("msg_id")
+        if parent_id:
+            pubs[parent_id].append(msg)
+
+    iopub.on_recv(on_iopub)
 
     for cell in nbjson["cells"]:
         if cell["cell_type"] == "code":
