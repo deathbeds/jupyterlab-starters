@@ -101,7 +101,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       execute: (args: any) => {
         const notebook: NotebookPanel = args.current || notebooks.currentWidget;
         if (!metadata) {
-          metadata = new NotebookMetadata({ manager });
+          metadata = new NotebookMetadata({ manager, commands });
           metadata.title.iconClass = DEFAULT_ICON_CLASS;
           metadata.title.caption = 'Starter Notebook Metadata';
           app.shell.add(metadata, 'right');

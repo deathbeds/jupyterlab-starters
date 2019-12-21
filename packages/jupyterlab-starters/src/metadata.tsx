@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { JSONObject } from '@phosphor/coreutils';
+import { JSONObject, JSONExt } from '@phosphor/coreutils';
+import { CommandRegistry } from '@phosphor/commands';
 import { Widget, BoxLayout } from '@phosphor/widgets';
 import { VDomModel, VDomRenderer } from '@jupyterlab/apputils';
 
@@ -14,19 +15,7 @@ import { SchemaForm } from './schemaform';
 import { CSS } from './css';
 import { NotebookPanel } from '@jupyterlab/notebook';
 
-const JSON_SCHEMA = (SCHEMA_DEFAULT as any).default;
-
-const { definitions } = JSON_SCHEMA;
-
-const starterMeta = definitions['starter-meta'];
-
-let STARTER_META = {
-  definitions,
-  type: 'object',
-  ...starterMeta
-};
-
-delete STARTER_META['required'];
+const RAW_SCHEMA = (SCHEMA_DEFAULT as any).default;
 
 export class NotebookMetadata extends Widget {
   private _form: SchemaForm<JSONObject>;
@@ -36,13 +25,13 @@ export class NotebookMetadata extends Widget {
 
   constructor(options: NotebookMetadata.IOptions) {
     super(options);
-    this.model = new NotebookMetadata.Model();
+    this.model = new NotebookMetadata.Model(options);
     this.layout = new BoxLayout();
     this.id = Private.nextId();
     this.addClass(CSS.META);
     this.addClass(CSS.FORM_PANEL);
 
-    this._form = new SchemaForm(STARTER_META, { liveValidate: true });
+    this._form = new SchemaForm(this.model.liveSchema, { liveValidate: true });
     this._buttons = this.makeButtons();
     this.model.form = this._form.model;
 
@@ -70,11 +59,42 @@ export class NotebookMetadata extends Widget {
 export namespace NotebookMetadata {
   export interface IOptions extends Widget.IOptions {
     manager: IStarterManager;
+    commands: CommandRegistry;
   }
 
   export class Model extends VDomModel {
     private _form: SchemaForm.Model<JSONObject>;
     private _notebook: NotebookPanel;
+    // private _manager: IStarterManager;
+    private _commands: CommandRegistry;
+
+    constructor(options: IOptions) {
+      super();
+      // this._manager = options.manager;
+      this._commands = options.commands;
+    }
+
+    get liveSchema() {
+      const { definitions } = RAW_SCHEMA;
+
+      let commandIds = this._commands.listCommands().filter(id => {
+        return (id || '').trim().length;
+      });
+      commandIds.sort();
+      definitions.command.properties.id.enum = commandIds;
+
+      const starterMeta = definitions['starter-meta'];
+
+      let schema = {
+        definitions,
+        type: 'object',
+        ...starterMeta
+      };
+
+      delete schema['required'];
+
+      return schema;
+    }
 
     get notebook() {
       return this._notebook;
@@ -104,9 +124,11 @@ export namespace NotebookMetadata {
       const fromNotebook = this._notebook.model.metadata.get(
         NOTEBOOK_META_KEY
       ) as JSONObject;
-      console.log('getting metadata', fromNotebook);
       if (fromNotebook && fromNotebook[NOTEBOOK_META_SUBKEY]) {
-        this._form.formData = fromNotebook[NOTEBOOK_META_SUBKEY] as JSONObject;
+        const candidate = fromNotebook[NOTEBOOK_META_SUBKEY] as JSONObject;
+        if (!JSONExt.deepEqual(this._form.formData, candidate)) {
+          this._form.formData = candidate;
+        }
       }
     }
 
@@ -125,18 +147,21 @@ export namespace NotebookMetadata {
 
     private _change = () => {
       const { formData } = this._form;
-      console.log('setting metadata', formData);
       if (this._notebook && formData) {
         const fromNotebook =
           this._notebook.model.metadata.get(NOTEBOOK_META_KEY) || ({} as any);
         const nbStarter = fromNotebook[NOTEBOOK_META_SUBKEY] || {};
-        this._notebook.model.metadata.set(NOTEBOOK_META_KEY, {
+        let candidate = {
           ...fromNotebook,
           [NOTEBOOK_META_SUBKEY]: {
             ...nbStarter,
             ...formData
           }
-        });
+        };
+
+        if (!JSONExt.deepEqual(fromNotebook, candidate)) {
+          this._notebook.model.metadata.set(NOTEBOOK_META_KEY, candidate);
+        }
       }
       this.stateChanged.emit(void 0);
     };

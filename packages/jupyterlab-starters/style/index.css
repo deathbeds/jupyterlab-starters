@@ -28,6 +28,8 @@
   right: 0;
   left: 0;
   z-index: 1;
+  overflow-y: auto;
+  max-height: 20rem;
 }
 
 .jp-Starters-NotebookMetadata {
