@@ -8,6 +8,7 @@ trigger:
 
 pr:
   - master
+  - 0.1.x
 
 variables:
   PYTHONUNBUFFERED: 1
