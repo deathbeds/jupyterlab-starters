@@ -4,6 +4,7 @@ trigger:
     include:
       - master
       - refs/tags/v*
+      - 0.1.x
 
 pr:
   - master
