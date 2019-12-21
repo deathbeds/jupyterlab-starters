@@ -4,9 +4,11 @@ trigger:
     include:
       - master
       - refs/tags/v*
+      - 0.1.x
 
 pr:
   - master
+  - 0.1.x
 
 variables:
   PYTHONUNBUFFERED: 1
