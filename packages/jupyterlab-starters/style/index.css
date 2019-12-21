@@ -61,3 +61,17 @@
 .jp-Starters-BodyBuilder-buttons button:first-child {
   margin-left: 0;
 }
+
+.jp-Starters-Preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: calc(
+    var(--jp-private-launcher-card-size) + 4 * var(--jp-notebook-padding)
+  );
+}
+
+.jp-Starters-Preview img {
+  width: var(--jp-private-launcher-large-icon-size);
+  height: var(--jp-private-launcher-large-icon-size);
+}

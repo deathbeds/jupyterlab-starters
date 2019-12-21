@@ -7,5 +7,11 @@ export const CSS = {
   BUILDER: 'jp-Starters-BodyBuilder',
   BUILDER_BUTTONS: 'jp-Starters-BodyBuilder-buttons',
   META: 'jp-Starters-NotebookMetadata',
-  FORM_PANEL: 'jp-Starters-FormPanel'
+  FORM_PANEL: 'jp-Starters-FormPanel',
+  PREVIEW: 'jp-Starters-Preview',
+  LAUNCHER: {
+    CARD: 'jp-LauncherCard',
+    ICON: 'jp-LauncherCard-icon',
+    LABEL: 'jp-LauncherCard-label'
+  }
 };
