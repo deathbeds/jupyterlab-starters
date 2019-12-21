@@ -19,13 +19,15 @@ if TYPE_CHECKING:
 DEFAULT_TEMPLATE = "https://github.com/audreyr/cookiecutter-pypackage.git"
 
 
-def cookiecutter_starters():
+def cookiecutter_starters(manager):
     """ try to find some cookiecutters
     """
     try:
         cookiecutter = __import__("cookiecutter")
     except (ImportError, ValueError) as err:
-        print(f"couldn't import cookiecutter: {err}")
+        manager.log.debug(
+            f"🍪 install cookiecutter to enable the cookiecutter starter. yum!"
+        )
         return {}
 
     return {
