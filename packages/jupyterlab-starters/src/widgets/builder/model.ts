@@ -37,6 +37,7 @@ export class BuilderModel extends VDomModel {
     this._context = context;
     this._form.schema = context.starter.schema;
     this._form.formData = context.body;
+    this._form.uiSchema = context.starter.uiSchema;
   }
 
   get form() {

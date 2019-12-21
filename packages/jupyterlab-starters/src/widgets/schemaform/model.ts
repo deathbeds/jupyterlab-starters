@@ -59,6 +59,15 @@ export class SchemaFormModel<T extends JSONValue> extends VDomModel {
     this.stateChanged.emit(void 0);
   }
 
+  set uiSchema(uiSchema: any) {
+    this._props.uiSchema = uiSchema;
+    this.stateChanged.emit(void 0);
+  }
+
+  get uiSchema() {
+    return this._props.uiSchema;
+  }
+
   /**
    * Get the props for the form
    */

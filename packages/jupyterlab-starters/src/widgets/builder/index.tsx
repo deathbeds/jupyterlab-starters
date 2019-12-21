@@ -32,7 +32,8 @@ export class BodyBuilder extends Widget {
 
     this._form = new SchemaForm(this._context.starter.schema, {
       liveValidate: true,
-      formData: this._context.body
+      formData: this._context.body,
+      uiSchema: this._context.starter.uiSchema || {}
     });
     this._buttons = this.makeButtons();
 
