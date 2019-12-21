@@ -5,18 +5,33 @@
   background-image: url('./icons/starter.svg');
 }
 
-.jp-Starters-BodyBuilder {
+.jp-Starters-FormPanel {
   background-color: var(--jp-layout-color0);
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.jp-Starters-BodyBuilder .jp-SchemaForm {
+.jp-Starters-FormPanel .jp-SchemaForm {
   overflow-y: auto;
   flex: 1;
   max-height: 100%;
   padding: var(--jp-notebook-padding);
+}
+
+.jp-Starters-FormPanel .jp-SchemaForm > .panel.panel-danger.errors {
+  padding: var(--jp-notebook-padding);
+  position: absolute;
+  bottom: 0;
+  background-color: var(--jp-layout-color1);
+  border-top: solid 1px var(--jp-warn-color0);
+  right: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.jp-Starters-NotebookMetadata {
+  min-width: 300px;
 }
 
 .jp-Starters-BodyBuilder-buttons {
@@ -43,15 +58,4 @@
 
 .jp-Starters-BodyBuilder-buttons button:first-child {
   margin-left: 0;
-}
-
-.jp-Starters-BodyBuilder .jp-SchemaForm > .panel.panel-danger.errors {
-  padding: var(--jp-notebook-padding);
-  position: absolute;
-  bottom: 0;
-  background-color: var(--jp-layout-color1);
-  border-top: solid 1px var(--jp-warn-color0);
-  right: 0;
-  left: 0;
-  z-index: 1;
 }

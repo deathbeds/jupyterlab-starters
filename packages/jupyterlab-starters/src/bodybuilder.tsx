@@ -25,6 +25,7 @@ export class BodyBuilder extends Widget {
     const { label } = this._context.starter;
     this.id = Private.nextId();
     this.addClass(CSS.BUILDER);
+    this.addClass(CSS.FORM_PANEL);
     this.title.label = label;
     this.title.iconClass = this.model.iconClass;
 

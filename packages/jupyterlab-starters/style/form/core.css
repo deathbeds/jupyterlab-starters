@@ -18,6 +18,11 @@
   padding: 0;
 }
 
+.jp-SchemaForm fieldset fieldset {
+  padding-left: var(--jp-notebook-padding);
+  border-left: solid 1px var(--jp-border-color0);
+}
+
 .jp-SchemaForm button[type='submit'] {
   display: none;
 }

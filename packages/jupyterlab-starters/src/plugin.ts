@@ -23,6 +23,7 @@ import {
 import { BodyBuilder } from './bodybuilder';
 import { NotebookStarter } from './notebookbutton';
 import * as SCHEMA from './_schema';
+import { NotebookMetadata } from './metadata';
 
 const plugin: JupyterFrontEndPlugin<void> = {
   id: `${NS}:plugin`,
@@ -94,10 +95,23 @@ const plugin: JupyterFrontEndPlugin<void> = {
       }
     });
 
+    let metadata: NotebookMetadata;
+
     commands.addCommand(CommandIDs.notebookMeta, {
       execute: (args: any) => {
         const notebook: NotebookPanel = args.current || notebooks.currentWidget;
-        console.log(notebook);
+        if (!metadata) {
+          metadata = new NotebookMetadata({ manager });
+          metadata.title.iconClass = DEFAULT_ICON_CLASS;
+          metadata.title.caption = 'Starter Notebook Metadata';
+          app.shell.add(metadata, 'right');
+          notebooks.currentChanged.connect(() => {
+            metadata.model.notebook = null;
+            metadata.model.notebook = notebooks.currentWidget;
+          });
+          metadata.model.notebook = notebook;
+          metadata.activate();
+        }
       },
       caption: (args: any) => {
         const notebook: NotebookPanel = args.current || notebooks.currentWidget;

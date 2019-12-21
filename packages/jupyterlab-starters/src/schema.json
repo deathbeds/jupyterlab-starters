@@ -1,0 +1,204 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "anyOf": [
+    {
+      "$ref": "#/definitions/all-starters"
+    },
+    {
+      "$ref": "#/definitions/start-response"
+    }
+  ],
+  "definitions": {
+    "all-starters": {
+      "title": "All Starters Server Response",
+      "type": "object",
+      "required": ["starters", "version"],
+      "properties": {
+        "starters": {
+          "$ref": "#/definitions/starters"
+        },
+        "version": {
+          "type": "string",
+          "enum": ["2"]
+        }
+      }
+    },
+    "starters": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "$ref": "#/definitions/starter"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/starter"
+      }
+    },
+    "start-response": {
+      "title": "StartResponse",
+      "type": "object",
+      "required": ["name", "path", "starter", "body", "status"],
+      "properties": {
+        "starter": {
+          "$ref": "#/definitions/starter"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["error", "continuing", "done"]
+        },
+        "name": {
+          "type": "string"
+        },
+        "body": {
+          "type": "object"
+        },
+        "path": {
+          "type": "string"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "starter": {
+      "title": "Starter",
+      "allOf": [
+        {
+          "$ref": "#/definitions/starter-meta"
+        },
+        {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/starter-copy"
+            },
+            {
+              "$ref": "#/definitions/starter-copy-with-dest"
+            },
+            {
+              "$ref": "#/definitions/starter-python"
+            },
+            {
+              "$ref": "#/definitions/starter-notebook"
+            }
+          ]
+        }
+      ]
+    },
+    "starter-meta": {
+      "title": "Starter Meta",
+      "type": "object",
+      "required": ["label", "description"],
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/command"
+          }
+        },
+        "ignore": {
+          "description": "glob patterns to ignore (will also ignore children)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "schema": {
+          "description": "JSON schema for a body to pass",
+          "type": "object",
+          "$ref": "#/definitions/json-schema"
+        }
+      }
+    },
+    "json-schema": {
+      "title": "JSON Schema",
+      "description": "presently under-defined because of toolchain",
+      "type": "object"
+    },
+    "command": {
+      "title": "Post-Starter Command",
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "args": {
+          "type": "object"
+        }
+      }
+    },
+    "starter-copy": {
+      "title": "Copy Starter",
+      "required": ["src", "type"],
+      "properties": {
+        "src": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["copy"]
+        }
+      }
+    },
+    "starter-copy-with-dest": {
+      "title": "Copy with Destination Starter",
+      "allOf": [
+        {
+          "$ref": "#/definitions/starter-copy"
+        },
+        {
+          "required": ["dest", "schema"],
+          "properties": {
+            "dest": {
+              "description": "A name to copy to: Jinja will be applied with `body` as the context",
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "starter-notebook": {
+      "title": "Notebook Starter",
+      "description": "Uses a notebook as both the configuration object (in `#/metadata/jupyter-starters`) and execution",
+      "type": "object",
+      "required": ["type", "src"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["notebook"]
+        },
+        "src": {
+          "type": "string"
+        }
+      }
+    },
+    "starter-python": {
+      "title": "Python Starter",
+      "description": "Invokes an importable python function (multiple times)",
+      "required": ["type", "callable", "schema"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["python"]
+        },
+        "callable": {
+          "description": "a python function that accepts the `body`",
+          "type": "string",
+          "pattern": "[a-zA-Z_\\d\\.]"
+        }
+      }
+    }
+  }
+}
