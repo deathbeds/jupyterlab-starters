@@ -20,10 +20,11 @@ import {
   IStarterManager,
   DEFAULT_ICON_CLASS
 } from './tokens';
-import { BodyBuilder } from './bodybuilder';
 import { NotebookStarter } from './notebookbutton';
 import * as SCHEMA from './_schema';
-import { NotebookMetadata } from './metadata';
+
+import { NotebookMetadata } from './widgets/meta';
+import { BodyBuilder } from './widgets/builder';
 
 const plugin: JupyterFrontEndPlugin<void> = {
   id: `${NS}:plugin`,
