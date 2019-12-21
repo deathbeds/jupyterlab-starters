@@ -26,7 +26,7 @@
   "scripts": {
     "build:pre": "jlpm build:json2ts && jlpm build:copyschema",
     "build:json2ts": "json2ts ../../src/jupyter_starters/schema/v2.json --unreachableDefinitions | prettier --stdin-filepath _schema.d.ts > src/_schema.d.ts",
-    "build:copyschema": "cp ../../src/jupyter_starters/schema/v2.json src/schema.json && cp ../../src/jupyter_starters/schema/v2.json lib/schema.json",
+    "build:copyschema": "python -c \"from pathlib import Path as P; s = P('../../src/jupyter_starters/schema/v2.json').read_text(); P('lib').mkdir(exist_ok=True); P('lib/schema.json').write_text(s)\"",
     "bundle": "npm pack .",
     "clean": "rimraf lib",
     "lab:link": "jupyter labextension link . --no-build",
