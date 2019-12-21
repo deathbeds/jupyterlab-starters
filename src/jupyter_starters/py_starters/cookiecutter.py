@@ -24,7 +24,7 @@ def cookiecutter_starters(manager):
     """
     try:
         cookiecutter = __import__("cookiecutter")
-    except (ImportError, ValueError) as err:
+    except (ImportError, ValueError):
         manager.log.debug(
             f"🍪 install cookiecutter to enable the cookiecutter starter. yum!"
         )
