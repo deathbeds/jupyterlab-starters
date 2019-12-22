@@ -6,7 +6,6 @@ import * as rjsfUtils from 'react-jsonschema-form/lib/utils';
 
 export class RawJSONObjectField extends ObjectField {
   render() {
-    console.log(this.props);
     const {
       uiSchema,
       formData,
@@ -35,7 +34,7 @@ export class RawJSONObjectField extends ObjectField {
         const value = JSON.parse(event.currentTarget.value);
         this.props.onChange(value);
       } catch (err) {
-        console.log('whatever', err);
+        //
       }
     };
 

@@ -126,7 +126,7 @@
         },
         "schema": {
           "title": "JSON Schema",
-          "description": "JSON schema for a body to pass",
+          "description": "JSON schema the body must validate against before continuing",
           "type": "object",
           "$ref": "#/definitions/json-schema"
         },
