@@ -75,3 +75,7 @@
   width: var(--jp-private-launcher-large-icon-size);
   height: var(--jp-private-launcher-large-icon-size);
 }
+
+.jp-Starters-FormPanel .jp-SchemaForm > .form-group {
+  margin-bottom: 20rem;
+}

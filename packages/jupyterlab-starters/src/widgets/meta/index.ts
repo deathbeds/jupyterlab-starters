@@ -31,6 +31,7 @@ export class NotebookMetadata extends Widget {
         description: AS_TEXTAREA,
         icon: AS_TEXTAREA,
         schema: AS_JSONOBJECT,
+        uiSchema: AS_JSONOBJECT,
         commands: {
           items: {
             args: AS_JSONOBJECT
