@@ -50,8 +50,8 @@ export class NotebookMetadata extends Widget {
       this._form.setHidden(!this.model.notebook);
     });
 
-    this.boxLayout.addWidget(this._preview);
     this.boxLayout.addWidget(this._form);
+    this.boxLayout.addWidget(this._preview);
   }
 
   get boxLayout() {

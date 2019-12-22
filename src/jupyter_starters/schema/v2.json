@@ -44,7 +44,7 @@
         },
         "status": {
           "title": "Status",
-          "description": "the state of the starter",
+          "description": "the current state of the Starter",
           "type": "string",
           "enum": ["error", "continuing", "done"]
         },
@@ -90,7 +90,8 @@
       ]
     },
     "starter-meta": {
-      "title": "Starter Meta",
+      "title": "Starter Metadata",
+      "description": "common metadata for Starters",
       "type": "object",
       "required": ["label", "description"],
       "properties": {
@@ -101,7 +102,7 @@
         },
         "description": {
           "title": "Description",
-          "description": "short description of the intent of the starter",
+          "description": "short description of the intent of the Starter",
           "type": "string"
         },
         "icon": {
@@ -111,14 +112,15 @@
         },
         "commands": {
           "title": "Commands",
-          "description": "JupyterLab commands to run at various times in the lifecycle",
+          "description": "JupyterLab commands to run after the Starter has completed",
           "type": "array",
           "items": {
             "$ref": "#/definitions/command"
           }
         },
         "ignore": {
-          "description": "glob patterns to exclude from copying (will also ignore children)",
+          "title": "Ignore Files",
+          "description": "Folders and files exclude from copying, with * for wildcards",
           "type": "array",
           "items": {
             "type": "string"

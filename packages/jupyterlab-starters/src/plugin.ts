@@ -1,6 +1,7 @@
 import {
   JupyterFrontEnd,
-  JupyterFrontEndPlugin
+  JupyterFrontEndPlugin,
+  ILabShell
 } from '@jupyterlab/application';
 import { ILauncher } from '@jupyterlab/launcher';
 import { IIconRegistry } from '@jupyterlab/ui-components';
@@ -28,10 +29,11 @@ import { BodyBuilder } from './widgets/builder';
 
 const plugin: JupyterFrontEndPlugin<void> = {
   id: `${NS}:plugin`,
-  requires: [ILauncher, IIconRegistry, INotebookTracker],
+  requires: [ILabShell, ILauncher, IIconRegistry, INotebookTracker],
   autoStart: true,
   activate: (
     app: JupyterFrontEnd,
+    shell: ILabShell,
     launcher: ILauncher,
     icons: IIconRegistry,
     notebooks: INotebookTracker
@@ -103,6 +105,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
         const notebook: NotebookPanel = args.current || notebooks.currentWidget;
         if (!metadata) {
           metadata = new NotebookMetadata({ manager, commands });
+          metadata.id = 'id-jp-starters-notebookmeta';
           metadata.title.iconClass = DEFAULT_ICON_CLASS;
           metadata.title.caption = 'Starter Notebook Metadata';
           app.shell.add(metadata, 'right');
@@ -111,7 +114,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
             metadata.model.notebook = notebooks.currentWidget;
           });
           metadata.model.notebook = notebook;
-          metadata.activate();
+          shell.expandRight();
+          shell.activateById(metadata.id);
         }
       },
       caption: (args: any) => {

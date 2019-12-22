@@ -27,7 +27,7 @@ export class NotebookStarter
       id: CommandIDs.notebookMeta
     });
 
-    panel.toolbar.insertItem(9, 'starter-notebook', button);
+    panel.toolbar.insertItem(10, 'starter-notebook', button);
 
     return new DisposableDelegate(() => button.dispose());
   }
