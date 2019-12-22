@@ -43,6 +43,8 @@
           "$ref": "#/definitions/starter"
         },
         "status": {
+          "title": "Status",
+          "description": "the state of the starter",
           "type": "string",
           "enum": ["error", "continuing", "done"]
         },
@@ -93,33 +95,43 @@
       "required": ["label", "description"],
       "properties": {
         "label": {
+          "title": "Label",
+          "description": "human-readable description used in UI labels and tab titles",
           "type": "string"
         },
         "description": {
+          "title": "Description",
+          "description": "short description of the intent of the starter",
           "type": "string"
         },
         "icon": {
+          "title": "Icon",
+          "description": "an SVG to use in Launcher cards and tab icons",
           "type": "string"
         },
         "commands": {
+          "title": "Commands",
+          "description": "JupyterLab commands to run at various times in the lifecycle",
           "type": "array",
           "items": {
             "$ref": "#/definitions/command"
           }
         },
         "ignore": {
-          "description": "glob patterns to ignore (will also ignore children)",
+          "description": "glob patterns to exclude from copying (will also ignore children)",
           "type": "array",
           "items": {
             "type": "string"
           }
         },
         "schema": {
+          "title": "JSON Schema",
           "description": "JSON schema for a body to pass",
           "type": "object",
           "$ref": "#/definitions/json-schema"
         },
         "uiSchema": {
+          "title": "UI Schema",
           "description": "A react-jsonschema-form UI schema for customizing the selection of widgets https://react-jsonschema-form.readthedocs.io/en/latest/form-customization/#the-uischema-object",
           "type": "object"
         }
