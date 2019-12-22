@@ -143,14 +143,18 @@
       "type": "object"
     },
     "command": {
-      "title": "Post-Starter Command",
+      "title": "JupyterLab Command",
       "type": "object",
       "required": ["id"],
       "properties": {
         "id": {
+          "title": "Command ID",
+          "description": "canonical name for the command",
           "type": "string"
         },
         "args": {
+          "title": "Arguments",
+          "description": "optional values provided to the command when executed",
           "type": "object"
         }
       }

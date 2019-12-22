@@ -12,23 +12,20 @@ export class PreviewCard extends VDomRenderer<PreviewCardModel> {
   }
 
   render() {
-    const { starter } = this.model;
+    const { starter, iconURI } = this.model;
 
     if (!starter) {
       return <div className={CSS.LAUNCHER.CARD}></div>;
     }
 
     return (
-      <div>
-        <label>Launcher Card Preview</label>
-        <div className={CSS.LAUNCHER.CARD} title={starter.description}>
-          <div className={CSS.LAUNCHER.ICON}>
-            <img src={`data:image/svg+xml;base64,${btoa(starter.icon)}`} />
-          </div>
+      <div className={CSS.LAUNCHER.CARD} title={starter.description}>
+        <div className={CSS.LAUNCHER.ICON}>
+          <img src={iconURI} />
+        </div>
 
-          <div className={CSS.LAUNCHER.LABEL}>
-            <p>{starter.label}</p>
-          </div>
+        <div className={CSS.LAUNCHER.LABEL}>
+          <p>{starter.label}</p>
         </div>
       </div>
     );

@@ -67,7 +67,7 @@
   flex-direction: column;
   align-items: center;
   max-height: calc(
-    var(--jp-private-launcher-card-size) + 4 * var(--jp-notebook-padding)
+    var(--jp-private-launcher-card-size) + 2 * var(--jp-notebook-padding)
   );
 }
 

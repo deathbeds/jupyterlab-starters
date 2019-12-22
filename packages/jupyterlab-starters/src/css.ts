@@ -1,3 +1,6 @@
+import DEFAULT_ICON_SVG from '!!raw-loader!../style/icons/starter.svg';
+import COOKIECUTTER_SVG from '!!raw-loader!../style/icons/cookiecutter.svg';
+
 export const CSS = {
   JP: {
     styled: 'jp-mod-styled',
@@ -13,5 +16,9 @@ export const CSS = {
     CARD: 'jp-LauncherCard',
     ICON: 'jp-LauncherCard-icon',
     LABEL: 'jp-LauncherCard-label'
+  },
+  SVG: {
+    DEFAULT_ICON: DEFAULT_ICON_SVG,
+    COOKIECUTTER: COOKIECUTTER_SVG
   }
 };

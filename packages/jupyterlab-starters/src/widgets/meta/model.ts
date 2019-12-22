@@ -35,7 +35,29 @@ export class NotebookMetadataModel extends VDomModel {
       return (id || '').trim().length;
     });
     commandIds.sort();
-    definitions.command.properties.id.enum = commandIds;
+    const commandLabels = commandIds.map(id => {
+      let label = '';
+      try {
+        label = this._commands.label(id) || this._commands.caption(id);
+      } catch {
+        label = '';
+      }
+      return label.length ? label : `[${id}]`;
+    });
+
+    definitions.command.properties.id.anyOf = [
+      {
+        title: 'Choose from Commands',
+        description: 'Commands available in this JupyterLab',
+        enum: commandIds,
+        enumNames: commandLabels
+      },
+      {
+        title: 'Other',
+        description: 'Any command id',
+        type: 'string'
+      }
+    ];
 
     const starterMeta = definitions['starter-meta'];
 
@@ -55,7 +77,11 @@ export class NotebookMetadataModel extends VDomModel {
   }
 
   set notebook(notebook) {
-    if (this._notebook) {
+    if (notebook === this._notebook) {
+      return;
+    }
+
+    if (this._notebook?.model) {
       this._notebook.model.metadata.changed.disconnect(
         this.onNotebookMeta,
         this
@@ -64,22 +90,22 @@ export class NotebookMetadataModel extends VDomModel {
 
     this._notebook = notebook;
 
-    if (this._notebook) {
+    if (this._notebook?.model) {
       this._notebook.model.metadata.changed.connect(this.onNotebookMeta, this);
-      this.onNotebookMeta();
     }
+
+    this.onNotebookMeta();
+
     this.stateChanged.emit(void 0);
   }
 
   onNotebookMeta() {
-    const fromNotebook = this._notebook.model.metadata.get(
-      NOTEBOOK_META_KEY
-    ) as JSONObject;
-    if (fromNotebook && fromNotebook[NOTEBOOK_META_SUBKEY]) {
-      const candidate = fromNotebook[NOTEBOOK_META_SUBKEY] as JSONObject;
-      if (!JSONExt.deepEqual(this._form.formData, candidate)) {
-        this._form.formData = candidate;
-      }
+    const fromNotebook =
+      (this._notebook?.model?.metadata?.get(NOTEBOOK_META_KEY) as JSONObject) ||
+      {};
+    const candidate = (fromNotebook[NOTEBOOK_META_SUBKEY] || {}) as JSONObject;
+    if (!JSONExt.deepEqual(this._form.formData, candidate)) {
+      this._form.formData = candidate;
     }
   }
 

@@ -4,10 +4,12 @@ import { Widget, BoxLayout } from '@phosphor/widgets';
 import { CSS } from '../../css';
 import { SchemaForm } from '../schemaform';
 import { PreviewCard } from '../previewcard';
+import { RawJSONObjectField } from '../rawjson';
 
 import { NotebookMetadataModel } from './model';
 
 const AS_TEXTAREA = { 'ui:widget': 'textarea' };
+const AS_JSONOBJECT = { 'ui:field': 'jsonobject' };
 
 export class NotebookMetadata extends Widget {
   private _form: SchemaForm<JSONObject>;
@@ -26,12 +28,17 @@ export class NotebookMetadata extends Widget {
     this._form = new SchemaForm(this.model.liveSchema, {
       liveValidate: true,
       uiSchema: {
-        description: {
-          ...AS_TEXTAREA
-        },
-        icon: {
-          ...AS_TEXTAREA
+        description: AS_TEXTAREA,
+        icon: AS_TEXTAREA,
+        schema: AS_JSONOBJECT,
+        commands: {
+          items: {
+            args: AS_JSONOBJECT
+          }
         }
+      },
+      fields: {
+        jsonobject: RawJSONObjectField
       }
     });
     this.model.form = this._form.model;
@@ -39,10 +46,11 @@ export class NotebookMetadata extends Widget {
     this._preview = new PreviewCard();
     this.model.stateChanged.connect(() => {
       this._preview.model.starter = (this.model.form.formData as any) || {};
+      this._form.setHidden(!this.model.notebook);
     });
 
-    this.boxLayout.addWidget(this._form);
     this.boxLayout.addWidget(this._preview);
+    this.boxLayout.addWidget(this._form);
   }
 
   get boxLayout() {
