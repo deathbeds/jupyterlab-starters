@@ -34,7 +34,7 @@
 }
 
 .jp-Starters-NotebookMetadata {
-  min-width: 300px;
+  min-width: 350px;
 }
 
 .jp-Starters-BodyBuilder-buttons {
@@ -81,4 +81,8 @@
 
 .jp-Starters-FormPanel .jp-SchemaForm > .form-group {
   margin-bottom: 20rem;
+}
+
+.jp-Starters-FormPanel .jp-RenderedHTMLCommon {
+  padding: 0;
 }

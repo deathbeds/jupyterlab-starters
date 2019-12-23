@@ -20,7 +20,7 @@
 
 .jp-SchemaForm fieldset fieldset {
   padding-left: var(--jp-notebook-padding);
-  border-left: solid 1px var(--jp-border-color0);
+  border-left: solid 4px var(--jp-border-color3);
 }
 
 .jp-SchemaForm button[type='submit'] {
@@ -40,6 +40,8 @@
   margin-bottom: var(--jp-ui-font-size1);
   width: 100%;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .jp-SchemaForm .form-group:last-child {
@@ -47,9 +49,8 @@
 }
 
 .jp-SchemaForm .field-description {
-  font-style: italic;
-  margin-bottom: calc(var(--jp-ui-font-size1) / 2);
   color: var(--jp-ui-font-color2);
+  order: 2;
 }
 
 .jp-SchemaForm .required {

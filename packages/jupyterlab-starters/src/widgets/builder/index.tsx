@@ -7,6 +7,7 @@ import { IStartContext } from '../../tokens';
 import { CSS } from '../../css';
 
 import { SchemaForm } from '../schemaform';
+import { MarkdownDescriptionField } from '../form/fields/markdowndescription';
 
 import { BuilderModel } from './model';
 
@@ -33,7 +34,10 @@ export class BodyBuilder extends Widget {
     this._form = new SchemaForm(this._context.starter.schema, {
       liveValidate: true,
       formData: this._context.body,
-      uiSchema: this._context.starter.uiSchema || {}
+      uiSchema: this._context.starter.uiSchema || {},
+      fields: {
+        DescriptionField: MarkdownDescriptionField
+      }
     });
     this._buttons = this.makeButtons();
 

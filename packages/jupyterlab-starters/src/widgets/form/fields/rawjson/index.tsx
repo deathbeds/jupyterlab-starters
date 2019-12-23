@@ -14,7 +14,8 @@ export class RawJSONObjectField extends ObjectField {
       registry = rjsfUtils.getDefaultRegistry()
     } = this.props;
 
-    const { definitions } = registry;
+    const { definitions, fields } = registry;
+    const { TitleField, DescriptionField } = fields;
     const schema = (rjsfUtils as any).retrieveSchema(
       this.props.schema,
       definitions,
@@ -40,16 +41,26 @@ export class RawJSONObjectField extends ObjectField {
     };
 
     return (
-      <div>
-        <legend>{title}</legend>
-        <p className="field-description">{description}</p>
+      <>
+        <TitleField
+          id={`${idSchema.$id}__title`}
+          title={title}
+          required={this.props.required}
+          formContext={this.props.formContext}
+        />
+        <DescriptionField
+          id={`${this.props.idSchema.$id}__description`}
+          description={description}
+          formContext={this.props.formContext}
+        />
         <textarea
           spellCheck={false}
           id={idSchema.$id}
+          className="form-control"
           defaultValue={JSON.stringify(formData, null, 2)}
           onChange={onChange}
         ></textarea>
-      </div>
+      </>
     );
   }
 }

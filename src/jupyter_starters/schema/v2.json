@@ -107,12 +107,12 @@
         },
         "icon": {
           "title": "Icon",
-          "description": "an SVG to use in Launcher cards and tab icons",
+          "description": "[SVG](https://developer.mozilla.org/en-US/docs/Web/SVG) string to use in Launcher cards and tab icons",
           "type": "string"
         },
         "commands": {
           "title": "Commands",
-          "description": "JupyterLab commands to run after the Starter has completed",
+          "description": "[JupyterLab commands](https://jupyterlab.readthedocs.io/en/stable/developer/extension_points.html#commands) to run after the Starter has completed",
           "type": "array",
           "items": {
             "$ref": "#/definitions/command"
@@ -120,7 +120,7 @@
         },
         "ignore": {
           "title": "Ignore Files",
-          "description": "Folders and files exclude from copying, with * for wildcards",
+          "description": "[glob-style patterns](https://docs.python.org/3/library/pathlib.html#pathlib.PurePath.match) for folders and files exclude from copying, with * for wildcards",
           "type": "array",
           "items": {
             "type": "string"
@@ -128,20 +128,19 @@
         },
         "schema": {
           "title": "JSON Schema",
-          "description": "JSON schema the body must validate against before continuing",
+          "description": "[Draft 7 JSON Schema](https://json-schema.org/understanding-json-schema) that generates a form like this one, which must validate the user's data. Description fields may include markdown",
           "type": "object",
           "$ref": "#/definitions/json-schema"
         },
         "uiSchema": {
           "title": "UI Schema",
-          "description": "A react-jsonschema-form UI schema for customizing the selection of widgets https://react-jsonschema-form.readthedocs.io/en/latest/form-customization/#the-uischema-object",
+          "description": "[react-jsonschema-form `uiSchema`](https://react-jsonschema-form.readthedocs.io/en/latest/form-customization/#the-uischema-object) for customizing the selection of widgets",
           "type": "object"
         }
       }
     },
     "json-schema": {
       "title": "JSON Schema",
-      "description": "presently under-defined because of toolchain",
       "type": "object"
     },
     "command": {

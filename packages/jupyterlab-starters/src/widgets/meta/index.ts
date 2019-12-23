@@ -4,7 +4,8 @@ import { Widget, BoxLayout } from '@phosphor/widgets';
 import { CSS } from '../../css';
 import { SchemaForm } from '../schemaform';
 import { PreviewCard } from '../previewcard';
-import { RawJSONObjectField } from '../rawjson';
+import { RawJSONObjectField } from '../form/fields/rawjson';
+import { MarkdownDescriptionField } from '../form/fields/markdowndescription';
 
 import { NotebookMetadataModel } from './model';
 
@@ -39,7 +40,8 @@ export class NotebookMetadata extends Widget {
         }
       },
       fields: {
-        jsonobject: RawJSONObjectField
+        jsonobject: RawJSONObjectField,
+        DescriptionField: MarkdownDescriptionField
       }
     });
     this.model.form = this._form.model;
