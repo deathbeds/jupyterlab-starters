@@ -3,11 +3,18 @@ import React from 'react';
 import * as rjsf from 'react-jsonschema-form';
 
 import { JSONObject, JSONValue } from '@phosphor/coreutils';
+
 import { VDomRenderer } from '@jupyterlab/apputils';
+
+import { renderMarkdown } from '@jupyterlab/rendermime/lib/renderers';
 
 import { Form } from '../form';
 
 import { SchemaFormModel } from './model';
+
+const MARKDOWN_CLASSES = ['jp-RenderedMarkdown', 'jp-RenderedHTMLCommon'];
+const UNRENDERED_LABELS =
+  'legend:not(.jp-RenderedMarkdown), .field-description:not(.jp-RenderedMarkdown), .control-label:not(.jp-RenderedMarkdown)';
 
 /**
  * The id prefix all JSON Schema forms will share
@@ -28,11 +35,41 @@ export class SchemaForm<T extends JSONValue> extends VDomRenderer<
   /**
    * Construct a new Model
    */
-  constructor(schema: JSONObject, props: Partial<rjsf.FormProps<T>> = {}) {
+  constructor(
+    schema: JSONObject,
+    props: Partial<rjsf.FormProps<T>> = {},
+    options?: SchemaFormModel.IOptions
+  ) {
     super();
     this._idPrefix = `${SCHEMA_FORM_ID_PREFIX}-${Private.nextId()}`;
-    this.model = new SchemaFormModel<T>(schema, props);
+    this.model = new SchemaFormModel<T>(schema, props, options);
+    if (this.model.markdown) {
+      this.model.rendered.connect(this._renderMarkdown);
+    }
   }
+
+  _renderMarkdown = () => {
+    const markdown = this.model.markdown;
+    const hosts = Array.from(this.node.querySelectorAll(UNRENDERED_LABELS));
+    console.log('rendering markdown', hosts);
+    if (!hosts.length) {
+      setTimeout(this._renderMarkdown, 100);
+      return;
+    }
+    for (const host of hosts) {
+      host.classList.add(...MARKDOWN_CLASSES);
+      void renderMarkdown({
+        host: host as HTMLElement,
+        source: host.textContent.trim(),
+        trusted: true,
+        sanitizer: markdown.sanitizer,
+        latexTypesetter: markdown.latexTypesetter,
+        resolver: markdown.resolver,
+        linkHandler: markdown.linkHandler,
+        shouldTypeset: true
+      });
+    }
+  };
 
   /**
    * Render the form, if the model is available
@@ -68,13 +105,14 @@ export class SchemaForm<T extends JSONValue> extends VDomRenderer<
       }
     };
 
-    setTimeout(this._observeErrors, 100);
+    setTimeout(this._postRender, 100);
 
     return <Form {...finalProps} />;
   }
 
-  _observeErrors = () => {
+  private _postRender = () => {
     this.model.errorsObserved = !!this.node.querySelector('.errors');
+    this.model.emitRenderered();
   };
 
   /**

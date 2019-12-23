@@ -6,6 +6,7 @@ import {
 import { ILauncher } from '@jupyterlab/launcher';
 import { IIconRegistry } from '@jupyterlab/ui-components';
 import { MainAreaWidget } from '@jupyterlab/apputils';
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
 import { NotebookPanel, INotebookTracker } from '@jupyterlab/notebook';
 
@@ -29,17 +30,24 @@ import { BodyBuilder } from './widgets/builder';
 
 const plugin: JupyterFrontEndPlugin<void> = {
   id: `${NS}:plugin`,
-  requires: [ILabShell, ILauncher, IIconRegistry, INotebookTracker],
+  requires: [
+    ILabShell,
+    ILauncher,
+    IIconRegistry,
+    INotebookTracker,
+    IRenderMimeRegistry
+  ],
   autoStart: true,
   activate: (
     app: JupyterFrontEnd,
     shell: ILabShell,
     launcher: ILauncher,
     icons: IIconRegistry,
-    notebooks: INotebookTracker
+    notebooks: INotebookTracker,
+    rendermime: IRenderMimeRegistry
   ) => {
     const { commands } = app;
-    const manager: IStarterManager = new StarterManager({ icons });
+    const manager: IStarterManager = new StarterManager({ icons, rendermime });
 
     commands.addCommand(CommandIDs.start, {
       execute: async (args: any) => {

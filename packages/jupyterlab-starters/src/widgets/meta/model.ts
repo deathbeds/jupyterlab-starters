@@ -19,12 +19,12 @@ const NOTEBOOK_META_SUBKEY = 'starter';
 export class NotebookMetadataModel extends VDomModel {
   private _form: SchemaFormModel<JSONObject>;
   private _notebook: NotebookPanel;
-  // private _manager: IStarterManager;
+  private _manager: IStarterManager;
   private _commands: CommandRegistry;
 
   constructor(options: NotebookMetadataModel.IOptions) {
     super();
-    // this._manager = options.manager;
+    this._manager = options.manager;
     this._commands = options.commands;
   }
 
@@ -70,6 +70,10 @@ export class NotebookMetadataModel extends VDomModel {
     delete schema['required'];
 
     return schema;
+  }
+
+  get manager() {
+    return this._manager;
   }
 
   get notebook() {

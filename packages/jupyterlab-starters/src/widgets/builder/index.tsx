@@ -30,11 +30,16 @@ export class BodyBuilder extends Widget {
     this.title.label = label;
     this.title.iconClass = this.model.iconClass;
 
-    this._form = new SchemaForm(this._context.starter.schema, {
-      liveValidate: true,
-      formData: this._context.body,
-      uiSchema: this._context.starter.uiSchema || {}
-    });
+    this._form = new SchemaForm(
+      this._context.starter.schema,
+      {
+        liveValidate: true,
+        formData: this._context.body,
+        uiSchema: this._context.starter.uiSchema || {}
+      },
+      { markdown: this.model.manager.markdown }
+    );
+
     this._buttons = this.makeButtons();
 
     this.boxLayout.addWidget(this._form);

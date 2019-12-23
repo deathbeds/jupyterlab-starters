@@ -3,15 +3,17 @@ import { Signal } from '@phosphor/signaling';
 import { URLExt } from '@jupyterlab/coreutils';
 import { ServerConnection } from '@jupyterlab/services';
 import { IIconRegistry, IconRegistry } from '@jupyterlab/ui-components';
+import { IRenderMimeRegistry, RenderedMarkdown } from '@jupyterlab/rendermime';
+
 import {
   IStarterManager,
   DEFAULT_ICON_CLASS,
-  DEFAULT_ICON_NAME
+  DEFAULT_ICON_NAME,
+  API
 } from './tokens';
 
 import * as SCHEMA from './_schema';
 import { CSS } from './css';
-import { API } from './tokens';
 
 const { makeRequest, makeSettings } = ServerConnection;
 
@@ -20,9 +22,12 @@ export class StarterManager implements IStarterManager {
   private _starters: SCHEMA.Starters = {};
   private _serverSettings = makeSettings();
   private _icons: IIconRegistry;
+  private _rendermime: IRenderMimeRegistry;
+  private _markdown: RenderedMarkdown;
 
   constructor(options: IStarterManager.IOptions) {
     this._icons = options.icons;
+    this._rendermime = options.rendermime;
     this._changed = new Signal<IStarterManager, void>(this);
     const icon = { name: DEFAULT_ICON_NAME, svg: CSS.SVG.DEFAULT_ICON };
     const cookiecutter = {
@@ -30,6 +35,15 @@ export class StarterManager implements IStarterManager {
       svg: CSS.SVG.COOKIECUTTER
     };
     this._icons.addIcon(icon, cookiecutter);
+  }
+
+  get markdown() {
+    if (!this._markdown) {
+      this._markdown = this._rendermime.createRenderer(
+        'text/markdown'
+      ) as RenderedMarkdown;
+    }
+    return this._markdown;
   }
 
   get changed() {
