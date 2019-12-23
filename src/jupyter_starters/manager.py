@@ -20,13 +20,19 @@ from .py_starters.notebook import notebook_starter, response_from_notebook
 from .schema.v2 import STARTERS
 from .trait_types import Schema
 
-# default patterns to ignore
+# default patterns to ignore when copying
 DEFAULT_IGNORE_PATTERNS = [
     "__pycache__",
+    ".*_cache",
     ".git",
     ".ipynb_checkpoints",
+    ".vscode",
+    "*.egg-info",
     "*.pyc",
+    "build",
+    "dist",
     "node_modules",
+    "Untitled.*",
 ]
 
 
@@ -159,9 +165,7 @@ class StarterManager(LoggingConfigurable):
 
         await self.save_one(root, dest)
 
-        for child in iter_not_ignored(
-            root, starter.get("ignore", DEFAULT_IGNORE_PATTERNS)
-        ):
+        for child in iter_not_ignored(root, starter.get("ignore")):
             await self.save_one(
                 child, unquote(ujoin(dest, child.as_uri().replace(root_uri, ""))),
             )
@@ -222,9 +226,12 @@ class StarterManager(LoggingConfigurable):
                 self.contents_manager.allow_hidden = allow_hidden
 
 
-def iter_not_ignored(root, ignore_patterns):
+def iter_not_ignored(root, ignore_patterns=None):
     """ yield all children under a root that do not match the ignore patterns
     """
+    if not ignore_patterns:
+        ignore_patterns = DEFAULT_IGNORE_PATTERNS
+
     if root.is_dir():
         ignored = set()
         for src in sorted(root.rglob("*")):
