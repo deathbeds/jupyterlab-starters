@@ -9,18 +9,18 @@ Simple Notebook
     [Documentation]    Can we start a single notebook?
     Click Element    ${CSS LAUNCH CARD SINGLE}
     Wait Until Created    ${HOME}${/}whitepaper-single.ipynb
-    Capture Page Screenshot    notebook-0.png
+    Capture Page Screenshot    00-notebook-did-create.png
     Wait Until Kernel
     Wait Until Page Contains Element    id:My-Next-Big-Idea
     Save Notebook
-    Capture Page Screenshot    notebook-1.png
+    Capture Page Screenshot    01-notebook-did-open.png
 
 Simple Folder
     [Documentation]    Can we start a folder?
     Click Element    ${CSS LAUNCH CARD FOLDER}
     Wait Until Created    ${HOME}${/}whitepaper-multiple
     Wait Until Page Contains Element    ${XP FILE TREE ITEM}\[contains(text(), '00 Introduction.ipynb')]
-    Capture Page Screenshot    folder.png
+    Capture Page Screenshot    10-folder-did-copy.png
 
 Folder Ignoring
     [Documentation]    Will it ignore paths?
@@ -29,4 +29,4 @@ Folder Ignoring
     Wait Until Created    ${HOME}${/}whitepaper-multiple
     Wait Until Page Contains Element    ${XP FILE TREE ITEM}\[contains(text(), '00 Introduction.ipynb')]
     Page Should Not Contain Element    ${XP FILE TREE ITEM}\[contains(text(), 'node_modules')]
-    Capture Page Screenshot    ignored.png
+    Capture Page Screenshot    20-files-were-ignored.png

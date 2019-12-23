@@ -11,20 +11,20 @@ Happy Path
     Click Element    ${CSS LAUNCH CARD NOTEBOOK}
     ${index ipynb} =    Set Variable    ${XP FILE TREE ITEM}\[contains(text(), 'index.ipynb')]
     ${name} =    Change the name field
-    Capture Page Screenshot    cookiecutter-0.png
+    Capture Page Screenshot    00-notebook-accepted-name.png
     Advance Starter Form
     ${quest css} =    Set Variable    css:input[label\="So, ${name}, what is your quest?"]
     ${quest} =    Change the quest Field
-    Capture Page Screenshot    cookiecutter-1.png
+    Capture Page Screenshot    01-notebook-accepted-quest.png
     Advance Starter Form
     Change the answer field    42
-    Capture Page Screenshot    cookiecutter-2.png
+    Capture Page Screenshot    02-notebook-accepted-answet.png
     Advance Starter Form
     ${txt} =    Set Variable    ${XP FILE TREE ITEM}\[contains(text(), 'good job ${name}.txt')]
     Wait Until Page Contains Element    ${txt}
     Double Click Element    ${txt}
     Wait Until Page Contains    fjords
-    Capture Page Screenshot    cookiecutter-3.png
+    Capture Page Screenshot    03-notebook-created-file.png
 
 *** Keywords ***
 Change the name field

@@ -8,7 +8,7 @@ commands:
   integrity:
     unix: python scripts/integrity.py
   atest:
-    unix: python scripts/atest.py
+    unix: python scripts/atest.py --dryrun && python scripts/atest.py
   release:
     unix: python scripts/release.py
   upload:

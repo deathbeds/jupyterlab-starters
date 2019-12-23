@@ -7,7 +7,7 @@ Resource          Keywords.robot
 *** Test Cases ***
 Lab Version
     [Documentation]    JupyterLab Version
-    Capture Page Screenshot    00-smoke.png
+    Capture Page Screenshot    00-smoke-did-load.png
     ${script} =    Get Element Attribute    id:jupyter-config-data    innerHTML
     ${config} =    Evaluate    __import__("json").loads("""${script}""")
     Set Global Variable    ${PAGE CONFIG}    ${config}

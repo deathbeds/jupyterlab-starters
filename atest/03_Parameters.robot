@@ -14,9 +14,9 @@ Cancel
     Click Element    ${CSS LAUNCH CARD PARAM}
     Wait Until Page Contains Element    ${CSS BODYBUILDER}
     Really Input Text    ${CSS TOPIC}    cancel
-    Capture Page Screenshot    cancel-0.png
+    Capture Page Screenshot    00-cancel-did-edit.png
     Wait Until Keyword Succeeds    3x    0.5s    Cancel Starter Form
-    Capture Page Screenshot    cancel-1.png
+    Capture Page Screenshot    01-cancel-did-cancel.png
 
 Parameter Notebook
     [Documentation]    Can we start a single notebook with parameters?
@@ -26,7 +26,7 @@ Parameter Notebook
     Advance Starter Form
     Wait Until Page Contains Element    ${XP FILE TREE ITEM}\[contains(text(), '${topic} Whitepaper.ipynb')]
     Wait Until Kernel
-    Capture Page Screenshot    notebook-0.png
+    Capture Page Screenshot    10-notebook-accepted-parameter.png
     Wait Until Page Contains Element    id:My-Next-Big-Idea
     Save Notebook
-    Capture Page Screenshot    notebook-1.png
+    Capture Page Screenshot    11-notebook-did-save.png

@@ -3,19 +3,32 @@ Documentation     Notebook Meta
 Suite Setup       Setup Suite For Screenshots    notebook-meta
 Force Tags        example:notebook-meta
 Resource          Keywords.robot
+Library           String
 
 *** Variables ***
 ${XP FILE TREE EXAMPLES}    ${XP FILE TREE ITEM}\[contains(text(), 'examples')]
 ${XP FILE TREE NOTEBOOK}    ${XP FILE TREE ITEM}\[contains(text(), 'Starter Notebook.ipynb')]
 
 *** Test Cases ***
-Example Starter Notebook
+View Example Starter Notebook
     [Documentation]    Can we view notebook metadata?
     Open the Example Starter Notebook
     Open the Starter Notebook Metadata Sidebar
-    Capture Page Screenshot    notebook-meta-0.png
     Check Metadata Text Input    Label    Starter Notebook
     Check Metadata Text Area    Description    A notebook that is also a starter
+    Capture Page Screenshot    00-notebook-meta-did-open.png
+
+Edit Example Starter Notebook
+    [Documentation]    Can we edit notebook metadata and have it "stick"?
+    Open the Example Starter Notebook
+    Open the Starter Notebook Metadata Sidebar
+    ${rando} =    Generate Random String
+    Really Input Text    ${CSS NOTEBOOK STARTER META} input[label\="Label"]    Starter Notebook ${rando}
+    Save Notebook
+    Capture Page Screenshot    10-notebook-meta-did-edit.png
+    Reset Application State
+    Element Should Contain    ${CSS LAUNCH CARD NOTEBOOK}    Starter Notebook ${rando}
+    Capture Page Screenshot    11-notebook-meta-did-persist.png
 
 *** Keywords ***
 Open the Example Starter Notebook

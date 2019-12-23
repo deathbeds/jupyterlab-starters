@@ -10,4 +10,4 @@ Launcher
     Wait Until Page Contains Element    ${XP LAUNCH SECTION}
     Scroll Element Into View    ${XP LAUNCH SECTION}
     Scroll Element Into View    ${CSS LAUNCH CARD}
-    Capture Page Screenshot    launcher.png
+    Capture Page Screenshot    00-launcher-did-load.png
