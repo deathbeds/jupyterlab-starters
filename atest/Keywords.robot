@@ -88,10 +88,14 @@ Ensure All Kernels Are Shut Down
     Run Keyword If    ${els.__len__()}    Click Element    css:.jp-mod-accept.jp-mod-warn
 
 Open Command Palette
-    [Documentation]    Open the command pallete
+    [Documentation]    Open the command palette
     Press Keys    id:main    ${ACCEL}+SHIFT+c
     Wait Until Page Contains Element    ${CMD PALETTE INPUT}
     Click Element    ${CMD PALETTE INPUT}
+
+Open File Browser
+    [Documentation]    Open the file browser
+    Press Keys    id:main    ${ACCEL}+SHIFT+f
 
 Enter Command Name
     [Arguments]    ${cmd}

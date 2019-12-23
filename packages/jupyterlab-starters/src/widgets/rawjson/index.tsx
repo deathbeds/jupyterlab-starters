@@ -43,7 +43,8 @@ export class RawJSONObjectField extends ObjectField {
         <legend>{title}</legend>
         <p className="field-description">{description}</p>
         <textarea
-          defaultValue={JSON.stringify(formData, null, 2)}
+          spellCheck={false}
+          value={JSON.stringify(formData, null, 2)}
           onChange={onChange}
         ></textarea>
       </div>

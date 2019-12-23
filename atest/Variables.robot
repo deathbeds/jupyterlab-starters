@@ -20,3 +20,6 @@ ${CSS BODYBUILDER ACCEPT}    css:.jp-Starters-BodyBuilder-buttons .jp-mod-accept
 ${CSS BODYBUILDER CANCEL}    css:.jp-Starters-BodyBuilder-buttons .jp-mod-warn
 ${CSS NOTEBOOK SAVE}    css:[data-icon="save"]
 ${CSS DIALOG OK}    css:.jp-Dialog .jp-mod-accept
+${CSS NOTEBOOK TOOLBAR BUTTON}    css:.jp-ToolbarButtonComponent-icon[data-icon="starters-default"]
+${CSS HOME FOLDER}    css:.jp-FileBrowser-crumbs > span[data-icon="folder"]
+${CSS NOTEBOOK STARTER META}    css:.jp-Starters-NotebookMetadata
