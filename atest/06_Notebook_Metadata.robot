@@ -8,6 +8,7 @@ Library           String
 *** Variables ***
 ${XP FILE TREE EXAMPLES}    ${XP FILE TREE ITEM}\[contains(text(), 'examples')]
 ${XP FILE TREE NOTEBOOK}    ${XP FILE TREE ITEM}\[contains(text(), 'Starter Notebook.ipynb')]
+${SIMPLE SCHEMA}    {"required": ["name"], "properties": {"name": {"title": "Moniker", "type": "string"}}}
 
 *** Test Cases ***
 View Example Starter Notebook
@@ -24,11 +25,18 @@ Edit Example Starter Notebook
     Open the Starter Notebook Metadata Sidebar
     ${rando} =    Generate Random String
     Really Input Text    ${CSS NOTEBOOK STARTER META} input[label\="Label"]    Starter Notebook ${rando}
+    Really Input Text    ${CSS NOTEBOOK STARTER META} textarea[id$\="_schema"]    ${SIMPLE SCHEMA}
     Save Notebook
     Capture Page Screenshot    10-notebook-meta-did-edit.png
     Reset Application State
     Element Should Contain    ${CSS LAUNCH CARD NOTEBOOK}    Starter Notebook ${rando}
     Capture Page Screenshot    11-notebook-meta-did-persist.png
+    Click Element    ${CSS LAUNCH CARD NOTEBOOK}
+    ${name} =    Change the moniker field
+    Capture Page Screenshot    12-notebook-accepted-moniker.png
+    Advance Starter Form
+    Wait Until Page Contains Element    css:input[label\="Quest"]    timeout=30s
+    Capture Page Screenshot    13-notebook-meta-did-advance.png
 
 *** Keywords ***
 Open the Example Starter Notebook
@@ -60,3 +68,13 @@ Check Metadata Text Area
     ${sel} =    Set Variable    ${CSS NOTEBOOK STARTER META} textarea[id$\="_${label.lower()}"]
     Wait Until Page Contains Element    ${sel}    timeout=10s
     Element Attribute Value Should Be    ${sel}    value    ${value}
+
+Change the moniker field
+    [Arguments]    ${previous}=${EMPTY}
+    [Documentation]    Set a random name on the name field
+    ${name css} =    Set Variable If    "${previous}"    css:input[label\="Hi, ${previous}"]    css:input[label\="Moniker"]
+    Wait Until Page Contains Element    ${name css}    timeout=30s
+    ${name} =    Generate Random String
+    Click Element    ${name css}
+    Really Input Text    ${name css}    ${name}
+    [Return]    ${name}
