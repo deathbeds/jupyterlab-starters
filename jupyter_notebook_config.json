@@ -46,7 +46,7 @@
           "properties": {
             "dest": {
               "title": "Topic",
-              "description": "the topic of the whitepaper",
+              "description": "the *topic* of the whitepaper",
               "type": "string",
               "default": "Unimagined"
             }
