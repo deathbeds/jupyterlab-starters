@@ -7,7 +7,7 @@
 ## `@deathbeds/jupyterlab-starters 0.2.0a0`
 
 - add notebook metadata authoring [#13][]
-- add Jupyter markdown to `title` and `description` in forms [#17][]
+- add Jupyter markdown to `title`, `description` and `ui:help` in schema forms [#17][]
 
 ## `jupyter_starters 0.1.0a3`
 

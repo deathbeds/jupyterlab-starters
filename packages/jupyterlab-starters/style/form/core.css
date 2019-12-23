@@ -47,17 +47,15 @@
   margin-bottom: var(--jp-ui-font-size1);
   width: 100%;
   position: relative;
-  display: flex;
-  flex-direction: column;
 }
 
 .jp-SchemaForm .form-group:last-child {
   margin-bottom: 0;
 }
 
-.jp-SchemaForm .field-description {
+.jp-SchemaForm .field-description,
+.jp-SchemaForm .help-block {
   color: var(--jp-ui-font-color2);
-  order: 2;
 }
 
 .jp-SchemaForm .required {

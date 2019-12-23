@@ -13,8 +13,14 @@ import { Form } from '../form';
 import { SchemaFormModel } from './model';
 
 const MARKDOWN_CLASSES = ['jp-RenderedMarkdown', 'jp-RenderedHTMLCommon'];
-const UNRENDERED_LABELS =
-  'legend:not(.jp-RenderedMarkdown), .field-description:not(.jp-RenderedMarkdown), .control-label:not(.jp-RenderedMarkdown)';
+const UNRENDERED_LABELS = [
+  'legend',
+  '.field-description',
+  '.control-label',
+  '.help-block'
+]
+  .map(s => `${s}:not(.jp-RenderedMarkdown)`)
+  .join(', ');
 
 /**
  * The id prefix all JSON Schema forms will share

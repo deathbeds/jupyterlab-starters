@@ -6,7 +6,7 @@ Resource          Keywords.robot
 Library           String
 
 *** Variables ***
-${CSS TOPIC}      css:input[label="Topic"]
+${CSS TOPIC}      css:input[label="## Topic"]
 
 *** Test Cases ***
 Cancel
@@ -23,6 +23,7 @@ Parameter Notebook
     Click Element    ${CSS LAUNCH CARD PARAM}
     ${topic} =    Generate Random String
     Really Input Text    ${CSS TOPIC}    ${topic}
+    Starter Form Should Contain Markdown Elements
     Advance Starter Form
     Wait Until Page Contains Element    ${XP FILE TREE ITEM}\[contains(text(), '${topic} Whitepaper.ipynb')]
     Wait Until Kernel
@@ -30,3 +31,13 @@ Parameter Notebook
     Wait Until Page Contains Element    id:My-Next-Big-Idea
     Save Notebook
     Capture Page Screenshot    11-notebook-did-save.png
+
+*** Keywords ***
+Starter Form Should Contain Markdown Elements
+    [Documentation]    Verify some fancy markdown rendered.
+    Page Should Contain Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.legend h1
+    Page Should Contain Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.control-label h2
+    Page Should Contain Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.field-description em
+    Page Should Contain Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.field-description blockquote a
+    Page Should Contain Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.help-block code
+    Page Should Contain Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.help-block .MathJax
