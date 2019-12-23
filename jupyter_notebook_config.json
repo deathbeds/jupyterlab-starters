@@ -40,7 +40,7 @@
         "icon": "<svg><g class='jp-icon-contrast3' fill='#ccc'><rect width='100' height='100'/></g></svg>",
         "uiSchema": {
           "dest": {
-            "ui:help": "keep it short and simple it will go in: $1$ file named: `<topic> Whitepaper.ipynb`",
+            "ui:help": "keep it short and simple: it will go in $1$ file named: `<topic> Whitepaper.ipynb`",
             "ui:autofocus": true
           }
         },
