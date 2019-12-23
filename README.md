@@ -13,6 +13,8 @@
 - [x] A directory
 - [x] A python function
 - [x] A [cookiecutter][]
+  - _requires `pip install cookiecutter` or `conda install -c conda-forge cookiecutter`_
+- [x] A notebook
 - [ ] A shell script
 
 ... that shows up in your JupyterLab at the click of a button

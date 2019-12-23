@@ -1,5 +1,6 @@
 __pycache__/
 _*.d.ts
+_*.json
 .ipynb_checkpoints/
 .mypy_cache/
 .pytest_cache/

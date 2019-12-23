@@ -1,6 +1,6 @@
 """ a starter that runs cookiecutter
 """
-# pylint: disable=cyclic-import
+# pylint: disable=cyclic-import,duplicate-code
 
 import re
 import shutil
@@ -19,13 +19,15 @@ if TYPE_CHECKING:
 DEFAULT_TEMPLATE = "https://github.com/audreyr/cookiecutter-pypackage.git"
 
 
-def cookiecutter_starters():
+def cookiecutter_starters(manager):
     """ try to find some cookiecutters
     """
     try:
         cookiecutter = __import__("cookiecutter")
-    except (ImportError, ValueError) as err:
-        print(f"couldn't import cookiecutter: {err}")
+    except (ImportError, ValueError):
+        manager.log.debug(
+            f"🍪 install cookiecutter to enable the cookiecutter starter. yum!"
+        )
         return {}
 
     return {
@@ -128,16 +130,7 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
 
             roots = sorted(Path(tmpd).glob("*"))
             for root in roots:
-                await manager.start_copy(
-                    "cookiecutter-copy",
-                    {
-                        "label": "Copy Cookiecutter",
-                        "description": "just copies whatever cookiecutter did",
-                        "src": str(root),
-                    },
-                    path,
-                    {},
-                )
+                await manager.just_copy(root, path)
 
             if cleanup:
                 shutil.rmtree(repo_dir)

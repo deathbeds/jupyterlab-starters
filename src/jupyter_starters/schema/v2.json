@@ -43,6 +43,8 @@
           "$ref": "#/definitions/starter"
         },
         "status": {
+          "title": "Status",
+          "description": "the current state of the Starter",
           "type": "string",
           "enum": ["error", "continuing", "done"]
         },
@@ -79,40 +81,61 @@
             },
             {
               "$ref": "#/definitions/starter-python"
+            },
+            {
+              "$ref": "#/definitions/starter-notebook"
             }
           ]
         }
       ]
     },
     "starter-meta": {
-      "title": "Starter Meta",
+      "title": "Starter Metadata",
+      "description": "common metadata for Starters",
       "type": "object",
       "required": ["label", "description"],
       "properties": {
         "label": {
+          "title": "Label",
+          "description": "human-readable description used in UI labels and tab titles",
           "type": "string"
         },
         "description": {
+          "title": "Description",
+          "description": "short description of the intent of the Starter",
           "type": "string"
         },
         "icon": {
+          "title": "Icon",
+          "description": "an SVG to use in Launcher cards and tab icons",
           "type": "string"
         },
         "commands": {
+          "title": "Commands",
+          "description": "JupyterLab commands to run after the Starter has completed",
           "type": "array",
           "items": {
             "$ref": "#/definitions/command"
           }
         },
         "ignore": {
-          "description": "glob patterns to ignore (will also ignore children)",
+          "title": "Ignore Files",
+          "description": "Folders and files exclude from copying, with * for wildcards",
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
         "schema": {
-          "description": "JSON schema for a body to pass",
+          "title": "JSON Schema",
+          "description": "JSON schema the body must validate against before continuing",
           "type": "object",
           "$ref": "#/definitions/json-schema"
+        },
+        "uiSchema": {
+          "title": "UI Schema",
+          "description": "A react-jsonschema-form UI schema for customizing the selection of widgets https://react-jsonschema-form.readthedocs.io/en/latest/form-customization/#the-uischema-object",
+          "type": "object"
         }
       }
     },
@@ -122,14 +145,18 @@
       "type": "object"
     },
     "command": {
-      "title": "Post-Starter Command",
+      "title": "JupyterLab Command",
       "type": "object",
       "required": ["id"],
       "properties": {
         "id": {
+          "title": "Command ID",
+          "description": "canonical name for the command",
           "type": "string"
         },
         "args": {
+          "title": "Arguments",
+          "description": "optional values provided to the command when executed",
           "type": "object"
         }
       }
@@ -163,6 +190,21 @@
           }
         }
       ]
+    },
+    "starter-notebook": {
+      "title": "Notebook Starter",
+      "description": "Uses a notebook as both the configuration object (in `#/metadata/jupyter-starters`) and execution",
+      "type": "object",
+      "required": ["type", "src"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["notebook"]
+        },
+        "src": {
+          "type": "string"
+        }
+      }
     },
     "starter-python": {
       "title": "Python Starter",

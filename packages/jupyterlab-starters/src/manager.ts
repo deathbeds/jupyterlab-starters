@@ -10,11 +10,8 @@ import {
 } from './tokens';
 
 import * as SCHEMA from './_schema';
-
+import { CSS } from './css';
 import { API } from './tokens';
-
-import DEFAULT_ICON_SVG from '!!raw-loader!../style/icons/starter.svg';
-import COOKIECUTTER_SVG from '!!raw-loader!../style/icons/cookiecutter.svg';
 
 const { makeRequest, makeSettings } = ServerConnection;
 
@@ -27,10 +24,10 @@ export class StarterManager implements IStarterManager {
   constructor(options: IStarterManager.IOptions) {
     this._icons = options.icons;
     this._changed = new Signal<IStarterManager, void>(this);
-    const icon = { name: DEFAULT_ICON_NAME, svg: DEFAULT_ICON_SVG };
+    const icon = { name: DEFAULT_ICON_NAME, svg: CSS.SVG.DEFAULT_ICON };
     const cookiecutter = {
       name: 'cookiecutter-starter',
-      svg: COOKIECUTTER_SVG
+      svg: CSS.SVG.COOKIECUTTER
     };
     this._icons.addIcon(icon, cookiecutter);
   }

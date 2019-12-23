@@ -2,7 +2,15 @@
 
 ## `jupyter_starters 0.2.0a0`
 
+- add notebook as starter [#13][]
+
 ## `@deathbeds/jupyterlab-starters 0.2.0a0`
+
+- add notebook metadata authoring [#13][]
+
+## `jupyter_starters 0.1.0a3`
+
+- make optional dependency messages only appear in debug mode
 
 ## `jupyter_starters 0.1.0a2`
 
@@ -24,3 +32,5 @@
 ## `jupyter_starters 0.1.0a0`
 
 - initial implementation
+
+[#13]: https://github.com/deathbeds/jupyterlab-starters/pull/13

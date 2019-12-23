@@ -2,6 +2,7 @@
 """
 # pylint: disable=no-self-use,unsubscriptable-object,fixme,bad-continuation
 import base64
+from copy import deepcopy
 from pathlib import Path
 from typing import List, Text
 from urllib.parse import unquote
@@ -15,16 +16,23 @@ from notebook.utils import maybe_future, url_path_join as ujoin
 from traitlets.config import LoggingConfigurable
 
 from .py_starters.cookiecutter import cookiecutter_starters
+from .py_starters.notebook import notebook_starter, response_from_notebook
 from .schema.v2 import STARTERS
 from .trait_types import Schema
 
-# default patterns to ignore
+# default patterns to ignore when copying
 DEFAULT_IGNORE_PATTERNS = [
     "__pycache__",
+    ".*_cache",
     ".git",
     ".ipynb_checkpoints",
+    ".vscode",
+    "*.egg-info",
     "*.pyc",
+    "build",
+    "dist",
     "node_modules",
+    "Untitled.*",
 ]
 
 
@@ -32,10 +40,11 @@ class StarterManager(LoggingConfigurable):
     """ handlers starting starters
     """
 
-    starters = Schema(validator=STARTERS)
+    _starters = Schema(validator=STARTERS)
     jinja_env = T.Instance(jinja2.Environment)
     jinja_env_extensions = T.Dict()
     config_dict = T.Dict()
+    kernel_dirs = T.Dict({})
 
     extra_starters = Schema(default_value={}, validator=STARTERS).tag(config=True)
     extra_jinja_env_extensions = T.Dict({}).tag(config=True)
@@ -45,6 +54,12 @@ class StarterManager(LoggingConfigurable):
         """ use the contents manager from parent
         """
         return self.parent.contents_manager
+
+    @property
+    def kernel_manager(self):
+        """ use the kernel manager from parent
+        """
+        return self.parent.kernel_manager
 
     @T.default("jinja_env_extensions")
     def _default_env_extensions(self):
@@ -72,14 +87,28 @@ class StarterManager(LoggingConfigurable):
         manager = ConfigManager(read_config_path=jupyter_config_path())
         return manager.get("jupyter_notebook_config").get("StarterManager", {})
 
-    @T.default("starters")
+    @T.default("_starters")
     def _default_starters(self):
         """ default starters
         """
         starters = {}
-        starters.update(cookiecutter_starters())
+        starters.update(cookiecutter_starters(self))
         starters.update(self.config_dict.get("extra_starters", {}))
         starters.update(self.extra_starters)
+        return starters
+
+    @property
+    def starters(self):
+        """ augment notebook starters
+
+            TODO: caching
+        """
+        starters = {}
+        for name, starter in dict(self._starters).items():
+            starters[name] = deepcopy(starter)
+            if starter["type"] == "notebook":
+                response = response_from_notebook(starter["src"])
+                starters[name].update(response["starter"])
         return starters
 
     @property
@@ -100,7 +129,24 @@ class StarterManager(LoggingConfigurable):
         if starter_type == "python":
             return await self.start_python(name, starter, path, body)
 
+        if starter_type == "notebook":
+            return await self.start_notebook(name, starter, path, body)
+
         raise NotImplementedError(starter["type"])
+
+    async def just_copy(self, root, path):
+        """ just copy, with some dummy values
+        """
+        await self.start_copy(
+            "just-copy",
+            {
+                "label": "Copy Something",
+                "description": "just copies whatever",
+                "src": str(root),
+            },
+            path,
+            {},
+        )
 
     async def start_copy(self, name, starter, path, body):
         """ start a copy starter
@@ -119,9 +165,7 @@ class StarterManager(LoggingConfigurable):
 
         await self.save_one(root, dest)
 
-        for child in iter_not_ignored(
-            root, starter.get("ignore", DEFAULT_IGNORE_PATTERNS)
-        ):
+        for child in iter_not_ignored(root, starter.get("ignore")):
             await self.save_one(
                 child, unquote(ujoin(dest, child.as_uri().replace(root_uri, ""))),
             )
@@ -139,6 +183,11 @@ class StarterManager(LoggingConfigurable):
         """
         func = T.import_item(starter["callable"])
         return await func(name, starter, path, body, self)
+
+    async def start_notebook(self, name, starter, path, body):
+        """ delegate running the notebook to a thread
+        """
+        return await notebook_starter(name, starter, path, body, self)
 
     async def save_one(self, src, dest):
         """ use the contents manager to write a single file/folder
@@ -177,9 +226,12 @@ class StarterManager(LoggingConfigurable):
                 self.contents_manager.allow_hidden = allow_hidden
 
 
-def iter_not_ignored(root, ignore_patterns):
+def iter_not_ignored(root, ignore_patterns=None):
     """ yield all children under a root that do not match the ignore patterns
     """
+    if not ignore_patterns:
+        ignore_patterns = DEFAULT_IGNORE_PATTERNS
+
     if root.is_dir():
         ignored = set()
         for src in sorted(root.rglob("*")):

@@ -1,10 +1,13 @@
 import {
   JupyterFrontEnd,
-  JupyterFrontEndPlugin
+  JupyterFrontEndPlugin,
+  ILabShell
 } from '@jupyterlab/application';
 import { ILauncher } from '@jupyterlab/launcher';
 import { IIconRegistry } from '@jupyterlab/ui-components';
 import { MainAreaWidget } from '@jupyterlab/apputils';
+
+import { NotebookPanel, INotebookTracker } from '@jupyterlab/notebook';
 
 import '../style/index.css';
 
@@ -15,19 +18,25 @@ import {
   CommandIDs,
   CATEGORY,
   IStartContext,
-  IStarterManager
+  IStarterManager,
+  DEFAULT_ICON_CLASS
 } from './tokens';
-import { BodyBuilder } from './bodybuilder';
+import { NotebookStarter } from './notebookbutton';
 import * as SCHEMA from './_schema';
+
+import { NotebookMetadata } from './widgets/meta';
+import { BodyBuilder } from './widgets/builder';
 
 const plugin: JupyterFrontEndPlugin<void> = {
   id: `${NS}:plugin`,
-  requires: [ILauncher, IIconRegistry],
+  requires: [ILabShell, ILauncher, IIconRegistry, INotebookTracker],
   autoStart: true,
   activate: (
     app: JupyterFrontEnd,
+    shell: ILabShell,
     launcher: ILauncher,
-    icons: IIconRegistry
+    icons: IIconRegistry,
+    notebooks: INotebookTracker
   ) => {
     const { commands } = app;
     const manager: IStarterManager = new StarterManager({ icons });
@@ -88,6 +97,43 @@ const plugin: JupyterFrontEndPlugin<void> = {
         return manager.iconClass(context.name, context.starter);
       }
     });
+
+    let metadata: NotebookMetadata;
+
+    commands.addCommand(CommandIDs.notebookMeta, {
+      execute: (args: any) => {
+        const notebook: NotebookPanel = args.current || notebooks.currentWidget;
+        if (!metadata) {
+          metadata = new NotebookMetadata({ manager, commands });
+          metadata.id = 'id-jp-starters-notebookmeta';
+          metadata.title.iconClass = DEFAULT_ICON_CLASS;
+          metadata.title.caption = 'Starter Notebook Metadata';
+          app.shell.add(metadata, 'right');
+          notebooks.currentChanged.connect(() => {
+            metadata.model.notebook = null;
+            metadata.model.notebook = notebooks.currentWidget;
+          });
+          metadata.model.notebook = notebook;
+          shell.expandRight();
+          shell.activateById(metadata.id);
+        }
+      },
+      caption: (args: any) => {
+        const notebook: NotebookPanel = args.current || notebooks.currentWidget;
+        if (!notebook) {
+          return '';
+        }
+        return `Configure ${notebook.title.label.replace(
+          /.ipynb$/,
+          ''
+        )} as Starter`;
+      },
+      iconClass: DEFAULT_ICON_CLASS
+    });
+
+    const notebookbutton = new NotebookStarter({ commands });
+
+    app.docRegistry.addWidgetExtension('Notebook', notebookbutton);
 
     manager.changed.connect(() => {
       const { starters } = manager;
