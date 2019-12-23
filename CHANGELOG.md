@@ -7,6 +7,7 @@
 ## `@deathbeds/jupyterlab-starters 0.2.0a0`
 
 - add notebook metadata authoring [#13][]
+- render markdown inside schema descriptions [#16][]
 
 ## `jupyter_starters 0.1.0a3`
 
@@ -34,3 +35,4 @@
 - initial implementation
 
 [#13]: https://github.com/deathbeds/jupyterlab-starters/pull/13
+[#16]: https://github.com/deathbeds/jupyterlab-starters/pull/16
