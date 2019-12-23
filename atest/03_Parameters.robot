@@ -23,21 +23,22 @@ Parameter Notebook
     Click Element    ${CSS LAUNCH CARD PARAM}
     ${topic} =    Generate Random String
     Really Input Text    ${CSS TOPIC}    ${topic}
+    Capture Page Screenshot    10-notebook-topic-changed.png
     Starter Form Should Contain Markdown Elements
     Advance Starter Form
     Wait Until Page Contains Element    ${XP FILE TREE ITEM}\[contains(text(), '${topic} Whitepaper.ipynb')]
     Wait Until Kernel
-    Capture Page Screenshot    10-notebook-accepted-parameter.png
+    Capture Page Screenshot    11-notebook-accepted-parameter.png
     Wait Until Page Contains Element    id:My-Next-Big-Idea
     Save Notebook
-    Capture Page Screenshot    11-notebook-did-save.png
+    Capture Page Screenshot    12-notebook-did-save.png
 
 *** Keywords ***
 Starter Form Should Contain Markdown Elements
     [Documentation]    Verify some fancy markdown rendered.
-    Page Should Contain Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.legend h1
-    Page Should Contain Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.control-label h2
-    Page Should Contain Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.field-description em
-    Page Should Contain Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.field-description blockquote a
-    Page Should Contain Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.help-block code
-    Page Should Contain Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.help-block .MathJax
+    Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.legend h1
+    Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.control-label h2
+    Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.field-description em
+    Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.field-description blockquote a
+    Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.help-block code
+    Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.help-block .MathJax
