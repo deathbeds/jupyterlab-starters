@@ -36,7 +36,7 @@ Parameter Notebook
 *** Keywords ***
 Starter Form Should Contain Markdown Elements
     [Documentation]    Verify some fancy markdown rendered.
-    Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.legend h1
+    Wait Until Page Contains Element    ${CSS BODYBUILDER} legend.jp-RenderedMarkdown h1
     Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.control-label h2
     Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.field-description em
     Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.field-description blockquote a

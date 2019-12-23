@@ -57,9 +57,9 @@ export class SchemaForm<T extends JSONValue> extends VDomRenderer<
   _renderMarkdown = () => {
     const markdown = this.model.markdown;
     const hosts = Array.from(this.node.querySelectorAll(UNRENDERED_LABELS));
-    console.log('rendering markdown', hosts);
-    if (!hosts.length) {
-      setTimeout(this._renderMarkdown, 100);
+    if (!hosts.length && !this._initialRender) {
+      this._initialRenderDelay = this._initialRenderDelay * 2;
+      setTimeout(this._renderMarkdown, this._initialRenderDelay);
       return;
     }
     for (const host of hosts) {
@@ -75,6 +75,7 @@ export class SchemaForm<T extends JSONValue> extends VDomRenderer<
         shouldTypeset: true
       });
     }
+    this._initialRender = true;
   };
 
   /**
@@ -147,6 +148,8 @@ export class SchemaForm<T extends JSONValue> extends VDomRenderer<
    * The id prefix to use for all form children
    */
   private _idPrefix: string;
+  private _initialRender = false;
+  private _initialRenderDelay = 10;
 }
 
 namespace Private {
