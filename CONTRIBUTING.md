@@ -39,7 +39,7 @@ Try out some stuff. Make some whitepapers and cookiecutters.
 anaconda-project run atest
 ```
 
-> _You have to run against a "clean" lab, e.g. `postBuild`_
+> _You have to run against a "clean" lab, e.g. `apr postBuild`_
 
 ## hacking
 
