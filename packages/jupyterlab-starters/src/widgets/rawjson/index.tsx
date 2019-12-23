@@ -10,6 +10,7 @@ export class RawJSONObjectField extends ObjectField {
       uiSchema,
       formData,
       name,
+      idSchema,
       registry = rjsfUtils.getDefaultRegistry()
     } = this.props;
 
@@ -44,6 +45,7 @@ export class RawJSONObjectField extends ObjectField {
         <p className="field-description">{description}</p>
         <textarea
           spellCheck={false}
+          id={idSchema.$id}
           defaultValue={JSON.stringify(formData, null, 2)}
           onChange={onChange}
         ></textarea>
