@@ -86,7 +86,7 @@ class StarterManager(LoggingConfigurable):
         """ default starters
         """
         starters = {}
-        starters.update(cookiecutter_starters())
+        starters.update(cookiecutter_starters(self))
         starters.update(self.config_dict.get("extra_starters", {}))
         starters.update(self.extra_starters)
         return starters

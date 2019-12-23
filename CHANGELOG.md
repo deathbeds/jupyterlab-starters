@@ -8,6 +8,10 @@
 
 - add notebook metadata authoring [#13][]
 
+## `jupyter_starters 0.1.0a3`
+
+- make optional dependency messages only appear in debug mode
+
 ## `jupyter_starters 0.1.0a2`
 
 - add ignore patterns to schema
