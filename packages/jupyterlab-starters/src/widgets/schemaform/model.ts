@@ -1,14 +1,23 @@
 import * as rjsf from 'react-jsonschema-form';
 
+import { Signal } from '@phosphor/signaling';
 import { JSONObject, JSONValue } from '@phosphor/coreutils';
 import { VDomModel } from '@jupyterlab/apputils';
+import { RenderedMarkdown } from '@jupyterlab/rendermime';
 
 export class SchemaFormModel<T extends JSONValue> extends VDomModel {
-  constructor(schema: JSONObject, props?: Partial<rjsf.FormProps<T>>) {
+  constructor(
+    schema: JSONObject,
+    props?: Partial<rjsf.FormProps<T>>,
+    options?: SchemaFormModel.IOptions
+  ) {
     super();
     this.schema = schema;
     if (props) {
       this.props = props;
+    }
+    if (options) {
+      this._markdown = options.markdown;
     }
   }
 
@@ -94,9 +103,29 @@ export class SchemaFormModel<T extends JSONValue> extends VDomModel {
     this.stateChanged.emit(void 0);
   }
 
+  get rendered() {
+    return this._rendered;
+  }
+
+  emitRenderered() {
+    this._rendered.emit(void 0);
+  }
+
+  get markdown() {
+    return this._markdown;
+  }
+
   private _formData: T = null;
   private _errors: rjsf.AjvError[] = [];
   private _schema: JSONObject;
   private _props: Partial<rjsf.FormProps<T>>;
   private _errorsObserved = false;
+  private _rendered = new Signal<SchemaFormModel<T>, void>(this);
+  private _markdown: RenderedMarkdown;
+}
+
+export namespace SchemaFormModel {
+  export interface IOptions {
+    markdown?: RenderedMarkdown;
+  }
 }

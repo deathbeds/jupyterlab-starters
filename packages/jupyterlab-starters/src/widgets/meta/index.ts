@@ -25,23 +25,27 @@ export class NotebookMetadata extends Widget {
     this.addClass(CSS.META);
     this.addClass(CSS.FORM_PANEL);
 
-    this._form = new SchemaForm(this.model.liveSchema, {
-      liveValidate: true,
-      uiSchema: {
-        description: AS_TEXTAREA,
-        icon: AS_TEXTAREA,
-        schema: AS_JSONOBJECT,
-        uiSchema: AS_JSONOBJECT,
-        commands: {
-          items: {
-            args: AS_JSONOBJECT
+    this._form = new SchemaForm(
+      this.model.liveSchema,
+      {
+        liveValidate: true,
+        uiSchema: {
+          description: AS_TEXTAREA,
+          icon: AS_TEXTAREA,
+          schema: AS_JSONOBJECT,
+          uiSchema: AS_JSONOBJECT,
+          commands: {
+            items: {
+              args: AS_JSONOBJECT
+            }
           }
+        },
+        fields: {
+          jsonobject: RawJSONObjectField
         }
       },
-      fields: {
-        jsonobject: RawJSONObjectField
-      }
-    });
+      { markdown: this.model.manager.markdown }
+    );
     this.model.form = this._form.model;
 
     this._preview = new PreviewCard();

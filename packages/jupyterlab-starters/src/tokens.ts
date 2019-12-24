@@ -1,7 +1,10 @@
 import { JSONObject } from '@phosphor/coreutils';
-import { PageConfig, URLExt } from '@jupyterlab/coreutils';
-import { IIconRegistry } from '@jupyterlab/ui-components';
 import { ISignal } from '@phosphor/signaling';
+
+import { PageConfig, URLExt } from '@jupyterlab/coreutils';
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
+import { RenderedMarkdown } from '@jupyterlab/rendermime/lib/widgets';
+import { IIconRegistry } from '@jupyterlab/ui-components';
 
 import * as SCHEMA from './_schema';
 
@@ -17,6 +20,7 @@ export interface IStarterManager {
   starters: SCHEMA.Starters;
   starter(name: string): SCHEMA.Starter;
   iconClass(name: string, starter: SCHEMA.Starter): string;
+  markdown: RenderedMarkdown;
   fetch(): Promise<void>;
   start(
     name: string,
@@ -29,6 +33,7 @@ export interface IStarterManager {
 export namespace IStarterManager {
   export interface IOptions {
     icons: IIconRegistry;
+    rendermime: IRenderMimeRegistry;
   }
 }
 

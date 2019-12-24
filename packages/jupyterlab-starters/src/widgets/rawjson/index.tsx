@@ -40,7 +40,7 @@ export class RawJSONObjectField extends ObjectField {
     };
 
     return (
-      <div>
+      <>
         <legend>{title}</legend>
         <p className="field-description">{description}</p>
         <textarea
@@ -49,7 +49,7 @@ export class RawJSONObjectField extends ObjectField {
           defaultValue={JSON.stringify(formData, null, 2)}
           onChange={onChange}
         ></textarea>
-      </div>
+      </>
     );
   }
 }

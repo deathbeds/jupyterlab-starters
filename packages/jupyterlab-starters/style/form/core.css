@@ -20,7 +20,7 @@
 
 .jp-SchemaForm fieldset fieldset {
   padding-left: var(--jp-notebook-padding);
-  border-left: solid 1px var(--jp-border-color0);
+  border-left: solid 4px var(--jp-border-color3);
 }
 
 .jp-SchemaForm button[type='submit'] {
@@ -31,9 +31,16 @@
 .jp-SchemaForm legend {
   margin: 0;
   padding: 0;
-  margin-bottom: calc(var(--jp-ui-font-size1) / 2);
   font-weight: bold;
   display: block;
+  position: relative;
+  display: block;
+}
+
+.jp-SchemaForm .control-label > :first-child,
+.jp-SchemaForm legend > :first-child {
+  margin-top: 0;
+  padding-top: 0;
 }
 
 .jp-SchemaForm .form-group {
@@ -46,9 +53,8 @@
   margin-bottom: 0;
 }
 
-.jp-SchemaForm .field-description {
-  font-style: italic;
-  margin-bottom: calc(var(--jp-ui-font-size1) / 2);
+.jp-SchemaForm .field-description,
+.jp-SchemaForm .help-block {
   color: var(--jp-ui-font-color2);
 }
 
@@ -57,6 +63,7 @@
   color: var(--jp-warn-color1);
   font-weight: 800;
   position: absolute;
-  margin-left: 0.1em;
-  margin-top: -0.1em;
+  top: 0;
+  right: 0;
+  display: block;
 }

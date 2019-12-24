@@ -29,6 +29,10 @@ export class BuilderModel extends VDomModel {
     return this._start;
   }
 
+  get manager() {
+    return this._manager;
+  }
+
   get context() {
     return this._context;
   }
