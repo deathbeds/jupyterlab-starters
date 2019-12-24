@@ -26,7 +26,7 @@ Parameter Notebook
     Capture Page Screenshot    10-notebook-topic-changed.png
     Starter Form Should Contain Markdown Elements
     Advance Starter Form
-    Wait Until Page Contains Element    ${XP FILE TREE ITEM}\[text() = '${topic} Whitepaper.ipynb']
+    Wait Until Page Contains Element    ${XP FILE TREE ITEM}\[contains(text(), '${topic} Whitepaper.ipynb')]
     Wait Until Kernel
     Capture Page Screenshot    11-notebook-accepted-parameter.png
     Wait Until Page Contains Element    id:My-Next-Big-Idea
