@@ -10,6 +10,12 @@
         "label": "Starter Notebook",
         "description": "A notebook that is also a starter"
       },
+      "multi-stage-notebook": {
+        "type": "notebook",
+        "src": "./examples/Multi-Stage Starter Notebook.ipynb",
+        "label": "Multi-Stage Starter Notebook",
+        "description": "Build a directory one file at a time"
+      },
       "whitepaper-single": {
         "type": "copy",
         "label": "Whitepaper Notebook",

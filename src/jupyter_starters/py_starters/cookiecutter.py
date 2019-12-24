@@ -1,6 +1,6 @@
 """ a starter that runs cookiecutter
 """
-# pylint: disable=cyclic-import,duplicate-code
+# pylint: disable=cyclic-import,duplicate-code,broad-except
 
 import re
 import shutil
@@ -17,7 +17,56 @@ from ..types import Status
 if TYPE_CHECKING:
     from ..manager import StarterManager  # noqa
 
-DEFAULT_TEMPLATE = "https://github.com/audreyr/cookiecutter-pypackage.git"
+
+GH = "https://github.com"
+GITHUB_TOPIC = f"{GH}/topics/cookiecutter-template"
+GITHUB_SEARCH = f"{GH}/search?utf8=%E2%9C%93&q=path%3A%2F+filename%3Acookiecutter.json"
+
+JUPYTER_COOKIECUTTERS = [
+    {
+        "name": "jupyter/cookiecutter-docker-stacks",
+        "repo": f"{GH}/jupyter/cookiecutter-docker-stacks",
+        "description": "Cookiecutter for community-maintained Jupyter Docker images",
+    },
+    {
+        "name": "jupyter-widgets/widget-ts-cookiecutter",
+        "repo": f"{GH}/jupyter-widgets/widget-ts-cookiecutter",
+        "description": (
+            "A highly opinionated cookiecutter template for" "ipywidget extensions."
+        ),
+    },
+    {
+        "name": "jupyter-widgets/widget-cookiecutter",
+        "repo": f"{GH}/jupyter-widgets/widget-cookiecutter",
+        "description": (
+            "A cookiecutter template for creating a custom Jupyter" "widget project."
+        ),
+    },
+    {
+        "name": "jupyterlab/extension-cookiecutter-js",
+        "repo": f"{GH}/jupyterlab/extension-cookiecutter-js",
+        "description": "A cookiecutter recipe for building JupyterLab extensions.",
+    },
+    {
+        "name": "jupyterlab/extension-cookiecutter-ts",
+        "repo": f"{GH}/jupyterlab/extension-cookiecutter-ts",
+        "description": "A cookiecutter recipe for JupyterLab extensions in Typescript",
+    },
+    {
+        "name": "jupyterlab/mimerender-cookiecutter-ts",
+        "repo": f"{GH}/jupyterlab/mimerender-cookiecutter-ts",
+        "description": (
+            "Cookie cutter for JupyterLab mimerenderer" "extensions using TypeScript"
+        ),
+    },
+    {
+        "name": "jupyterlab/theme-cookiecutter",
+        "repo": f"{GH}/jupyterlab/theme-cookiecutter",
+        "description": (
+            "A cookiecutter template to help you make" "new JupyterLab theme extensions"
+        ),
+    },
+]
 
 
 def cookiecutter_starters(manager):
@@ -42,19 +91,67 @@ def cookiecutter_starters(manager):
                 "properties": {
                     "template": {
                         "title": "Template",
-                        "description": "Directory or URL of template",
                         "type": "string",
-                        "default": DEFAULT_TEMPLATE,
+                        "description": (
+                            "Directory or URL of template. "
+                            f" Find more on GitHub by [topic]({GITHUB_TOPIC}) "
+                            f" or [advanced search]({GITHUB_SEARCH})."
+                        ),
+                        "anyOf": [
+                            {"type": "string", "title": "Enter URL"},
+                            *cookiecutter_pantry(),
+                        ],
                     },
                     "checkout": {
                         "title": "Checkout",
-                        "description": "The branch, tag or commit ID to use",
+                        "description": "The branch, tag, or commit ID to use",
                         "type": "string",
                     },
                 },
             },
+            "uiSchema": {"checkout": {"ui:placeholder": "master"}},
         }
     }
+
+
+def cookiecutter_pantry():
+    """ try to load the pantry from the cookiecutter metadata
+    """
+    grouped = {"Jupyter": JUPYTER_COOKIECUTTERS}
+
+    try:
+        metadata = __import__("importlib_metadata").metadata
+
+        ccmd = (
+            str(metadata("cookiecutter")).split("Pantry")[1].split("\n## ")[0].strip()
+        )
+
+        groups = ccmd.split("### ")[1:]
+
+        for group in groups:
+            name = group.split("\n")[0].strip()
+            grouped[name] = [
+                dict(repo=m[1], description=m[2])
+                for m in sorted(re.findall(r"\* \[(.*?)]\((.*?)\)[\s:]*(.*?)\n", group))
+            ]
+
+    except (ImportError, ValueError, AttributeError):
+        pass
+
+    grouped = dict(sorted(grouped.items()))
+
+    return [
+        {
+            "title": name,
+            "enum": [t["repo"] for t in templates],
+            "enumNames": [
+                f"""{"/".join(t["repo"].split("/")[-2:])}: {t["description"]}"""
+                for t in templates
+            ],
+            "default": templates[0]["repo"],
+        }
+        for name, templates in grouped.items()
+    ]
 
 
 async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
