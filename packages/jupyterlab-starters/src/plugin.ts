@@ -77,6 +77,11 @@ const plugin: JupyterFrontEndPlugin<void> = {
                   body: response.body,
                   cwd: response.path
                 };
+                if (response.starter.commands) {
+                  for (const cmd of response.starter.commands) {
+                    await commands.execute(cmd.id, cmd.args);
+                  }
+                }
                 break;
               default:
                 console.error(`Unknown status ${response.status}`, response);

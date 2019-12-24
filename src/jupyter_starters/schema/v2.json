@@ -40,6 +40,7 @@
       "required": ["name", "path", "starter", "body", "status"],
       "properties": {
         "starter": {
+          "description": "the current definition of the starter: may change during multi-step starters",
           "$ref": "#/definitions/starter"
         },
         "status": {
@@ -49,15 +50,23 @@
           "enum": ["error", "continuing", "done"]
         },
         "name": {
+          "description": "the canonical name of the starter",
           "type": "string"
         },
         "body": {
+          "description": "user data populated by the client",
           "type": "object"
         },
         "path": {
+          "description": "the API path (`/` delimited) to which files will be written",
           "type": "string"
         },
+        "copy": {
+          "description": "copy files after starter is run (irrespective of status) if `true`",
+          "type": "boolean"
+        },
         "errors": {
+          "description": "a listing of system and user errors created during a starter",
           "type": "array",
           "items": {
             "type": "string"

@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING, Any, Dict, Text
 from notebook.utils import url_path_join as ujoin
 
 from .._json import JsonSchemaException, json_validator
+from ..types import Status
 
 if TYPE_CHECKING:
     from ..manager import StarterManager  # noqa
@@ -113,7 +114,7 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
             "name": name,
             "path": path,
             "starter": new_starter,
-            "status": "continuing",
+            "status": Status.CONTINUING,
         }
 
     with TemporaryDirectory() as tmpd:
@@ -140,7 +141,7 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
                 "name": name,
                 "path": ujoin(path, roots[0].name),
                 "starter": new_starter,
-                "status": "done",
+                "status": Status.DONE,
             }
         except Exception as err:
             manager.log.exception(f"🍪 error")
@@ -151,7 +152,7 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
                 "name": name,
                 "path": path,
                 "starter": new_starter,
-                "status": "continuing",
+                "status": Status.CONTINUING,
                 "errors": [str(err)],
             }
 

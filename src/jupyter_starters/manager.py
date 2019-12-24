@@ -19,6 +19,7 @@ from .py_starters.cookiecutter import cookiecutter_starters
 from .py_starters.notebook import notebook_starter, response_from_notebook
 from .schema.v2 import STARTERS
 from .trait_types import Schema
+from .types import Status
 
 # default patterns to ignore when copying
 DEFAULT_IGNORE_PATTERNS = [
@@ -175,7 +176,7 @@ class StarterManager(LoggingConfigurable):
             "name": name,
             "path": dest,
             "starter": starter,
-            "status": "done",
+            "status": Status.DONE,
         }
 
     async def start_python(self, name, starter, path, body):

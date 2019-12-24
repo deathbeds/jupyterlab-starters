@@ -10,6 +10,7 @@ from pathlib import Path
 from notebook.utils import maybe_future, url_path_join as ujoin
 
 from .._json import JsonSchemaException, dumps, json_validator, loads
+from ..types import Status
 
 NBFORMAT_KEY = "jupyter_starters"
 MAGIC_NOTEBOOK_NAME = "_jupyter_starter_.ipynb"
@@ -92,20 +93,27 @@ async def notebook_starter(name, starter, path, body, manager):
 
     nb_response = response_from_notebook(tmp_nb)
 
-    nb_response.update(body=body, name=name, path=path, status="continuing")
+    nb_response.update(
+        body=body, name=name, path=path, status=Status.CONTINUING, copy=False
+    )
 
     validator = json_validator(nb_response["starter"]["schema"])
 
     try:
         validator(body)
-        nb_response.update(status="done")
+        nb_response.update(status=Status.DONE)
     except JsonSchemaException as err:
         manager.log.debug(f"[not valid]: {err}")
 
-    if nb_response["status"] == "done":
+    status = nb_response["status"]
+    copy = nb_response.get("copy", False)
+
+    if status in [Status.DONE] or (status in [Status.CONTINUING] and copy):
         first_copied = await copy_files(tmp_nb, path, manager)
         if first_copied:
             nb_response.update(path=ujoin(path, first_copied.name))
+
+    if status in [Status.DONE]:
         await stop_kernel(name, manager)
 
     return nb_response

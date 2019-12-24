@@ -3,6 +3,7 @@
 ## `jupyter_starters 0.2.0a0`
 
 - add notebook as starter [#13][]
+- add copying files and commands while starter is continuing [#18][]
 
 ## `@deathbeds/jupyterlab-starters 0.2.0a0`
 
@@ -36,3 +37,4 @@
 
 [#13]: https://github.com/deathbeds/jupyterlab-starters/pull/13
 [#17]: https://github.com/deathbeds/jupyterlab-starters/pull/17
+[#18]: https://github.com/deathbeds/jupyterlab-starters/pull/18
