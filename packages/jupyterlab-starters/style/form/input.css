@@ -73,3 +73,15 @@
   min-width: calc(var(--jp-ui-font-size1) * 1.6);
   font-weight: bold;
 }
+
+.jp-SchemaForm .radio > label > span {
+  display: flex;
+}
+
+.jp-SchemaForm .radio > label > span > input {
+  flex: 0;
+}
+
+.jp-SchemaForm .radio > label > span > span {
+  flex: 1;
+}

@@ -1,0 +1,9 @@
+.jp-SchemaForm .jp-RenderedMarkdown > *:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.jp-SchemaForm .jp-RenderedMarkdown > *:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
