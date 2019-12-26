@@ -20,15 +20,7 @@
         "type": "copy",
         "label": "Whitepaper Notebook",
         "description": "A reusable notebook for proposing research",
-        "src": "examples/whitepaper-single.ipynb",
-        "commands": [
-          {
-            "id": "application:set-mode",
-            "args": {
-              "mode": "single-document"
-            }
-          }
-        ]
+        "src": "examples/whitepaper-single.ipynb"
       },
       "whitepaper-multiple": {
         "type": "copy",
