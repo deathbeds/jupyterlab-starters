@@ -97,7 +97,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           return await manager.start(name, starter, cwd, body);
         } else {
           const response = await manager.start(name, starter, cwd, body);
-          if (response.status == 'done') {
+          if (response.status === 'done') {
             await runCommands(response);
           }
         }
