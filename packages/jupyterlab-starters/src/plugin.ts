@@ -59,7 +59,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
             for (const cmd of response.starter.commands) {
               await commands.execute(cmd.id, cmd.args);
             }
-          } else {
+          } else if (response.status === 'done') {
             await commands.execute('filebrowser:open-path', {
               path: response.path
             });
@@ -97,9 +97,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           return await manager.start(name, starter, cwd, body);
         } else {
           const response = await manager.start(name, starter, cwd, body);
-          if (response.status === 'done') {
-            await runCommands(response);
-          }
+          await runCommands(response);
         }
       },
       label: (args: any) => args.starter.label,
