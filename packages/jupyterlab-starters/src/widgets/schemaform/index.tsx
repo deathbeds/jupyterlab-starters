@@ -18,7 +18,8 @@ const UNRENDERED_LABELS = [
   '.field-description',
   '.control-label',
   '.help-block',
-  '.field-radio-group .radio label span span'
+  '.field-radio-group .radio > label > span > span',
+  '.field-boolean .checkbox > label > span'
 ]
   .map(s => `${s}:not(.jp-RenderedMarkdown)`)
   .join(', ');

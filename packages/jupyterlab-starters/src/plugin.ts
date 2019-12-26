@@ -54,6 +54,18 @@ const plugin: JupyterFrontEndPlugin<void> = {
         const context = (args as any) as IStartContext;
         const { starter, name, cwd, body } = context;
 
+        const runCommands = async (response: SCHEMA.StartResponse) => {
+          if (response.starter.commands) {
+            for (const cmd of response.starter.commands) {
+              await commands.execute(cmd.id, cmd.args);
+            }
+          } else {
+            await commands.execute('filebrowser:open-path', {
+              path: response.path
+            });
+          }
+        };
+
         if (starter.schema && !body) {
           const content = new BodyBuilder({ manager, context, name });
           const main = new MainAreaWidget({ content });
@@ -66,9 +78,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
             switch (response.status) {
               case 'done':
                 main.dispose();
-                await commands.execute('filebrowser:open-path', {
-                  path: response.path
-                });
+                await runCommands(response);
                 break;
               case 'continuing':
                 content.model.context = {
@@ -77,11 +87,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
                   body: response.body,
                   cwd: response.path
                 };
-                if (response.starter.commands) {
-                  for (const cmd of response.starter.commands) {
-                    await commands.execute(cmd.id, cmd.args);
-                  }
-                }
+                await runCommands(response);
                 break;
               default:
                 console.error(`Unknown status ${response.status}`, response);
@@ -91,16 +97,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
           return await manager.start(name, starter, cwd, body);
         } else {
           const response = await manager.start(name, starter, cwd, body);
-
-          if (starter.commands) {
-            for (const cmd of starter.commands) {
-              await commands.execute(cmd.id, cmd.args);
-            }
+          if (response.status == 'done') {
+            await runCommands(response);
           }
-
-          await commands.execute('filebrowser:open-path', {
-            path: response.path
-          });
         }
       },
       label: (args: any) => args.starter.label,
