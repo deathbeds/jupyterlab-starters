@@ -24,43 +24,36 @@ GITHUB_SEARCH = f"{GH}/search?utf8=%E2%9C%93&q=path%3A%2F+filename%3Acookiecutte
 
 JUPYTER_COOKIECUTTERS = [
     {
-        "name": "jupyter/cookiecutter-docker-stacks",
         "repo": f"{GH}/jupyter/cookiecutter-docker-stacks",
         "description": "Cookiecutter for community-maintained Jupyter Docker images",
     },
     {
-        "name": "jupyter-widgets/widget-ts-cookiecutter",
         "repo": f"{GH}/jupyter-widgets/widget-ts-cookiecutter",
         "description": (
             "A highly opinionated cookiecutter template for" "ipywidget extensions."
         ),
     },
     {
-        "name": "jupyter-widgets/widget-cookiecutter",
         "repo": f"{GH}/jupyter-widgets/widget-cookiecutter",
         "description": (
             "A cookiecutter template for creating a custom Jupyter" "widget project."
         ),
     },
     {
-        "name": "jupyterlab/extension-cookiecutter-js",
         "repo": f"{GH}/jupyterlab/extension-cookiecutter-js",
         "description": "A cookiecutter recipe for building JupyterLab extensions.",
     },
     {
-        "name": "jupyterlab/extension-cookiecutter-ts",
         "repo": f"{GH}/jupyterlab/extension-cookiecutter-ts",
         "description": "A cookiecutter recipe for JupyterLab extensions in Typescript",
     },
     {
-        "name": "jupyterlab/mimerender-cookiecutter-ts",
         "repo": f"{GH}/jupyterlab/mimerender-cookiecutter-ts",
         "description": (
             "Cookie cutter for JupyterLab mimerenderer" "extensions using TypeScript"
         ),
     },
     {
-        "name": "jupyterlab/theme-cookiecutter",
         "repo": f"{GH}/jupyterlab/theme-cookiecutter",
         "description": (
             "A cookiecutter template to help you make" "new JupyterLab theme extensions"
