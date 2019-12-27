@@ -40,7 +40,6 @@ export class BodyBuilder extends Widget {
     );
 
     this._buttons = this.makeButtons();
-
     this.boxLayout.addWidget(this._form);
     this.boxLayout.addWidget(this._buttons);
   }

@@ -20,6 +20,7 @@ export interface IStarterManager {
   starters: SCHEMA.Starters;
   starter(name: string): SCHEMA.Starter;
   iconClass(name: string, starter: SCHEMA.Starter): string;
+  icons: IIconRegistry;
   markdown: RenderedMarkdown;
   fetch(): Promise<void>;
   start(
