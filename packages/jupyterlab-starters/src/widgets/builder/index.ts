@@ -1,7 +1,5 @@
-import * as React from 'react';
 import { JSONObject } from '@phosphor/coreutils';
 import { Widget, BoxLayout } from '@phosphor/widgets';
-import { VDomRenderer } from '@jupyterlab/apputils';
 
 import { IStartContext } from '../../tokens';
 import { CSS } from '../../css';
@@ -9,6 +7,7 @@ import { CSS } from '../../css';
 import { SchemaForm } from '../schemaform';
 
 import { BuilderModel } from './model';
+import { BuilderButtons } from './buttons';
 
 export class BodyBuilder extends Widget {
   private _form: SchemaForm<JSONObject>;
@@ -27,7 +26,7 @@ export class BodyBuilder extends Widget {
     this.id = Private.nextId();
     this.addClass(CSS.BUILDER);
     this.addClass(CSS.FORM_PANEL);
-    this.title.label = label;
+    this.title.caption = label;
     this.title.iconClass = this.model.iconClass;
 
     this._form = new SchemaForm(
@@ -64,40 +63,6 @@ export class BodyBuilder extends Widget {
 
     return buttons;
   }
-}
-
-export class BuilderButtons extends VDomRenderer<BuilderModel> {
-  constructor(model: BuilderModel) {
-    super();
-    this.model = model;
-    this.addClass(CSS.BUILDER_BUTTONS);
-  }
-
-  protected render() {
-    const { form } = this.model;
-    const hasErrors = !!(!form || form.errors.length || form.errorsObserved);
-
-    return (
-      <div>
-        <button
-          onClick={this.onDone}
-          className={`${CSS.JP.styled} ${CSS.JP.warn}`}
-        >
-          CANCEL
-        </button>
-        <button
-          disabled={hasErrors}
-          className={`${hasErrors ? '' : CSS.JP.accept} ${CSS.JP.styled}`}
-          onClick={this.onStart}
-        >
-          START
-        </button>
-      </div>
-    );
-  }
-
-  onStart = () => this.model.onStart();
-  onDone = () => this.model.onDone();
 }
 
 namespace Private {

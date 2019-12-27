@@ -5,7 +5,6 @@ import {
 } from '@jupyterlab/application';
 import { ILauncher } from '@jupyterlab/launcher';
 import { IIconRegistry } from '@jupyterlab/ui-components';
-import { MainAreaWidget } from '@jupyterlab/apputils';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
 import { NotebookPanel, INotebookTracker } from '@jupyterlab/notebook';
@@ -68,8 +67,10 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
         if (starter.schema && !body) {
           const content = new BodyBuilder({ manager, context, name });
-          const main = new MainAreaWidget({ content });
-          app.shell.add(main, 'main', { mode: 'split-right' });
+          content.id = `id-jp-starters-${name}`;
+          app.shell.add(content, 'right');
+          shell.expandRight();
+          shell.activateById(content.id);
           content.model.start.connect(async (builder, context) => {
             const response = (await commands.execute(
               CommandIDs.start,
@@ -77,7 +78,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
             )) as SCHEMA.StartResponse;
             switch (response.status) {
               case 'done':
-                main.dispose();
+                content.dispose();
                 await runCommands(response);
                 break;
               case 'continuing':

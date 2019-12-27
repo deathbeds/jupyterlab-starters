@@ -20,13 +20,11 @@ Happy Path
     Advance Starter Form
     Wait for File Tab    ${file1}
     Capture Page Screenshot    02-notebook-multi-updated-file-1-prompt-file.png
-    Return to Starter
     ${file2} =    Wait for File Prompt    ${name}    2
     Capture Page Screenshot    03-notebook-multi-updated-file-2-prompt.png
     Advance Starter Form
     Wait for File Tab    ${file2}
     Capture Page Screenshot    04-notebook-multi-updated-file-2-prompt-file.png
-    Return to Starter
     I am done
     Advance Starter Form
     Wait Until Page Does Not Contain Element    ${MULTI TAB}
@@ -54,10 +52,6 @@ Wait for File Tab
     [Arguments]    ${file}
     [Documentation]    Wait until a file is opened
     Wait Until Page Contains Element    xpath://div[contains(@class, 'p-TabBar-tabLabel')][text() = '${file}']
-
-Return to Starter
-    [Documentation]    Re-open the starter (change if sidebar'd)
-    Click Element    ${MULTI TAB}
 
 I am done
     [Documentation]    Signal to the notebook that we are done
