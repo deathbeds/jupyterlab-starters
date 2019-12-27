@@ -6,8 +6,8 @@ Resource          Keywords.robot
 Library           String
 
 *** Variables ***
-${XP FILE TREE EXAMPLES}    ${XP FILE TREE ITEM}\[contains(text(), 'examples')]
-${XP FILE TREE NOTEBOOK}    ${XP FILE TREE ITEM}\[contains(text(), 'Starter Notebook.ipynb')]
+${XP FILE TREE EXAMPLES}    ${XP FILE TREE ITEM}\[text() = 'examples']
+${XP FILE TREE NOTEBOOK}    ${XP FILE TREE ITEM}\[text() = 'Starter Notebook.ipynb']
 ${SIMPLE SCHEMA}    {"required": ["name"], "properties": {"name": {"title": "Moniker", "type": "string"}}}
 
 *** Test Cases ***

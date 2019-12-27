@@ -125,12 +125,18 @@ def test_changelog_versions(pkg, version):
     assert "## `{} {}`".format(pkg, version) in CHANGELOG.read_text()
 
 
+PYTEST_INI = """
+[pytest]
+junit_family = xunit2
+"""
+
+
 def integrity():
     """ run the tests
     """
     with tempfile.TemporaryDirectory() as tmpd:
         ini = pathlib.Path(tmpd) / "pytest.ini"
-        ini.write_text("")
+        ini.write_text(PYTEST_INI)
 
         return pytest.main(["-c", str(ini), "-vv", __file__])
 

@@ -5,7 +5,6 @@ import {
 } from '@jupyterlab/application';
 import { ILauncher } from '@jupyterlab/launcher';
 import { IIconRegistry } from '@jupyterlab/ui-components';
-import { MainAreaWidget } from '@jupyterlab/apputils';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
 import { NotebookPanel, INotebookTracker } from '@jupyterlab/notebook';
@@ -54,10 +53,24 @@ const plugin: JupyterFrontEndPlugin<void> = {
         const context = (args as any) as IStartContext;
         const { starter, name, cwd, body } = context;
 
+        const runCommands = async (response: SCHEMA.StartResponse) => {
+          if (response.starter.commands) {
+            for (const cmd of response.starter.commands) {
+              await commands.execute(cmd.id, cmd.args);
+            }
+          } else if (response.status === 'done') {
+            await commands.execute('filebrowser:open-path', {
+              path: response.path
+            });
+          }
+        };
+
         if (starter.schema && !body) {
           const content = new BodyBuilder({ manager, context, name });
-          const main = new MainAreaWidget({ content });
-          app.shell.add(main, 'main', { mode: 'split-right' });
+          content.id = `id-jp-starters-${name}`;
+          app.shell.add(content, 'right');
+          shell.expandRight();
+          shell.activateById(content.id);
           content.model.start.connect(async (builder, context) => {
             const response = (await commands.execute(
               CommandIDs.start,
@@ -65,10 +78,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
             )) as SCHEMA.StartResponse;
             switch (response.status) {
               case 'done':
-                main.dispose();
-                await commands.execute('filebrowser:open-path', {
-                  path: response.path
-                });
+                content.dispose();
+                await runCommands(response);
                 break;
               case 'continuing':
                 content.model.context = {
@@ -77,6 +88,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
                   body: response.body,
                   cwd: response.path
                 };
+                await runCommands(response);
                 break;
               default:
                 console.error(`Unknown status ${response.status}`, response);
@@ -86,16 +98,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           return await manager.start(name, starter, cwd, body);
         } else {
           const response = await manager.start(name, starter, cwd, body);
-
-          if (starter.commands) {
-            for (const cmd of starter.commands) {
-              await commands.execute(cmd.id, cmd.args);
-            }
-          }
-
-          await commands.execute('filebrowser:open-path', {
-            path: response.path
-          });
+          await runCommands(response);
         }
       },
       label: (args: any) => args.starter.label,

@@ -11,6 +11,7 @@ ${CSS TOPIC}      css:input[label="## Topic"]
 *** Test Cases ***
 Cancel
     [Documentation]    Does the cancel button work?
+    Wait Until Page Contains Element    ${CSS LAUNCH CARD PARAM}    timeout=10s
     Click Element    ${CSS LAUNCH CARD PARAM}
     Wait Until Page Contains Element    ${CSS BODYBUILDER}
     Really Input Text    ${CSS TOPIC}    cancel
@@ -20,6 +21,7 @@ Cancel
 
 Parameter Notebook
     [Documentation]    Can we start a single notebook with parameters?
+    Wait Until Page Contains Element    ${CSS LAUNCH CARD PARAM}    timeout=10s
     Click Element    ${CSS LAUNCH CARD PARAM}
     ${topic} =    Generate Random String
     Really Input Text    ${CSS TOPIC}    ${topic}

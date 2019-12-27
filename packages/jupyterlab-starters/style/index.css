@@ -5,12 +5,16 @@
   background-image: url('./icons/starter.svg');
 }
 
+#jp-left-stack > .p-Widget.jp-Starters-FormPanel,
+#jp-right-stack > .p-Widget.jp-Starters-FormPanel,
 .jp-Starters-FormPanel {
   background-color: var(--jp-layout-color0);
+  color: var(--jp-ui-font-color1);
   display: flex;
   flex-direction: column;
   flex: 1;
   min-width: 300px;
+  width: 300px;
 }
 
 .jp-Starters-FormPanel .jp-SchemaForm {
@@ -44,23 +48,54 @@
   max-height: var(--jp-starters-btn-height);
   height: var(--jp-starters-btn-height);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--jp-layout-color2);
+  border-top: solid 1px var(--jp-border-color0);
+  border-bottom: solid 1px var(--jp-border-color0);
 }
 
 .jp-Starters-BodyBuilder-buttons > div {
-  display: flex;
   flex: 1;
+  color: var(--jp-ui-font-color2);
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.jp-Starters-BodyBuilder-buttons > div > label {
+  display: flex;
   flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.jp-Starters-BodyBuilder-buttons > div strong {
+  font-weight: bold;
+  white-space: nowrap;
 }
 
 .jp-Starters-BodyBuilder-buttons button {
-  flex: 1;
   margin-left: var(--jp-notebook-padding);
   height: unset;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-.jp-Starters-BodyBuilder-buttons button:first-child {
-  margin-left: 0;
+.jp-Starters-BodyBuilder-buttons div[data-icon] {
+  display: flex;
+  flex-direction: column;
+}
+
+.jp-Starters-BodyBuilder-buttons button [fill]:not([fill='none']) {
+  fill: var(--jp-ui-font-color0);
+}
+
+.jp-Starters-BodyBuilder-buttons button.jp-mod-warn [fill]:not([fill='none']),
+.jp-Starters-BodyBuilder-buttons
+  button.jp-mod-accept
+  [fill]:not([fill='none']) {
+  fill: white;
 }
 
 .jp-Starters-Preview {

@@ -7,9 +7,10 @@ import tempfile
 from collections import defaultdict
 from pathlib import Path
 
-from notebook.utils import maybe_future, url_path_join as ujoin
+from notebook.utils import maybe_future
 
 from .._json import JsonSchemaException, dumps, json_validator, loads
+from ..types import Status
 
 NBFORMAT_KEY = "jupyter_starters"
 MAGIC_NOTEBOOK_NAME = "_jupyter_starter_.ipynb"
@@ -84,7 +85,7 @@ async def notebook_starter(name, starter, path, body, manager):
 
     kernel, tmpdir = await get_kernel_and_tmpdir(name, starter, manager)
 
-    tmp_nb = await ensure_notebook(starter, body, tmpdir)
+    tmp_nb = await ensure_notebook(starter, path, body, tmpdir)
 
     nbjson = loads(tmp_nb.read_text())
 
@@ -92,26 +93,33 @@ async def notebook_starter(name, starter, path, body, manager):
 
     nb_response = response_from_notebook(tmp_nb)
 
-    nb_response.update(body=body, name=name, path=path, status="continuing")
+    nb_response.update(body=body, name=name, path=path)
 
     validator = json_validator(nb_response["starter"]["schema"])
 
     try:
         validator(body)
-        nb_response.update(status="done")
+        if nb_response.get("status") is None:
+            nb_response.update(status=Status.DONE)
     except JsonSchemaException as err:
         manager.log.debug(f"[not valid]: {err}")
 
-    if nb_response["status"] == "done":
-        first_copied = await copy_files(tmp_nb, path, manager)
-        if first_copied:
-            nb_response.update(path=ujoin(path, first_copied.name))
+    status = nb_response.get("status")
+    copy = nb_response.get("copy", False)
+
+    if status in [Status.DONE] or (status in [Status.CONTINUING] and copy):
+        await copy_files(tmp_nb, path, manager)
+
+    if status in [Status.DONE]:
         await stop_kernel(name, manager)
+
+    if status is None:
+        nb_response["status"] = Status.CONTINUING
 
     return nb_response
 
 
-async def ensure_notebook(starter, body, tmpdir):
+async def ensure_notebook(starter, path, body, tmpdir):
     """ ensure a notebook exists in a temporary directory
     """
     nbp = Path(starter["src"]).resolve()
@@ -123,7 +131,9 @@ async def ensure_notebook(starter, body, tmpdir):
         tmp_nb.unlink()
 
     nbjson = loads(nbp.read_text())
-    nbjson["metadata"].setdefault(NBFORMAT_KEY, {})["body"] = body
+    meta = nbjson["metadata"].setdefault(NBFORMAT_KEY, {})
+    meta["body"] = body
+    meta["path"] = path
     tmp_nb.write_text(dumps(nbjson))
     return tmp_nb
 
@@ -132,10 +142,9 @@ async def copy_files(tmp_nb, path, manager):
     """ handle retrieving the files from the temporary directory
     """
     first_copied = None
+    tmp_nb.unlink()
 
     for root in sorted(tmp_nb.parent.glob("*")):
-        if root == tmp_nb:
-            continue
         first_copied = root
         await manager.just_copy(root, path)
 

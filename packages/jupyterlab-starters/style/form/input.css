@@ -73,3 +73,18 @@
   min-width: calc(var(--jp-ui-font-size1) * 1.6);
   font-weight: bold;
 }
+
+.jp-SchemaForm .radio > label > span,
+.jp-SchemaForm .field-boolean .checkbox > label {
+  display: flex;
+}
+
+.jp-SchemaForm .radio > label > span > input,
+.jp-SchemaForm .field-boolean .checkbox > label > input {
+  flex: 0;
+}
+
+.jp-SchemaForm .radio > label > span > span,
+.jp-SchemaForm .field-boolean .checkbox > label > span {
+  flex: 1;
+}

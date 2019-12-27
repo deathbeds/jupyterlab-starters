@@ -9,7 +9,7 @@ Library           String
 Happy Path
     [Documentation]    Can we use the notebook?
     Click Element    ${CSS LAUNCH CARD NOTEBOOK}
-    ${index ipynb} =    Set Variable    ${XP FILE TREE ITEM}\[contains(text(), 'index.ipynb')]
+    ${index ipynb} =    Set Variable    ${XP FILE TREE ITEM}\[text() = 'index.ipynb']
     ${name} =    Change the name field
     Capture Page Screenshot    00-notebook-accepted-name.png
     Advance Starter Form
@@ -20,7 +20,7 @@ Happy Path
     Change the answer field    42
     Capture Page Screenshot    02-notebook-accepted-answet.png
     Advance Starter Form
-    ${txt} =    Set Variable    ${XP FILE TREE ITEM}\[contains(text(), 'good job ${name}.txt')]
+    ${txt} =    Set Variable    ${XP FILE TREE ITEM}\[text() = 'good job ${name}.txt']
     Wait Until Page Contains Element    ${txt}
     Double Click Element    ${txt}
     Wait Until Page Contains    fjords

@@ -81,6 +81,10 @@ export class StarterManager implements IStarterManager {
     return result;
   }
 
+  get icons() {
+    return this._icons;
+  }
+
   iconClass(name: string, starter: SCHEMA.Starter) {
     const icon = `${name}-starter`;
 

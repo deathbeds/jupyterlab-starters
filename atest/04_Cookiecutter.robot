@@ -10,8 +10,8 @@ Happy Path
     [Documentation]    Can we use the cookiecutter?
     Click Element    ${CSS LAUNCH CARD COOKIECUTTER}
     ${template css} =    Set Variable    css:input[label\="Template"]
-    ${size css} =    Set Variable    css:.jp-SchemaForm select
-    ${index ipynb} =    Set Variable    ${XP FILE TREE ITEM}\[contains(text(), 'index.ipynb')]
+    ${size css} =    Set Variable    css:.jp-SchemaForm select[id$\="idea_size"]
+    ${index ipynb} =    Set Variable    ${XP FILE TREE ITEM}\[text() = 'index.ipynb']
     Wait Until Page Contains Element    ${template css}
     Capture Page Screenshot    00-cookiecutter-did-launch.png
     Click Element    ${template css}
