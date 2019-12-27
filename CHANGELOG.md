@@ -9,6 +9,7 @@
 
 - add notebook metadata authoring [#13][]
 - add Jupyter markdown to `title`, `description` and `ui:help` in schema forms [#17][]
+- all starters launch in right sidebar [#18][]
 
 ## `jupyter_starters 0.1.0a3`
 
