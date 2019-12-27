@@ -47,7 +47,7 @@ Wait for File Prompt
     [Arguments]    ${name}    ${number}
     [Documentation]    Accept that a file will be made
     ${file} =    Set Variable    file for ${name} ${number}.txt
-    Wait Until Page Contains Element    xpath://code[text() = '${file}']
+    Wait Until Page Contains Element    xpath://code[text() = '${file}']    timeout=30s
     [Return]    ${file}
 
 Wait for File Tab
