@@ -138,8 +138,7 @@
         "schema": {
           "title": "JSON Schema",
           "description": "[Draft 7 JSON Schema](https://json-schema.org/understanding-json-schema) that generates a form like this one, which must validate the user's data. Description fields may include markdown",
-          "type": "object",
-          "$ref": "#/definitions/json-schema"
+          "type": "object"
         },
         "uiSchema": {
           "title": "UI Schema",
@@ -147,10 +146,6 @@
           "type": "object"
         }
       }
-    },
-    "json-schema": {
-      "title": "JSON Schema",
-      "type": "object"
     },
     "command": {
       "title": "JupyterLab Command",
