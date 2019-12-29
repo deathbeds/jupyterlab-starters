@@ -42,8 +42,7 @@ Edit Example Starter Notebook
     Capture Page Screenshot    13-notebook-meta-did-advance.png
 
 No Empty Metadata
-    [Documentation]    Is the metadata as expected?
-    ...    https://github.com/deathbeds/jupyterlab-starters/issues/20
+    [Documentation]    https://github.com/deathbeds/jupyterlab-starters/issues/20
     [Tags]    issue:20
     FOR    ${i}    IN RANGE    10
         Verify the Metadata Between Sidebars

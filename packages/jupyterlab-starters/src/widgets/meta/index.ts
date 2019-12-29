@@ -4,13 +4,9 @@ import { Widget, BoxLayout } from '@phosphor/widgets';
 import { CSS } from '../../css';
 import { SchemaForm } from '../schemaform';
 import { PreviewCard } from '../previewcard';
-import { JSONObjectField, XMLField } from '../fields';
+import { ALL_CUSTOM_UI, AS_JSONOBJECT, AS_TEXTAREA, AS_XML } from '../fields';
 
 import { NotebookMetadataModel } from './model';
-
-const AS_JSONOBJECT = { 'ui:field': 'codemirror-jsonobject' };
-const AS_TEXTAREA = { 'ui:widget': 'textarea' };
-const AS_XML = { 'ui:widget': 'codemirror-xml' };
 
 export class NotebookMetadata extends Widget {
   private _form: SchemaForm<JSONObject>;
@@ -41,12 +37,7 @@ export class NotebookMetadata extends Widget {
             }
           }
         },
-        fields: {
-          'codemirror-jsonobject': JSONObjectField
-        },
-        widgets: {
-          'codemirror-xml': XMLField
-        }
+        ...ALL_CUSTOM_UI
       },
       { markdown: this.model.manager.markdown }
     );
