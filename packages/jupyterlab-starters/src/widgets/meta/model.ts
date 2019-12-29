@@ -123,7 +123,6 @@ export class NotebookMetadataModel extends VDomModel {
     }
     this._form = form;
     form.stateChanged.connect(this._change, this);
-    this._change();
   }
 
   private _change = () => {
