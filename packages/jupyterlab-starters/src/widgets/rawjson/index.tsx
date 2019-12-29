@@ -35,7 +35,9 @@ export class RawJSONObjectField extends ObjectField {
       title = schema.title === undefined ? name : schema.title;
     }
 
-    const isLight = !!document.querySelector('body[data-jp-theme-light="true"]');
+    const isLight = !!document.querySelector(
+      'body[data-jp-theme-light="true"]'
+    );
 
     const description = uiSchema['ui:description'] || schema.description;
     const { canSave } = this;
@@ -46,13 +48,18 @@ export class RawJSONObjectField extends ObjectField {
         <legend>{title}</legend>
         <p className="field-description">{description}</p>
         <button
+          id={`${idSchema.$id}_save`}
           disabled={!canSave}
           className={saveClassName}
           onClick={this.onSave}
         >
           Save
         </button>
-        <button className="jp-mod-styled" onClick={this.onReset}>
+        <button
+          id={`${idSchema.$id}_reset`}
+          className="jp-mod-styled"
+          onClick={this.onReset}
+        >
           Reset
         </button>
         <div id={idSchema.$id}>

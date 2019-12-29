@@ -5,6 +5,7 @@ Force Tags        example:notebook-meta
 Resource          Keywords.robot
 Library           String
 Library           Collections
+Resource          CodeMirror.robot
 
 *** Variables ***
 ${XP FILE TREE EXAMPLES}    ${XP FILE TREE ITEM}\[text() = 'examples']
@@ -26,7 +27,8 @@ Edit Example Starter Notebook
     Open the Starter Notebook Metadata Sidebar
     ${rando} =    Generate Random String
     Really Input Text    ${CSS NOTEBOOK STARTER META} input[label\="Label"]    Starter Notebook ${rando}
-    Really Input Text    ${CSS NOTEBOOK STARTER META} textarea[id$\="_schema"]    ${SIMPLE SCHEMA}
+    Set CodeMirror Value    [id$\="_schema"] .CodeMirror    ${SIMPLE SCHEMA}
+    Click Element    css:button[id$\="_schema_save"]
     Save Notebook
     Capture Page Screenshot    10-notebook-meta-did-edit.png
     Reset Application State
