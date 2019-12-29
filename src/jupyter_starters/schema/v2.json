@@ -106,12 +106,12 @@
       "properties": {
         "label": {
           "title": "Label",
-          "description": "human-readable description used in UI labels and tab titles",
+          "description": "human-readable, plain-text description used in UI labels and tab titles",
           "type": "string"
         },
         "description": {
           "title": "Description",
-          "description": "short description of the intent of the Starter",
+          "description": "short, plain-text description of the intent of the Starter",
           "type": "string"
         },
         "icon": {

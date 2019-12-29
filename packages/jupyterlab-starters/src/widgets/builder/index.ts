@@ -8,6 +8,12 @@ import { SchemaForm } from '../schemaform';
 
 import { BuilderModel } from './model';
 import { BuilderButtons } from './buttons';
+import {
+  JSONObjectField,
+  XMLField,
+  MarkdownField,
+  CodeMirrorField
+} from '../fields';
 
 export class BodyBuilder extends Widget {
   private _form: SchemaForm<JSONObject>;
@@ -34,7 +40,15 @@ export class BodyBuilder extends Widget {
       {
         liveValidate: true,
         formData: this._context.body,
-        uiSchema: this._context.starter.uiSchema || {}
+        uiSchema: this._context.starter.uiSchema || {},
+        fields: {
+          'codemirror-jsonobject': JSONObjectField
+        },
+        widgets: {
+          codemirror: CodeMirrorField,
+          'codemirror-xml': XMLField,
+          'codemirror-markdown': MarkdownField
+        }
       },
       { markdown: this.model.manager.markdown }
     );
