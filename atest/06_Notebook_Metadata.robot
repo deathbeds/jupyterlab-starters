@@ -32,7 +32,7 @@ Edit Example Starter Notebook
     Save Notebook
     Capture Page Screenshot    10-notebook-meta-did-edit.png
     Reset Application State
-    Element Should Contain    ${CSS LAUNCH CARD NOTEBOOK}    Starter Notebook ${rando}
+    Wait Until Element Contains    ${CSS LAUNCH CARD NOTEBOOK}    Starter Notebook ${rando}
     Capture Page Screenshot    11-notebook-meta-did-persist.png
     Click Element    ${CSS LAUNCH CARD NOTEBOOK}
     ${name} =    Change the moniker field
@@ -71,14 +71,14 @@ Check Metadata Text Input
     [Documentation]    Verify an input
     ${sel} =    Set Variable    ${CSS NOTEBOOK STARTER META} input[label\="${label}"]
     Wait Until Page Contains Element    ${sel}    timeout=10s
-    Element Attribute Value Should Be    ${sel}    value    ${value}
+    Wait Until Keyword Succeeds    2x    200ms    Element Attribute Value Should Be    ${sel}    value    ${value}
 
 Check Metadata Text Area
     [Arguments]    ${label}    ${value}
     [Documentation]    Verify a textarea
     ${sel} =    Set Variable    ${CSS NOTEBOOK STARTER META} textarea[id$\="_${label.lower()}"]
     Wait Until Page Contains Element    ${sel}    timeout=10s
-    Element Attribute Value Should Be    ${sel}    value    ${value}
+    Wait Until Keyword Succeeds    2x    200ms    Element Attribute Value Should Be    ${sel}    value    ${value}
 
 Change the moniker field
     [Arguments]    ${previous}=${EMPTY}
