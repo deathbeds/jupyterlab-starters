@@ -121,7 +121,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
           metadata.title.caption = 'Starter Notebook Metadata';
           app.shell.add(metadata, 'right');
           notebooks.currentChanged.connect(() => {
-            metadata.model.notebook = null;
             metadata.model.notebook = notebooks.currentWidget;
           });
           metadata.model.notebook = notebook;
