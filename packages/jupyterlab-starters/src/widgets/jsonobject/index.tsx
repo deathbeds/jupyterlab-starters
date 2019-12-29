@@ -10,7 +10,7 @@ import * as CodeMirror from 'codemirror';
 
 import { JSONExt } from '@phosphor/coreutils';
 
-export class RawJSONObjectField extends ObjectField {
+export class JSONObjectField extends ObjectField {
   protected _editor: CodeMirror.Editor;
 
   render() {
@@ -41,35 +41,38 @@ export class RawJSONObjectField extends ObjectField {
 
     const description = uiSchema['ui:description'] || schema.description;
     const { canSave } = this;
-    const saveClassName = `jp-mod-styled ${canSave ? 'jp-mod-accept' : ''}`;
+
+    const options = {
+      mode: 'application/json',
+      theme: isLight ? 'default' : 'zenburn',
+      matchBrackets: true,
+      autoCloseBrackets: true
+    };
 
     return (
       <>
         <legend>{title}</legend>
         <p className="field-description">{description}</p>
-        <button
-          id={`${idSchema.$id}_save`}
-          disabled={!canSave}
-          className={saveClassName}
-          onClick={this.onSave}
-        >
-          Save
-        </button>
-        <button
-          id={`${idSchema.$id}_reset`}
-          className="jp-mod-styled"
-          onClick={this.onReset}
-        >
-          Reset
-        </button>
+        <div className="jp-SchemaForm-JSONObject-buttons">
+          <button
+            id={`${idSchema.$id}_revert`}
+            className="jp-JSONEditor-revertButton"
+            title="Revert to Previous Notebook Metadata"
+            onClick={this.onReset}
+          ></button>
+          <button
+            id={`${idSchema.$id}_commit`}
+            disabled={!canSave}
+            className="jp-JSONEditor-commitButton"
+            title="Commit to Notebook Metadata"
+            onClick={this.onSave}
+          ></button>
+        </div>
         <div id={idSchema.$id}>
           <UnControlled
             editorDidMount={editor => (this._editor = editor)}
             value={JSON.stringify(formData, null, 2)}
-            options={{
-              mode: 'application/json',
-              theme: isLight ? 'default' : 'zenburn'
-            }}
+            options={options}
             onChange={this.onChange}
           />
         </div>

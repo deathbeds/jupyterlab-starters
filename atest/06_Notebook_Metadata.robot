@@ -28,7 +28,7 @@ Edit Example Starter Notebook
     ${rando} =    Generate Random String
     Really Input Text    ${CSS NOTEBOOK STARTER META} input[label\="Label"]    Starter Notebook ${rando}
     Set CodeMirror Value    [id$\="_schema"] .CodeMirror    ${SIMPLE SCHEMA}
-    Click Element    css:button[id$\="_schema_save"]
+    Click Element    css:button[id$\="_schema_commit"]
     Save Notebook
     Capture Page Screenshot    10-notebook-meta-did-edit.png
     Reset Application State

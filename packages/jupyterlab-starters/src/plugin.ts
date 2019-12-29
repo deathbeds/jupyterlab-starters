@@ -111,6 +111,19 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     let metadata: NotebookMetadata;
 
+    const onCurrentNotebook = () => {
+      const { currentWidget } = notebooks;
+      if (!currentWidget) {
+        if (metadata) {
+          metadata.dispose();
+        }
+        metadata = null;
+        notebooks.currentChanged.disconnect(onCurrentNotebook);
+      } else {
+        metadata.model.notebook = currentWidget;
+      }
+    };
+
     commands.addCommand(CommandIDs.notebookMeta, {
       execute: (args: any) => {
         const notebook: NotebookPanel = args.current || notebooks.currentWidget;
@@ -120,9 +133,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           metadata.title.iconClass = DEFAULT_ICON_CLASS;
           metadata.title.caption = 'Starter Notebook Metadata';
           app.shell.add(metadata, 'right');
-          notebooks.currentChanged.connect(() => {
-            metadata.model.notebook = notebooks.currentWidget;
-          });
+          notebooks.currentChanged.connect(onCurrentNotebook);
           metadata.model.notebook = notebook;
           shell.expandRight();
           shell.activateById(metadata.id);
