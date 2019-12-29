@@ -122,7 +122,6 @@
   padding: 0;
 }
 
-
 /* json object */
 .jp-SchemaForm fieldset .jp-SchemaForm-JSONObject-buttons {
   display: flex;
@@ -139,8 +138,14 @@
   opacity: 0.25;
 }
 
-.jp-SchemaForm fieldset .jp-SchemaForm-JSONObject-buttons button:hover:not([disabled]),
-.jp-SchemaForm fieldset .jp-SchemaForm-JSONObject-buttons button:focus:not([disabled]) {
+.jp-SchemaForm
+  fieldset
+  .jp-SchemaForm-JSONObject-buttons
+  button:hover:not([disabled]),
+.jp-SchemaForm
+  fieldset
+  .jp-SchemaForm-JSONObject-buttons
+  button:focus:not([disabled]) {
   border: solid var(--jp-border-width) var(--jp-border-color1);
   background-color: var(jp-layout-color2);
 }
