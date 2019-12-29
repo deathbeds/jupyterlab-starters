@@ -31,5 +31,5 @@ Call CodeMirror Method
     [Arguments]    ${css}    ${js}
     [Documentation]    Construct and a method call against in the CodeMirror attached to the element
     ...    that matches a ``css`` selector with the given ``js`` code.
-    Wait for Page to Contain Element   css:${css}
+    Wait Until Page Contains Element   css:${css}
     Execute JavaScript    document.querySelector(`${css}`).CodeMirror.${js}
