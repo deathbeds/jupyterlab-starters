@@ -123,20 +123,29 @@ export class NotebookMetadataModel extends VDomModel {
     }
     this._form = form;
     form.stateChanged.connect(this._change, this);
-    this._change();
   }
 
   private _change = () => {
-    const { formData } = this._form;
+    const { formData, uiSchema } = this._form;
     if (this._notebook && formData) {
       const fromNotebook =
         this._notebook.model.metadata.get(NOTEBOOK_META_KEY) || ({} as any);
       const nbStarter = fromNotebook[NOTEBOOK_META_SUBKEY] || {};
+      const formStarter = JSONExt.deepCopy((formData as JSONObject) || {});
+
+      for (const key in uiSchema || {}) {
+        if (uiSchema[key]['ui:field'] === 'codemirror-jsonobject') {
+          if (!formStarter[key] || !Object.keys(formStarter[key]).length) {
+            delete formStarter[key];
+          }
+        }
+      }
+
       let candidate = {
         ...fromNotebook,
         [NOTEBOOK_META_SUBKEY]: {
           ...nbStarter,
-          ...formData
+          ...formStarter
         }
       };
 

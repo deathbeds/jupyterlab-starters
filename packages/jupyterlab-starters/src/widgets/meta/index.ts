@@ -4,12 +4,9 @@ import { Widget, BoxLayout } from '@phosphor/widgets';
 import { CSS } from '../../css';
 import { SchemaForm } from '../schemaform';
 import { PreviewCard } from '../previewcard';
-import { RawJSONObjectField } from '../rawjson';
+import { ALL_CUSTOM_UI, AS_JSONOBJECT, AS_TEXTAREA, AS_XML } from '../fields';
 
 import { NotebookMetadataModel } from './model';
-
-const AS_TEXTAREA = { 'ui:widget': 'textarea' };
-const AS_JSONOBJECT = { 'ui:field': 'jsonobject' };
 
 export class NotebookMetadata extends Widget {
   private _form: SchemaForm<JSONObject>;
@@ -31,7 +28,7 @@ export class NotebookMetadata extends Widget {
         liveValidate: true,
         uiSchema: {
           description: AS_TEXTAREA,
-          icon: AS_TEXTAREA,
+          icon: AS_XML,
           schema: AS_JSONOBJECT,
           uiSchema: AS_JSONOBJECT,
           commands: {
@@ -40,9 +37,7 @@ export class NotebookMetadata extends Widget {
             }
           }
         },
-        fields: {
-          jsonobject: RawJSONObjectField
-        }
+        ...ALL_CUSTOM_UI
       },
       { markdown: this.model.manager.markdown }
     );

@@ -45,6 +45,8 @@ def atest(attempt=0):
         "--noncritical",
         "ospy:windows38",
         "--xunitskipnoncritical",
+        "--consolewidth",
+        "100",
         *sys.argv[1:],
         ATEST,
     ]
