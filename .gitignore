@@ -16,3 +16,4 @@ envs/
 lib/
 node_modules/
 Untitled*
+_build

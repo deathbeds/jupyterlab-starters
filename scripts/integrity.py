@@ -71,6 +71,15 @@ def the_meta_package():
     )
 
 
+@pytest.mark.parametrize("name,env_path", [["docs", ROOT / "docs" / "environment.yml"]])
+def test_env_versions(name, env_path):
+    """ are special environments in sync with the main demo/development env?
+    """
+    env = yaml.safe_load(env_path.read_text())
+    for package in ENV["dependencies"]:
+        assert package in env["dependencies"], f"{package} in {name} is out-of-date"
+
+
 @pytest.mark.parametrize(
     "name,version",
     [["PY_JLST_VERSION", PY_VERSION], ["JS_JLST_VERSION", MAIN_EXT_VERSION]],

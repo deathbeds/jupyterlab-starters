@@ -11,9 +11,10 @@ ROOT = Path(__file__).parent.parent
 
 PY_SRC = list((ROOT / "src").rglob("*.py"))
 PY_SCRIPTS = list((ROOT / "scripts").rglob("*.py"))
+PY_DOCS = list((ROOT / "docs").rglob("*.py"))
 PY_ATEST = list((ROOT / "atest").rglob("*.py"))
 
-ALL_PY = [*PY_SRC, *PY_SCRIPTS, *PY_ATEST]
+ALL_PY = [*PY_SRC, *PY_SCRIPTS, *PY_ATEST, *PY_DOCS]
 
 ALL_ROBOT = list((ROOT / "atest").rglob("*.robot"))
 

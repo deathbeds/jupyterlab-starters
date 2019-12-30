@@ -86,5 +86,5 @@ Don't like what you see here? Try these other approaches:
 [screenshot]: https://raw.githubusercontent.com/deathbeds/jupyterlab-starters/master/docs/screenshot.png
 [pypi-badge]: https://img.shields.io/pypi/v/jupyter-starters
 [pypi]: https://pypi.org/project/jupyter-starters
-[npm-badge]: https://img.shields.io/npm/v/deathbeds/jupyterlab-starters
+[npm-badge]: https://img.shields.io/npm/v/@deathbeds/jupyterlab-starters
 [npm]: https://www.npmjs.com/package/@deathbeds/jupyterlab-starters

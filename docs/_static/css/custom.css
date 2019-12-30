@@ -1,0 +1,95 @@
+:root {
+  --none-blacker: rgb(0, 0, 0);
+  --deathbeds: #d374b3d5;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-transform: uppercase;
+  font-family: sans-serif;
+  font-weight: 100;
+}
+
+.rst-content blockquote {
+  padding: 24px;
+  margin-left: 0;
+  font-size: 120%;
+  font-style: italic;
+  background: linear-gradient(to right, #eee 10px, #fff 0);
+}
+
+h1 {
+  font-size: 350%;
+}
+
+h2 {
+  font-size: 200%;
+}
+
+p {
+  max-width: 45em;
+}
+
+.wy-side-nav-search,
+.wy-nav-top {
+  background-color: var(--none-blacker);
+}
+
+a {
+  color: var(--none-blacker);
+  font-weight: bold;
+}
+
+iframe {
+  height: 95vh;
+  border: 0;
+}
+
+a {
+  border-bottom: solid 1px transparent;
+}
+
+a:hover,
+a:active {
+  border-bottom: dotted 1px var(--deathbeds);
+  color: var(--deathbeds);
+}
+
+.wy-side-nav-search a:hover,
+.wy-side-nav-search a:active {
+  color: var(--deathbeds);
+  background-color: transparent;
+}
+
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+  display: none;
+}
+
+.wy-nav-content {
+  max-width: unset;
+}
+
+.rst-content .section .toctree-wrapper > ul {
+  display: flex;
+  flex-direction: row;
+}
+
+.rst-content .section .toctree-wrapper > ul > li {
+  flex: 1;
+}
+
+.rst-content .section .toctree-wrapper ul,
+.rst-content .section .toctree-wrapper li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rst-content .section .toctree-wrapper .toctree-l1 > a {
+  font-size: 150%;
+}
