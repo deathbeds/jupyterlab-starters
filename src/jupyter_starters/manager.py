@@ -148,23 +148,29 @@ class StarterManager(LoggingConfigurable):
         """ resolve the src of a file-based starter
         """
         root = Path.cwd()
-
-        py_src = starter.get("py_src")
-
-        if py_src:
-            spec = importlib.util.find_spec(py_src)
-            if not spec:
-                self.log.error(f"Failed to import `py_src` {py_src}")
-                return None
-            root = Path(spec.origin).parent
-
-        resolved = (root / starter["src"]).resolve()
-
-        if not resolved.exists():
-            self.log.error(f"{resolved} does not exist")
+        if "src" not in starter:
+            self.log.error("src is required")
             return None
 
-        return resolved
+        src = Path(starter["src"])
+
+        if not src.is_absolute():
+            py_src = starter.get("py_src")
+
+            if py_src:
+                spec = importlib.util.find_spec(py_src)
+                if not spec:
+                    self.log.error(f"Failed to import `py_src` {py_src}")
+                    return None
+                root = Path(spec.origin).parent
+
+            src = (root / starter["src"]).resolve()
+
+        if not src.exists():
+            self.log.error(f"{src} does not exist")
+            return None
+
+        return src
 
     async def just_copy(self, root, path):
         """ just copy, with some dummy values

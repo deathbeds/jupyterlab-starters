@@ -11,12 +11,15 @@ import pytest
     [
         ["doesn't exist", {"src": "doesnt-exist"}],
         ["not importable", {"py_src": "not_a_module", "src": "doesnt-matter"}],
+        ["no src", {"py_src": "won't matter"}],
+        ["nothing", {}],
     ],
 )
 def test_bad_src(starter_manager, name, starter):
     """ these are bad sources
     """
-    assert starter_manager.resolve_src(starter) is None, f"{name} should have been None"
+    src = starter_manager.resolve_src(starter)
+    assert src is None, f"{name} should have been None"
 
 
 @pytest.mark.parametrize(
