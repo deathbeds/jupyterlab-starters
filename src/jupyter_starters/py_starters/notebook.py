@@ -95,14 +95,19 @@ async def notebook_starter(name, starter, path, body, manager):
 
     nb_response.update(body=body, name=name, path=path)
 
-    validator = json_validator(nb_response["starter"]["schema"])
+    schema = nb_response.get("starter", {}).get("schema")
 
-    try:
-        validator(body)
-        if nb_response.get("status") is None:
-            nb_response.update(status=Status.DONE)
-    except JsonSchemaException as err:
-        manager.log.debug(f"[not valid]: {err}")
+    if schema:
+        validator = json_validator(schema)
+
+        try:
+            validator(body)
+            if nb_response.get("status") is None:
+                nb_response.update(status=Status.DONE)
+        except JsonSchemaException as err:
+            manager.log.debug(f"[not valid]: {err}")
+    elif nb_response.get("status") is None:
+        nb_response.update(status=Status.DONE)
 
     status = nb_response.get("status")
     copy = nb_response.get("copy", False)

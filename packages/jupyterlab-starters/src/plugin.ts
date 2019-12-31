@@ -54,11 +54,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
         const { starter, name, cwd, body } = context;
 
         const runCommands = async (response: SCHEMA.StartResponse) => {
-          if (response.starter.commands) {
-            for (const cmd of response.starter.commands) {
+          const starterCommands = response?.starter?.commands;
+          if (starterCommands) {
+            for (const cmd of starterCommands) {
               await commands.execute(cmd.id, cmd.args);
             }
-          } else if (response.status === 'done') {
+          } else if (response.status === 'done' && response.path.length) {
             await commands.execute('filebrowser:open-path', {
               path: response.path
             });

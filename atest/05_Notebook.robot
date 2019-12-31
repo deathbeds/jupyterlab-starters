@@ -26,6 +26,15 @@ Happy Path
     Wait Until Page Contains    fjords
     Capture Page Screenshot    03-notebook-created-file.png
 
+No-op
+    [Documentation]    Does a no-op do nothing?
+    [Tags]    issue:26
+    Capture Page Screenshot    04-noop-before.png
+    Click Element    ${CSS LAUNCH CARD NOTEBOOK NOOP}
+    Sleep    5s
+    Page Should Not Contain Element    ${CSS DIALOG}
+    Capture Page Screenshot    04-noop-after.png
+
 *** Keywords ***
 Change the name field
     [Arguments]    ${previous}=${EMPTY}

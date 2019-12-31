@@ -1,15 +1,41 @@
 """ common test stuff
 """
+# pylint: disable=redefined-outer-name
+import nbformat.v4
 import pytest
+import traitlets
+from jupyter_client.multikernelmanager import MultiKernelManager
+from traitlets.config import LoggingConfigurable
 
 from jupyter_starters.manager import StarterManager
 
 
+class MockApp(LoggingConfigurable):
+    """ not really a nbapp
+    """
+
+    kernel_manager = traitlets.Instance(MultiKernelManager)
+
+    @traitlets.default("kernel_manager")
+    def _kernel_manager(self):
+        """ simplest reasonable kernel manager
+        """
+        return MultiKernelManager(parent=self)
+
+
 @pytest.fixture
-def starter_manager():
+def starter_manager(mock_app):
     """ an orphaned starter
     """
-    return StarterManager()
+    return StarterManager(parent=mock_app)
+
+
+@pytest.fixture
+def mock_app(monkeypatch, tmp_path):
+    """ a fake notebook app in a tmpdir
+    """
+    monkeypatch.chdir(tmp_path)
+    return MockApp()
 
 
 @pytest.fixture
@@ -25,3 +51,14 @@ def example_project(tmp_path):
     (starter_content / "example.txt").write_text("123")
 
     return tmp_path
+
+
+@pytest.fixture
+def tmp_notebook(tmp_path):
+    """ make an empty python notebook on disk
+    """
+    notebook = nbformat.v4.new_notebook()
+    notebook.metadata["kernelspec"] = {"name": "python3"}
+    nb_path = tmp_path / "Untitled.ipynb"
+    nb_path.write_text(nbformat.writes(notebook))
+    return nb_path
