@@ -43,10 +43,12 @@ env_specs:
     inherit_from:
       - default
     packages:
-      - sphinx
       - nbsphinx
-      - sphinx-autobuild
+      - pip
+      - sphinx
       - sphinx_rtd_theme
+      - sphinx-autobuild
+      - sphinx-copybutton
 
   jupyterlab-starters:
     channels:

@@ -13,8 +13,7 @@ def setup(app):
 
 nbsphinx.RST_TEMPLATE = nbsphinx.RST_TEMPLATE.replace(
     """{% block input -%}""",
-    """{% block input -%}"""
-    """{% if not cell.metadata.get("jupyter", {}).get("source_hidden", False) -%}""",
+    """{% block input -%}""" """{% if not cell.metadata.get("hide_input", False) -%}""",
 ).replace("""{% endblock input %}""", """{%- endif -%}{%- endblock input %}""")
 
 
@@ -52,6 +51,7 @@ release = ""
 # ones.
 extensions = [
     "nbsphinx",
+    "sphinx_copybutton",
     "sphinx.ext.autodoc",
     "sphinx.ext.coverage",
     "sphinx.ext.doctest",
@@ -87,7 +87,7 @@ language = None
 exclude_patterns = [".ipynb_checkpoints", "**/.ipynb_checkpoints", "**/~.*"]
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = None
+pygments_style = "monokai"
 
 
 # -- Options for HTML output -------------------------------------------------

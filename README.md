@@ -13,7 +13,6 @@
 - [x] A directory
 - [x] A python function
 - [x] A [cookiecutter][]
-  - _requires `pip install cookiecutter` or `conda install -c conda-forge cookiecutter`_
 - [x] A notebook
 - [ ] A shell script
 
@@ -21,7 +20,7 @@
 
 ## Installing
 
-> _You'll need `jupyterlab >=1,<2`, `python >=3.6`, and `nodejs >=8`_
+> You'll need `jupyterlab >=1,<2`, `python >=3.6`, and `nodejs >=8`
 
 ```bash
 pip install --pre jupyter_starters
@@ -59,7 +58,7 @@ it is launched from in the JupyterLab [Launcher][].
 }
 ```
 
-> _more docs TBD: for now, see examples in [jupyter_notebook_config.json](./jupyter_notebook_config.json)_
+> more docs TBD: for now, see examples in the [demo configuration][conf].
 
 ## Alternatives
 
@@ -71,6 +70,7 @@ Don't like what you see here? Try these other approaches:
 [badge-ci]: https://dev.azure.com/nickbollweg/deathbeds/_apis/build/status/deathbeds.jupyterlab-starters?branchName=master
 [binder]: https://mybinder.org/v2/gh/deathbeds/jupyterlab-starters/master?urlpath=lab
 [ci]: https://dev.azure.com/nickbollweg/deathbeds/_build/latest?definitionId=8&branchName=master
+[conf]: https://github.com/deathbeds/jupyterlab-starters/tree/master/jupyter_notebook_config.json
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
 [notebook-config]: https://jupyter-notebook.readthedocs.io/en/stable/config.html
 [launcher]: https://jupyterlab.readthedocs.io/en/stable/user/files.html#creating-files-and-activities

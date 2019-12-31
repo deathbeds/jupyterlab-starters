@@ -1,6 +1,9 @@
 :root {
   --none-blacker: rgb(0, 0, 0);
   --deathbeds: #d374b3d5;
+  --code-bg: rgb(39, 40, 34);
+  --border-width: 1px;
+  --border-radius: 5px;
 }
 
 h1,
@@ -14,12 +17,25 @@ h6 {
   font-weight: 100;
 }
 
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+  text-transform: none;
+}
+
 .rst-content blockquote {
-  padding: 24px;
+  padding: 0.5em 0 0.5em 2em;
   margin-left: 0;
   font-size: 120%;
   font-style: italic;
-  background: linear-gradient(to right, #eee 10px, #fff 0);
+  background: linear-gradient(to right, #eee 1em, #fff 0);
+}
+
+.rst-content blockquote div *:last-child {
+  margin-bottom: 0;
 }
 
 h1 {
@@ -39,6 +55,10 @@ p {
   background-color: var(--none-blacker);
 }
 
+.wy-side-nav-search input[type='text'] {
+  border-radius: var(--border-radius);
+}
+
 a {
   color: var(--none-blacker);
   font-weight: bold;
@@ -50,12 +70,12 @@ iframe {
 }
 
 a {
-  border-bottom: solid 1px transparent;
+  border-bottom: solid var(--border-width) transparent;
 }
 
 a:hover,
 a:active {
-  border-bottom: dotted 1px var(--deathbeds);
+  text-decoration: underline;
   color: var(--deathbeds);
 }
 
@@ -92,4 +112,26 @@ div.nboutput div.prompt {
 
 .rst-content .section .toctree-wrapper .toctree-l1 > a {
   font-size: 150%;
+}
+
+body div.nboutput.container div[class*='highlight'] {
+  background: var(--code-bg);
+}
+
+.rst-content div[class^='highlight'] {
+  border-radius: var(--border-radius);
+}
+
+body div.nboutput.container div[class*='highlight'] {
+  margin-bottom: 1em;
+}
+
+body div.nboutput.container div[class*='highlight'] div[class*='highlight'] {
+  margin: 0;
+  padding: 0;
+}
+
+body div.nboutput.container div[class*='highlight'] pre {
+  background-color: transparent;
+  padding: 1em;
 }
