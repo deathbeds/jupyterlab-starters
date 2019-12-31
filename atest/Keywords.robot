@@ -174,5 +174,5 @@ Merge To JSON File
     ${file} =    Get File    ${path}
     ${json} =    Evaluate    __import__("json").loads('''${file}''')
     TCM.Recursive Update    ${json}    ${obj}
-    Evaluate    __import__("pathlib").Path("${path}").write_text(__import__("json").dumps(${json}))
+    Evaluate    __import__("pathlib").Path(r'''${path}''').write_text(__import__("json").dumps(${json}))
     [Return]    ${json}
