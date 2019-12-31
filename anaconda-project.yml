@@ -29,6 +29,7 @@ env_specs:
       - mypy
       - pylint
       - pytest
+      - pytest-asyncio
       - pytest-cov
       - pytest-flake8
       - robotframework-lint
