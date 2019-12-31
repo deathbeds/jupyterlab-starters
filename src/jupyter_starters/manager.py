@@ -164,12 +164,6 @@ class StarterManager(LoggingConfigurable):
             self.log.error(f"{resolved} does not exist")
             return None
 
-        try:
-            resolved.relative_to(root)
-        except ValueError:
-            self.log.error(f"{resolved} is not under {root}")
-            return None
-
         return resolved
 
     async def just_copy(self, root, path):

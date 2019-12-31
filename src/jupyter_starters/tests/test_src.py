@@ -10,7 +10,6 @@ import pytest
     "name,starter",
     [
         ["doesn't exist", {"src": "doesnt-exist"}],
-        ["not inside", {"py_src": "jupyter_starters", "src": ".."}],
         ["not importable", {"py_src": "not_a_module", "src": "doesnt-matter"}],
     ],
 )
