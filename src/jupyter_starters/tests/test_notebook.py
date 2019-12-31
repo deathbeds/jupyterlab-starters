@@ -20,5 +20,4 @@ async def test_notebook_no_schema(starter_manager, tmp_notebook):
     }
 
     response = await starter_manager.start(name, "", {})
-    print(response)
-    assert response["status"] == Status.CONTINUING
+    assert response["status"] == Status.DONE, response

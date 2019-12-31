@@ -24,3 +24,4 @@ ${CSS DIALOG OK}    css:.jp-Dialog .jp-mod-accept
 ${CSS NOTEBOOK TOOLBAR BUTTON}    css:.jp-ToolbarButtonComponent-icon[data-icon="starters-default"]
 ${CSS HOME FOLDER}    css:.jp-FileBrowser-crumbs > span[data-icon="folder"]
 ${CSS NOTEBOOK STARTER META}    css:.jp-Starters-NotebookMetadata
+${NOOP CONF}      {"StarterManager": {"extra_starters": {"noop": {"src": "examples/No-Op Notebook.ipynb", "type": "notebook", "label": "noop", "description": "noop"}}}}

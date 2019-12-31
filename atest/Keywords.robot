@@ -4,6 +4,7 @@ Library           SeleniumLibrary
 Library           OperatingSystem
 Library           Process
 Library           String
+Library           traitlets.config.manager    WITH NAME    TCM
 Library           ./ports.py
 
 *** Keywords ***
@@ -20,8 +21,7 @@ Setup Server and Browser
     ${root} =    Normalize Path    ${OUTPUT DIR}${/}..${/}..${/}..
     Set Global Variable    ${HOME}    ${home}
     Create Directory    ${home}
-    Copy Directory    ${OUTPUT DIR}${/}..${/}..${/}..${/}examples    ${home}${/}examples
-    Copy File    ${OUTPUT DIR}${/}..${/}..${/}..${/}jupyter_notebook_config.json    ${home}
+    Update Examples    ${home}
     ${WORKSPACES DIR} =    Set Variable    ${OUTPUT DIR}${/}workspaces
     Initialize User Settings
     ${app args} =    Set Variable    --no-browser --debug --NotebookApp.base_url\='${BASE}' --port\=${PORT} --NotebookApp.token\='${token}'
@@ -31,6 +31,15 @@ Setup Server and Browser
     ...    stderr=STDOUT
     Set Global Variable    ${SERVER}    ${server}
     Open JupyterLab
+
+Update Examples
+    [Arguments]    ${home}
+    [Documentation]    Add the examples and patch in non-functioning examples
+    Copy Directory    ${OUTPUT DIR}${/}..${/}..${/}..${/}examples    ${home}${/}examples
+    ${conf} =    Set Variable    jupyter_notebook_config.json
+    Copy File    ${OUTPUT DIR}${/}..${/}..${/}..${/}${conf}    ${home}
+    ${noop} =    Evaluate    ${NOOP CONF}
+    Merge To JSON File    ${home}${/}${conf}    ${noop}
 
 Setup Suite For Screenshots
     [Arguments]    ${folder}
@@ -158,3 +167,12 @@ Accept Default Dialog Option
     [Documentation]    Accept a dialog, if it exists
     ${el} =    Get WebElements    ${CSS DIALOG OK}
     Run Keyword If    ${el.__len__()}    Click Element    ${CSS DIALOG OK}
+
+Merge To JSON File
+    [Arguments]    ${path}    ${obj}
+    [Documentation]    Merge a dictionary into a JSON file
+    ${file} =    Get File    ${path}
+    ${json} =    Evaluate    __import__("json").loads('''${file}''')
+    TCM.Recursive Update    ${json}    ${obj}
+    Evaluate    __import__("pathlib").Path("${path}").write_text(__import__("json").dumps(${json}))
+    [Return]    ${json}

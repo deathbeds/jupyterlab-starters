@@ -106,6 +106,8 @@ async def notebook_starter(name, starter, path, body, manager):
                 nb_response.update(status=Status.DONE)
         except JsonSchemaException as err:
             manager.log.debug(f"[not valid]: {err}")
+    elif nb_response.get("status") is None:
+        nb_response.update(status=Status.DONE)
 
     status = nb_response.get("status")
     copy = nb_response.get("copy", False)
