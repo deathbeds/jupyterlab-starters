@@ -57,7 +57,7 @@ async def get_kernel_and_tmpdir(name, starter, manager):
     """ use the manager to get a kernel and working directory
     """
     if name not in manager.kernel_dirs:
-        kernel_name = kernel_for_path(starter["src"])
+        kernel_name = kernel_for_path(manager.resolve_src(starter))
         tmpdir = tempfile.mkdtemp()
         manager.kernel_dirs[name] = [
             await maybe_future(
@@ -85,7 +85,7 @@ async def notebook_starter(name, starter, path, body, manager):
 
     kernel, tmpdir = await get_kernel_and_tmpdir(name, starter, manager)
 
-    tmp_nb = await ensure_notebook(starter, path, body, tmpdir)
+    tmp_nb = await ensure_notebook(starter, path, body, tmpdir, manager)
 
     nbjson = loads(tmp_nb.read_text())
 
@@ -119,10 +119,10 @@ async def notebook_starter(name, starter, path, body, manager):
     return nb_response
 
 
-async def ensure_notebook(starter, path, body, tmpdir):
+async def ensure_notebook(starter, path, body, tmpdir, manager):
     """ ensure a notebook exists in a temporary directory
     """
-    nbp = Path(starter["src"]).resolve()
+    nbp = manager.resolve_src(starter)
 
     tdp = Path(tmpdir)
     tmp_nb = tdp / MAGIC_NOTEBOOK_NAME

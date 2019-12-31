@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## `jupyter_starters 0.2.1a0`
+
+- add `py_src` for easier distribution of starters [#25][]
+- add unit tests [#25][]
+
 ## `jupyter_starters 0.2.0a0`
 
 - add notebook as starter [#13][]
@@ -41,3 +46,4 @@
 [#17]: https://github.com/deathbeds/jupyterlab-starters/pull/17
 [#18]: https://github.com/deathbeds/jupyterlab-starters/pull/18
 [#21]: https://github.com/deathbeds/jupyterlab-starters/pull/21
+[#25]: https://github.com/deathbeds/jupyterlab-starters/pull/25

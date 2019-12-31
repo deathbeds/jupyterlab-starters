@@ -10,5 +10,9 @@ dependencies:
   - geckodriver
   - jupyterlab {lab}
   - nodejs
+  - pytest-asyncio
+  - pytest-azurepipelines
+  - pytest-cov
+  - pytest-flake8
   - python {python}
   - robotframework-seleniumlibrary

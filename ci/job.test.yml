@@ -58,6 +58,9 @@ jobs:
               - script: ${{ platform.activate }} jupyterlab-starters && cd dist && python -m pip install jupyter_starters-$(PY_JLST_VERSION)-py3-none-any.whl --no-deps
                 displayName: install python wheel
 
+              - script: ${{ platform.activate }} jupyterlab-starters && python scripts/utest.py
+                displayName: run unit tests
+
               - script: ${{ platform.activate }} jupyterlab-starters && jupyter serverextension list
                 displayName: list server extensions
 
