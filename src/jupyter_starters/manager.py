@@ -156,7 +156,7 @@ class StarterManager(LoggingConfigurable):
             if not spec:
                 self.log.error(f"Failed to import `py_src` {py_src}")
                 return None
-            root = Path(spec.origin).parent.as_posix()
+            root = Path(spec.origin).parent
 
         resolved = (root / starter["src"]).resolve()
 
