@@ -4,7 +4,11 @@
 
 - add `py_src` for easier distribution of starters [#25][]
 - add unit tests [#25][]
-- handle minimally specified notebook metadata [#26][]
+- handle minimally specified notebook metadata [#29][]
+
+## `@deathbeds/jupyterlab-starters 0.2.1a0`
+
+- handle minimally specified notebook metadata [#29][]
 
 ## `jupyter_starters 0.2.0a0`
 
@@ -48,4 +52,4 @@
 [#18]: https://github.com/deathbeds/jupyterlab-starters/pull/18
 [#21]: https://github.com/deathbeds/jupyterlab-starters/pull/21
 [#25]: https://github.com/deathbeds/jupyterlab-starters/pull/25
-[#26]: https://github.com/deathbeds/jupyterlab-starters/pull/26
+[#29]: https://github.com/deathbeds/jupyterlab-starters/pull/29
