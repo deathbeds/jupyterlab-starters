@@ -9,6 +9,8 @@ commands:
     unix: python scripts/integrity.py
   atest:
     unix: python scripts/atest.py --dryrun && python scripts/atest.py
+  utest:
+    unix: python scripts/utest.py
   release:
     unix: python scripts/release.py
   upload:
@@ -27,8 +29,11 @@ env_specs:
       - mypy
       - pylint
       - pytest
-      - robotframework-seleniumlibrary
+      - pytest-asyncio
+      - pytest-cov
+      - pytest-flake8
       - robotframework-lint
+      - robotframework-seleniumlibrary
       - ruamel_yaml
       - twine >=1.11.0
       - wheel >=0.31.0
