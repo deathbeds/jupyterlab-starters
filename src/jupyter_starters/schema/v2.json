@@ -169,7 +169,10 @@
       "required": ["src", "type"],
       "properties": {
         "src": {
-          "type": "string"
+          "$ref": "#/definitions/starter-src"
+        },
+        "py_src": {
+          "$ref": "#/definitions/starter-py-src"
         },
         "type": {
           "type": "string",
@@ -205,7 +208,10 @@
           "enum": ["notebook"]
         },
         "src": {
-          "type": "string"
+          "$ref": "#/definitions/starter-src"
+        },
+        "py_src": {
+          "$ref": "#/definitions/starter-py-src"
         }
       }
     },
@@ -224,6 +230,14 @@
           "pattern": "[a-zA-Z_\\d\\.]"
         }
       }
+    },
+    "starter-src": {
+      "description": "path to the starter. may be absolute or relative to the `notebook` launch directory (or `py_src`)",
+      "type": "string"
+    },
+    "starter-py-src": {
+      "description": "name of a python module installed in the `notebook` environment to prepent to `src`",
+      "type": "string"
     }
   }
 }

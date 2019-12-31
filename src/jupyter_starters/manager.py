@@ -2,6 +2,7 @@
 """
 # pylint: disable=no-self-use,unsubscriptable-object,fixme,bad-continuation
 import base64
+import importlib
 from copy import deepcopy
 from pathlib import Path
 from typing import List, Text
@@ -106,10 +107,18 @@ class StarterManager(LoggingConfigurable):
         """
         starters = {}
         for name, starter in dict(self._starters).items():
-            starters[name] = deepcopy(starter)
-            if starter["type"] == "notebook":
-                response = response_from_notebook(starter["src"])
-                starters[name].update(response["starter"])
+            starter_copy = deepcopy(starter)
+
+            if starter_copy["type"] == "notebook":
+                src = self.resolve_src(starter)
+                if src is None:
+                    self.log.error(f"couldn't resolve starter {name}")
+                    continue
+                response = response_from_notebook(src)
+                starter_copy.update(response["starter"])
+
+            starters[name] = starter_copy
+
         return starters
 
     @property
@@ -135,6 +144,27 @@ class StarterManager(LoggingConfigurable):
 
         raise NotImplementedError(starter["type"])
 
+    def resolve_src(self, starter):
+        """ resolve the src of a file-based starter
+        """
+        root = Path.cwd()
+
+        py_src = starter.get("py_src")
+
+        if py_src:
+            spec = importlib.util.find_spec(py_src)
+            if not spec:
+                self.log.error(f"Failed to import `py_src` {py_src}")
+                return None
+            root = Path(spec.origin).parent.as_posix()
+
+        resolved = (root / starter["src"]).resolve()
+
+        if not resolved.exists():
+            self.log.error(f"{resolved} does not exist")
+
+        return resolved
+
     async def just_copy(self, root, path):
         """ just copy, with some dummy values
         """
@@ -152,7 +182,10 @@ class StarterManager(LoggingConfigurable):
     async def start_copy(self, name, starter, path, body):
         """ start a copy starter
         """
-        root = Path(starter["src"]).resolve()
+        root = self.resolve_src(starter)
+
+        if root is None:
+            return None
 
         root_uri = root.as_uri()
 
