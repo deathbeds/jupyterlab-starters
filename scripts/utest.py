@@ -1,8 +1,14 @@
 """ run python unit tests with pytest
 """
+import platform
 import sys
 
 import pytest
+
+OS = platform.system()
+PY = "".join(map(str, sys.version_info[:2]))
+
+SKIPS = {("Windows", "38"): ["-k", "not notebook"]}
 
 
 def utest(*extra_args):
@@ -19,6 +25,7 @@ def utest(*extra_args):
         "no:warnings",
         "--flake8",
         # "--cov-fail-under=100",
+        *SKIPS.get((OS, PY), []),
         "-vv",
     ] + list(extra_args)
 

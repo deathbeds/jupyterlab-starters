@@ -115,7 +115,7 @@ class StarterManager(LoggingConfigurable):
                     self.log.error(f"couldn't resolve starter {name}")
                     continue
                 response = response_from_notebook(src)
-                starter_copy.update(response["starter"])
+                starter_copy.update(response.get("starter", {}))
 
             starters[name] = starter_copy
 
