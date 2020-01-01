@@ -1,4 +1,5 @@
-""" some third-party preferred alternatives to stdlib/status quo
+""" some third-party preferred alternatives to stdlib/status quo for parsing
+    and validating JSON
 """
 # pylint: disable=invalid-name,c-extension-no-member
 from typing import Any, Callable, Dict, Text
