@@ -2,9 +2,9 @@
 
 > _Parameterized file and directory starters for JupyterLab._
 
-|                                       releases                                        |                     deps                      |         ci          |            demo             |                                                docs                                                 |
-| :-----------------------------------------------------------------------------------: | :-------------------------------------------: | :-----------------: | :-------------------------: | :-------------------------------------------------------------------------------------------------: |
-| [![pypi-badge][]][pypi]<br/>[![npm-badge][]][npm] <br/> [![license-badge][]][license] | ![python-badge][] <br/> ![jupyterlab-badge][] | [![ci-badge][]][ci] | [![binder-badge][]][binder] | [![docs-badge][]][docs] <br/> [![roadmap-badge][]][roadmap] <br/> [![changelog-badge][]][changelog] |
+|                                  releases                                   |                  deps                   |         ci          |            demo             |                                          docs                                           |
+| :-------------------------------------------------------------------------: | :-------------------------------------: | :-----------------: | :-------------------------: | :-------------------------------------------------------------------------------------: |
+| [![pypi-badge][]][pypi] [![npm-badge][]][npm] [![license-badge][]][license] | ![python-badge][] ![jupyterlab-badge][] | [![ci-badge][]][ci] | [![binder-badge][]][binder] | [![docs-badge][]][docs] [![roadmap-badge][]][roadmap] [![changelog-badge][]][changelog] |
 
 ![screenshot][]
 
@@ -73,7 +73,7 @@ Don't like what you see here? Try these other approaches:
 [binder]: https://mybinder.org/v2/gh/deathbeds/jupyterlab-starters/master?urlpath=lab
 [changelog-badge]: https://img.shields.io/badge/docs-changelog-purple
 [changelog]: https://github.com/deathbeds/jupyterlab-starters/tree/master/CHANGELOG.md
-[ci-badge]: https://dev.azure.com/nickbollweg/deathbeds/_apis/build/status/deathbeds.jupyterlab-starters?branchName=master
+[ci-badge]: https://img.shields.io/azure-devops/build/nickbollweg/ec62cb62-c61a-4bf3-931c-089d81718737/8
 [ci]: https://dev.azure.com/nickbollweg/deathbeds/_build/latest?definitionId=8&branchName=master
 [conf]: https://github.com/deathbeds/jupyterlab-starters/tree/master/jupyter_notebook_config.json
 [contributing]: https://github.com/deathbeds/jupyterlab-starters/tree/master/CONTRIBUTING.md

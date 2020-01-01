@@ -135,3 +135,14 @@ body div.nboutput.container div[class*='highlight'] pre {
   background-color: transparent;
   padding: 1em;
 }
+
+.section[id='Jupyter[Lab]-Starters'] .wy-table-responsive table td,
+.section[id='Jupyter[Lab]-Starters'] .wy-table-responsive table th {
+  white-space: unset;
+  text-align: center;
+}
+
+.section[id='Jupyter[Lab]-Starters'] .wy-table-responsive table td img,
+.section[id='Jupyter[Lab]-Starters'] .wy-table-responsive table th img {
+  max-width: unset;
+}
