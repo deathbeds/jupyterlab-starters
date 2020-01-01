@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## `jupyter_starters 0.2.2a0`
+
+- [#23][] rename `_json` module to `json_`, start documentation site in earnest
+
 ## `jupyter_starters 0.2.1a0`
 
 - [#25][] add `py_src` for easier distribution of starters
@@ -51,5 +55,6 @@
 [#17]: https://github.com/deathbeds/jupyterlab-starters/pull/17
 [#18]: https://github.com/deathbeds/jupyterlab-starters/pull/18
 [#21]: https://github.com/deathbeds/jupyterlab-starters/pull/21
+[#23]: https://github.com/deathbeds/jupyterlab-starters/pull/23
 [#25]: https://github.com/deathbeds/jupyterlab-starters/pull/25
 [#29]: https://github.com/deathbeds/jupyterlab-starters/pull/29
