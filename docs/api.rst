@@ -37,7 +37,7 @@ Types
    :special-members:
 
 Traits
-^^^^^
+^^^^^^
 
 .. automodule:: jupyter_starters.trait_types
    :members:

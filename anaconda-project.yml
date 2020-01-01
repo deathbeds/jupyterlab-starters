@@ -50,6 +50,7 @@ env_specs:
     packages:
       - nbsphinx
       - pip
+      - recommonmark
       - sphinx
       - sphinx_rtd_theme
       - sphinx-autobuild
