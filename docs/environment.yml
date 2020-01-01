@@ -12,8 +12,9 @@ dependencies:
   - nodejs >=11,<12
   - python >=3.7,<3.8.0a0
   - python-fastjsonschema
+  - python-graphviz
   - sphinx
   - sphinx_rtd_theme
-  - sphinx-autodoc
+  - sphinx-autodoc-typehints
   - sphinx-copybutton
   - ujson

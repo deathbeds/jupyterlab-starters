@@ -1,6 +1,7 @@
 :root {
   --none-blacker: rgb(0, 0, 0);
   --deathbeds: #d374b3d5;
+  --deadsheets: rgba(211, 116, 179, 0.125);
   --code-bg: rgb(39, 40, 34);
   --border-width: 1px;
   --border-radius: 5px;
@@ -145,4 +146,11 @@ body div.nboutput.container div[class*='highlight'] pre {
 .section[id='Jupyter[Lab]-Starters'] .wy-table-responsive table td img,
 .section[id='Jupyter[Lab]-Starters'] .wy-table-responsive table th img {
   max-width: unset;
+}
+
+/* autodoc */
+.rst-content dl:not(.docutils) dt {
+  color: var(--deathbeds);
+  border-top: solid 3px var(--deathbeds);
+  background: var(--deadsheets);
 }

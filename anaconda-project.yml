@@ -53,6 +53,7 @@ env_specs:
       - sphinx
       - sphinx_rtd_theme
       - sphinx-autobuild
+      - sphinx-autodoc-typehints
       - sphinx-copybutton
 
   jupyterlab-starters:
@@ -66,4 +67,5 @@ env_specs:
       - nodejs >=11,<12
       - python >=3.7,<3.8.0a0
       - python-fastjsonschema
+      - python-graphviz
       - ujson

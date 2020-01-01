@@ -10,16 +10,20 @@
 
 ## What's a starter?
 
-- [x] A python function
-- [x] A [cookiecutter][]
-- [x] A notebook
+A starter is a...
 
-... that creates ...
+- single file
+- directory
+- python function
+- [cookiecutter][]
+- notebook
 
-- [x] A single file
-- [x] A directory
+... that creates a...
 
-... that shows up in your JupyterLab at the click of a button
+- single file
+- directory of files (or more directories)
+
+... that shows up **where you want it** in JupyterLab **at the click of a button**
 
 ## Installing
 

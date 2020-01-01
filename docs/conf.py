@@ -2,6 +2,9 @@
 """
 # pylint: disable=invalid-name,redefined-builtin,import-error
 
+import pathlib
+import sys
+
 import nbsphinx
 
 
@@ -22,10 +25,8 @@ nbsphinx.RST_TEMPLATE = nbsphinx.RST_TEMPLATE.replace(
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+
+sys.path.insert(0, str((pathlib.Path.cwd().parent / "src").resolve()))
 
 
 # -- Project information -----------------------------------------------------
@@ -51,8 +52,8 @@ release = ""
 # ones.
 extensions = [
     "nbsphinx",
-    "sphinx_copybutton",
     "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
     "sphinx.ext.coverage",
     "sphinx.ext.doctest",
     "sphinx.ext.githubpages",
@@ -61,6 +62,8 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
+    "sphinx_copybutton",
+    "sphinx_autodoc_typehints",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -236,3 +239,10 @@ html_context = {
     "github_version": "master",
     "conf_py_path": "/docs/",
 }
+
+html_logo = "../packages/jupyterlab-starters/style/icons/starter.svg"
+
+# sphinx-autodoc-typehints
+# set_type_checking_flag = True
+# always_document_param_types = True
+# typehints_document_rtype = True
