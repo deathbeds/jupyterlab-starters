@@ -2,7 +2,7 @@
 """
 from pathlib import Path
 
-from .._json import json_validator, loads
+from ..json_ import json_validator, loads
 
 VERSION = "2"
 

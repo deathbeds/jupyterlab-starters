@@ -9,7 +9,7 @@ from pathlib import Path
 
 from notebook.utils import maybe_future
 
-from .._json import JsonSchemaException, dumps, json_validator, loads
+from ..json_ import JsonSchemaException, dumps, json_validator, loads
 from ..types import Status
 
 NBFORMAT_KEY = "jupyter_starters"

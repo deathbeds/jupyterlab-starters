@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from notebook.base.handlers import IPythonHandler
 from notebook.utils import url_path_join as ujoin
 
-from ._json import JsonSchemaException, loads
+from .json_ import JsonSchemaException, loads
 from .schema.v2 import ALL_STARTERS, VERSION
 from .types import NS
 

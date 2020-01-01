@@ -8,7 +8,7 @@ Starter Manager
    :members:
    :special-members:
 
-The Starters
+Starters
 ------------
 
 Cookiecutter
@@ -22,5 +22,30 @@ Notebook
 ^^^^^^^^
 
 .. automodule:: jupyter_starters.py_starters.notebook
+   :members:
+   :special-members:
+
+Miscellaneous
+-------------
+
+
+Types
+^^^^^
+
+.. automodule:: jupyter_starters.types
+   :members:
+   :special-members:
+
+Traits
+^^^^^
+
+.. automodule:: jupyter_starters.trait_types
+   :members:
+   :special-members:
+
+Validators
+^^^^^^^^^^
+
+.. automodule:: jupyter_starters.json_
    :members:
    :special-members:
