@@ -11,7 +11,7 @@ from .json_ import JsonSchemaException
 
 
 class Schema(traitlets.Any):
-    """ any... but validated by a :func:`jupyter_startersjson_.json_validator`
+    """ any... but validated by a :func:`jupyter_starters.json_.json_validator`
     """
 
     _validator = None
