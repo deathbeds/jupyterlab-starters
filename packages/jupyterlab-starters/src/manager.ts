@@ -19,7 +19,7 @@ const { makeRequest, makeSettings } = ServerConnection;
 
 export class StarterManager implements IStarterManager {
   private _changed: Signal<IStarterManager, void>;
-  private _starters: SCHEMA.Starters = {};
+  private _starters: SCHEMA.NamedStarters = {};
   private _serverSettings = makeSettings();
   private _icons: IIconRegistry;
   private _rendermime: IRenderMimeRegistry;
@@ -50,7 +50,7 @@ export class StarterManager implements IStarterManager {
     return this._changed;
   }
 
-  get starters(): SCHEMA.Starters {
+  get starters(): SCHEMA.NamedStarters {
     return { ...this._starters };
   }
 
@@ -60,7 +60,7 @@ export class StarterManager implements IStarterManager {
 
   async fetch() {
     const response = await makeRequest(API, {}, this._serverSettings);
-    const content = (await response.json()) as SCHEMA.AllStartersServerResponse;
+    const content = (await response.json()) as SCHEMA.AResponseForAnStartersRequest;
     this._starters = content.starters;
     this._changed.emit(void 0);
   }
@@ -77,7 +77,7 @@ export class StarterManager implements IStarterManager {
     }
     const url = URLExt.join(API, name, contentsPath);
     const response = await makeRequest(url, init, this._serverSettings);
-    const result = (await response.json()) as SCHEMA.StartResponse;
+    const result = (await response.json()) as SCHEMA.AResponseForStartRequest;
     return result;
   }
 

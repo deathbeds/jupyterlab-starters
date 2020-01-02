@@ -4,6 +4,10 @@
 
 - [#23][] rename `_json` module to `json_`, start documentation site in earnest
 
+## `@deathbeds/jupyterlab-starters 0.2.2a0`
+
+- [#29][] some updated class names based on schema
+
 ## `jupyter_starters 0.2.1a0`
 
 - [#25][] add `py_src` for easier distribution of starters

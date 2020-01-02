@@ -17,7 +17,7 @@ export const CATEGORY = 'Starters';
 
 export interface IStarterManager {
   changed: ISignal<IStarterManager, void>;
-  starters: SCHEMA.Starters;
+  starters: SCHEMA.NamedStarters;
   starter(name: string): SCHEMA.Starter;
   iconClass(name: string, starter: SCHEMA.Starter): string;
   icons: IIconRegistry;
@@ -28,7 +28,7 @@ export interface IStarterManager {
     starter: SCHEMA.Starter,
     path: string,
     body?: JSONObject
-  ): Promise<SCHEMA.StartResponse>;
+  ): Promise<SCHEMA.AResponseForStartRequest>;
 }
 
 export namespace IStarterManager {

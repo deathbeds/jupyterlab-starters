@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-starters",
-  "version": "0.2.1a0",
+  "version": "0.2.2a0",
   "description": "Parameterized files and folders for JupyterLab",
   "keywords": [
     "jupyter",
