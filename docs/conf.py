@@ -2,16 +2,40 @@
 """
 # pylint: disable=invalid-name,redefined-builtin,import-error
 
+import os
 import pathlib
 import sys
+from subprocess import check_call
 
 import nbsphinx
+
+HERE = pathlib.Path(__file__).parent
+ROOT = HERE.parent
+
+
+def build_finished(_app, exception):
+    """ handle post-build steps
+    """
+    if exception is None:
+        check_call(
+            ["python", "scripts/docs.py"],
+            cwd=ROOT,
+            env=dict(**os.environ, STARTERS_SPHINX_STAGE="build-finished"),
+        )
 
 
 def setup(app):
     """ Runs before the "normal business" of sphinx. Don't go too crazy here.
     """
     app.add_css_file("css/custom.css")
+
+    check_call(
+        ["python", "scripts/docs.py"],
+        cwd=ROOT,
+        env=dict(**os.environ, STARTERS_SPHINX_STAGE="setup"),
+    )
+
+    app.connect("build-finished", build_finished)
 
 
 nbsphinx.RST_TEMPLATE = nbsphinx.RST_TEMPLATE.replace(

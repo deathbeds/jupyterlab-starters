@@ -1,5 +1,6 @@
 """ antidisinformationarianism
 """
+import os
 import re
 import shutil
 import sys
@@ -7,6 +8,12 @@ from pathlib import Path
 from subprocess import check_call
 
 import jinja2
+
+SPHINX_STAGE = os.environ.get("STARTERS_SPHINX_STAGE")
+
+SETUP = SPHINX_STAGE == "setup"
+FINISHED = SPHINX_STAGE == "build-finished"
+META = SPHINX_STAGE is None
 
 RST_TEMPLATE = jinja2.Template(
     """
@@ -96,29 +103,36 @@ def make_schema_index():
 
 
 def docs():
-    """ build docs
+    """ build (and test) docs.
+
+        because readthedocs, this gets called twice from inside sphinx
     """
-    shutil.rmtree(DOCS_BUILD, ignore_errors=1)
-    shutil.rmtree(SCHEMA_DOCS, ignore_errors=1)
-    check_call(
-        [
-            "jlpm",
-            "jsonschema2md",
-            "-x",
-            "docs/schema/raw",
-            "-d",
-            SCHEMA_SRC,
-            "-e",
-            "json",
-            "-o",
-            SCHEMA_DOCS,
-        ]
-    )
-    fix_schema_md()
-    make_schema_index()
-    check_call(["sphinx-build", "-M", "html", DOCS, DOCS_BUILD])
-    fix_schema_html()
-    check_call(["pytest", "--check-links", DOCS_BUILD, "-k", SKIPS])
+
+    if META:
+        shutil.rmtree(DOCS_BUILD, ignore_errors=1)
+        shutil.rmtree(SCHEMA_DOCS, ignore_errors=1)
+        check_call(["sphinx-build", "-M", "html", DOCS, DOCS_BUILD])
+        check_call(["pytest", "--check-links", DOCS_BUILD, "-k", SKIPS])
+    elif SETUP:
+        check_call(["jlpm"])
+        check_call(
+            [
+                "jlpm",
+                "jsonschema2md",
+                "-x",
+                "docs/schema/raw",
+                "-d",
+                SCHEMA_SRC,
+                "-e",
+                "json",
+                "-o",
+                SCHEMA_DOCS,
+            ]
+        )
+        fix_schema_md()
+        make_schema_index()
+    elif FINISHED:
+        fix_schema_html()
 
     return 0
 
