@@ -6,9 +6,11 @@
   "type": "object",
   "anyOf": [
     {
+      "title": "A response for an starters request",
       "$ref": "#/definitions/all-starters"
     },
     {
+      "title": "A response for start request",
       "$ref": "#/definitions/start-response"
     }
   ],
@@ -19,9 +21,13 @@
       "required": ["starters", "version"],
       "properties": {
         "starters": {
+          "title": "Named Starters",
+          "description": "Starters keyed by their API/URL names",
           "$ref": "#/definitions/starters"
         },
         "version": {
+          "title": "API Version",
+          "description": "The version of the Jupyter Starters API",
           "type": "string",
           "enum": ["2"]
         }
@@ -31,11 +37,6 @@
       "title": "Starters",
       "description": "a named set of Starters",
       "type": "object",
-      "patternProperties": {
-        ".*": {
-          "$ref": "#/definitions/starter"
-        }
-      },
       "additionalProperties": {
         "$ref": "#/definitions/starter"
       }
@@ -46,6 +47,7 @@
       "required": ["name", "path", "starter", "body", "status"],
       "properties": {
         "starter": {
+          "title": "Starter",
           "description": "the current definition of the starter: may change during multi-step starters",
           "$ref": "#/definitions/starter"
         },
@@ -56,25 +58,31 @@
           "enum": ["error", "continuing", "done"]
         },
         "name": {
+          "title": "Name",
           "description": "the canonical name of the starter",
           "type": "string"
         },
         "body": {
+          "title": "Body",
           "description": "user data populated by the client",
           "type": "object"
         },
         "path": {
+          "title": "API Path",
           "description": "the API path (`/` delimited) to which files will be written",
           "type": "string"
         },
         "copy": {
+          "title": "Force Copy",
           "description": "copy files after starter is run (irrespective of status) if `true`",
           "type": "boolean"
         },
         "errors": {
+          "title": "Errors",
           "description": "a listing of system and user errors created during a starter",
           "type": "array",
           "items": {
+            "title": "Error Text",
             "type": "string"
           }
         }
@@ -82,25 +90,30 @@
     },
     "starter": {
       "title": "Starter",
-      "allOf": [
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Starter Type"
+        }
+      },
+      "anyOf": [
         {
-          "$ref": "#/definitions/starter-meta"
+          "title": "A Copy Starter",
+          "$ref": "#/definitions/starter-copy"
         },
         {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/starter-copy"
-            },
-            {
-              "$ref": "#/definitions/starter-copy-with-dest"
-            },
-            {
-              "$ref": "#/definitions/starter-python"
-            },
-            {
-              "$ref": "#/definitions/starter-notebook"
-            }
-          ]
+          "title": "A Copy Starter With a Custom Destination",
+          "$ref": "#/definitions/starter-copy-with-dest"
+        },
+        {
+          "title": "A Python Starter",
+          "$ref": "#/definitions/starter-python"
+        },
+        {
+          "title": "A Notebook Starter",
+          "$ref": "#/definitions/starter-notebook"
         }
       ]
     },
@@ -172,18 +185,20 @@
     },
     "starter-copy": {
       "title": "Copy Starter",
-      "required": ["src", "type"],
+      "type": "object",
+      "allOf": [
+        {
+          "title": "Starter Metadata",
+          "description": "Common starter fields",
+          "$ref": "#/definitions/starter-meta"
+        },
+        {
+          "title": "Source of Contents",
+          "description": "Where to find the contents to copy",
+          "$ref": "#/definitions/starter-with-src"
+        }
+      ],
       "properties": {
-        "src": {
-          "title": "Copy Source",
-          "description": "the absolute or relative path where the Starter contents should be found. Can be modified with `py_src`",
-          "$ref": "#/definitions/starter-src"
-        },
-        "py_src": {
-          "title": "Python Source Root",
-          "description": "A (dotted) python module to use as the `notebook_dir`",
-          "$ref": "#/definitions/starter-py-src"
-        },
         "type": {
           "title": "Copy Type",
           "description": "Signifies a copy type",
@@ -195,47 +210,64 @@
     "starter-copy-with-dest": {
       "title": "Copy with Destination Starter",
       "type": "object",
+      "required": ["dest", "schema"],
       "allOf": [
         {
+          "title": "Copy Starter properties",
+          "description": "All the properties from a Copy Starter",
           "$ref": "#/definitions/starter-copy"
-        },
-        {
-          "required": ["dest", "schema"],
-          "properties": {
-            "dest": {
-              "title": "Copy Destination",
-              "description": "The file or folder to copy to: Jinja templates will be applied with `body` as the context",
-              "type": "string"
-            }
-          }
         }
-      ]
+      ],
+      "properties": {
+        "dest": {
+          "title": "Copy Destination",
+          "description": "The file or folder to copy to: Jinja templates will be applied with `body` as the context",
+          "type": "string"
+        }
+      }
     },
     "starter-notebook": {
       "title": "Notebook Starter",
       "description": "Uses a notebook as both the configuration object (in `#/metadata/jupyter-starters`) and execution",
       "type": "object",
-      "required": ["type", "src"],
+      "allOf": [
+        {
+          "title": "Starter Metadata",
+          "description": "Common starter fields",
+          "$ref": "#/definitions/starter-meta"
+        },
+        {
+          "title": "Source of Notebook",
+          "description": "Where to find the notebook",
+          "$ref": "#/definitions/starter-with-src"
+        }
+      ],
+      "required": ["src"],
       "properties": {
         "type": {
+          "title": "Notebook Type",
+          "description": "Signifies a notebook starter",
           "type": "string",
           "enum": ["notebook"]
-        },
-        "src": {
-          "$ref": "#/definitions/starter-src"
-        },
-        "py_src": {
-          "$ref": "#/definitions/starter-py-src"
         }
       }
     },
     "starter-python": {
       "title": "Python Starter",
       "description": "Invokes an importable python function (multiple times)",
-      "required": ["type", "callable", "schema"],
+      "required": ["callable", "schema"],
+      "type": "object",
+      "allOf": [
+        {
+          "title": "Starter Metadata",
+          "description": "Common starter fields",
+          "$ref": "#/definitions/starter-meta"
+        }
+      ],
       "properties": {
         "type": {
           "title": "Python Type",
+          "description": "Signifies a python starter",
           "type": "string",
           "enum": ["python"]
         },
@@ -247,15 +279,22 @@
         }
       }
     },
-    "starter-src": {
-      "title": "Starter Source",
-      "description": "path to the starter. may be absolute or relative to the `notebook` launch directory (or `py_src`)",
-      "type": "string"
-    },
-    "starter-py-src": {
-      "title": "Starter Python Source",
-      "description": "name of a python module installed in the `notebook` environment to prepent to `src`",
-      "type": "string"
+    "starter-with-src": {
+      "title": "Starter with Files",
+      "type": "object",
+      "required": ["src"],
+      "properties": {
+        "src": {
+          "title": "Starter Source",
+          "description": "path to the starter. may be absolute or relative to the `notebook` launch directory (or `py_src`)",
+          "type": "string"
+        },
+        "py_src": {
+          "title": "Starter Python Source",
+          "description": "name of a python module installed in the `notebook` environment to prepent to `src`",
+          "type": "string"
+        }
+      }
     }
   }
 }

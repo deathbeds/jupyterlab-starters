@@ -50,6 +50,7 @@ env_specs:
     packages:
       - nbsphinx
       - pip
+      - pytest
       - recommonmark
       - sphinx
       - sphinx_rtd_theme
@@ -57,6 +58,7 @@ env_specs:
       - sphinx-autodoc-typehints
       - sphinx-copybutton
       - pip:
+          - pytest-check-links
           - sphinx-markdown-tables
 
   jupyterlab-starters:

@@ -86,33 +86,36 @@ a:active {
   background-color: transparent;
 }
 
-div.nbinput div.prompt,
-div.nboutput div.prompt {
-  display: none;
-}
-
 .wy-nav-content {
   max-width: unset;
 }
 
-.rst-content .section .toctree-wrapper > ul {
+/* toctree */
+
+.rst-content .section:not(#all-json-schema) .toctree-wrapper > ul {
   display: flex;
   flex-direction: row;
 }
 
-.rst-content .section .toctree-wrapper > ul > li {
+.rst-content .section:not(#all-json-schema) .toctree-wrapper > ul > li {
   flex: 1;
 }
 
-.rst-content .section .toctree-wrapper ul,
-.rst-content .section .toctree-wrapper li {
+.rst-content .section:not(#all-json-schema) .toctree-wrapper ul,
+.rst-content .section:not(#all-json-schema) .toctree-wrapper li {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.rst-content .section .toctree-wrapper .toctree-l1 > a {
+.rst-content .section:not(#all-json-schema) .toctree-wrapper .toctree-l1 > a {
   font-size: 150%;
+}
+
+/* syntax highlighting and input/output*/
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+  display: none;
 }
 
 body div.nboutput.container div[class*='highlight'] {
@@ -137,6 +140,14 @@ body div.nboutput.container div[class*='highlight'] pre {
   padding: 1em;
 }
 
+/* autodoc */
+.rst-content dl:not(.docutils) dt {
+  color: var(--deathbeds);
+  border-top: solid 3px var(--deathbeds);
+  background: var(--deadsheets);
+}
+
+/* section-specifics */
 .section[id='Jupyter[Lab]-Starters'] .wy-table-responsive table td,
 .section[id='Jupyter[Lab]-Starters'] .wy-table-responsive table th {
   white-space: unset;
@@ -146,11 +157,4 @@ body div.nboutput.container div[class*='highlight'] pre {
 .section[id='Jupyter[Lab]-Starters'] .wy-table-responsive table td img,
 .section[id='Jupyter[Lab]-Starters'] .wy-table-responsive table th img {
   max-width: unset;
-}
-
-/* autodoc */
-.rst-content dl:not(.docutils) dt {
-  color: var(--deathbeds);
-  border-top: solid 3px var(--deathbeds);
-  background: var(--deadsheets);
 }

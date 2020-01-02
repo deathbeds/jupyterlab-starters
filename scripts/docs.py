@@ -6,6 +6,21 @@ import sys
 from pathlib import Path
 from subprocess import check_call
 
+import jinja2
+
+RST_TEMPLATE = jinja2.Template(
+    """
+All JSON Schema
+===============
+
+.. toctree::
+    :maxdepth: 1
+
+    {% for path in paths %}{{ path.name.replace('.md', '') }}
+    {% endfor %}
+"""
+)
+
 ROOT = Path(__file__).parent.parent
 SCHEMA_SRC = ROOT / "src" / "jupyter_starters" / "schema"
 DOCS = ROOT / "docs"
@@ -25,6 +40,8 @@ MD_REPLACEMENTS = [
     [r"\[(Jupyter Starters JSON|v\d+.json)\]\(.*?\)", ""],
     # $id not useful
     [re.escape(SCHEMA_STEM), ""],
+    # regexpr not useful
+    [r"\[try pattern\]\(.*?\)", ""],
 ]
 
 HTML_REPLACEMENTS = [
@@ -32,10 +49,13 @@ HTML_REPLACEMENTS = [
     [r'"(.*?)\.md"', r'"\1.html"'],
 ]
 
+SKIPS = "not github and not ujson"
+
 
 def fix_schema_md():
     """ fix up generated markdown to work (somewhat better) with sphinx
     """
+    (SCHEMA_DOCS / "README.md").unlink()
     md_files = list(SCHEMA_DOCS.glob("*.md"))
 
     check_call(["jlpm", "prettier", "--write", "--loglevel", "silent", *md_files])
@@ -65,6 +85,16 @@ def fix_schema_html():
         html_file.write_text(html_txt)
 
 
+def make_schema_index():
+    """ make an index for all the schema markdown
+    """
+    md_files = sorted(SCHEMA_DOCS.glob("*.md"))
+    index = SCHEMA_DOCS / "index.rst"
+
+    rst = RST_TEMPLATE.render(paths=md_files)
+    index.write_text(rst)
+
+
 def docs():
     """ build docs
     """
@@ -85,8 +115,10 @@ def docs():
         ]
     )
     fix_schema_md()
+    make_schema_index()
     check_call(["sphinx-build", "-M", "html", DOCS, DOCS_BUILD])
     fix_schema_html()
+    check_call(["pytest", "--check-links", DOCS_BUILD, "-k", SKIPS])
 
     return 0
 
