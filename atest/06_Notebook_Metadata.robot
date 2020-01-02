@@ -44,7 +44,7 @@ Edit Example Starter Notebook
 No Empty Metadata
     [Documentation]    https://github.com/deathbeds/jupyterlab-starters/issues/20
     [Tags]    issue:20
-    FOR    ${i}    IN RANGE    10
+    FOR    ${i}    IN RANGE    5
         Verify the Metadata Between Sidebars
         Reset Application State
     END

@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING, Any, Dict, Text
 
 from notebook.utils import url_path_join as ujoin
 
-from .._json import JsonSchemaException, json_validator
+from ..json_ import JsonSchemaException, json_validator
 from ..types import Status
 
 if TYPE_CHECKING:

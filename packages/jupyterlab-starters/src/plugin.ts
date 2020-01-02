@@ -53,7 +53,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
         const context = (args as any) as IStartContext;
         const { starter, name, cwd, body } = context;
 
-        const runCommands = async (response: SCHEMA.StartResponse) => {
+        const runCommands = async (
+          response: SCHEMA.AResponseForStartRequest
+        ) => {
           const starterCommands = response?.starter?.commands;
           if (starterCommands) {
             for (const cmd of starterCommands) {
@@ -76,7 +78,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
             const response = (await commands.execute(
               CommandIDs.start,
               context as any
-            )) as SCHEMA.StartResponse;
+            )) as SCHEMA.AResponseForStartRequest;
             switch (response.status) {
               case 'done':
                 content.dispose();

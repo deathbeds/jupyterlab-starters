@@ -1,13 +1,17 @@
 """ some more traits
+
+    these are not typechecked yet, because of the impedance between traitlets,
+    JSON Schema, and mypy.
 """
+
 # pylint: disable=broad-except,unused-argument
 import traitlets
 
-from ._json import JsonSchemaException
+from .json_ import JsonSchemaException
 
 
 class Schema(traitlets.Any):
-    """ any... but validated by a jsonschema.Validator
+    """ any... but validated by a :func:`jupyter_starters.json_.json_validator`
     """
 
     _validator = None

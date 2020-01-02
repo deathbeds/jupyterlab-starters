@@ -5,6 +5,7 @@
 *.egg-info/
 atest/
 dist/
+docs/_build/
 envs/
 lib/
 node_modules/

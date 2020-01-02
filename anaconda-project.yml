@@ -15,6 +15,12 @@ commands:
     unix: python scripts/release.py
   upload:
     unix: python scripts/upload.py
+  docs:
+    unix: python scripts/docs.py
+    env_spec: docs
+  docs:watch:
+    unix: git clean -dxf docs/_build && sphinx-autobuild docs docs/_build
+    env_spec: docs
 
 env_specs:
   default:
@@ -38,6 +44,23 @@ env_specs:
       - twine >=1.11.0
       - wheel >=0.31.0
 
+  docs:
+    inherit_from:
+      - default
+    packages:
+      - nbsphinx
+      - pip
+      - pytest
+      - recommonmark
+      - sphinx
+      - sphinx_rtd_theme
+      - sphinx-autobuild
+      - sphinx-autodoc-typehints
+      - sphinx-copybutton
+      - pip:
+          - pytest-check-links
+          - sphinx-markdown-tables
+
   jupyterlab-starters:
     channels:
       - conda-forge
@@ -49,4 +72,5 @@ env_specs:
       - nodejs >=11,<12
       - python >=3.7,<3.8.0a0
       - python-fastjsonschema
+      - python-graphviz
       - ujson

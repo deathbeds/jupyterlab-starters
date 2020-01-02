@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@adobe/jsonschema2md": "^4.0.0",
     "lerna": "^3.13.2",
     "prettier": "^1.19.1",
     "tslint-config-prettier": "^1.18.0",
@@ -12,18 +13,17 @@
   "scripts": {
     "bootstrap": "jlpm --ignore-optional --prefer-offline --frozen-lockfile && lerna bootstrap && jlpm lint && jlpm clean && jlpm build",
     "build": "lerna run build:pre && lerna run build",
-    "watch": "lerna run --parallel watch",
     "bundle": "lerna run --parallel bundle",
     "clean": "lerna run --parallel clean",
     "lab:link": "lerna run lab:link",
     "lint:check": "jlpm prettier:check && jlpm tslint:check",
-    "lint": "jlpm prettier && jlpm tslint",
+    "lint": "jlpm prettier:fix && jlpm tslint:fix",
     "prettier:check": "prettier --check '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",
+    "prettier:fix": "prettier --write '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",
     "test": "lerna run --stream --concurrency=1 test",
-    "prettier": "prettier --write '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",
-    "tslint": "tslint --fix -c tslint.json --project tsconfigbase.json 'packages/**/*{.ts,.tsx}'",
     "tslint:check": "tslint -c tslint.json --project tsconfigbase.json 'packages/**/*{.ts,.tsx}'",
-    "upload": "lerna run upload"
+    "tslint:fix": "tslint --fix -c tslint.json --project tsconfigbase.json 'packages/**/*{.ts,.tsx}'",
+    "watch": "lerna run --parallel watch"
   },
   "workspaces": {
     "packages": [
