@@ -37,5 +37,8 @@ jobs:
       - script: ${{ parameters.docs_env_update }} || ${{ parameters.docs_env_update }} || ${{ parameters.docs_env_update }}
         displayName: update conda environment with docs dependencies
 
-      - script: ${{ parameters.act }} python scripts/docs.py
+      - script: ${{ parameters.act }} python -m pip install -e .
+        displayName: setup python for examples
+
+        - script: ${{ parameters.act }} python scripts/docs.py
         displayName: build docs
