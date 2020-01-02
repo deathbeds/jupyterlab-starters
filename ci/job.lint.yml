@@ -40,5 +40,5 @@ jobs:
       - script: ${{ parameters.act }} python -m pip install -e .
         displayName: setup python for examples
 
-        - script: ${{ parameters.act }} python scripts/docs.py
+      - script: ${{ parameters.act }} python scripts/docs.py
         displayName: build docs
