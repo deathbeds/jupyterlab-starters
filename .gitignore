@@ -1,6 +1,7 @@
 __pycache__/
 _*.d.ts
 _*.json
+_build
 .coverage
 .ipynb_checkpoints/
 .mypy_cache/
@@ -13,8 +14,8 @@ _*.json
 atest/output/
 build/
 dist/
+docs/schema
 envs/
 lib/
 node_modules/
 Untitled*
-_build

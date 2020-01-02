@@ -1,5 +1,9 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/deathbeds/jupyterlab-starters/master/src/jupyter_starters/schema/v2.json",
+  "title": "Jupyter Starters JSON",
+  "description": "A collection of JSON types for configuring and operating Starters",
+  "type": "object",
   "anyOf": [
     {
       "$ref": "#/definitions/all-starters"
@@ -24,6 +28,8 @@
       }
     },
     "starters": {
+      "title": "Starters",
+      "description": "a named set of Starters",
       "type": "object",
       "patternProperties": {
         ".*": {
@@ -35,7 +41,7 @@
       }
     },
     "start-response": {
-      "title": "StartResponse",
+      "title": "Start Response",
       "type": "object",
       "required": ["name", "path", "starter", "body", "status"],
       "properties": {
@@ -169,12 +175,18 @@
       "required": ["src", "type"],
       "properties": {
         "src": {
+          "title": "Copy Source",
+          "description": "the absolute or relative path where the Starter contents should be found. Can be modified with `py_src`",
           "$ref": "#/definitions/starter-src"
         },
         "py_src": {
+          "title": "Python Source Root",
+          "description": "A (dotted) python module to use as the `notebook_dir`",
           "$ref": "#/definitions/starter-py-src"
         },
         "type": {
+          "title": "Copy Type",
+          "description": "Signifies a copy type",
           "type": "string",
           "enum": ["copy"]
         }
@@ -182,6 +194,7 @@
     },
     "starter-copy-with-dest": {
       "title": "Copy with Destination Starter",
+      "type": "object",
       "allOf": [
         {
           "$ref": "#/definitions/starter-copy"
@@ -190,7 +203,8 @@
           "required": ["dest", "schema"],
           "properties": {
             "dest": {
-              "description": "A name to copy to: Jinja will be applied with `body` as the context",
+              "title": "Copy Destination",
+              "description": "The file or folder to copy to: Jinja templates will be applied with `body` as the context",
               "type": "string"
             }
           }
@@ -221,10 +235,12 @@
       "required": ["type", "callable", "schema"],
       "properties": {
         "type": {
+          "title": "Python Type",
           "type": "string",
           "enum": ["python"]
         },
         "callable": {
+          "title": "Python Callable",
           "description": "a python function that accepts the `body`",
           "type": "string",
           "pattern": "[a-zA-Z_\\d\\.]"
@@ -232,10 +248,12 @@
       }
     },
     "starter-src": {
+      "title": "Starter Source",
       "description": "path to the starter. may be absolute or relative to the `notebook` launch directory (or `py_src`)",
       "type": "string"
     },
     "starter-py-src": {
+      "title": "Starter Python Source",
       "description": "name of a python module installed in the `notebook` environment to prepent to `src`",
       "type": "string"
     }

@@ -37,5 +37,5 @@ jobs:
       - script: ${{ parameters.docs_env_update }} || ${{ parameters.docs_env_update }} || ${{ parameters.docs_env_update }}
         displayName: update conda environment with docs dependencies
 
-      - script: ${{ parameters.act }} sphinx-build -M html docs docs/_build
+      - script: ${{ parameters.act }} python scripts/docs.py
         displayName: build docs

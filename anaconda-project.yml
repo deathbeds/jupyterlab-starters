@@ -16,7 +16,7 @@ commands:
   upload:
     unix: python scripts/upload.py
   docs:
-    unix: sphinx-build -M html docs docs/_build
+    unix: python scripts/docs.py
     env_spec: docs
   docs:watch:
     unix: git clean -dxf docs/_build && sphinx-autobuild docs docs/_build
@@ -56,6 +56,8 @@ env_specs:
       - sphinx-autobuild
       - sphinx-autodoc-typehints
       - sphinx-copybutton
+      - pip:
+          - sphinx-markdown-tables
 
   jupyterlab-starters:
     channels:
