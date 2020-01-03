@@ -1,5 +1,7 @@
 :root {
+  --jp-starters-btns-height: calc(4 * var(--jp-ui-font-size3));
   --jp-starters-btn-height: calc(3 * var(--jp-ui-font-size3));
+  --jp-starters-btn-icon-size: calc(2 * var(--jp-ui-font-size3));
 }
 .jp-StartersDefaultIcon {
   background-image: url('./icons/starter.svg');
@@ -43,43 +45,69 @@
 
 .jp-Starters-BodyBuilder-buttons {
   flex: 0;
-  padding: var(--jp-notebook-padding);
-  min-height: var(--jp-starters-btn-height);
-  max-height: var(--jp-starters-btn-height);
-  height: var(--jp-starters-btn-height);
+  max-height: var(--jp-starters-btns-height);
+  height: var(--jp-starters-btns-height);
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
   background-color: var(--jp-layout-color2);
   border-top: solid 1px var(--jp-border-color0);
   border-bottom: solid 1px var(--jp-border-color0);
+  padding: var(--jp-notebook-padding);
 }
 
-.jp-Starters-BodyBuilder-buttons > div {
-  flex: 1;
+.jp-Starters-BodyBuilder-buttons > footer {
+  flex: 0;
+  min-height: var(--jp-ui-font-size3);
   color: var(--jp-ui-font-color2);
   text-overflow: ellipsis;
   overflow: hidden;
+  display: flex;
+  flex-direction: row;
 }
 
-.jp-Starters-BodyBuilder-buttons > div > label {
+.jp-Starters-BodyBuilder-buttons > footer > label {
   display: flex;
+  flex: 1;
   flex-direction: row;
   align-items: center;
   white-space: nowrap;
 }
 
-.jp-Starters-BodyBuilder-buttons > div strong {
+.jp-Starters-BodyBuilder-buttons > footer > label [data-icon] {
+  margin-right: 0.25em;
+}
+
+.jp-Starters-BodyBuilder-buttons > footer strong {
+  flex: 1;
   font-weight: bold;
   white-space: nowrap;
+  text-align: right;
+}
+
+.jp-Starters-BodyBuilder-buttons section {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  max-height: var(--jp-starters-btn-height);
 }
 
 .jp-Starters-BodyBuilder-buttons button {
-  margin-left: var(--jp-notebook-padding);
+  margin: var(--jp-notebook-padding) 0 var(--jp-notebook-padding)
+    var(--jp-notebook-padding);
   height: unset;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.jp-Starters-BodyBuilder-buttons button:first-child {
+  margin-left: 0;
+}
+
+.jp-Starters-BodyBuilder-buttons button:disabled {
+  opacity: 0.5;
 }
 
 .jp-Starters-BodyBuilder-buttons div[data-icon] {

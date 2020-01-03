@@ -19,7 +19,7 @@ ${CSS LAUNCH CARD FOLDER}    ${CSS LAUNCH CARD}\[title\="Some reusable notebooks
 ${XP FILE TREE ITEM}    xpath://span[contains(@class, 'jp-DirListing-itemText')]
 ${CSS BODYBUILDER}    css:.jp-Starters-BodyBuilder
 ${CSS BODYBUILDER ACCEPT}    css:.jp-Starters-BodyBuilder-buttons .jp-mod-accept
-${CSS BODYBUILDER CANCEL}    css:.jp-Starters-BodyBuilder-buttons .jp-mod-warn
+${CSS BODYBUILDER CANCEL}    css:.jp-Starters-BodyBuilder-buttons .jp-mod-reject
 ${CSS NOTEBOOK SAVE}    css:[data-icon="save"]
 ${CSS DIALOG}     css:.jp-Dialog
 ${CSS DIALOG OK}    ${CSS DIALOG} .jp-mod-accept

@@ -14,46 +14,83 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
   }
 
   protected render() {
-    const { form } = this.model;
-    const hasErrors = !!(!form || form.errors.length || form.errorsObserved);
-
+    const m = this.model;
+    const { context, manager } = m;
+    let path = context.cwd;
+    path = path.startsWith('/') ? path : `/${path}`;
+    path = path.endsWith('/') ? path : `${path}/`;
+    path = path.replace(/\//g, ' / ');
+    console.log(path);
     return (
       <>
-        <div>
-          <strong title={this.model.context.starter.description}>
-            {this.model.context.starter.label}
-          </strong>
-          <br />
-          <label title={this.model.context.cwd}>
-            {this.model.manager.icons.iconReact({
+        <footer>
+          <label title={context.cwd}>
+            {manager.icons.iconReact({
               name: 'folder',
               width: 16
             })}
-            {`/ ${this.model.context.cwd.replace('/', ' / ')}`}
+            {path}
           </label>
-        </div>
-        <button
-          onClick={this.onDone}
-          className={`${CSS.JP.styled} ${CSS.JP.warn}`}
-        >
-          {this.model.manager.icons.iconReact({
-            name: 'stop',
-            width: 16
-          })}
-          <label> CANCEL</label>
-        </button>
-        <button
-          disabled={hasErrors}
-          className={`${hasErrors ? '' : CSS.JP.accept} ${CSS.JP.styled}`}
-          onClick={this.onStart}
-        >
-          {this.model.manager.icons.iconReact({
-            name: 'run',
-            width: 16
-          })}
-          <label> START</label>
-        </button>
+          <strong title={context.starter.description}>
+            {context.starter.label}
+          </strong>
+        </footer>
+        <section>
+          {this.renderCancelButton()}
+          {this.renderStartButton()}
+        </section>
       </>
+    );
+  }
+
+  protected renderCancelButton() {
+    return (
+      <button
+        onClick={this.onDone}
+        className={`${CSS.JP.styled} ${CSS.JP.reject}`}
+      >
+        <i className={`${CSS.JP.icon16} ${CSS.JP.ICON_CLASS.close}`}></i>
+        <label> CANCEL</label>
+      </button>
+    );
+  }
+
+  protected renderStartButton() {
+    const { status, manager, startCount } = this.model;
+    const { icons } = manager;
+    const width = 16;
+
+    let icon = icons.iconReact({ name: 'stop', width });
+    let label = 'FIXME';
+    let statusClass = CSS.JP.warn;
+
+    switch (status) {
+      case 'ready':
+        icon = icons.iconReact({ name: 'run', width });
+        label = startCount ? 'CONTINUE' : 'START';
+        statusClass = CSS.JP.accept;
+        break;
+      case 'starting':
+        icon = (
+          <i
+            className={`${CSS.JP.icon16} ${CSS.JP.ICON_CLASS.filledCircle}`}
+          ></i>
+        );
+        label = startCount > 1 ? 'CONTINUING' : 'STARTING';
+        break;
+      default:
+        break;
+    }
+
+    return (
+      <button
+        disabled={status !== 'ready'}
+        className={`${CSS.JP.styled} ${statusClass}`}
+        onClick={this.onStart}
+      >
+        {icon}
+        <label> {label} </label>
+      </button>
     );
   }
 

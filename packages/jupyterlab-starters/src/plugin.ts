@@ -92,6 +92,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
                   cwd: response.path
                 };
                 await runCommands(response);
+                content.model.status = 'ready';
                 break;
               default:
                 console.error(`Unknown status ${response.status}`, response);
