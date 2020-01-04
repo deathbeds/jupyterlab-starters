@@ -3,7 +3,6 @@ import * as React from 'react';
 import { UnControlled } from 'react-codemirror2';
 
 export function CodeMirrorField(props: any) {
-  console.log('codemirror', props);
   const { options } = props;
 
   const cmOptions = {

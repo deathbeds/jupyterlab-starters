@@ -12,10 +12,12 @@ export class BuilderModel extends VDomModel {
 
   private _form: SchemaFormModel<JSONObject>;
   private _name: string;
+  private _status: BuilderModel.TStatus = 'starting';
 
   private _start: Signal<BuilderModel, IStartContext>;
   private _manager: IStarterManager;
   private _done: Function;
+  private _startCount = 0;
 
   constructor(options: BuilderModel.IOptions) {
     super();
@@ -23,6 +25,24 @@ export class BuilderModel extends VDomModel {
     this._manager = options.manager;
     this._name = options.name;
     this._start = new Signal<BuilderModel, IStartContext>(this);
+  }
+
+  get startCount() {
+    return this._startCount;
+  }
+
+  get status() {
+    if (!this._form) {
+      return 'starting';
+    } else if (this._form.errors.length || this._form.errorsObserved) {
+      return 'error';
+    }
+    return this._status;
+  }
+
+  set status(status) {
+    this._status = status;
+    this.stateChanged.emit(void 0);
   }
 
   get start() {
@@ -58,6 +78,11 @@ export class BuilderModel extends VDomModel {
   }
 
   private _change = () => {
+    if (this._form.errors && this._form.errors.length) {
+      this.status = 'error';
+    } else {
+      this.status = 'ready';
+    }
     this.stateChanged.emit(void 0);
   };
 
@@ -65,6 +90,8 @@ export class BuilderModel extends VDomModel {
     if (this._form.errors && this._form.errors.length) {
       return;
     }
+    this._startCount += 1;
+    this.status = 'starting';
     this._start.emit({
       ...this._context,
       body: this._form.formData
@@ -94,4 +121,6 @@ export namespace BuilderModel {
     manager: IStarterManager;
     context: IStartContext;
   }
+
+  export type TStatus = 'ready' | 'starting' | 'error';
 }

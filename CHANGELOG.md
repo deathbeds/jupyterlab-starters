@@ -7,6 +7,7 @@
 ## `@deathbeds/jupyterlab-starters 0.2.2a0`
 
 - [#29][] some updated class names based on schema
+- [#34][] add stauts indicator for starting/continuing
 
 ## `jupyter_starters 0.2.1a0`
 
@@ -62,3 +63,4 @@
 [#23]: https://github.com/deathbeds/jupyterlab-starters/pull/23
 [#25]: https://github.com/deathbeds/jupyterlab-starters/pull/25
 [#29]: https://github.com/deathbeds/jupyterlab-starters/pull/29
+[#34]: https://github.com/deathbeds/jupyterlab-starters/pull/34

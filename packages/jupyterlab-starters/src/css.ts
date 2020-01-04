@@ -3,9 +3,15 @@ import COOKIECUTTER_SVG from '!!raw-loader!../style/icons/cookiecutter.svg';
 
 export const CSS = {
   JP: {
-    styled: 'jp-mod-styled',
     accept: 'jp-mod-accept',
-    warn: 'jp-mod-warn'
+    reject: 'jp-mod-reject',
+    styled: 'jp-mod-styled',
+    warn: 'jp-mod-warn',
+    icon16: 'jp-MaterialIcon jp-Icon16',
+    ICON_CLASS: {
+      filledCircle: 'jp-FilledCircleIcon',
+      close: 'jp-CloseIcon'
+    }
   },
   BUILDER: 'jp-Starters-BodyBuilder',
   BUILDER_BUTTONS: 'jp-Starters-BodyBuilder-buttons',
