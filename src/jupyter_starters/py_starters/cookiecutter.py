@@ -80,6 +80,7 @@ def cookiecutter_starters(manager):
             "type": "python",
             "callable": "jupyter_starters.py_starters.cookiecutter.start",
             "schema": {
+                "type": "object",
                 "required": ["template"],
                 "properties": {
                     "template": {

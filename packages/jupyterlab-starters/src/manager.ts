@@ -1,4 +1,4 @@
-import { JSONObject } from '@phosphor/coreutils';
+import { JSONObject, PromiseDelegate } from '@phosphor/coreutils';
 import { Signal } from '@phosphor/signaling';
 import { URLExt } from '@jupyterlab/coreutils';
 import { ServerConnection } from '@jupyterlab/services';
@@ -24,6 +24,7 @@ export class StarterManager implements IStarterManager {
   private _icons: IIconRegistry;
   private _rendermime: IRenderMimeRegistry;
   private _markdown: RenderedMarkdown;
+  private _ready = new PromiseDelegate<void>();
 
   constructor(options: IStarterManager.IOptions) {
     this._icons = options.icons;
@@ -46,6 +47,10 @@ export class StarterManager implements IStarterManager {
     return this._markdown;
   }
 
+  get ready() {
+    return this._ready.promise;
+  }
+
   get changed() {
     return this._changed;
   }
@@ -63,6 +68,7 @@ export class StarterManager implements IStarterManager {
     const content = (await response.json()) as SCHEMA.AResponseForAnStartersRequest;
     this._starters = content.starters;
     this._changed.emit(void 0);
+    this._ready.resolve(void 0);
   }
 
   async start(

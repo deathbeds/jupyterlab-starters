@@ -23,6 +23,7 @@ export interface IStarterManager {
   icons: IIconRegistry;
   markdown: RenderedMarkdown;
   fetch(): Promise<void>;
+  ready: Promise<void>;
   start(
     name: string,
     starter: SCHEMA.Starter,
@@ -40,6 +41,7 @@ export namespace IStarterManager {
 
 export namespace CommandIDs {
   export const start = `${NS}:start`;
+  export const routerStart = `${NS}:router-starter`;
   export const notebookMeta = `${NS}:notebook-meta`;
 }
 
