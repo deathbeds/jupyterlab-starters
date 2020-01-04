@@ -20,7 +20,7 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
     path = path.startsWith('/') ? path : `/${path}`;
     path = path.endsWith('/') ? path : `${path}/`;
     path = path.replace(/\//g, ' / ');
-    console.log(path);
+
     return (
       <>
         <footer>
