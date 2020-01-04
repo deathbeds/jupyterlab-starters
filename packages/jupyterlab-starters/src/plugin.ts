@@ -195,30 +195,36 @@ const plugin: JupyterFrontEndPlugin<void> = {
           starter
         });
 
-        let notHiddenCount = 0;
-        const contentId = `id-jp-starters-${name}`;
+        if (starter.schema) {
+          let notHiddenCount = 0;
+          let retries = 20;
+          const contentId = `id-jp-starters-${name}`;
 
-        const expandInterval = setInterval(() => {
-          const hidden = document.querySelector(
-            `#jp-right-stack.${CSS.P.hidden}`
-          );
-          if (hidden) {
-            shell.expandRight();
-            shell.activateById(contentId);
-            return;
-          }
-          const sidebar = document.querySelector(
-            `.${CSS.BUILDER}:not(.${CSS.P.hidden})`
-          );
-          if (sidebar) {
-            notHiddenCount++;
-            shell.expandRight();
-            shell.activateById(contentId);
-            if (notHiddenCount > 3) {
+          const expandInterval = setInterval(() => {
+            if (retries-- <= 0) {
               clearInterval(expandInterval);
             }
-          }
-        }, 100);
+            const hidden = document.querySelector(
+              `#jp-right-stack.${CSS.P.hidden}`
+            );
+            if (hidden) {
+              shell.expandRight();
+              shell.activateById(contentId);
+              return;
+            }
+            const sidebar = document.querySelector(
+              `.${CSS.BUILDER}:not(.${CSS.P.hidden})`
+            );
+            if (sidebar) {
+              notHiddenCount++;
+              shell.expandRight();
+              shell.activateById(contentId);
+              if (notHiddenCount > 3) {
+                clearInterval(expandInterval);
+              }
+            }
+          }, 500);
+        }
 
         return router.stop;
       }
