@@ -48,7 +48,9 @@ def nblint():
                     cell.execution_count = None
                     changed = True
 
-        if not nbf.cells[-1].source.strip():
+        last_cell = nbf.cells[-1]
+
+        if last_cell.cell_type == "code" and not last_cell.source.strip():
             nbf.cells = nbf.cells[:-1]
             changed = True
 

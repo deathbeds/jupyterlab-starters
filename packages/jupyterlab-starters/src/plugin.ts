@@ -1,8 +1,11 @@
+import { URLExt } from '@jupyterlab/coreutils';
 import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin,
-  ILabShell
+  ILabShell,
+  IRouter
 } from '@jupyterlab/application';
+
 import { ILauncher } from '@jupyterlab/launcher';
 import { IIconRegistry } from '@jupyterlab/ui-components';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
@@ -23,6 +26,7 @@ import {
 } from './tokens';
 import { NotebookStarter } from './notebookbutton';
 import * as SCHEMA from './_schema';
+import { CSS } from './css';
 
 import { NotebookMetadata } from './widgets/meta';
 import { BodyBuilder } from './widgets/builder';
@@ -30,20 +34,24 @@ import { BodyBuilder } from './widgets/builder';
 const plugin: JupyterFrontEndPlugin<void> = {
   id: `${NS}:plugin`,
   requires: [
+    JupyterFrontEnd.IPaths,
     ILabShell,
     ILauncher,
     IIconRegistry,
     INotebookTracker,
-    IRenderMimeRegistry
+    IRenderMimeRegistry,
+    IRouter
   ],
   autoStart: true,
   activate: (
     app: JupyterFrontEnd,
+    paths: JupyterFrontEnd.IPaths,
     shell: ILabShell,
     launcher: ILauncher,
     icons: IIconRegistry,
     notebooks: INotebookTracker,
-    rendermime: IRenderMimeRegistry
+    rendermime: IRenderMimeRegistry,
+    router: IRouter
   ) => {
     const { commands } = app;
     const manager: IStarterManager = new StarterManager({ icons, rendermime });
@@ -154,6 +162,78 @@ const plugin: JupyterFrontEndPlugin<void> = {
         )} as Starter`;
       },
       iconClass: DEFAULT_ICON_CLASS
+    });
+
+    const starterPattern = new RegExp(
+      `^${paths.urls.tree}/starter/([^/]+)/?(.*)`
+    );
+
+    commands.addCommand(CommandIDs.routerStart, {
+      execute: async args => {
+        const loc = args as IRouter.ILocation;
+        const starterMatch = loc.path.match(starterPattern);
+        if (starterMatch == null) {
+          return;
+        }
+        const [name, cwd] = starterMatch.slice(1);
+
+        await manager.ready;
+
+        const starter = manager.starters[name];
+
+        if (starter == null) {
+          return;
+        }
+
+        const url = URLExt.join(paths.urls.tree, cwd);
+
+        router.navigate(url);
+
+        void commands.execute(CommandIDs.start, {
+          name,
+          cwd,
+          starter
+        });
+
+        if (starter.schema) {
+          let notHiddenCount = 0;
+          let retries = 20;
+          const contentId = `id-jp-starters-${name}`;
+
+          const expandInterval = setInterval(() => {
+            if (retries-- <= 0) {
+              clearInterval(expandInterval);
+            }
+            const hidden = document.querySelector(
+              `#jp-right-stack.${CSS.P.hidden}`
+            );
+            if (hidden) {
+              shell.expandRight();
+              shell.activateById(contentId);
+              return;
+            }
+            const sidebar = document.querySelector(
+              `.${CSS.BUILDER}:not(.${CSS.P.hidden})`
+            );
+            if (sidebar) {
+              notHiddenCount++;
+              shell.expandRight();
+              shell.activateById(contentId);
+              if (notHiddenCount > 3) {
+                clearInterval(expandInterval);
+              }
+            }
+          }, 500);
+        }
+
+        return router.stop;
+      }
+    });
+
+    router.register({
+      command: CommandIDs.routerStart,
+      pattern: starterPattern,
+      rank: 29
     });
 
     const notebookbutton = new NotebookStarter({ commands });

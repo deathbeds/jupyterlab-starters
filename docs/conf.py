@@ -56,7 +56,7 @@ sys.path.insert(0, str((pathlib.Path.cwd().parent / "src").resolve()))
 # -- Project information -----------------------------------------------------
 
 project = "JupyterStarters"
-copyright = "2019, Dead Pixels Collective"
+copyright = "2020, Dead Pixels Collective"
 author = "Deathbeds"
 
 # The short X.Y version

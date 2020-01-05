@@ -2,6 +2,9 @@ import DEFAULT_ICON_SVG from '!!raw-loader!../style/icons/starter.svg';
 import COOKIECUTTER_SVG from '!!raw-loader!../style/icons/cookiecutter.svg';
 
 export const CSS = {
+  P: {
+    hidden: 'p-mod-hidden'
+  },
   JP: {
     accept: 'jp-mod-accept',
     reject: 'jp-mod-reject',

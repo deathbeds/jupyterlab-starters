@@ -80,6 +80,7 @@ def cookiecutter_starters(manager):
             "type": "python",
             "callable": "jupyter_starters.py_starters.cookiecutter.start",
             "schema": {
+                "type": "object",
                 "required": ["template"],
                 "properties": {
                     "template": {
@@ -102,7 +103,10 @@ def cookiecutter_starters(manager):
                     },
                 },
             },
-            "uiSchema": {"checkout": {"ui:placeholder": "master"}},
+            "uiSchema": {
+                "template": {"ui:autofocus": True},
+                "checkout": {"ui:placeholder": "master"},
+            },
         }
     }
 

@@ -40,11 +40,11 @@ h6 code {
 }
 
 h1 {
-  font-size: 350%;
+  font-size: 250%;
 }
 
 h2 {
-  font-size: 200%;
+  font-size: 150%;
 }
 
 p {
@@ -72,6 +72,7 @@ iframe {
 
 a {
   border-bottom: solid var(--border-width) transparent;
+  color: var(--deathbeds);
 }
 
 a:hover,
@@ -95,10 +96,12 @@ a:active {
 .rst-content .section:not(#all-json-schema) .toctree-wrapper > ul {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .rst-content .section:not(#all-json-schema) .toctree-wrapper > ul > li {
   flex: 1;
+  margin-bottom: 1em;
 }
 
 .rst-content .section:not(#all-json-schema) .toctree-wrapper ul,
@@ -106,6 +109,7 @@ a:active {
   list-style: none;
   margin: 0;
   padding: 0;
+  min-width: 300px;
 }
 
 .rst-content .section:not(#all-json-schema) .toctree-wrapper .toctree-l1 > a {

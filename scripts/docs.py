@@ -58,11 +58,15 @@ HTML_REPLACEMENTS = [
 
 SKIPS = "not github and not ujson"
 
+SCHEMA_README = SCHEMA_DOCS / "README.md"
+
 
 def fix_schema_md():
     """ fix up generated markdown to work (somewhat better) with sphinx
     """
-    (SCHEMA_DOCS / "README.md").unlink()
+    if SCHEMA_README.exists():
+        SCHEMA_README.unlink()
+
     md_files = list(SCHEMA_DOCS.glob("*.md"))
 
     check_call(["jlpm", "prettier", "--write", "--loglevel", "silent", *md_files])
@@ -113,7 +117,7 @@ def docs():
         shutil.rmtree(SCHEMA_DOCS, ignore_errors=1)
         check_call(["sphinx-build", "-M", "html", DOCS, DOCS_BUILD])
         check_call(["pytest", "--check-links", DOCS_BUILD, "-k", SKIPS])
-    elif SETUP:
+    elif SETUP and not SCHEMA_DOCS.exists():
         check_call(["jlpm"])
         check_call(
             [
