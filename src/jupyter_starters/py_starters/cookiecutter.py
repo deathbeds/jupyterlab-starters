@@ -103,7 +103,10 @@ def cookiecutter_starters(manager):
                     },
                 },
             },
-            "uiSchema": {"checkout": {"ui:placeholder": "master"}},
+            "uiSchema": {
+                "template": {"ui:autofocus": True},
+                "checkout": {"ui:placeholder": "master"},
+            },
         }
     }
 
