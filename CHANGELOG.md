@@ -8,6 +8,7 @@
 
 - [#29][] some updated class names based on schema
 - [#34][] add stauts indicator for starting/continuing
+- [#35][] add `/lab/tree/starter/<starter>/<path>` URL router
 
 ## `jupyter_starters 0.2.1a0`
 
@@ -64,3 +65,4 @@
 [#25]: https://github.com/deathbeds/jupyterlab-starters/pull/25
 [#29]: https://github.com/deathbeds/jupyterlab-starters/pull/29
 [#34]: https://github.com/deathbeds/jupyterlab-starters/pull/34
+[#35]: https://github.com/deathbeds/jupyterlab-starters/pull/35
