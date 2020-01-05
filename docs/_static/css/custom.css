@@ -72,6 +72,7 @@ iframe {
 
 a {
   border-bottom: solid var(--border-width) transparent;
+  color: var(--deathbeds);
 }
 
 a:hover,
