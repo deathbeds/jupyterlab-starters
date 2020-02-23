@@ -16,9 +16,11 @@ variables:
 
   PY_JLST_VERSION: 0.2.2a0
   JS_JLST_VERSION: 0.2.2-a0
+  JS_RJSF_VERSION: "0.1.0"
 
   FIRST_PARTY_LABEXTENSIONS: >-
     packages/jupyterlab-starters/deathbeds-jupyterlab-starters-$(JS_JLST_VERSION).tgz
+    packages/jupyterlab-starters/deathbeds-jupyterlab-rjsf-$(JS_RJSF_VERSION).tgz
 
 jobs:
   - template: ci/job.lint.yml

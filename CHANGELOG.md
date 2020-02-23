@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## `@deathbeds/jupyterlab-rjsf 0.1.0`
+
+- [#38][] split out `rjsf` into its own package
+
+
 ## `jupyter_starters 0.2.2a0`
 
 - [#23][] rename `_json` module to `json_`, start documentation site in earnest
@@ -66,3 +71,4 @@
 [#29]: https://github.com/deathbeds/jupyterlab-starters/pull/29
 [#34]: https://github.com/deathbeds/jupyterlab-starters/pull/34
 [#35]: https://github.com/deathbeds/jupyterlab-starters/pull/35
+[#38]: https://github.com/deathbeds/jupyterlab-starters/pull/38
