@@ -37,7 +37,7 @@ const SCHEMA_FORM_CLASS = 'jp-SchemaForm';
 /**
  * Am opionated widget for displaying a form defined by JSON Schema
  */
-export class SchemaForm<T extends JSONValue> extends VDomRenderer<
+export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
   SchemaFormModel<T>
 > {
   /**

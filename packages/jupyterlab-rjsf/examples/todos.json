@@ -1,0 +1,13 @@
+{
+  "$schema": "packages/jupyterlab-rjsf/examples/todo.schema.json", 
+  "todos": [
+    {
+      "text": "write this",
+      "done": false
+    },
+    {
+      "text": "publish this",
+      "done": false
+    }
+  ]
+}
