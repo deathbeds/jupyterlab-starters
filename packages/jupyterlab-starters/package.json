@@ -33,7 +33,7 @@
     "upload": "jlpm publish ."
   },
   "dependencies": {
-    "react-jsonschema-form": "~1.8.0",
+    "react-jsonschema-form": "~1.8.1",
     "react-codemirror2": "^6.0.0"
   },
   "peerDependencies": {
