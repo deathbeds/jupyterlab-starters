@@ -1,3 +1,3 @@
 export { default } from './Theme';
-import '../../../../style/form/index.css';
+import '../../../style/index.css';
 export * from './Theme';

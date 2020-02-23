@@ -106,11 +106,16 @@
     classnames "^2.2"
     tslib "~1.9.0"
 
-"@deathbeds/jupyterlab-starters@file:packages/jupyterlab-starters":
-  version "0.2.2-a0"
+"@deathbeds/jupyterlab-rjsf@file:packages/jupyterlab-rjsf":
+  version "0.1.0"
   dependencies:
     react-codemirror2 "^6.0.0"
     react-jsonschema-form "~1.8.1"
+
+"@deathbeds/jupyterlab-starters@file:packages/jupyterlab-starters":
+  version "0.2.2-a0"
+  dependencies:
+    "@deathbeds/jupyterlab-rjsf" "^0.1.0"
 
 "@evocateur/libnpmaccess@^3.1.2":
   version "3.1.2"

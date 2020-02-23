@@ -1,7 +1,7 @@
 {
-  "name": "@deathbeds/jupyterlab-starters",
-  "version": "0.2.2a0",
-  "description": "Parameterized files and folders for JupyterLab",
+  "name": "@deathbeds/jupyterlab-rjsf",
+  "version": "0.1.0",
+  "description": "React JSON Schema Form for JupyterLab",
   "keywords": [
     "jupyter",
     "jupyterlab",
@@ -24,42 +24,27 @@
     "url": "https://github.com/deathbeds/jupyterlab-starters.git"
   },
   "scripts": {
-    "build:pre": "jlpm build:json2ts && jlpm build:copyschema",
-    "build:json2ts": "json2ts ../../src/jupyter_starters/schema/v2.json --unreachableDefinitions | prettier --stdin-filepath _schema.d.ts > src/_schema.d.ts",
-    "build:copyschema": "python -c \"from pathlib import Path as P; s = P('../../src/jupyter_starters/schema/v2.json').read_text(); P('lib').mkdir(exist_ok=True); P('lib/_schema.json').write_text(s)\"",
     "bundle": "npm pack .",
     "clean": "rimraf lib",
     "lab:link": "jupyter labextension link . --no-build",
     "upload": "jlpm publish ."
   },
   "dependencies": {
-    "@deathbeds/jupyterlab-rjsf": "^0.1.0"
+    "react-jsonschema-form": "~1.8.1",
+    "react-codemirror2": "^6.0.0"
   },
   "peerDependencies": {
-    "@jupyterlab/application": "1",
-    "@jupyterlab/launcher": "1",
-    "@jupyterlab/notebook": "1"
+    "@jupyterlab/application": "1"
   },
   "devDependencies": {
+    "@types/codemirror": "^0.0.74",
+    "@types/react-jsonschema-form": "^1.6.6",
     "@jupyterlab/application": "1",
-    "@jupyterlab/launcher": "1",
-    "@jupyterlab/notebook": "1",
-    "json-schema-to-typescript": "^8.0.0",
     "react": "*",
     "rimraf": "~2.6.2",
     "typescript": "~3.7.2"
   },
   "jupyterlab": {
-    "discovery": {
-      "server": {
-        "base": {
-          "name": "jupyter_starters"
-        },
-        "managers": [
-          "pip"
-        ]
-      }
-    },
     "extension": "lib/plugin.js"
   }
 }

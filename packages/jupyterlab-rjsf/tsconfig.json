@@ -5,10 +5,5 @@
     "rootDir": "src",
     "tsBuildInfoFile": "lib/.tsbuildinfo"
   },
-  "include": ["src/**/*", "src/schema.json"],
-  "references": [
-    {
-      "path": "../jupyterlab-rjsf"
-    }
-  ]
+  "include": ["src/**/*"]
 }

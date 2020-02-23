@@ -2,9 +2,14 @@ import { JSONObject } from '@phosphor/coreutils';
 import { Widget, BoxLayout } from '@phosphor/widgets';
 
 import { CSS } from '../../css';
-import { SchemaForm } from '../schemaform';
+import { SchemaForm } from '@deathbeds/jupyterlab-rjsf/lib/schemaform';
 import { PreviewCard } from '../previewcard';
-import { ALL_CUSTOM_UI, AS_JSONOBJECT, AS_TEXTAREA, AS_XML } from '../fields';
+import {
+  ALL_CUSTOM_UI,
+  AS_JSONOBJECT,
+  AS_TEXTAREA,
+  AS_XML
+} from '@deathbeds/jupyterlab-rjsf/lib/fields';
 
 import { NotebookMetadataModel } from './model';
 
