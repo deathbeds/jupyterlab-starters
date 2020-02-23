@@ -84,7 +84,11 @@ def test_env_versions(name, env_path):
 
 @pytest.mark.parametrize(
     "name,version",
-    [["PY_JLST_VERSION", PY_VERSION], ["JS_JLST_VERSION", MAIN_EXT_VERSION], ["JS_RJSF_VERSION", RJSF_EXT_VERSION]],
+    [
+        ["PY_JLST_VERSION", PY_VERSION],
+        ["JS_JLST_VERSION", MAIN_EXT_VERSION],
+        ["JS_RJSF_VERSION", RJSF_EXT_VERSION],
+    ],
 )
 def test_ci_variables(name, version):
     """ are CI variables right?
@@ -128,7 +132,12 @@ def test_ts_package_integrity(name, info, the_meta_package):
 
 
 @pytest.mark.parametrize(
-    "pkg,version", [[PY_NAME, PY_VERSION], [MAIN_NAME, MAIN_EXT_VERSION], [RJSF_NAME, RJSF_EXT_VERSION]]
+    "pkg,version",
+    [
+        [PY_NAME, PY_VERSION],
+        [MAIN_NAME, MAIN_EXT_VERSION],
+        [RJSF_NAME, RJSF_EXT_VERSION],
+    ],
 )
 def test_changelog_versions(pkg, version):
     """ is the changelog up-to-date(ish)
