@@ -19,7 +19,6 @@ export const ICON_NAME = 'json-schema-form';
 
 import ICON_SVG from '!!raw-loader!../style/icons/form.svg';
 
-
 export interface IJSONSchemaFormTracker
   extends IWidgetTracker<JSONSchemaFormDocument> {}
 
@@ -39,6 +38,6 @@ export const FILE_TYPE: DocumentRegistry.IFileType = {
 
 export const CommandIds = {
   createNew: `${NS}:create-new`
-}
+};
 
-export {ICON_SVG};
+export { ICON_SVG };

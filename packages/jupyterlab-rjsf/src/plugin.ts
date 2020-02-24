@@ -21,7 +21,7 @@ import { IFileBrowserFactory } from '@jupyterlab/filebrowser';
 
 import { ILauncher } from '@jupyterlab/launcher';
 
-import {IDocumentManager} from '@jupyterlab/docmanager';
+import { IDocumentManager } from '@jupyterlab/docmanager';
 
 import { IIconRegistry } from '@jupyterlab/ui-components';
 
@@ -70,20 +70,22 @@ function activate(
   const tracker = new WidgetTracker<JSONSchemaFormDocument>({ namespace: NS });
 
   // Handle state restoration.
-  restorer.restore(tracker, {
-    command: 'docmanager:open',
-    args: widget => ({ path: widget.context.path, factory: FACTORY }),
-    name: widget => widget.context.path
-  });
+  restorer
+    .restore(tracker, {
+      command: 'docmanager:open',
+      args: widget => ({ path: widget.context.path, factory: FACTORY }),
+      name: widget => widget.context.path
+    })
+    .catch(console.warn);
 
-  factory.widgetCreated.connect((sender, widget) => {
+  factory.widgetCreated.connect(async (sender, widget) => {
     widget.title.icon = `jp-MaterialIcon ${ICON}`; // TODO change
 
     // Notify the instance tracker if restore data needs to update.
-    widget.context.pathChanged.connect(() => {
-      tracker.save(widget);
+    widget.context.pathChanged.connect(async () => {
+      await tracker.save(widget);
     });
-    tracker.add(widget);
+    await tracker.add(widget);
   });
   app.docRegistry.addWidgetFactory(factory);
 

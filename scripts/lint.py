@@ -16,8 +16,16 @@ PY_SCRIPTS = list((ROOT / "scripts").rglob("*.py"))
 PY_DOCS = list((ROOT / "docs").rglob("*.py"))
 PY_ATEST = list((ROOT / "atest").rglob("*.py"))
 
-NB_DOCS = list((ROOT / "docs").rglob("*.ipynb"))
-NB_EXAMPLES = list((ROOT / "examples").rglob("*.ipynb"))
+NB_DOCS = [
+    nb
+    for nb in (ROOT / "docs").rglob("*.ipynb")
+    if "_build" not in str(nb) and ".ipynb_checkpoints" not in str(nb)
+]
+NB_EXAMPLES = [
+    nb
+    for nb in (ROOT / "examples").rglob("*.ipynb")
+    if ".ipynb_checkpoints" not in str(nb)
+]
 
 ALL_NB = [*NB_DOCS, *NB_EXAMPLES]
 ALL_PY = [*PY_SRC, *PY_SCRIPTS, *PY_ATEST, *PY_DOCS]
