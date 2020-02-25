@@ -48,7 +48,7 @@ env_specs:
     inherit_from:
       - default
     packages:
-      - nbsphinx
+      - nbsphinx >=0.5.0,<0.5.1a0
       - pip
       - pytest
       - recommonmark
