@@ -1,0 +1,20 @@
+{
+  "todos": {
+    "items": {
+      "ui:order": ["done", "text"],
+      "done": {
+        "ui:widget": "radio"
+      },
+      "text": {
+        "ui:widget": "codemirror-markdown",
+        "ui:options": {
+          "cmOptions": {
+            "theme": "material",
+            "lineNumbers": true,
+            "cursorBlinkRate": 100
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "todos": {
+    "items": {
+      "text": {
+        "ui:widget": "textarea",
+        "ui:options": {
+          "rows": 3
+        }
+      }
+    }
+  }
+}

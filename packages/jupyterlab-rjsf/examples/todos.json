@@ -2,12 +2,12 @@
   "$schema": "./todo.schema.json",
   "todos": [
     {
-      "text": "write this",
+      "text": "the first task",
       "done": false
     },
     {
-      "text": "publish this",
-      "done": false
+      "text": "the second task",
+      "done": true
     }
   ]
 }

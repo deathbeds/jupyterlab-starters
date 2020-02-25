@@ -2,6 +2,7 @@ import { Widget } from '@phosphor/widgets';
 import { JSONExt } from '@phosphor/coreutils';
 import { IIterator } from '@phosphor/algorithm';
 import { PathExt, URLExt } from '@jupyterlab/coreutils';
+import { ALL_CUSTOM_UI } from '../fields';
 
 import {
   ABCWidgetFactory,
@@ -26,8 +27,10 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
   docManager: IDocumentManager;
   getOpenWidgets: () => IIterator<Widget>;
   private _schemaModel: DocumentRegistry.IModel;
+  private _uiSchemaModel: DocumentRegistry.IModel;
   private _schemaId: string;
   private _schemaFinder: SchemaFinder;
+  private _uiSchemaFinder: SchemaFinder;
   private _indenter: Indenter;
 
   constructor(options: JSONSchemaFormDocument.IOptions) {
@@ -65,15 +68,22 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
    */
   initToolbar() {
     this._schemaFinder = new SchemaFinder();
+    this._schemaFinder.model.label = 'JSON';
     this._schemaFinder.model.getOpenWidgets = this.getOpenWidgets;
     this._schemaFinder.model.stateChanged.connect(this.onSchemaFound, this);
 
+    this._uiSchemaFinder = new SchemaFinder();
+    this._uiSchemaFinder.model.label = 'UI';
+    this._uiSchemaFinder.model.getOpenWidgets = this.getOpenWidgets;
+    this._uiSchemaFinder.model.stateChanged.connect(this.onUiSchemaFound, this);
+
     this._indenter = new Indenter();
+    this._indenter.model.stateChanged.connect(this.onFormChange, this);
+
     this.toolbar.addItem('schema', this._schemaFinder);
+    this.toolbar.addItem('ui', this._uiSchemaFinder);
     this.toolbar.addItem('spacer', Toolbar.createSpacerItem());
     this.toolbar.addItem('indenter', this._indenter);
-
-    this._indenter.model.stateChanged.connect(this.onFormChange, this);
   }
 
   async onFormChange() {
@@ -98,12 +108,25 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
     }
   }
 
-  async onContextReady() {
-    this.context.model.contentChanged.connect(this.onContentChanged, this);
-    await this.onContentChanged();
+  async onUiSchemaFound() {
+    const model = this._uiSchemaFinder.model.schemaContext?.model;
+    if (
+      model != null &&
+      model !== this.uiSchemaModel &&
+      model !== this.context.model
+    ) {
+      this.uiSchemaModel = model;
+    }
   }
 
-  async onContentChanged() {
+  async onContextReady() {
+    this.context.model.contentChanged.connect(this.onContentChanged, this);
+    this.context.pathChanged.connect(this.onPathChanged, this);
+    this.onContentChanged();
+    this.onPathChanged();
+  }
+
+  onContentChanged() {
     let json: any;
     try {
       json = JSON.parse((this.context.model as any).value.text);
@@ -121,6 +144,11 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
         this.content.model.formData = json;
       }
     }
+  }
+
+  onPathChanged() {
+    this._schemaFinder.model.basePath = this.context.path;
+    this._uiSchemaFinder.model.basePath = this.context.path;
   }
 
   get schemaId() {
@@ -168,16 +196,55 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
     }
   }
 
+  get uiSchemaModel() {
+    return this._schemaModel;
+  }
+
+  set uiSchemaModel(uiSchemaModel) {
+    if (this._uiSchemaModel) {
+      this._uiSchemaModel.contentChanged.disconnect(this.onUiSchema, this);
+    }
+    this._uiSchemaModel = uiSchemaModel;
+    if (this._uiSchemaModel) {
+      this._uiSchemaModel.contentChanged.connect(this.onUiSchema, this);
+      this.onUiSchema().catch(console.warn);
+    }
+  }
+
   async onSchema() {
     if (this._schemaModel != null) {
       let json: any;
+      let text: string;
       try {
-        json = JSON.parse((this._schemaModel as any).value.text);
+        text = (this._schemaModel as any).value.text;
+        json = JSON.parse(text);
       } catch (err) {
-        console.warn(err);
+        console.warn(err, text);
       }
-      if (json && !JSONExt.deepEqual(this.content.model.schema, json)) {
+      if (
+        (json && !this.content.model.schema) ||
+        !JSONExt.deepEqual(this.content.model.schema, json)
+      ) {
         this.content.model.schema = json;
+      }
+    }
+  }
+
+  async onUiSchema() {
+    if (this._uiSchemaModel != null) {
+      let json: any;
+      let text: string;
+      try {
+        text = (this._uiSchemaModel as any).value.text;
+        json = JSON.parse(text);
+      } catch (err) {
+        console.warn(err, text);
+      }
+      if (
+        (json && !this.content.model.uiSchema) ||
+        !JSONExt.deepEqual(this.content.model.uiSchema, json)
+      ) {
+        this.content.model.uiSchema = json;
       }
     }
   }
@@ -216,7 +283,13 @@ export class JSONSchemaFormFactory extends ABCWidgetFactory<
       context,
       docManager: this.docManager,
       getOpenWidgets: this.getOpenWidgets,
-      content: new SchemaForm({})
+      content: new SchemaForm(
+        {},
+        {
+          liveValidate: true,
+          ...ALL_CUSTOM_UI
+        }
+      )
     });
   }
 }

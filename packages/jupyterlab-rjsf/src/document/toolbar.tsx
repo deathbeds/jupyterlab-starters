@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { PathExt } from '@jupyterlab/coreutils';
 import { HTMLSelect } from '@jupyterlab/ui-components';
 import { Widget } from '@phosphor/widgets';
 import { IIterator, toArray } from '@phosphor/algorithm';
@@ -16,11 +16,12 @@ export class SchemaFinder extends VDomRenderer<SchemaFinder.Model> {
     this.model = new SchemaFinder.Model();
   }
   protected render() {
+    const label = `${this.model.label} Schema`;
     return (
       <label>
-        <span>JSON Schema</span>
+        <span>{label}</span>
         <HTMLSelect
-          aria-label="JSON Schema"
+          aria-label={label}
           minimal
           iconProps={CARET}
           value={this.model.schemaPath}
@@ -28,7 +29,13 @@ export class SchemaFinder extends VDomRenderer<SchemaFinder.Model> {
         >
           <option value="">Detect</option>
           {this.model.jsonContexts.map((ctx, i) => {
-            return <option key={ctx.path}>{ctx.path}</option>;
+            return (
+              <option key={ctx.path} value={ctx.path}>
+                {this.model.basePath
+                  ? PathExt.relative(this.model.basePath, ctx.path)
+                  : ctx.path}
+              </option>
+            );
           })}
           <option value="refresh">Refresh</option>
         </HTMLSelect>
@@ -62,10 +69,34 @@ export namespace SchemaFinder {
     private _getOpenWidgets: () => IIterator<Widget>;
     private _schemaContext: DocumentRegistry.IContext<DocumentRegistry.IModel>;
     private _contexts: DocumentRegistry.IContext<DocumentRegistry.IModel>[];
+    private _label: string;
+    private _basePath: string;
 
     refresh() {
       this._contexts = null;
       this.stateChanged.emit(void 0);
+    }
+
+    get basePath() {
+      return this._basePath;
+    }
+
+    set basePath(basePath) {
+      if (this._basePath !== basePath) {
+        this._basePath = basePath;
+        this.stateChanged.emit(void 0);
+      }
+    }
+
+    get label() {
+      return this._label;
+    }
+
+    set label(label) {
+      if (this._label !== label) {
+        this._label = label;
+        this.stateChanged.emit(void 0);
+      }
     }
 
     set getOpenWidgets(getOpenWidgets: () => IIterator<Widget>) {
