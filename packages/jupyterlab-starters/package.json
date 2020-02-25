@@ -32,10 +32,8 @@
     "lab:link": "jupyter labextension link . --no-build",
     "upload": "jlpm publish ."
   },
-  "dependencies": {
-    "@deathbeds/jupyterlab-rjsf": "^0.1.0"
-  },
   "peerDependencies": {
+    "@deathbeds/jupyterlab-rjsf": "^0.1.0",
     "@jupyterlab/application": "1",
     "@jupyterlab/launcher": "1",
     "@jupyterlab/notebook": "1"
