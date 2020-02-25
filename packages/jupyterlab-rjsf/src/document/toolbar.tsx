@@ -1,10 +1,9 @@
 import React from 'react';
 import { PathExt } from '@jupyterlab/coreutils';
 import { HTMLSelect } from '@jupyterlab/ui-components';
-import { Widget } from '@phosphor/widgets';
-import { IIterator, toArray } from '@phosphor/algorithm';
 import { VDomRenderer, VDomModel } from '@jupyterlab/apputils';
 import { DocumentRegistry, DocumentWidget } from '@jupyterlab/docregistry';
+import { ISchemaManager } from '../tokens';
 
 const CARET = {
   icon: <span className="jp-MaterialIcon jp-DownCaretIcon bp3-icon" />
@@ -17,6 +16,9 @@ export class SchemaFinder extends VDomRenderer<SchemaFinder.Model> {
   }
   protected render() {
     const label = `${this.model.label} Schema`;
+    const base = this.model.basePath
+      ? PathExt.dirname(this.model.basePath)
+      : null;
     return (
       <label>
         <span>{label}</span>
@@ -31,9 +33,7 @@ export class SchemaFinder extends VDomRenderer<SchemaFinder.Model> {
           {this.model.jsonContexts.map((ctx, i) => {
             return (
               <option key={ctx.path} value={ctx.path}>
-                {this.model.basePath
-                  ? PathExt.relative(this.model.basePath, ctx.path)
-                  : ctx.path}
+                {base ? PathExt.relative(base, ctx.path) : ctx.path}
               </option>
             );
           })}
@@ -66,11 +66,27 @@ export class SchemaFinder extends VDomRenderer<SchemaFinder.Model> {
 
 export namespace SchemaFinder {
   export class Model extends VDomModel {
-    private _getOpenWidgets: () => IIterator<Widget>;
+    private _schemaManager: ISchemaManager;
     private _schemaContext: DocumentRegistry.IContext<DocumentRegistry.IModel>;
     private _contexts: DocumentRegistry.IContext<DocumentRegistry.IModel>[];
     private _label: string;
     private _basePath: string;
+
+    dispose() {
+      if (this.isDisposed) {
+        return;
+      }
+      this._schemaManager.widgetsChanged.disconnect(
+        this.onWidgetsChanged,
+        this
+      );
+      this._schemaManager = null;
+      super.dispose();
+    }
+
+    onWidgetsChanged() {
+      this.stateChanged.emit(void 0);
+    }
 
     refresh() {
       this._contexts = null;
@@ -99,8 +115,17 @@ export namespace SchemaFinder {
       }
     }
 
-    set getOpenWidgets(getOpenWidgets: () => IIterator<Widget>) {
-      this._getOpenWidgets = getOpenWidgets;
+    set schemaManager(schemaManager: ISchemaManager) {
+      if (this._schemaManager) {
+        this._schemaManager.widgetsChanged.disconnect(
+          this.onWidgetsChanged,
+          this
+        );
+      }
+      this._schemaManager = schemaManager;
+      if (this._schemaManager) {
+        this._schemaManager.widgetsChanged.connect(this.onWidgetsChanged, this);
+      }
       this.stateChanged.emit(void 0);
     }
 
@@ -123,10 +148,13 @@ export namespace SchemaFinder {
           string,
           DocumentRegistry.IContext<DocumentRegistry.IModel>
         >();
-        if (this._getOpenWidgets != null) {
-          const widgets = this._getOpenWidgets();
-          for (const widget of toArray(widgets)) {
+        if (this._schemaManager != null) {
+          const widgets = this._schemaManager.widgets;
+          for (const widget of widgets) {
             if (widget instanceof DocumentWidget) {
+              if (widget.context.path === this._basePath) {
+                continue;
+              }
               if (widget.context.path.endsWith('json')) {
                 contexts.set(widget.context.path, widget.context);
               }

@@ -1,8 +1,10 @@
 export const NS = 'rjsf';
 
 import { Token } from '@phosphor/coreutils';
-
+import { ISignal } from '@phosphor/signaling';
+import { Widget } from '@phosphor/widgets';
 import { IWidgetTracker } from '@jupyterlab/apputils';
+import { RenderedMarkdown } from '@jupyterlab/rendermime';
 
 import { JSONSchemaFormDocument } from './document';
 
@@ -11,9 +13,9 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 /**
  * The name of the factory that creates editor widgets.
  */
-export const FACTORY = 'JSONSchemaForm';
+export const FACTORY = 'Schema Form';
 
-export const ICON = 'jp-JsonSchemaFormIcon';
+export const ICON_CLASS = 'jp-JsonSchemaFormIcon';
 
 export const ICON_NAME = 'json-schema-form';
 
@@ -31,7 +33,7 @@ export const FILE_TYPE: DocumentRegistry.IFileType = {
   displayName: 'JSON Schema Form',
   mimeTypes: ['application/json'],
   extensions: ['.json'],
-  iconClass: `jp-MaterialIcon ${ICON}`,
+  iconClass: ICON_CLASS,
   fileFormat: 'json',
   contentType: 'file'
 };
@@ -39,5 +41,11 @@ export const FILE_TYPE: DocumentRegistry.IFileType = {
 export const CommandIds = {
   createNew: `${NS}:create-new`
 };
+
+export interface ISchemaManager {
+  widgetsChanged: ISignal<ISchemaManager, void>;
+  widgets: Widget[];
+  markdown: RenderedMarkdown;
+}
 
 export { ICON_SVG };

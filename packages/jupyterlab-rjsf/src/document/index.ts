@@ -1,6 +1,5 @@
 import { Widget } from '@phosphor/widgets';
 import { JSONExt } from '@phosphor/coreutils';
-import { IIterator } from '@phosphor/algorithm';
 import { PathExt, URLExt } from '@jupyterlab/coreutils';
 import { ALL_CUSTOM_UI } from '../fields';
 
@@ -17,15 +16,14 @@ import { IDocumentManager } from '@jupyterlab/docmanager';
 import { SchemaForm } from '../schemaform';
 
 import { SchemaFinder, Indenter } from './toolbar';
+import { ISchemaManager } from '../tokens';
 
-// TODO: make configurable/detectable
-export const INDENT = 2;
 export const DOC_CLASS = 'jp-SchemaForm-Document';
 
 export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
   content: SchemaForm;
   docManager: IDocumentManager;
-  getOpenWidgets: () => IIterator<Widget>;
+  schemaManager: ISchemaManager;
   private _schemaModel: DocumentRegistry.IModel;
   private _uiSchemaModel: DocumentRegistry.IModel;
   private _schemaId: string;
@@ -37,7 +35,7 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
     super(options);
     this.addClass(DOC_CLASS);
     this.docManager = options.docManager;
-    this.getOpenWidgets = options.getOpenWidgets;
+    this.schemaManager = options.schemaManager;
 
     const { context } = options;
     this.initToolbar();
@@ -69,12 +67,12 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
   initToolbar() {
     this._schemaFinder = new SchemaFinder();
     this._schemaFinder.model.label = 'JSON';
-    this._schemaFinder.model.getOpenWidgets = this.getOpenWidgets;
+    this._schemaFinder.model.schemaManager = this.schemaManager;
     this._schemaFinder.model.stateChanged.connect(this.onSchemaFound, this);
 
     this._uiSchemaFinder = new SchemaFinder();
     this._uiSchemaFinder.model.label = 'UI';
-    this._uiSchemaFinder.model.getOpenWidgets = this.getOpenWidgets;
+    this._uiSchemaFinder.model.schemaManager = this.schemaManager;
     this._uiSchemaFinder.model.stateChanged.connect(this.onUiSchemaFound, this);
 
     this._indenter = new Indenter();
@@ -92,7 +90,7 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
         this.content.model.formData,
         null,
         this._indenter.model.indent
-      )
+      ) + '\n'
     );
   }
 
@@ -169,7 +167,9 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
           PathExt.dirname(this.context.path),
           this._schemaId
         );
-        const widget = this.docManager.openOrReveal(path);
+        const widget = this.docManager.openOrReveal(path, 'Editor', null, {
+          mode: 'split-right'
+        });
         if (widget) {
           this.schemaModel = widget.context.model;
         }
@@ -253,7 +253,7 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
 export namespace JSONSchemaFormDocument {
   export interface IOptions extends DocumentWidget.IOptions<SchemaForm> {
     docManager: IDocumentManager;
-    getOpenWidgets: () => IIterator<Widget>;
+    schemaManager: ISchemaManager;
   }
 }
 
@@ -265,7 +265,7 @@ export class JSONSchemaFormFactory extends ABCWidgetFactory<
   DocumentRegistry.IModel
 > {
   private docManager: IDocumentManager;
-  private getOpenWidgets: () => IIterator<Widget>;
+  private schemaManager: ISchemaManager;
 
   /**
    * Create a new widget given a context.
@@ -273,7 +273,7 @@ export class JSONSchemaFormFactory extends ABCWidgetFactory<
   constructor(options: JSONSchemaFormFactory.IOptions) {
     super(options);
     this.docManager = options.docManager;
-    this.getOpenWidgets = options.getOpenWidgets;
+    this.schemaManager = options.schemaManager;
   }
 
   protected createNewWidget(
@@ -282,13 +282,14 @@ export class JSONSchemaFormFactory extends ABCWidgetFactory<
     return new JSONSchemaFormDocument({
       context,
       docManager: this.docManager,
-      getOpenWidgets: this.getOpenWidgets,
+      schemaManager: this.schemaManager,
       content: new SchemaForm(
         {},
         {
           liveValidate: true,
           ...ALL_CUSTOM_UI
-        }
+        },
+        { markdown: this.schemaManager.markdown }
       )
     });
   }
@@ -297,6 +298,6 @@ export class JSONSchemaFormFactory extends ABCWidgetFactory<
 export namespace JSONSchemaFormFactory {
   export interface IOptions extends DocumentRegistry.IWidgetFactoryOptions {
     docManager: IDocumentManager;
-    getOpenWidgets: () => IIterator<Widget>;
+    schemaManager: ISchemaManager;
   }
 }
