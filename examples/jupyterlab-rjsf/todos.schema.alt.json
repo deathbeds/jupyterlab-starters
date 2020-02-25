@@ -1,9 +1,9 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://raw.githubusercontent.com/deathbeds/jupyterlab-starters/master/packages/jupyterlab-rjsf/examples/todo.schema.json",
-  "title": "TODO",
+  "title": "# TODO THESE THINGS",
   "type": "object",
-  "description": "a list of things. to do.",
+  "description": "A List of Things.",
   "properties": {
     "todos": {
       "type": "array",
@@ -11,12 +11,16 @@
         "type": "object",
         "properties": {
           "text": {
-            "type": "string"
+            "title": "This is a Thing",
+            "description": "It's a _very_ important thing",
+            "type": "string",
+            "pattern": "^[A-Z].*"
           },
           "done": {
             "type": "boolean"
           },
           "importance": {
+            "title": "",
             "type": "number"
           }
         }

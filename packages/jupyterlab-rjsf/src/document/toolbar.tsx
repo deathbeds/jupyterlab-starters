@@ -10,10 +10,19 @@ const CARET = {
 };
 
 export class SchemaFinder extends VDomRenderer<SchemaFinder.Model> {
-  constructor() {
+  constructor(options: SchemaFinder.IOptions) {
     super();
-    this.model = new SchemaFinder.Model();
+    this.model = new SchemaFinder.Model(options);
   }
+
+  dispose() {
+    if (this.isDisposed) {
+      return;
+    }
+    this.model.dispose();
+    super.dispose();
+  }
+
   protected render() {
     const label = `${this.model.label} Schema`;
     const base = this.model.basePath
@@ -29,14 +38,16 @@ export class SchemaFinder extends VDomRenderer<SchemaFinder.Model> {
           value={this.model.schemaPath}
           onChange={this.handleChange}
         >
-          <option value="">Detect</option>
-          {this.model.jsonContexts.map((ctx, i) => {
-            return (
-              <option key={ctx.path} value={ctx.path}>
-                {base ? PathExt.relative(base, ctx.path) : ctx.path}
-              </option>
-            );
-          })}
+          <option value="">{this.model.showDetect || '-'}</option>
+          <optgroup label={`Open ${label}`}>
+            {this.model.jsonContexts.map((ctx, i) => {
+              return (
+                <option key={ctx.path} value={ctx.path}>
+                  {base ? PathExt.relative(base, ctx.path) : ctx.path}
+                </option>
+              );
+            })}
+          </optgroup>
           <option value="refresh">Refresh</option>
         </HTMLSelect>
       </label>
@@ -48,10 +59,12 @@ export class SchemaFinder extends VDomRenderer<SchemaFinder.Model> {
     if (!path) {
       this.model.schemaContext = null;
     }
+
     if (path === 'refresh') {
-      this.model.refresh();
+      this.model.onWidgetsChanged();
       return;
     }
+
     const contexts = this.model.jsonContexts.filter(ctx => {
       return ctx.path === path;
     });
@@ -65,12 +78,24 @@ export class SchemaFinder extends VDomRenderer<SchemaFinder.Model> {
 }
 
 export namespace SchemaFinder {
+  export interface IOptions {
+    showDetect: string;
+    canary: string;
+  }
   export class Model extends VDomModel {
     private _schemaManager: ISchemaManager;
     private _schemaContext: DocumentRegistry.IContext<DocumentRegistry.IModel>;
     private _contexts: DocumentRegistry.IContext<DocumentRegistry.IModel>[];
     private _label: string;
     private _basePath: string;
+    private _showDetect: string;
+    private _canary: string;
+
+    constructor(options: IOptions) {
+      super();
+      this._showDetect = options.showDetect;
+      this._canary = options.canary;
+    }
 
     dispose() {
       if (this.isDisposed) {
@@ -85,11 +110,42 @@ export namespace SchemaFinder {
     }
 
     onWidgetsChanged() {
+      const contexts = new Map<
+        string,
+        DocumentRegistry.IContext<DocumentRegistry.IModel>
+      >();
+      if (this._schemaManager != null) {
+        const widgets = this._schemaManager.widgets;
+        for (const widget of widgets) {
+          if (widget instanceof DocumentWidget) {
+            const { context } = widget;
+            if (context.path === this._basePath) {
+              continue;
+            }
+            if (
+              context.path.endsWith('json') &&
+              context.model.value.text.indexOf(this._canary) !== -1
+            ) {
+              contexts.set(context.path, context);
+            }
+          }
+        }
+      }
+      this._contexts = Array.from(contexts.values());
+
       this.stateChanged.emit(void 0);
     }
 
-    refresh() {
-      this._contexts = null;
+    get showDetect() {
+      return this._showDetect;
+    }
+
+    get canary() {
+      return this._canary;
+    }
+
+    set canary(canary) {
+      this._canary = canary;
       this.stateChanged.emit(void 0);
     }
 
@@ -143,27 +199,7 @@ export namespace SchemaFinder {
     }
 
     get jsonContexts() {
-      if (this._contexts == null) {
-        const contexts = new Map<
-          string,
-          DocumentRegistry.IContext<DocumentRegistry.IModel>
-        >();
-        if (this._schemaManager != null) {
-          const widgets = this._schemaManager.widgets;
-          for (const widget of widgets) {
-            if (widget instanceof DocumentWidget) {
-              if (widget.context.path === this._basePath) {
-                continue;
-              }
-              if (widget.context.path.endsWith('json')) {
-                contexts.set(widget.context.path, widget.context);
-              }
-            }
-          }
-        }
-        this._contexts = Array.from(contexts.values());
-      }
-      return this._contexts;
+      return this._contexts || [];
     }
   }
 }
@@ -173,6 +209,15 @@ export class Indenter extends VDomRenderer<Indenter.Model> {
     super();
     this.model = new Indenter.Model();
   }
+
+  dispose() {
+    if (this.isDisposed) {
+      return;
+    }
+    this.model.dispose();
+    super.dispose();
+  }
+
   protected render() {
     return (
       <label>
@@ -237,6 +282,75 @@ export namespace Indenter {
     }
     get indent() {
       return this._character.repeat(this._count);
+    }
+  }
+}
+
+export class Toggle extends VDomRenderer<Toggle.Model> {
+  constructor(options: Toggle.IOptions) {
+    super();
+    this.model = new Toggle.Model(options);
+  }
+
+  dispose() {
+    if (this.isDisposed) {
+      return;
+    }
+    this.model.dispose();
+    super.dispose();
+  }
+
+  protected render() {
+    return (
+      <label>
+        <span>{this.model.label}</span>
+        <input
+          type="checkbox"
+          defaultChecked={this.model.value}
+          onChange={this.handleChange}
+        />
+      </label>
+    );
+  }
+
+  handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    this.model.value = event.currentTarget.checked;
+  };
+}
+
+export namespace Toggle {
+  export interface IOptions {
+    value: boolean;
+    label: string;
+  }
+
+  export class Model extends VDomModel {
+    private _value: boolean;
+    private _label: string;
+
+    constructor(options: IOptions) {
+      super();
+      this._value = options.value;
+      this._label = options.label;
+    }
+
+    get value() {
+      return this._value;
+    }
+    set value(value) {
+      if (this._value !== value) {
+        this._value = value;
+        this.stateChanged.emit(void 0);
+      }
+    }
+    get label() {
+      return this._label;
+    }
+    set label(label) {
+      if (this._label !== label) {
+        this._label = label;
+        this.stateChanged.emit(void 0);
+      }
     }
   }
 }

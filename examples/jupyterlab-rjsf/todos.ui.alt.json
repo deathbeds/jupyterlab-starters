@@ -1,7 +1,7 @@
 {
   "todos": {
     "items": {
-      "ui:order": ["done", "text"],
+      "ui:order": ["importance", "done", "text"],
       "done": {
         "ui:widget": "radio"
       },

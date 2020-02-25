@@ -4,7 +4,7 @@
       "text": {
         "ui:widget": "textarea",
         "ui:options": {
-          "rows": 3
+          "rows": 4
         }
       }
     }

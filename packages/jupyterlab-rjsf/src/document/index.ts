@@ -15,7 +15,7 @@ import { IDocumentManager } from '@jupyterlab/docmanager';
 
 import { SchemaForm } from '../schemaform';
 
-import { SchemaFinder, Indenter } from './toolbar';
+import { SchemaFinder, Indenter, Toggle } from './toolbar';
 import { ISchemaManager } from '../tokens';
 
 export const DOC_CLASS = 'jp-SchemaForm-Document';
@@ -30,6 +30,8 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
   private _schemaFinder: SchemaFinder;
   private _uiSchemaFinder: SchemaFinder;
   private _indenter: Indenter;
+  private _liveValidation: Toggle;
+  private _liveOmit: Toggle;
 
   constructor(options: JSONSchemaFormDocument.IOptions) {
     super(options);
@@ -42,9 +44,9 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
 
     this.content.model.stateChanged.connect(this.onFormChange, this);
 
-    context.ready
-      .then(async () => await this.onContextReady())
-      .catch(console.warn);
+    context.ready.then(async () => this.onContextReady()).catch(console.warn);
+
+    this.onPathChanged();
   }
 
   dispose() {
@@ -56,6 +58,14 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
     if (this.schemaModel) {
       this.schemaModel.contentChanged.disconnect(this.onSchema, this);
     }
+    this._liveValidation.model.stateChanged.disconnect(
+      this.onValidationChanged,
+      this
+    );
+    this._liveOmit.model.stateChanged.disconnect(this.onOmitChanged, this);
+    this._schemaFinder.dispose();
+    this._uiSchemaFinder.dispose();
+    this._indenter.dispose();
     super.dispose();
   }
 
@@ -65,12 +75,18 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
    * - text formatting options: indent, sortkeys, etc
    */
   initToolbar() {
-    this._schemaFinder = new SchemaFinder();
+    this._schemaFinder = new SchemaFinder({
+      showDetect: 'from $schema',
+      canary: 'properties'
+    });
     this._schemaFinder.model.label = 'JSON';
     this._schemaFinder.model.schemaManager = this.schemaManager;
     this._schemaFinder.model.stateChanged.connect(this.onSchemaFound, this);
 
-    this._uiSchemaFinder = new SchemaFinder();
+    this._uiSchemaFinder = new SchemaFinder({
+      showDetect: '-',
+      canary: 'ui:'
+    });
     this._uiSchemaFinder.model.label = 'UI';
     this._uiSchemaFinder.model.schemaManager = this.schemaManager;
     this._uiSchemaFinder.model.stateChanged.connect(this.onUiSchemaFound, this);
@@ -78,13 +94,25 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
     this._indenter = new Indenter();
     this._indenter.model.stateChanged.connect(this.onFormChange, this);
 
+    this._liveValidation = new Toggle({ label: 'Validate', value: true });
+    this._liveValidation.model.stateChanged.connect(
+      this.onValidationChanged,
+      this
+    );
+
+    this._liveOmit = new Toggle({ label: 'Omit', value: false });
+    this._liveOmit.model.stateChanged.connect(this.onOmitChanged, this);
+
     this.toolbar.addItem('schema', this._schemaFinder);
     this.toolbar.addItem('ui', this._uiSchemaFinder);
-    this.toolbar.addItem('spacer', Toolbar.createSpacerItem());
+    this.toolbar.addItem('spacer1', Toolbar.createSpacerItem());
+    this.toolbar.addItem('validation', this._liveValidation);
+    this.toolbar.addItem('omit', this._liveOmit);
+    this.toolbar.addItem('spacer2', Toolbar.createSpacerItem());
     this.toolbar.addItem('indenter', this._indenter);
   }
 
-  async onFormChange() {
+  onFormChange() {
     this.context.model.fromString(
       JSON.stringify(
         this.content.model.formData,
@@ -94,7 +122,7 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
     );
   }
 
-  async onSchemaFound() {
+  onSchemaFound() {
     const model = this._schemaFinder.model.schemaContext?.model;
     if (
       model != null &&
@@ -106,7 +134,7 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
     }
   }
 
-  async onUiSchemaFound() {
+  onUiSchemaFound() {
     const model = this._uiSchemaFinder.model.schemaContext?.model;
     if (
       model != null &&
@@ -117,7 +145,7 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
     }
   }
 
-  async onContextReady() {
+  onContextReady() {
     this.context.model.contentChanged.connect(this.onContentChanged, this);
     this.context.pathChanged.connect(this.onPathChanged, this);
     this.onContentChanged();
@@ -138,15 +166,27 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
         this.schemaId = $schema;
       }
 
-      if (!JSONExt.deepEqual(json, this.content.model.formData)) {
-        this.content.model.formData = json;
+      if (JSONExt.deepEqual(json, this.content.model.formData)) {
+        return;
       }
+
+      this.content.model.formData = json || {};
     }
   }
 
   onPathChanged() {
     this._schemaFinder.model.basePath = this.context.path;
     this._uiSchemaFinder.model.basePath = this.context.path;
+  }
+
+  onValidationChanged() {
+    this.content.model.props.liveValidate = this._liveValidation.model.value;
+    this.content.model.stateChanged.emit(void 0);
+  }
+
+  onOmitChanged() {
+    this.content.model.props.liveOmit = this._liveOmit.model.value;
+    this.content.model.stateChanged.emit(void 0);
   }
 
   get schemaId() {
@@ -192,7 +232,7 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
     this._schemaModel = schemaModel;
     if (this._schemaModel) {
       this._schemaModel.contentChanged.connect(this.onSchema, this);
-      this.onSchema().catch(console.warn);
+      this.onSchema();
     }
   }
 
@@ -207,13 +247,13 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
     this._uiSchemaModel = uiSchemaModel;
     if (this._uiSchemaModel) {
       this._uiSchemaModel.contentChanged.connect(this.onUiSchema, this);
-      this.onUiSchema().catch(console.warn);
+      this.onUiSchema();
     }
   }
 
-  async onSchema() {
+  onSchema() {
     if (this._schemaModel != null) {
-      let json: any;
+      let json = {};
       let text: string;
       try {
         text = (this._schemaModel as any).value.text;
@@ -222,17 +262,21 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
         console.warn(err, text);
       }
       if (
-        (json && !this.content.model.schema) ||
-        !JSONExt.deepEqual(this.content.model.schema, json)
+        json &&
+        this.content.model.schema &&
+        JSONExt.deepEqual(this.content.model.schema, json)
       ) {
-        this.content.model.schema = json;
+        return;
       }
+
+      this.content.model.schema = json || {};
+      this.content.model.stateChanged.emit(void 0);
     }
   }
 
-  async onUiSchema() {
+  onUiSchema() {
     if (this._uiSchemaModel != null) {
-      let json: any;
+      let json = {};
       let text: string;
       try {
         text = (this._uiSchemaModel as any).value.text;
@@ -241,11 +285,15 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
         console.warn(err, text);
       }
       if (
-        (json && !this.content.model.uiSchema) ||
-        !JSONExt.deepEqual(this.content.model.uiSchema, json)
+        json &&
+        this.content.model.uiSchema &&
+        JSONExt.deepEqual(this.content.model.uiSchema, json)
       ) {
-        this.content.model.uiSchema = json;
+        return;
       }
+
+      this.content.model.uiSchema = json || {};
+      this.content.model.stateChanged.emit(void 0);
     }
   }
 }
@@ -279,18 +327,23 @@ export class JSONSchemaFormFactory extends ABCWidgetFactory<
   protected createNewWidget(
     context: DocumentRegistry.Context
   ): JSONSchemaFormDocument {
+    const { docManager, schemaManager } = this;
+    const { markdown } = schemaManager;
+
+    const content = new SchemaForm(
+      {},
+      {
+        liveValidate: true,
+        ...ALL_CUSTOM_UI
+      },
+      { markdown }
+    );
+
     return new JSONSchemaFormDocument({
       context,
-      docManager: this.docManager,
-      schemaManager: this.schemaManager,
-      content: new SchemaForm(
-        {},
-        {
-          liveValidate: true,
-          ...ALL_CUSTOM_UI
-        },
-        { markdown: this.schemaManager.markdown }
-      )
+      docManager,
+      schemaManager,
+      content
     });
   }
 }

@@ -11,6 +11,7 @@
         "type": "object",
         "properties": {
           "text": {
+            "title": "thing",
             "type": "string"
           },
           "done": {

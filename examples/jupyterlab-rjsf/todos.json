@@ -1,13 +1,8 @@
 {
-  "$schema": "./todos.schema.json",
+  "$schema": "./todos.schema.alt.json",
   "todos": [
     {
-      "text": "the second task",
-      "done": true
-    },
-    {
-      "text": "the first task",
-      "done": false
+      "text": "xxxx"
     }
   ]
 }

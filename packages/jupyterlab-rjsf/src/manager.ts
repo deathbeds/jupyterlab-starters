@@ -47,7 +47,7 @@ export class SchemaManager implements ISchemaManager {
 
     if (changed) {
       this._widgets = widgets;
-      this.widgetsChanged.emit(void 0);
+      this._widgetsChanged.emit(void 0);
     }
   }
 

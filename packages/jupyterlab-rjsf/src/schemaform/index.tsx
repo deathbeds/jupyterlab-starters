@@ -102,6 +102,7 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
       // overload classname
       className,
       validate: (formData: T, errors: rjsf.AjvError[]) => {
+        console.log(errors);
         return errors;
       },
       // overload onChange
