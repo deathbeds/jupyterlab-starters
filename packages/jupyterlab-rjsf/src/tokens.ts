@@ -4,7 +4,7 @@ import { Token } from '@phosphor/coreutils';
 
 import { IWidgetTracker } from '@jupyterlab/apputils';
 
-import { JSONSchemaFormDocument } from './factory';
+import { JSONSchemaFormDocument } from './document';
 
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 

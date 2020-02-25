@@ -1,5 +1,6 @@
 import { Widget } from '@phosphor/widgets';
 import { JSONExt } from '@phosphor/coreutils';
+import { IIterator } from '@phosphor/algorithm';
 import { PathExt, URLExt } from '@jupyterlab/coreutils';
 
 import {
@@ -8,22 +9,32 @@ import {
   DocumentWidget
 } from '@jupyterlab/docregistry';
 
+import { Toolbar } from '@jupyterlab/apputils';
+
 import { IDocumentManager } from '@jupyterlab/docmanager';
 
-import { SchemaForm } from './schemaform';
+import { SchemaForm } from '../schemaform';
+
+import { SchemaFinder, Indenter } from './toolbar';
 
 // TODO: make configurable/detectable
 export const INDENT = 2;
+export const DOC_CLASS = 'jp-SchemaForm-Document';
 
 export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
   content: SchemaForm;
   docManager: IDocumentManager;
+  getOpenWidgets: () => IIterator<Widget>;
   private _schemaModel: DocumentRegistry.IModel;
   private _schemaId: string;
+  private _schemaFinder: SchemaFinder;
+  private _indenter: Indenter;
 
   constructor(options: JSONSchemaFormDocument.IOptions) {
     super(options);
+    this.addClass(DOC_CLASS);
     this.docManager = options.docManager;
+    this.getOpenWidgets = options.getOpenWidgets;
 
     const { context } = options;
     this.initToolbar();
@@ -53,13 +64,38 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
    * - text formatting options: indent, sortkeys, etc
    */
   initToolbar() {
-    //
+    this._schemaFinder = new SchemaFinder();
+    this._schemaFinder.model.getOpenWidgets = this.getOpenWidgets;
+    this._schemaFinder.model.stateChanged.connect(this.onSchemaFound, this);
+
+    this._indenter = new Indenter();
+    this.toolbar.addItem('schema', this._schemaFinder);
+    this.toolbar.addItem('spacer', Toolbar.createSpacerItem());
+    this.toolbar.addItem('indenter', this._indenter);
+
+    this._indenter.model.stateChanged.connect(this.onFormChange, this);
   }
 
   async onFormChange() {
     this.context.model.fromString(
-      JSON.stringify(this.content.model.formData, null, INDENT)
+      JSON.stringify(
+        this.content.model.formData,
+        null,
+        this._indenter.model.indent
+      )
     );
+  }
+
+  async onSchemaFound() {
+    const model = this._schemaFinder.model.schemaContext?.model;
+    if (
+      model != null &&
+      model !== this.schemaModel &&
+      model !== this.context.model
+    ) {
+      this._schemaId = null;
+      this.schemaModel = model;
+    }
   }
 
   async onContextReady() {
@@ -77,7 +113,7 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
 
     if (json) {
       const { $schema } = json;
-      if ($schema) {
+      if ($schema && !this._schemaFinder.model.schemaPath) {
         this.schemaId = $schema;
       }
 
@@ -128,6 +164,7 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
     this._schemaModel = schemaModel;
     if (this._schemaModel) {
       this._schemaModel.contentChanged.connect(this.onSchema, this);
+      this.onSchema().catch(console.warn);
     }
   }
 
@@ -149,6 +186,7 @@ export class JSONSchemaFormDocument extends DocumentWidget<Widget> {
 export namespace JSONSchemaFormDocument {
   export interface IOptions extends DocumentWidget.IOptions<SchemaForm> {
     docManager: IDocumentManager;
+    getOpenWidgets: () => IIterator<Widget>;
   }
 }
 
@@ -160,6 +198,7 @@ export class JSONSchemaFormFactory extends ABCWidgetFactory<
   DocumentRegistry.IModel
 > {
   private docManager: IDocumentManager;
+  private getOpenWidgets: () => IIterator<Widget>;
 
   /**
    * Create a new widget given a context.
@@ -167,6 +206,7 @@ export class JSONSchemaFormFactory extends ABCWidgetFactory<
   constructor(options: JSONSchemaFormFactory.IOptions) {
     super(options);
     this.docManager = options.docManager;
+    this.getOpenWidgets = options.getOpenWidgets;
   }
 
   protected createNewWidget(
@@ -175,6 +215,7 @@ export class JSONSchemaFormFactory extends ABCWidgetFactory<
     return new JSONSchemaFormDocument({
       context,
       docManager: this.docManager,
+      getOpenWidgets: this.getOpenWidgets,
       content: new SchemaForm({})
     });
   }
@@ -183,5 +224,6 @@ export class JSONSchemaFormFactory extends ABCWidgetFactory<
 export namespace JSONSchemaFormFactory {
   export interface IOptions extends DocumentRegistry.IWidgetFactoryOptions {
     docManager: IDocumentManager;
+    getOpenWidgets: () => IIterator<Widget>;
   }
 }

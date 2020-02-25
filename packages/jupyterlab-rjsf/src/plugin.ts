@@ -25,7 +25,7 @@ import { IDocumentManager } from '@jupyterlab/docmanager';
 
 import { IIconRegistry } from '@jupyterlab/ui-components';
 
-import { JSONSchemaFormDocument, JSONSchemaFormFactory } from './factory';
+import { JSONSchemaFormDocument, JSONSchemaFormFactory } from './document';
 
 /**
  * The editor tracker extension.
@@ -64,7 +64,11 @@ function activate(
   const factory = new JSONSchemaFormFactory({
     name: FACTORY,
     docManager,
-    fileTypes: ['json']
+    fileTypes: ['json'],
+    getOpenWidgets: () => {
+      const widgets = app.shell.widgets('main');
+      return widgets;
+    }
   });
   const { commands } = app;
   const tracker = new WidgetTracker<JSONSchemaFormDocument>({ namespace: NS });
