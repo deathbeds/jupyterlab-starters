@@ -1,8 +1,14 @@
 {
-  "$schema": "./todos.schema.alt.json",
+  "$schema": "./todos.schema.json",
   "todos": [
     {
-      "text": "xxxx"
+      "text": "write this code"
+    },
+    {
+      "text": "test this code"
+    },
+    {
+      "text": "ship this code"
     }
   ]
 }
