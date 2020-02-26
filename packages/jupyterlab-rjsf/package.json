@@ -31,7 +31,8 @@
   },
   "dependencies": {
     "react-jsonschema-form": "~1.8.1",
-    "react-codemirror2": "^6.0.0"
+    "react-codemirror2": "^6.0.0",
+    "js-yaml": "^3.13.1"
   },
   "peerDependencies": {
     "@jupyterlab/application": "1"
@@ -42,7 +43,8 @@
     "@jupyterlab/application": "1",
     "react": "*",
     "rimraf": "~2.6.2",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "@types/js-yaml": "^3.12.2"
   },
   "jupyterlab": {
     "extension": "lib/plugin.js"

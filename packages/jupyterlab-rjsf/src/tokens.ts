@@ -1,6 +1,6 @@
 export const NS = 'rjsf';
 
-import { Token } from '@phosphor/coreutils';
+import { Token, JSONObject } from '@phosphor/coreutils';
 import { ISignal } from '@phosphor/signaling';
 import { Widget } from '@phosphor/widgets';
 import { IWidgetTracker } from '@jupyterlab/apputils';
@@ -28,24 +28,55 @@ export const IJSONSchemaFormTracker = new Token<IJSONSchemaFormTracker>(
   `${NS}/tracker`
 );
 
-export const FILE_TYPE: DocumentRegistry.IFileType = {
-  name: 'rjsf',
-  displayName: 'JSON Schema Form',
-  mimeTypes: ['application/json'],
-  extensions: ['.json'],
-  iconClass: ICON_CLASS,
-  fileFormat: 'json',
-  contentType: 'file'
+export interface IFileTypes {
+  [key: string]: DocumentRegistry.IFileType;
+}
+
+export const FILE_TYPES: IFileTypes = {
+  'rjsf-json-instance': {
+    name: 'json',
+    displayName: 'JSON Schema Form',
+    mimeTypes: ['application/json', 'application/schema-instance+json'],
+    extensions: ['.json', '.instance.json'],
+    iconClass: ICON_CLASS,
+    fileFormat: 'json',
+    contentType: 'file'
+  },
+  'rjsf-yaml-instance': {
+    name: 'yaml',
+    displayName: 'JSON Schema Form in YAML',
+    mimeTypes: ['text/yaml', 'text/schema-instance+yaml'],
+    extensions: ['.yaml', '.yml', '.instance.yaml', '.instance.yml'],
+    iconClass: ICON_CLASS,
+    fileFormat: 'json',
+    contentType: 'file'
+  }
 };
 
 export const CommandIds = {
   createNew: `${NS}:create-new`
 };
 
-export interface ISchemaManager {
+export interface ISchemaManager extends ISchemaManager.IFullIO {
   widgetsChanged: ISignal<ISchemaManager, void>;
   widgets: Widget[];
   markdown: RenderedMarkdown;
+  registerReader(matcher: ISchemaManager.IContextMatcher): void;
+  registerWriter(matcher: ISchemaManager.IContextMatcher): void;
+  isActive(widget: Widget): boolean;
+}
+
+export namespace ISchemaManager {
+  export interface IContextMatcher {
+    handles<T>(action: string, context: DocumentRegistry.Context): boolean;
+  }
+  export interface IReader extends IContextMatcher {
+    read(context: DocumentRegistry.Context): Promise<JSONObject>;
+  }
+  export interface IWriter extends IContextMatcher {
+    write(value: JSONObject, context: DocumentRegistry.Context): Promise<void>;
+  }
+  export interface IFullIO extends IContextMatcher, IReader, IWriter {}
 }
 
 export { ICON_SVG };

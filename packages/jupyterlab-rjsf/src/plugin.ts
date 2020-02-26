@@ -2,7 +2,7 @@ import {
   NS,
   FACTORY,
   IJSONSchemaFormTracker,
-  FILE_TYPE,
+  FILE_TYPES,
   CommandIds,
   ICON_NAME,
   ICON_SVG,
@@ -28,6 +28,9 @@ import { IIconRegistry } from '@jupyterlab/ui-components';
 import { JSONSchemaFormDocument, JSONSchemaFormFactory } from './document';
 import { SchemaManager } from './manager';
 
+import { JSONMatcher } from './matchers/json';
+import { YAMLMatcher } from './matchers/yaml';
+
 /**
  * The editor tracker extension.
  */
@@ -47,8 +50,6 @@ const plugin: JupyterFrontEndPlugin<IJSONSchemaFormTracker> = {
   autoStart: true
 };
 
-export default plugin;
-
 function activate(
   app: JupyterLab,
   browserFactory: IFileBrowserFactory,
@@ -65,11 +66,18 @@ function activate(
   });
 
   const schemaManager = new SchemaManager({ shell, rendermime });
+  const jsonMatcher = new JSONMatcher();
+  const yamlMatcher = new YAMLMatcher();
+
+  for (const matcher of [jsonMatcher, yamlMatcher]) {
+    schemaManager.registerReader(matcher);
+    schemaManager.registerWriter(matcher);
+  }
 
   const factory = new JSONSchemaFormFactory({
     name: FACTORY,
     docManager,
-    fileTypes: ['json'],
+    fileTypes: Object.keys(FILE_TYPES).map((key) => FILE_TYPES[key].name),
     schemaManager
   });
 
@@ -96,27 +104,31 @@ function activate(
   });
   app.docRegistry.addWidgetFactory(factory);
 
-  // register the filetype
-  app.docRegistry.addFileType(FILE_TYPE);
+  for (const fileType in FILE_TYPES) {
+    // register the filetype
+    app.docRegistry.addFileType(FILE_TYPES[fileType]);
 
-  // Add a command for creating a new JSON form file.
-  commands.addCommand(CommandIds.createNew, {
-    label: FILE_TYPE.displayName,
-    iconClass: ICON_CLASS,
-    caption: 'Create a new JSON Form',
-    execute: async () => {
-      let path = browserFactory.defaultBrowser.model.path;
-      const model = await commands.execute('docmanager:new-untitled', {
-        path,
-        type: 'file',
-        ext: '.json'
-      });
-      return commands.execute('docmanager:open', {
-        path: model.path,
-        factory: FACTORY
-      });
-    }
-  });
+    // Add a command for creating a new Form Instance file.
+    commands.addCommand(`${CommandIds.createNew}-${fileType}`, {
+      label: FILE_TYPES[fileType].displayName,
+      iconClass: ICON_CLASS,
+      caption: `Create a new JSON Schema Form ${FILE_TYPES[fileType].displayName}`,
+      execute: async () => {
+        let path = browserFactory.defaultBrowser.model.path;
+        const model = await commands.execute('docmanager:new-untitled', {
+          path,
+          type: 'file',
+          ext: FILE_TYPES[fileType].extensions[0]
+        });
+        return await commands.execute('docmanager:open', {
+          path: model.path,
+          factory: FACTORY
+        });
+      }
+    });
+  }
 
   return tracker;
 }
+
+export default [plugin];

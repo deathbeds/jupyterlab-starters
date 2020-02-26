@@ -1,0 +1,16 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: TODO
+type: object
+description: a list of things. to do. Right now.
+properties:
+  todos:
+    type: array
+    items:
+      type: object
+      properties:
+        text:
+          title: things
+          description: this is the _description_. it seems to keep working. sort of
+          type: string
+        done:
+          type: boolean

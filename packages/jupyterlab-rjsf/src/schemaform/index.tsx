@@ -13,16 +13,18 @@ import { Form } from '../form';
 import { SchemaFormModel } from './model';
 
 const MARKDOWN_CLASSES = ['jp-RenderedMarkdown', 'jp-RenderedHTMLCommon'];
-const UNRENDERED_LABELS = [
+const RENDERABLE_LABELS = [
   'legend',
   '.field-description',
   '.control-label',
   '.help-block',
   '.field-radio-group .radio > label > span > span',
   '.field-boolean .checkbox > label > span'
-]
-  .map(s => `${s}:not(.jp-RenderedMarkdown)`)
-  .join(', ');
+];
+const ALL_LABELS = RENDERABLE_LABELS.join(', ');
+const UNRENDERED_LABELS = RENDERABLE_LABELS.map(
+  s => `${s}:not(.jp-RenderedMarkdown)`
+).join(', ');
 
 /**
  * The id prefix all JSON Schema forms will share
@@ -58,7 +60,11 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
 
   _renderMarkdown = () => {
     const markdown = this.model.markdown;
-    const hosts = Array.from(this.node.querySelectorAll(UNRENDERED_LABELS));
+    const hosts = Array.from(
+      this.node.querySelectorAll(
+        this.model.liveMarkdown ? UNRENDERED_LABELS : ALL_LABELS
+      )
+    );
     if (!hosts.length && !this._initialRender) {
       this._initialRenderDelay = this._initialRenderDelay * 2;
       setTimeout(this._renderMarkdown, this._initialRenderDelay);
@@ -102,7 +108,6 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
       // overload classname
       className,
       validate: (formData: T, errors: rjsf.AjvError[]) => {
-        console.log(errors);
         return errors;
       },
       // overload onChange

@@ -1,0 +1,5 @@
+$schema: ./todos.schema.yaml
+todos:
+  - text: still working on the stuff
+  - text: looks pretty good
+    done: true

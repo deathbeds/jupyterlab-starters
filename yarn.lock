@@ -109,13 +109,12 @@
 "@deathbeds/jupyterlab-rjsf@file:packages/jupyterlab-rjsf":
   version "0.1.0"
   dependencies:
+    js-yaml "^3.13.1"
     react-codemirror2 "^6.0.0"
     react-jsonschema-form "~1.8.1"
 
 "@deathbeds/jupyterlab-starters@file:packages/jupyterlab-starters":
   version "0.2.2-a0"
-  dependencies:
-    "@deathbeds/jupyterlab-rjsf" "^0.1.0"
 
 "@evocateur/libnpmaccess@^3.1.2":
   version "3.1.2"
@@ -1469,6 +1468,11 @@
     "@types/events" "*"
     "@types/minimatch" "*"
     "@types/node" "*"
+
+"@types/js-yaml@^3.12.2":
+  version "3.12.2"
+  resolved "https://registry.yarnpkg.com/@types/js-yaml/-/js-yaml-3.12.2.tgz#a35a1809c33a68200fb6403d1ad708363c56470a"
+  integrity sha512-0CFu/g4mDSNkodVwWijdlr8jH7RoplRWNgovjFLEZeT+QEbbZXjBmCe3HwaWheAlCbHwomTwzZoSedeOycABug==
 
 "@types/json-schema@*", "@types/json-schema@^7.0.3":
   version "7.0.4"

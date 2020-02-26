@@ -1,9 +1,16 @@
 import { toArray } from '@phosphor/algorithm';
 import { Signal } from '@phosphor/signaling';
+import { JSONObject } from '@phosphor/coreutils';
+
 import { Widget } from '@phosphor/widgets';
 import { ILabShell } from '@jupyterlab/application';
 import { ISchemaManager } from './tokens';
 import { IRenderMimeRegistry, RenderedMarkdown } from '@jupyterlab/rendermime';
+
+import { DocumentRegistry } from '@jupyterlab/docregistry';
+
+type IReaderFull = ISchemaManager.IContextMatcher & ISchemaManager.IReader;
+type IWriterFull = ISchemaManager.IContextMatcher & ISchemaManager.IWriter;
 
 export class SchemaManager implements ISchemaManager {
   private _widgetsChanged: Signal<ISchemaManager, void>;
@@ -11,12 +18,46 @@ export class SchemaManager implements ISchemaManager {
   private _shell: ILabShell;
   private _widgets: Widget[] = [];
   private _markdown: RenderedMarkdown;
+  private _readers: IReaderFull[] = [];
+  private _writers: IWriterFull[] = [];
 
   constructor(options: SchemaManager.IOptions) {
     this._shell = options.shell;
     this._rendermime = options.rendermime;
     this._widgetsChanged = new Signal<ISchemaManager, void>(this);
     this._shell.layoutModified.connect(this.onLayoutModified, this);
+  }
+
+  isActive(widget: Widget) {
+    return this._shell.activeWidget === widget;
+  }
+
+  registerReader(reader: IReaderFull) {
+    this._readers.push(reader);
+  }
+
+  registerWriter(writer: IWriterFull) {
+    this._writers.push(writer);
+  }
+
+  handles(action: string, context: DocumentRegistry.Context) {
+    return true;
+  }
+
+  async read(context: DocumentRegistry.Context) {
+    for (const reader of this._readers) {
+      if (reader.handles('read', context)) {
+        return await reader.read(context);
+      }
+    }
+  }
+
+  async write(value: JSONObject, context: DocumentRegistry.Context) {
+    for (const writer of this._writers) {
+      if (writer.handles('write', context)) {
+        return await writer.write(value, context);
+      }
+    }
   }
 
   get widgetsChanged() {

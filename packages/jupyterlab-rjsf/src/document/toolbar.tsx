@@ -24,7 +24,7 @@ export class SchemaFinder extends VDomRenderer<SchemaFinder.Model> {
   }
 
   protected render() {
-    const label = `${this.model.label} Schema`;
+    const label = this.model.label;
     const base = this.model.basePath
       ? PathExt.dirname(this.model.basePath)
       : null;
@@ -122,10 +122,7 @@ export namespace SchemaFinder {
             if (context.path === this._basePath) {
               continue;
             }
-            if (
-              context.path.endsWith('json') &&
-              context.model.value.text.indexOf(this._canary) !== -1
-            ) {
+            if (context.model.value.text.indexOf(this._canary) !== -1) {
               contexts.set(context.path, context);
             }
           }
