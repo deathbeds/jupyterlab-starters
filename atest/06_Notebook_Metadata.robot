@@ -102,7 +102,7 @@ Verify the Metadata Between Sidebars
 
 Open Notebook Advanced Tools
     [Documentation]    Open the notebook tools sidebar
-    ${tools} =    Set Variable    css:.jp-SideBar.jp-mod-left li[data-id\="notebook-tools"]
+    ${tools} =    Set Variable    css:.jp-SideBar.jp-mod-left li[data-id\="jp-property-inspector"]
     Wait Until Page Contains Element    ${tools}
     Click Element    ${tools}
     Click Element    css:.p-Widget.jp-Collapse-header

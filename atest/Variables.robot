@@ -23,7 +23,7 @@ ${CSS BODYBUILDER CANCEL}    css:.jp-Starters-BodyBuilder-buttons .jp-mod-reject
 ${CSS NOTEBOOK SAVE}    css:[data-icon="ui-components:save"]
 ${CSS DIALOG}     css:.jp-Dialog
 ${CSS DIALOG OK}    ${CSS DIALOG} .jp-mod-accept
-${CSS NOTEBOOK TOOLBAR BUTTON}    css:.jp-ToolbarButtonComponent-icon[data-icon="starters:default"]
+${CSS NOTEBOOK TOOLBAR BUTTON}    css:.jp-ToolbarButtonComponent-icon [data-icon="starters:default"]
 ${CSS HOME FOLDER}    css:.jp-FileBrowser-crumbs svg[data-icon="ui-components:folder"]
 ${CSS NOTEBOOK STARTER META}    css:.jp-Starters-NotebookMetadata
 ${NOOP CONF}      {"StarterManager": {"extra_starters": {"noop": {"src": "examples/No-Op Notebook.ipynb", "type": "notebook", "label": "noop", "description": "noop"}}}}
