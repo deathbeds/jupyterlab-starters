@@ -1,4 +1,5 @@
 *** Variables ***
+${LAB CONF}       jupyter_notebook_config.json
 ${LAB VERSION}    ${EMPTY}
 ${SPLASH}         id:jupyterlab-splash
 # to help catch hard-coded paths
@@ -26,4 +27,3 @@ ${CSS DIALOG OK}    ${CSS DIALOG} .jp-mod-accept
 ${CSS NOTEBOOK TOOLBAR BUTTON}    css:.jp-ToolbarButtonComponent[title^='Configure'][title$='as Starter']
 ${CSS HOME FOLDER}    css:.jp-FileBrowser-crumbs svg[data-icon="ui-components:folder"]
 ${CSS NOTEBOOK STARTER META}    css:.jp-Starters-NotebookMetadata
-${NOOP CONF}      {"StarterManager": {"extra_starters": {"noop": {"src": "examples/No-Op Notebook.ipynb", "type": "notebook", "label": "noop", "description": "noop"}}}}
