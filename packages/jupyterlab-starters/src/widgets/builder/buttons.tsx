@@ -1,5 +1,12 @@
 import * as React from 'react';
 
+import {
+  folderIcon,
+  runIcon,
+  circleIcon,
+  stopIcon
+} from '@jupyterlab/ui-components';
+
 import { VDomRenderer } from '@jupyterlab/apputils';
 
 import { CSS } from '../../css';
@@ -8,14 +15,13 @@ import { BuilderModel } from './model';
 
 export class BuilderButtons extends VDomRenderer<BuilderModel> {
   constructor(model: BuilderModel) {
-    super();
-    this.model = model;
+    super(model);
     this.addClass(CSS.BUILDER_BUTTONS);
   }
 
   protected render() {
     const m = this.model;
-    const { context, manager } = m;
+    const { context } = m;
     let path = context.cwd;
     path = path.startsWith('/') ? path : `/${path}`;
     path = path.endsWith('/') ? path : `${path}/`;
@@ -25,10 +31,7 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
       <>
         <footer>
           <label title={context.cwd}>
-            {manager.icons.iconReact({
-              name: 'folder',
-              width: 16
-            })}
+            <folderIcon.react tag="span" width="16" />
             {path}
           </label>
           <strong title={context.starter.description}>
@@ -56,26 +59,20 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
   }
 
   protected renderStartButton() {
-    const { status, manager, startCount } = this.model;
-    const { icons } = manager;
-    const width = 16;
+    const { status, startCount } = this.model;
 
-    let icon = icons.iconReact({ name: 'stop', width });
+    let icon = stopIcon;
     let label = 'FIXME';
     let statusClass = CSS.JP.warn;
 
     switch (status) {
       case 'ready':
-        icon = icons.iconReact({ name: 'run', width });
+        icon = runIcon;
         label = startCount ? 'CONTINUE' : 'START';
         statusClass = CSS.JP.accept;
         break;
       case 'starting':
-        icon = (
-          <i
-            className={`${CSS.JP.icon16} ${CSS.JP.ICON_CLASS.filledCircle}`}
-          ></i>
-        );
+        icon = circleIcon;
         label = startCount > 1 ? 'CONTINUING' : 'STARTING';
         break;
       default:
@@ -88,7 +85,7 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
         className={`${CSS.JP.styled} ${statusClass}`}
         onClick={this.onStart}
       >
-        {icon}
+        {icon.react({ tag: 'span', width: 16 })}
         <label> {label} </label>
       </button>
     );

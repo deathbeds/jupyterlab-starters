@@ -15,7 +15,7 @@ variables:
   ATEST_RETRIES: 2
 
   PY_JLST_VERSION: 0.2.2a0
-  JS_JLST_VERSION: 0.2.2-a0
+  JS_JLST_VERSION: 0.3.0-a0
 
   FIRST_PARTY_LABEXTENSIONS: >-
     packages/jupyterlab-starters/deathbeds-jupyterlab-starters-$(JS_JLST_VERSION).tgz

@@ -6,8 +6,7 @@ import { PreviewCardModel } from './model';
 
 export class PreviewCard extends VDomRenderer<PreviewCardModel> {
   constructor(options: PreviewCardModel.IOptions = {}) {
-    super();
-    this.model = new PreviewCardModel(options);
+    super(new PreviewCardModel(options));
     this.addClass(CSS.PREVIEW);
   }
 

@@ -7,7 +7,6 @@ import {
 } from '@jupyterlab/application';
 
 import { ILauncher } from '@jupyterlab/launcher';
-import { IIconRegistry } from '@jupyterlab/ui-components';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
 import { NotebookPanel, INotebookTracker } from '@jupyterlab/notebook';
@@ -37,7 +36,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
     JupyterFrontEnd.IPaths,
     ILabShell,
     ILauncher,
-    IIconRegistry,
     INotebookTracker,
     IRenderMimeRegistry,
     IRouter
@@ -48,13 +46,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
     paths: JupyterFrontEnd.IPaths,
     shell: ILabShell,
     launcher: ILauncher,
-    icons: IIconRegistry,
     notebooks: INotebookTracker,
     rendermime: IRenderMimeRegistry,
     router: IRouter
   ) => {
     const { commands } = app;
-    const manager: IStarterManager = new StarterManager({ icons, rendermime });
+    const manager: IStarterManager = new StarterManager({ rendermime });
 
     commands.addCommand(CommandIDs.start, {
       execute: async (args: any) => {
@@ -114,11 +111,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
         }
       },
       label: (args: any) => args.starter.label,
-      caption: (args: any) => args.starter.description,
-      iconClass: (args: any) => {
-        const context = (args as any) as IStartContext;
-        return manager.iconClass(context.name, context.starter);
-      }
+      caption: (args: any) => args.starter.description
+      // icon: (args: any) => { }
     });
 
     let metadata: NotebookMetadata;

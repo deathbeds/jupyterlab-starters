@@ -11,7 +11,7 @@ export class BuilderModel extends VDomModel {
   private _context: IStartContext;
 
   private _form: SchemaFormModel<JSONObject>;
-  private _name: string;
+  // private _name: string;
   private _status: BuilderModel.TStatus = 'starting';
 
   private _start: Signal<BuilderModel, IStartContext>;
@@ -23,7 +23,7 @@ export class BuilderModel extends VDomModel {
     super();
     this._context = options.context;
     this._manager = options.manager;
-    this._name = options.name;
+    // this._name = options.name;
     this._start = new Signal<BuilderModel, IStartContext>(this);
   }
 
@@ -110,9 +110,9 @@ export class BuilderModel extends VDomModel {
     this._done && this._done();
   }
 
-  get iconClass() {
-    return this._manager.iconClass(this._name, this._context.starter);
-  }
+  // get iconClass() {
+  //   return this._manager.iconClass(this._name, this._context.starter);
+  // }
 }
 
 export namespace BuilderModel {

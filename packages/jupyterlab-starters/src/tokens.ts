@@ -4,7 +4,6 @@ import { ISignal } from '@lumino/signaling';
 import { PageConfig, URLExt } from '@jupyterlab/coreutils';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { RenderedMarkdown } from '@jupyterlab/rendermime/lib/widgets';
-import { IIconRegistry } from '@jupyterlab/ui-components';
 
 import * as SCHEMA from './_schema';
 
@@ -19,8 +18,6 @@ export interface IStarterManager {
   changed: ISignal<IStarterManager, void>;
   starters: SCHEMA.NamedStarters;
   starter(name: string): SCHEMA.Starter;
-  iconClass(name: string, starter: SCHEMA.Starter): string;
-  icons: IIconRegistry;
   markdown: RenderedMarkdown;
   fetch(): Promise<void>;
   ready: Promise<void>;
@@ -34,7 +31,6 @@ export interface IStarterManager {
 
 export namespace IStarterManager {
   export interface IOptions {
-    icons: IIconRegistry;
     rendermime: IRenderMimeRegistry;
   }
 }
