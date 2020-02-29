@@ -1,6 +1,6 @@
 import { JSONObject } from '@lumino/coreutils';
 import { ISignal } from '@lumino/signaling';
-
+import { LabIcon } from '@jupyterlab/ui-components';
 import { PageConfig, URLExt } from '@jupyterlab/coreutils';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { RenderedMarkdown } from '@jupyterlab/rendermime/lib/widgets';
@@ -21,6 +21,7 @@ export interface IStarterManager {
   markdown: RenderedMarkdown;
   fetch(): Promise<void>;
   ready: Promise<void>;
+  icon(name: string, starter: SCHEMA.Starter): LabIcon.ILabIcon;
   start(
     name: string,
     starter: SCHEMA.Starter,

@@ -2,11 +2,13 @@ import { JSONObject, PromiseDelegate } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
 import { URLExt } from '@jupyterlab/coreutils';
 import { ServerConnection } from '@jupyterlab/services';
+import { LabIcon } from '@jupyterlab/ui-components';
 import { IRenderMimeRegistry, RenderedMarkdown } from '@jupyterlab/rendermime';
 
-import { IStarterManager, API } from './tokens';
+import { IStarterManager, API, NS } from './tokens';
 
 import * as SCHEMA from './_schema';
+import { Icons } from './icons';
 
 const { makeRequest, makeSettings } = ServerConnection;
 
@@ -48,6 +50,10 @@ export class StarterManager implements IStarterManager {
     return this._starters[name];
   }
 
+  icon(name: string, starter: SCHEMA.Starter) {
+    return Private.icon(name, starter);
+  }
+
   async fetch() {
     const response = await makeRequest(API, {}, this._serverSettings);
     const content = (await response.json()) as SCHEMA.AResponseForAnStartersRequest;
@@ -70,5 +76,30 @@ export class StarterManager implements IStarterManager {
     const response = await makeRequest(url, init, this._serverSettings);
     const result = (await response.json()) as SCHEMA.AResponseForStartRequest;
     return result;
+  }
+}
+
+namespace Private {
+  const _icons = new Map<string, LabIcon.ILabIcon>();
+
+  _icons.set('cookiecutter', Icons.cookiecutter);
+
+  export function icon(name: string, starter: SCHEMA.Starter) {
+    if (_icons.has(name)) {
+      return _icons.get(name);
+    }
+    if (
+      starter.icon != null &&
+      starter.icon.length &&
+      starter.icon.indexOf('http://www.w3.org/2000/svg') > -1
+    ) {
+      const newIcon = new LabIcon({
+        name: `${NS}:${name}`,
+        svgstr: starter.icon
+      });
+      _icons.set(name, newIcon);
+      return newIcon;
+    }
+    return Icons.starter;
   }
 }

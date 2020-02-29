@@ -4,7 +4,8 @@ import {
   folderIcon,
   runIcon,
   circleIcon,
-  stopIcon
+  stopIcon,
+  closeIcon
 } from '@jupyterlab/ui-components';
 
 import { VDomRenderer } from '@jupyterlab/apputils';
@@ -52,7 +53,7 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
         onClick={this.onDone}
         className={`${CSS.JP.styled} ${CSS.JP.reject}`}
       >
-        <i className={`${CSS.JP.icon16} ${CSS.JP.ICON_CLASS.close}`}></i>
+        <closeIcon.react tag="span" verticalAlign="middle" />
         <label> CANCEL</label>
       </button>
     );
@@ -61,18 +62,18 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
   protected renderStartButton() {
     const { status, startCount } = this.model;
 
-    let icon = stopIcon;
+    let icon = <stopIcon.react tag="span" verticalAlign="middle" />;
     let label = 'FIXME';
     let statusClass = CSS.JP.warn;
 
     switch (status) {
       case 'ready':
-        icon = runIcon;
+        icon = <runIcon.react tag="span" verticalAlign="middle" />;
         label = startCount ? 'CONTINUE' : 'START';
         statusClass = CSS.JP.accept;
         break;
       case 'starting':
-        icon = circleIcon;
+        icon = <circleIcon.react tag="span" verticalAlign="middle" />;
         label = startCount > 1 ? 'CONTINUING' : 'STARTING';
         break;
       default:
@@ -85,7 +86,7 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
         className={`${CSS.JP.styled} ${statusClass}`}
         onClick={this.onStart}
       >
-        {icon.react({ tag: 'span', width: 16 })}
+        {icon}
         <label> {label} </label>
       </button>
     );

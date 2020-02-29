@@ -111,8 +111,11 @@ const plugin: JupyterFrontEndPlugin<void> = {
         }
       },
       label: (args: any) => args.starter.label,
-      caption: (args: any) => args.starter.description
-      // icon: (args: any) => { }
+      caption: (args: any) => args.starter.description,
+      icon: (args: any) => {
+        const context = (args as any) as IStartContext;
+        return manager.icon(context.name, context.starter);
+      }
     });
 
     let metadata: NotebookMetadata;

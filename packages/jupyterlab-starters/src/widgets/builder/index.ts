@@ -28,7 +28,7 @@ export class BodyBuilder extends Widget {
     this.addClass(CSS.BUILDER);
     this.addClass(CSS.FORM_PANEL);
     this.title.caption = label;
-    // this.title.iconClass = this.model.iconClass;
+    this.title.icon = this.model.icon;
 
     this._form = new SchemaForm(
       this._context.starter.schema,
