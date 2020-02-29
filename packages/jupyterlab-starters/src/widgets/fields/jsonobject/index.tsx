@@ -8,7 +8,7 @@ import { UnControlled } from 'react-codemirror2';
 
 import * as CodeMirror from 'codemirror';
 
-import { JSONExt } from '@phosphor/coreutils';
+import { JSONExt } from '@lumino/coreutils';
 
 export class JSONObjectField extends ObjectField {
   protected _editor: CodeMirror.Editor;

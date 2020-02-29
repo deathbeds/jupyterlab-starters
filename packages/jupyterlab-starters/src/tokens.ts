@@ -1,5 +1,5 @@
-import { JSONObject } from '@phosphor/coreutils';
-import { ISignal } from '@phosphor/signaling';
+import { JSONObject } from '@lumino/coreutils';
+import { ISignal } from '@lumino/signaling';
 
 import { PageConfig, URLExt } from '@jupyterlab/coreutils';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';

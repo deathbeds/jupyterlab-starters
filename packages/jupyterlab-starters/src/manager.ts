@@ -1,5 +1,5 @@
-import { JSONObject, PromiseDelegate } from '@phosphor/coreutils';
-import { Signal } from '@phosphor/signaling';
+import { JSONObject, PromiseDelegate } from '@lumino/coreutils';
+import { Signal } from '@lumino/signaling';
 import { URLExt } from '@jupyterlab/coreutils';
 import { ServerConnection } from '@jupyterlab/services';
 import { IIconRegistry, IconRegistry } from '@jupyterlab/ui-components';

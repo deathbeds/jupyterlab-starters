@@ -2,7 +2,7 @@ import React from 'react';
 
 import * as rjsf from 'react-jsonschema-form';
 
-import { JSONObject, JSONValue } from '@phosphor/coreutils';
+import { JSONObject, JSONValue } from '@lumino/coreutils';
 
 import { VDomRenderer } from '@jupyterlab/apputils';
 

@@ -1,6 +1,6 @@
-import { JSONObject } from '@phosphor/coreutils';
-import { Signal } from '@phosphor/signaling';
-import { Widget } from '@phosphor/widgets';
+import { JSONObject } from '@lumino/coreutils';
+import { Signal } from '@lumino/signaling';
+import { Widget } from '@lumino/widgets';
 import { VDomModel } from '@jupyterlab/apputils';
 
 import { IStarterManager, IStartContext } from '../../tokens';

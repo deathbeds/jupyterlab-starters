@@ -1,6 +1,6 @@
-import { JSONObject, JSONExt } from '@phosphor/coreutils';
-import { CommandRegistry } from '@phosphor/commands';
-import { Widget } from '@phosphor/widgets';
+import { JSONObject, JSONExt } from '@lumino/coreutils';
+import { CommandRegistry } from '@lumino/commands';
+import { Widget } from '@lumino/widgets';
 import { VDomModel } from '@jupyterlab/apputils';
 
 import { NotebookPanel } from '@jupyterlab/notebook';

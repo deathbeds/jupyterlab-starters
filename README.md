@@ -27,7 +27,7 @@ A starter is a...
 
 ## Installing
 
-> You'll need `jupyterlab >=1,<2`, `python >=3.6`, and `nodejs >=8`
+> You'll need `jupyterlab >=2,<2.1.0a0`, `python >=3.6`, and `nodejs >=8`
 
 ```bash
 pip install --pre jupyter_starters

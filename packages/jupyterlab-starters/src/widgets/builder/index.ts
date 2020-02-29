@@ -1,5 +1,5 @@
-import { JSONObject } from '@phosphor/coreutils';
-import { Widget, BoxLayout } from '@phosphor/widgets';
+import { JSONObject } from '@lumino/coreutils';
+import { Widget, BoxLayout } from '@lumino/widgets';
 
 import { IStartContext } from '../../tokens';
 import { CSS } from '../../css';
