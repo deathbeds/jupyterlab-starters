@@ -82,7 +82,7 @@ export class StarterManager implements IStarterManager {
 namespace Private {
   const _icons = new Map<string, LabIcon.ILabIcon>();
 
-  _icons.set(`${NS}:cookiecutter`, Icons.cookiecutter);
+  _icons.set('cookiecutter', Icons.cookiecutter);
 
   export function icon(name: string, starter: SCHEMA.Starter) {
     if (_icons.has(name)) {

@@ -2,7 +2,7 @@ import { LabIcon } from '@jupyterlab/ui-components';
 
 import { CSS } from './css';
 
-import { DEFAULT_ICON_NAME } from './tokens';
+import { DEFAULT_ICON_NAME, NS } from './tokens';
 
 export namespace Icons {
   export const starter = new LabIcon({
@@ -10,7 +10,7 @@ export namespace Icons {
     svgstr: CSS.SVG.DEFAULT_ICON
   });
   export const cookiecutter = new LabIcon({
-    name: 'cookiecutter-starter',
+    name: `${NS}:cookiecutter`,
     svgstr: CSS.SVG.COOKIECUTTER
   });
 }

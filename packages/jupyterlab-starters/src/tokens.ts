@@ -10,7 +10,7 @@ import * as SCHEMA from './_schema';
 export const NS = 'starters';
 export const API = URLExt.join(PageConfig.getBaseUrl(), 'starters');
 
-export const DEFAULT_ICON_NAME = `${NS}-default`;
+export const DEFAULT_ICON_NAME = `${NS}:default`;
 export const DEFAULT_ICON_CLASS = `jp-StartersDefaultIcon`;
 export const CATEGORY = 'Starters';
 
