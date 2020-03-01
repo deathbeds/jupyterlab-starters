@@ -56,7 +56,7 @@ HTML_REPLACEMENTS = [
     [r'"(.*?)\.md"', r'"\1.html"'],
 ]
 
-SKIPS = "not github and not ujson"
+SKIPS = "not http and not ujson"
 
 SCHEMA_README = SCHEMA_DOCS / "README.md"
 
