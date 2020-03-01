@@ -1,8 +1,13 @@
 # CHANGELOG
 
+## `jupyter_starters 0.3.0a0`
+
+- [#39][] adds listing and stopping of currently-running kernels to REST API
+
 ## `@deathbeds/jupyterlab-starters 0.3.0a0`
 
-- [#39][] support JupyterLab 2.0
+- [#39][] supports JupyterLab 2.0
+- [#39][] adds listing and stopping of running kernel-backed starters
 
 ## `jupyter_starters 0.2.2a0`
 
