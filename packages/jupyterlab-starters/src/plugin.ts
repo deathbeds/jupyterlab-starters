@@ -6,6 +6,8 @@ import {
   IRouter
 } from '@jupyterlab/application';
 
+import { IRunningSessionManagers } from '@jupyterlab/running';
+
 import { ILauncher } from '@jupyterlab/launcher';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
@@ -38,7 +40,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
     ILauncher,
     INotebookTracker,
     IRenderMimeRegistry,
-    IRouter
+    IRouter,
+    IRunningSessionManagers
   ],
   autoStart: true,
   activate: (
@@ -48,10 +51,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
     launcher: ILauncher,
     notebooks: INotebookTracker,
     rendermime: IRenderMimeRegistry,
-    router: IRouter
+    router: IRouter,
+    running: IRunningSessionManagers
   ) => {
     const { commands } = app;
     const manager: IStarterManager = new StarterManager({ rendermime });
+
+    running.add(manager);
 
     commands.addCommand(CommandIDs.start, {
       execute: async (args: any) => {
@@ -237,14 +243,20 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     app.docRegistry.addWidgetExtension('Notebook', notebookbutton);
 
+    const cardsAdded = [] as string[];
+
     manager.changed.connect(() => {
       const { starters } = manager;
       for (const name in starters) {
+        if (cardsAdded.indexOf(name) !== -1) {
+          continue;
+        }
         launcher.add({
           command: CommandIDs.start,
           args: { name, starter: starters[name] },
           category: CATEGORY
         });
+        cardsAdded.push(name);
       }
     });
 

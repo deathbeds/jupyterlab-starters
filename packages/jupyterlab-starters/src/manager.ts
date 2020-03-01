@@ -1,4 +1,4 @@
-import { JSONObject, PromiseDelegate } from '@lumino/coreutils';
+import { JSONObject, PromiseDelegate, JSONExt } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
 import { URLExt } from '@jupyterlab/coreutils';
 import { ServerConnection } from '@jupyterlab/services';
@@ -13,16 +13,47 @@ import { Icons } from './icons';
 const { makeRequest, makeSettings } = ServerConnection;
 
 export class StarterManager implements IStarterManager {
+  readonly name = 'Starter';
+
   private _changed: Signal<IStarterManager, void>;
+  private _runningChanged: Signal<IStarterManager, void>;
   private _starters: SCHEMA.NamedStarters = {};
   private _serverSettings = makeSettings();
   private _rendermime: IRenderMimeRegistry;
   private _markdown: RenderedMarkdown;
   private _ready = new PromiseDelegate<void>();
+  private _running: string[];
 
   constructor(options: IStarterManager.IOptions) {
     this._rendermime = options.rendermime;
     this._changed = new Signal<IStarterManager, void>(this);
+    this._runningChanged = new Signal<IStarterManager, void>(this);
+  }
+
+  // running stuff
+  shutdownAll() {
+    //
+  }
+
+  running() {
+    return (this._running || []).map(name => {
+      const starter = this.starters[name];
+      const icon = this.icon(name, starter) as LabIcon;
+      return {
+        label: () => starter.label,
+        open: () => void 0,
+        shutdown: async () => await this.stop(name),
+        icon: () => icon
+      };
+    });
+  }
+
+  refreshRunning() {
+    this.fetch().catch(console.warn);
+  }
+
+  get runningChanged() {
+    return this._runningChanged;
   }
 
   get markdown() {
@@ -60,6 +91,11 @@ export class StarterManager implements IStarterManager {
     this._starters = content.starters;
     this._changed.emit(void 0);
     this._ready.resolve(void 0);
+
+    if (!JSONExt.deepEqual(this._running, content.running)) {
+      this._running = content.running;
+      this._runningChanged.emit(void 0);
+    }
   }
 
   async start(
@@ -76,6 +112,16 @@ export class StarterManager implements IStarterManager {
     const response = await makeRequest(url, init, this._serverSettings);
     const result = (await response.json()) as SCHEMA.AResponseForStartRequest;
     return result;
+  }
+
+  async stop(name: string) {
+    const init: RequestInit = { method: 'DELETE' };
+    const url = URLExt.join(API, name);
+    const response = await makeRequest(`${url}/`, init, this._serverSettings);
+    if (response.status !== 202) {
+      console.warn(response);
+    }
+    await this.fetch();
   }
 }
 
