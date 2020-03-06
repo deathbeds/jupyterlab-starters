@@ -33,7 +33,7 @@
     "upload": "jlpm publish ."
   },
   "peerDependencies": {
-    "@deathbeds/jupyterlab-rjsf": "~0.4.0",
+    "@deathbeds/jupyterlab-rjsf": "~0.4.0a0",
     "@jupyterlab/application": "2",
     "@jupyterlab/launcher": "2",
     "@jupyterlab/notebook": "2",
