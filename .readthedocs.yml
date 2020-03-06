@@ -6,4 +6,6 @@ sphinx:
 conda:
   environment: docs/rtd.yml
 
-formats: all
+formats:
+  - htmlzip
+  - epub
