@@ -1,8 +1,25 @@
 # CHANGELOG
 
-## `@deathbeds/jupyterlab-rjsf 0.1.0`
+## `@deathbeds/jupyterlab-rjsf 0.4.0`
 
 - [#38][] split out `rjsf` into its own package
+
+## `@deathbeds/jupyterlab-starters 0.4.0a0`
+
+- [#38][] depend on `@deathbeds/jupyterlab-rjsf`
+
+## `jupyter_starters 0.4.0a0`
+
+- Updated for parity with frontend
+
+## `jupyter_starters 0.3.0a0`
+
+- [#39][] adds listing and stopping of currently-running kernels to REST API
+
+## `@deathbeds/jupyterlab-starters 0.3.0a0`
+
+- [#39][] supports JupyterLab 2.0
+- [#39][] adds listing and stopping of running kernel-backed starters
 
 ## `jupyter_starters 0.2.2a0`
 
@@ -71,3 +88,4 @@
 [#34]: https://github.com/deathbeds/jupyterlab-starters/pull/34
 [#35]: https://github.com/deathbeds/jupyterlab-starters/pull/35
 [#38]: https://github.com/deathbeds/jupyterlab-starters/pull/38
+[#39]: https://github.com/deathbeds/jupyterlab-starters/pull/39

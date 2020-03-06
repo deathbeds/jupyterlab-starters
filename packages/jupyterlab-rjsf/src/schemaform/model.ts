@@ -1,7 +1,7 @@
 import * as rjsf from 'react-jsonschema-form';
 
-import { Signal } from '@phosphor/signaling';
-import { JSONObject, JSONValue } from '@phosphor/coreutils';
+import { Signal } from '@lumino/signaling';
+import { JSONObject, JSONValue } from '@lumino/coreutils';
 import { VDomModel } from '@jupyterlab/apputils';
 import { RenderedMarkdown } from '@jupyterlab/rendermime';
 

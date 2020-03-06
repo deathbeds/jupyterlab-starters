@@ -1,41 +1,59 @@
-import { JSONObject, PromiseDelegate } from '@phosphor/coreutils';
-import { Signal } from '@phosphor/signaling';
+import { JSONObject, PromiseDelegate, JSONExt } from '@lumino/coreutils';
+import { Signal } from '@lumino/signaling';
 import { URLExt } from '@jupyterlab/coreutils';
 import { ServerConnection } from '@jupyterlab/services';
-import { IIconRegistry, IconRegistry } from '@jupyterlab/ui-components';
+import { LabIcon } from '@jupyterlab/ui-components';
 import { IRenderMimeRegistry, RenderedMarkdown } from '@jupyterlab/rendermime';
 
-import {
-  IStarterManager,
-  DEFAULT_ICON_CLASS,
-  DEFAULT_ICON_NAME,
-  API
-} from './tokens';
+import { IStarterManager, API, NS } from './tokens';
 
 import * as SCHEMA from './_schema';
-import { CSS } from './css';
+import { Icons } from './icons';
 
 const { makeRequest, makeSettings } = ServerConnection;
 
 export class StarterManager implements IStarterManager {
+  readonly name = 'Starter';
+
   private _changed: Signal<IStarterManager, void>;
+  private _runningChanged: Signal<IStarterManager, void>;
   private _starters: SCHEMA.NamedStarters = {};
   private _serverSettings = makeSettings();
-  private _icons: IIconRegistry;
   private _rendermime: IRenderMimeRegistry;
   private _markdown: RenderedMarkdown;
   private _ready = new PromiseDelegate<void>();
+  private _running: string[];
 
   constructor(options: IStarterManager.IOptions) {
-    this._icons = options.icons;
     this._rendermime = options.rendermime;
     this._changed = new Signal<IStarterManager, void>(this);
-    const icon = { name: DEFAULT_ICON_NAME, svg: CSS.SVG.DEFAULT_ICON };
-    const cookiecutter = {
-      name: 'cookiecutter-starter',
-      svg: CSS.SVG.COOKIECUTTER
-    };
-    this._icons.addIcon(icon, cookiecutter);
+    this._runningChanged = new Signal<IStarterManager, void>(this);
+  }
+
+  // running stuff
+  shutdownAll() {
+    //
+  }
+
+  running() {
+    return (this._running || []).map(name => {
+      const starter = this.starters[name];
+      const icon = this.icon(name, starter) as LabIcon;
+      return {
+        label: () => starter.label,
+        open: () => void 0,
+        shutdown: async () => await this.stop(name),
+        icon: () => icon
+      };
+    });
+  }
+
+  refreshRunning() {
+    this.fetch().catch(console.warn);
+  }
+
+  get runningChanged() {
+    return this._runningChanged;
   }
 
   get markdown() {
@@ -63,12 +81,21 @@ export class StarterManager implements IStarterManager {
     return this._starters[name];
   }
 
+  icon(name: string, starter: SCHEMA.Starter) {
+    return Private.icon(name, starter);
+  }
+
   async fetch() {
     const response = await makeRequest(API, {}, this._serverSettings);
     const content = (await response.json()) as SCHEMA.AResponseForAnStartersRequest;
     this._starters = content.starters;
     this._changed.emit(void 0);
     this._ready.resolve(void 0);
+
+    if (!JSONExt.deepEqual(this._running, content.running)) {
+      this._running = content.running;
+      this._runningChanged.emit(void 0);
+    }
   }
 
   async start(
@@ -87,26 +114,38 @@ export class StarterManager implements IStarterManager {
     return result;
   }
 
-  get icons() {
-    return this._icons;
+  async stop(name: string) {
+    const init: RequestInit = { method: 'DELETE' };
+    const url = URLExt.join(API, name);
+    const response = await makeRequest(`${url}/`, init, this._serverSettings);
+    if (response.status !== 202) {
+      console.warn(response);
+    }
+    await this.fetch();
   }
+}
 
-  iconClass(name: string, starter: SCHEMA.Starter) {
-    const icon = `${name}-starter`;
+namespace Private {
+  const _icons = new Map<string, LabIcon.ILabIcon>();
 
-    if (this._icons.contains(icon)) {
-      return IconRegistry.iconClassName(icon);
+  _icons.set('cookiecutter', Icons.cookiecutter);
+
+  export function icon(name: string, starter: SCHEMA.Starter) {
+    if (_icons.has(name)) {
+      return _icons.get(name);
     }
-
-    if (!starter.icon) {
-      return DEFAULT_ICON_CLASS;
+    if (
+      starter.icon != null &&
+      starter.icon.length &&
+      starter.icon.indexOf('http://www.w3.org/2000/svg') > -1
+    ) {
+      const newIcon = new LabIcon({
+        name: `${NS}:${name}`,
+        svgstr: starter.icon
+      });
+      _icons.set(name, newIcon);
+      return newIcon;
     }
-
-    this._icons.addIcon({
-      name: icon,
-      svg: starter.icon
-    });
-
-    return IconRegistry.iconClassName(icon);
+    return Icons.starter;
   }
 }

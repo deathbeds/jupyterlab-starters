@@ -1,29 +1,28 @@
-import { JSONObject } from '@phosphor/coreutils';
-import { ISignal } from '@phosphor/signaling';
-
+import { JSONObject } from '@lumino/coreutils';
+import { ISignal } from '@lumino/signaling';
+import { LabIcon } from '@jupyterlab/ui-components';
 import { PageConfig, URLExt } from '@jupyterlab/coreutils';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { RenderedMarkdown } from '@jupyterlab/rendermime/lib/widgets';
-import { IIconRegistry } from '@jupyterlab/ui-components';
+import { IRunningSessions } from '@jupyterlab/running';
 
 import * as SCHEMA from './_schema';
 
 export const NS = 'starters';
 export const API = URLExt.join(PageConfig.getBaseUrl(), 'starters');
 
-export const DEFAULT_ICON_NAME = `${NS}-default`;
+export const DEFAULT_ICON_NAME = `${NS}:default`;
 export const DEFAULT_ICON_CLASS = `jp-StartersDefaultIcon`;
 export const CATEGORY = 'Starters';
 
-export interface IStarterManager {
+export interface IStarterManager extends IRunningSessions.IManager {
   changed: ISignal<IStarterManager, void>;
   starters: SCHEMA.NamedStarters;
   starter(name: string): SCHEMA.Starter;
-  iconClass(name: string, starter: SCHEMA.Starter): string;
-  icons: IIconRegistry;
   markdown: RenderedMarkdown;
   fetch(): Promise<void>;
   ready: Promise<void>;
+  icon(name: string, starter: SCHEMA.Starter): LabIcon.ILabIcon;
   start(
     name: string,
     starter: SCHEMA.Starter,
@@ -34,7 +33,6 @@ export interface IStarterManager {
 
 export namespace IStarterManager {
   export interface IOptions {
-    icons: IIconRegistry;
     rendermime: IRenderMimeRegistry;
   }
 }

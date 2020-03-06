@@ -36,10 +36,10 @@ Update Examples
     [Arguments]    ${home}
     [Documentation]    Add the examples and patch in non-functioning examples
     Copy Directory    ${OUTPUT DIR}${/}..${/}..${/}..${/}examples    ${home}${/}examples
-    ${conf} =    Set Variable    jupyter_notebook_config.json
-    Copy File    ${OUTPUT DIR}${/}..${/}..${/}..${/}${conf}    ${home}
-    ${noop} =    Evaluate    ${NOOP CONF}
-    Merge To JSON File    ${home}${/}${conf}    ${noop}
+    Copy File    ${OUTPUT DIR}${/}..${/}..${/}..${/}${LAB CONF}    ${home}${/}${LAB CONF}
+    ${atest conf txt} =    Get File    etc${/}${LAB CONF}
+    ${atest conf} =    Evaluate    __import__("json").loads('''${atest conf txt}''')
+    Merge To JSON File    ${home}${/}${LAB CONF}    ${atest conf}
 
 Setup Suite For Screenshots
     [Arguments]    ${folder}
@@ -73,7 +73,7 @@ Open JupyterLab
     ${firefox} =    Which    firefox
     ${geckodriver} =    Which    geckodriver
     Create WebDriver    Firefox    executable_path=${geckodriver}    firefox_binary=${firefox}    service_log_path=${OUTPUT DIR}${/}geckodriver.log
-    Wait Until Keyword Succeeds    10x    5s    Go To    ${URL}lab?token=${TOKEN}
+    Wait Until Keyword Succeeds    10x    5s    Go To    ${URL}lab?token=${TOKEN}&reset
     Set Window Size    1920    1080
     Wait For Splash
 

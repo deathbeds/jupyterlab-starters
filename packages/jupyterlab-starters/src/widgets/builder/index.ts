@@ -1,5 +1,5 @@
-import { JSONObject } from '@phosphor/coreutils';
-import { Widget, BoxLayout } from '@phosphor/widgets';
+import { JSONObject } from '@lumino/coreutils';
+import { Widget, BoxLayout } from '@lumino/widgets';
 
 import { IStartContext } from '../../tokens';
 import { CSS } from '../../css';
@@ -28,7 +28,7 @@ export class BodyBuilder extends Widget {
     this.addClass(CSS.BUILDER);
     this.addClass(CSS.FORM_PANEL);
     this.title.caption = label;
-    this.title.iconClass = this.model.iconClass;
+    this.title.icon = this.model.icon;
 
     this._form = new SchemaForm(
       this._context.starter.schema,

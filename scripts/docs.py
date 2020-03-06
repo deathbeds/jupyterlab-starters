@@ -9,6 +9,15 @@ from subprocess import check_call
 
 import jinja2
 
+HAS_PYTEST = False
+
+try:
+    __import__("pytest_check_links")
+    HAS_PYTEST = True
+except Exception as err:
+    print("pytest_check_links not available, skipping link check", err)
+
+
 SPHINX_STAGE = os.environ.get("STARTERS_SPHINX_STAGE")
 
 SETUP = SPHINX_STAGE == "setup"
@@ -56,7 +65,7 @@ HTML_REPLACEMENTS = [
     [r'"(.*?)\.md"', r'"\1.html"'],
 ]
 
-SKIPS = "not github and not ujson"
+SKIPS = "not http and not ujson"
 
 SCHEMA_README = SCHEMA_DOCS / "README.md"
 
@@ -116,7 +125,8 @@ def docs():
         shutil.rmtree(DOCS_BUILD, ignore_errors=1)
         shutil.rmtree(SCHEMA_DOCS, ignore_errors=1)
         check_call(["sphinx-build", "-M", "html", DOCS, DOCS_BUILD])
-        check_call(["pytest", "--check-links", DOCS_BUILD, "-k", SKIPS])
+        if HAS_PYTEST:
+            check_call(["pytest", "--check-links", DOCS_BUILD, "-k", SKIPS])
     elif SETUP and not SCHEMA_DOCS.exists():
         check_call(["jlpm"])
         check_call(

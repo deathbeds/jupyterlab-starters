@@ -1,6 +1,6 @@
-import { IDisposable, DisposableDelegate } from '@phosphor/disposable';
+import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 
-import { CommandRegistry } from '@phosphor/commands';
+import { CommandRegistry } from '@lumino/commands';
 
 import { CommandToolbarButton } from '@jupyterlab/apputils';
 

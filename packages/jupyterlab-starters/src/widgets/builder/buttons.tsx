@@ -1,5 +1,13 @@
 import * as React from 'react';
 
+import {
+  folderIcon,
+  runIcon,
+  circleIcon,
+  stopIcon,
+  closeIcon
+} from '@jupyterlab/ui-components';
+
 import { VDomRenderer } from '@jupyterlab/apputils';
 
 import { CSS } from '../../css';
@@ -8,14 +16,13 @@ import { BuilderModel } from './model';
 
 export class BuilderButtons extends VDomRenderer<BuilderModel> {
   constructor(model: BuilderModel) {
-    super();
-    this.model = model;
+    super(model);
     this.addClass(CSS.BUILDER_BUTTONS);
   }
 
   protected render() {
     const m = this.model;
-    const { context, manager } = m;
+    const { context } = m;
     let path = context.cwd;
     path = path.startsWith('/') ? path : `/${path}`;
     path = path.endsWith('/') ? path : `${path}/`;
@@ -25,10 +32,7 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
       <>
         <footer>
           <label title={context.cwd}>
-            {manager.icons.iconReact({
-              name: 'folder',
-              width: 16
-            })}
+            <folderIcon.react tag="span" width="16" />
             {path}
           </label>
           <strong title={context.starter.description}>
@@ -49,33 +53,27 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
         onClick={this.onDone}
         className={`${CSS.JP.styled} ${CSS.JP.reject}`}
       >
-        <i className={`${CSS.JP.icon16} ${CSS.JP.ICON_CLASS.close}`}></i>
+        <closeIcon.react tag="span" verticalAlign="middle" />
         <label> CANCEL</label>
       </button>
     );
   }
 
   protected renderStartButton() {
-    const { status, manager, startCount } = this.model;
-    const { icons } = manager;
-    const width = 16;
+    const { status, startCount } = this.model;
 
-    let icon = icons.iconReact({ name: 'stop', width });
+    let icon = <stopIcon.react tag="span" verticalAlign="middle" />;
     let label = 'FIXME';
     let statusClass = CSS.JP.warn;
 
     switch (status) {
       case 'ready':
-        icon = icons.iconReact({ name: 'run', width });
+        icon = <runIcon.react tag="span" verticalAlign="middle" />;
         label = startCount ? 'CONTINUE' : 'START';
         statusClass = CSS.JP.accept;
         break;
       case 'starting':
-        icon = (
-          <i
-            className={`${CSS.JP.icon16} ${CSS.JP.ICON_CLASS.filledCircle}`}
-          ></i>
-        );
+        icon = <circleIcon.react tag="span" verticalAlign="middle" />;
         label = startCount > 1 ? 'CONTINUING' : 'STARTING';
         break;
       default:

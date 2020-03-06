@@ -17,7 +17,7 @@ from notebook.utils import maybe_future, url_path_join as ujoin
 from traitlets.config import LoggingConfigurable
 
 from .py_starters.cookiecutter import cookiecutter_starters
-from .py_starters.notebook import notebook_starter, response_from_notebook
+from .py_starters.notebook import notebook_starter, response_from_notebook, stop_kernel
 from .schema.v2 import STARTERS
 from .trait_types import Schema
 from .types import Status
@@ -62,6 +62,12 @@ class StarterManager(LoggingConfigurable):
         """ use the kernel manager from parent
         """
         return self.parent.kernel_manager
+
+    @property
+    def running(self):
+        """ report names of all starters that could be stopped
+        """
+        return list(self.kernel_dirs.keys())
 
     @T.default("jinja_env_extensions")
     def _default_env_extensions(self):
@@ -141,6 +147,17 @@ class StarterManager(LoggingConfigurable):
 
         if starter_type == "notebook":
             return await self.start_notebook(name, starter, path, body)
+
+        raise NotImplementedError(starter["type"])
+
+    async def stop(self, name):
+        """ stop a starter. presently only works for notebooks
+        """
+        starter = self.starters[name]
+        starter_type = starter["type"]
+
+        if starter_type == "notebook":
+            return await self.stop_notebook(name)
 
         raise NotImplementedError(starter["type"])
 
@@ -226,9 +243,14 @@ class StarterManager(LoggingConfigurable):
         return await func(name, starter, path, body, self)
 
     async def start_notebook(self, name, starter, path, body):
-        """ delegate running the notebook to a thread
+        """ delegate running the notebook to a kernel
         """
         return await notebook_starter(name, starter, path, body, self)
+
+    async def stop_notebook(self, name):
+        """ stop running the notebook kernel
+        """
+        return await stop_kernel(name, self)
 
     async def save_one(self, src, dest):
         """ use the contents manager to write a single file/folder

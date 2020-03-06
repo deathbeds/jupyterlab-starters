@@ -1,4 +1,5 @@
 *** Variables ***
+${LAB CONF}       jupyter_notebook_config.json
 ${LAB VERSION}    ${EMPTY}
 ${SPLASH}         id:jupyterlab-splash
 # to help catch hard-coded paths
@@ -14,16 +15,15 @@ ${CSS LAUNCH CARD NOTEBOOK}    ${CSS LAUNCH CARD}\[title\="A notebook that is al
 ${CSS LAUNCH CARD NOTEBOOK NOOP}    ${CSS LAUNCH CARD}\[title\="noop"]
 ${CSS LAUNCH CARD NOTEBOOK MULTI}    ${CSS LAUNCH CARD}\[title\="Build a directory one file at a time"]
 ${CSS LAUNCH CARD PARAM}    ${CSS LAUNCH CARD}\[title\="A renamed whitepaper"]
-${CSS LAUNCH CARD COOKIECUTTER}    ${CSS LAUNCH CARD} [data-icon="cookiecutter-starter"]
+${CSS LAUNCH CARD COOKIECUTTER}    ${CSS LAUNCH CARD} [data-icon="starters:cookiecutter"]
 ${CSS LAUNCH CARD FOLDER}    ${CSS LAUNCH CARD}\[title\="Some reusable notebooks for proposing research"]
 ${XP FILE TREE ITEM}    xpath://span[contains(@class, 'jp-DirListing-itemText')]
 ${CSS BODYBUILDER}    css:.jp-Starters-BodyBuilder
 ${CSS BODYBUILDER ACCEPT}    css:.jp-Starters-BodyBuilder-buttons .jp-mod-accept
 ${CSS BODYBUILDER CANCEL}    css:.jp-Starters-BodyBuilder-buttons .jp-mod-reject
-${CSS NOTEBOOK SAVE}    css:[data-icon="save"]
+${CSS NOTEBOOK SAVE}    css:[data-icon="ui-components:save"]
 ${CSS DIALOG}     css:.jp-Dialog
 ${CSS DIALOG OK}    ${CSS DIALOG} .jp-mod-accept
-${CSS NOTEBOOK TOOLBAR BUTTON}    css:.jp-ToolbarButtonComponent-icon[data-icon="starters-default"]
-${CSS HOME FOLDER}    css:.jp-FileBrowser-crumbs > span[data-icon="folder"]
+${CSS NOTEBOOK TOOLBAR BUTTON}    css:.jp-ToolbarButtonComponent[title^='Configure'][title$='as Starter']
+${CSS HOME FOLDER}    css:.jp-FileBrowser-crumbs svg[data-icon="ui-components:folder"]
 ${CSS NOTEBOOK STARTER META}    css:.jp-Starters-NotebookMetadata
-${NOOP CONF}      {"StarterManager": {"extra_starters": {"noop": {"src": "examples/No-Op Notebook.ipynb", "type": "notebook", "label": "noop", "description": "noop"}}}}

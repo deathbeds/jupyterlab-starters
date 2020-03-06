@@ -1,10 +1,11 @@
-name: jupyter-starters
-type: sphinx
+version: 2
+
+sphinx:
+  configuration: docs/conf.py
+
 conda:
-  file: docs/environment.yml
-python:
-  version: 3
-  setup_py_install: true
+  environment: docs/rtd.yml
+
 formats:
   - htmlzip
   - epub

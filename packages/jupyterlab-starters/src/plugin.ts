@@ -6,8 +6,9 @@ import {
   IRouter
 } from '@jupyterlab/application';
 
+import { IRunningSessionManagers } from '@jupyterlab/running';
+
 import { ILauncher } from '@jupyterlab/launcher';
-import { IIconRegistry } from '@jupyterlab/ui-components';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
 import { NotebookPanel, INotebookTracker } from '@jupyterlab/notebook';
@@ -37,10 +38,10 @@ const plugin: JupyterFrontEndPlugin<void> = {
     JupyterFrontEnd.IPaths,
     ILabShell,
     ILauncher,
-    IIconRegistry,
     INotebookTracker,
     IRenderMimeRegistry,
-    IRouter
+    IRouter,
+    IRunningSessionManagers
   ],
   autoStart: true,
   activate: (
@@ -48,13 +49,15 @@ const plugin: JupyterFrontEndPlugin<void> = {
     paths: JupyterFrontEnd.IPaths,
     shell: ILabShell,
     launcher: ILauncher,
-    icons: IIconRegistry,
     notebooks: INotebookTracker,
     rendermime: IRenderMimeRegistry,
-    router: IRouter
+    router: IRouter,
+    running: IRunningSessionManagers
   ) => {
     const { commands } = app;
-    const manager: IStarterManager = new StarterManager({ icons, rendermime });
+    const manager: IStarterManager = new StarterManager({ rendermime });
+
+    running.add(manager);
 
     commands.addCommand(CommandIDs.start, {
       execute: async (args: any) => {
@@ -115,9 +118,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
       },
       label: (args: any) => args.starter.label,
       caption: (args: any) => args.starter.description,
-      iconClass: (args: any) => {
+      icon: (args: any) => {
         const context = (args as any) as IStartContext;
-        return manager.iconClass(context.name, context.starter);
+        return manager.icon(context.name, context.starter);
       }
     });
 
@@ -240,14 +243,20 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     app.docRegistry.addWidgetExtension('Notebook', notebookbutton);
 
+    const cardsAdded = [] as string[];
+
     manager.changed.connect(() => {
       const { starters } = manager;
       for (const name in starters) {
+        if (cardsAdded.indexOf(name) !== -1) {
+          continue;
+        }
         launcher.add({
           command: CommandIDs.start,
           args: { name, starter: starters[name] },
           category: CATEGORY
         });
+        cardsAdded.push(name);
       }
     });
 

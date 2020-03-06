@@ -33,7 +33,11 @@ class StartersHandler(BaseHandler):
     async def get(self) -> None:
         """ return the starters
         """
-        response = {"version": VERSION, "starters": self.manager.starters}
+        response = {
+            "version": VERSION,
+            "starters": self.manager.starters,
+            "running": self.manager.running,
+        }
 
         try:
             ALL_STARTERS(response)
@@ -56,6 +60,15 @@ class StarterHandler(BaseHandler):
             body = loads(self.request.body)
 
         self.finish(await self.manager.start(starter, path, body))
+
+    # pylint: disable=unused-argument
+
+    async def delete(self, starter, path=None) -> None:
+        """ forcibly stop a starter
+        """
+        await self.manager.stop(starter)
+        self.set_status(202)
+        self.finish({})
 
 
 def add_handlers(nbapp, manager) -> None:
