@@ -1,12 +1,13 @@
 -e .
 cookiecutter
-importlib_metadata
-nbsphinx >=0.5.0,<0.5.1a0
-jupyterlab >=2,<2.1.0a0
 graphviz
+importlib_metadata
+jupyterlab >=2,<2.1.0a0
+nbsphinx >=0.5.0,<0.5.1a0
 recommonmark
 sphinx
 sphinx_rtd_theme
 sphinx-autodoc-typehints
 sphinx-copybutton
+sphinx-markdown-tables
 ujson
