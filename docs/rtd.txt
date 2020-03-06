@@ -1,3 +1,4 @@
+-e ..
 cookiecutter
 importlib_metadata
 nbsphinx >=0.5.0,<0.5.1a0
