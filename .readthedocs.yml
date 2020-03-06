@@ -1,9 +1,9 @@
 name: jupyter-starters
 type: sphinx
-conda:
-  file: docs/environment.yml
 python:
-  version: 3
+  version: 3.7
+  install:
+    - requirements: docs/rtd.txt
   setup_py_install: true
 formats:
   - htmlzip

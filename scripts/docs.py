@@ -9,6 +9,15 @@ from subprocess import check_call
 
 import jinja2
 
+HAS_PYTEST = False
+
+try:
+    __import__("pytest_check_links")
+    HAS_PYTEST = True
+except ImportError, ValueError:
+    pass
+
+
 SPHINX_STAGE = os.environ.get("STARTERS_SPHINX_STAGE")
 
 SETUP = SPHINX_STAGE == "setup"
@@ -116,7 +125,8 @@ def docs():
         shutil.rmtree(DOCS_BUILD, ignore_errors=1)
         shutil.rmtree(SCHEMA_DOCS, ignore_errors=1)
         check_call(["sphinx-build", "-M", "html", DOCS, DOCS_BUILD])
-        check_call(["pytest", "--check-links", DOCS_BUILD, "-k", SKIPS])
+        if HAS_PYTEST:
+            check_call(["pytest", "--check-links", DOCS_BUILD, "-k", SKIPS])
     elif SETUP and not SCHEMA_DOCS.exists():
         check_call(["jlpm"])
         check_call(
