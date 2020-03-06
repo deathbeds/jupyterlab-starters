@@ -4,8 +4,6 @@ import {
   IJSONSchemaFormTracker,
   FILE_TYPES,
   CommandIds,
-  ICON_NAME,
-  ICON_SVG,
   ICON_CLASS
 } from './tokens';
 
@@ -23,8 +21,6 @@ import { IFileBrowserFactory } from '@jupyterlab/filebrowser';
 
 import { IDocumentManager } from '@jupyterlab/docmanager';
 
-import { IIconRegistry } from '@jupyterlab/ui-components';
-
 import { JSONSchemaFormDocument, JSONSchemaFormFactory } from './document';
 import { SchemaManager } from './manager';
 
@@ -41,7 +37,6 @@ const plugin: JupyterFrontEndPlugin<IJSONSchemaFormTracker> = {
     IFileBrowserFactory,
     ILayoutRestorer,
     ICommandPalette,
-    IIconRegistry,
     IDocumentManager,
     ILabShell,
     IRenderMimeRegistry
@@ -55,16 +50,10 @@ function activate(
   browserFactory: IFileBrowserFactory,
   restorer: ILayoutRestorer,
   palette: ICommandPalette,
-  icons: IIconRegistry,
   docManager: IDocumentManager,
   shell: ILabShell,
   rendermime: IRenderMimeRegistry
 ): IJSONSchemaFormTracker {
-  icons.addIcon({
-    name: ICON_NAME,
-    svg: ICON_SVG
-  });
-
   const schemaManager = new SchemaManager({ shell, rendermime });
   const jsonMatcher = new JSONMatcher();
   const yamlMatcher = new YAMLMatcher();
@@ -77,7 +66,7 @@ function activate(
   const factory = new JSONSchemaFormFactory({
     name: FACTORY,
     docManager,
-    fileTypes: Object.keys(FILE_TYPES).map((key) => FILE_TYPES[key].name),
+    fileTypes: Object.keys(FILE_TYPES).map(key => FILE_TYPES[key].name),
     schemaManager
   });
 

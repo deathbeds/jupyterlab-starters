@@ -1,8 +1,8 @@
 export const NS = 'rjsf';
 
-import { Token, JSONObject } from '@phosphor/coreutils';
-import { ISignal } from '@phosphor/signaling';
-import { Widget } from '@phosphor/widgets';
+import { Token, JSONObject } from '@lumino/coreutils';
+import { ISignal } from '@lumino/signaling';
+import { Widget } from '@lumino/widgets';
 import { IWidgetTracker } from '@jupyterlab/apputils';
 import { RenderedMarkdown } from '@jupyterlab/rendermime';
 

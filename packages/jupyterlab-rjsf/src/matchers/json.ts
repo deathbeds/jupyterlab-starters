@@ -1,6 +1,6 @@
 import { ISchemaManager } from '../tokens';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
-import { JSONObject } from '@phosphor/coreutils';
+import { JSONObject } from '@lumino/coreutils';
 
 export class JSONMatcher implements ISchemaManager.IFullIO {
   handles(action: string, context: DocumentRegistry.Context) {

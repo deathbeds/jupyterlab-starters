@@ -1,8 +1,8 @@
-import { toArray } from '@phosphor/algorithm';
-import { Signal } from '@phosphor/signaling';
-import { JSONObject } from '@phosphor/coreutils';
+import { toArray } from '@lumino/algorithm';
+import { Signal } from '@lumino/signaling';
+import { JSONObject } from '@lumino/coreutils';
 
-import { Widget } from '@phosphor/widgets';
+import { Widget } from '@lumino/widgets';
 import { ILabShell } from '@jupyterlab/application';
 import { ISchemaManager } from './tokens';
 import { IRenderMimeRegistry, RenderedMarkdown } from '@jupyterlab/rendermime';

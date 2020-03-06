@@ -42,7 +42,7 @@
   "devDependencies": {
     "@types/codemirror": "^0.0.74",
     "@types/react-jsonschema-form": "^1.6.6",
-    "@deathbeds/jupyterlab-rjsf": "~0.4.0",
+    "@deathbeds/jupyterlab-rjsf": "~0.4.0a0",
     "@jupyterlab/application": "2",
     "@jupyterlab/running": "2",
     "@jupyterlab/launcher": "2",

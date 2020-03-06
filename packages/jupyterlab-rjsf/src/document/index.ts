@@ -1,5 +1,5 @@
-import { Widget } from '@phosphor/widgets';
-import { JSONExt, JSONObject } from '@phosphor/coreutils';
+import { Widget } from '@lumino/widgets';
+import { JSONExt, JSONObject } from '@lumino/coreutils';
 import { PathExt, URLExt } from '@jupyterlab/coreutils';
 import { ALL_CUSTOM_UI } from '../fields';
 

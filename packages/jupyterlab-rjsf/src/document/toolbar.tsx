@@ -5,14 +5,9 @@ import { VDomRenderer, VDomModel } from '@jupyterlab/apputils';
 import { DocumentRegistry, DocumentWidget } from '@jupyterlab/docregistry';
 import { ISchemaManager } from '../tokens';
 
-const CARET = {
-  icon: <span className="jp-MaterialIcon jp-DownCaretIcon bp3-icon" />
-};
-
 export class SchemaFinder extends VDomRenderer<SchemaFinder.Model> {
   constructor(options: SchemaFinder.IOptions) {
-    super();
-    this.model = new SchemaFinder.Model(options);
+    super(new SchemaFinder.Model(options));
   }
 
   dispose() {
@@ -33,8 +28,6 @@ export class SchemaFinder extends VDomRenderer<SchemaFinder.Model> {
         <span>{label}</span>
         <HTMLSelect
           aria-label={label}
-          minimal
-          iconProps={CARET}
           value={this.model.schemaPath}
           onChange={this.handleChange}
         >
@@ -203,8 +196,7 @@ export namespace SchemaFinder {
 
 export class Indenter extends VDomRenderer<Indenter.Model> {
   constructor() {
-    super();
-    this.model = new Indenter.Model();
+    super(new Indenter.Model());
   }
 
   dispose() {
@@ -221,8 +213,6 @@ export class Indenter extends VDomRenderer<Indenter.Model> {
         <span>Indent</span>
         <HTMLSelect
           aria-label="Indent Count"
-          minimal
-          iconProps={CARET}
           onChange={this.handleCount}
           value={this.model.count}
         >
@@ -234,8 +224,6 @@ export class Indenter extends VDomRenderer<Indenter.Model> {
         </HTMLSelect>
         <HTMLSelect
           aria-label="Indent Character"
-          minimal
-          iconProps={CARET}
           onChange={this.handleCharacter}
           value={this.model.character}
         >
@@ -285,8 +273,7 @@ export namespace Indenter {
 
 export class Toggle extends VDomRenderer<Toggle.Model> {
   constructor(options: Toggle.IOptions) {
-    super();
-    this.model = new Toggle.Model(options);
+    super(new Toggle.Model(options));
   }
 
   dispose() {
