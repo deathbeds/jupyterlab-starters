@@ -14,8 +14,8 @@ HAS_PYTEST = False
 try:
     __import__("pytest_check_links")
     HAS_PYTEST = True
-except ImportError, ValueError:
-    pass
+except Exception as err:
+    print("pytest_check_links not available, skipping link check", err)
 
 
 SPHINX_STAGE = os.environ.get("STARTERS_SPHINX_STAGE")
