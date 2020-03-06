@@ -8,6 +8,7 @@ export class JSONMatcher implements ISchemaManager.IFullIO {
   }
 
   async read(context: DocumentRegistry.CodeContext) {
+    await context.ready;
     return JSON.parse(context.model.value.text);
   }
 

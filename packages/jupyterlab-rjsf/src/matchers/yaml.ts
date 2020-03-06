@@ -10,6 +10,7 @@ export class YAMLMatcher implements ISchemaManager.IFullIO {
   }
 
   async read(context: DocumentRegistry.CodeContext) {
+    await context.ready;
     try {
       return jsyaml.safeLoad(context.model.value.text);
     } catch (err) {

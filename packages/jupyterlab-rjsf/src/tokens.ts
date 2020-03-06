@@ -17,9 +17,13 @@ export const FACTORY = 'Schema Form';
 
 export const ICON_CLASS = 'jp-JsonSchemaFormIcon';
 
-export const ICON_NAME = 'json-schema-form';
+export const ICON_NAME = `${NS}:json-schema-form`;
 
 import ICON_SVG from '!!raw-loader!../style/icons/form.svg';
+
+import { LabIcon } from '@jupyterlab/ui-components';
+
+export const formIcon = new LabIcon({ name: ICON_NAME, svgstr: ICON_SVG });
 
 export interface IJSONSchemaFormTracker
   extends IWidgetTracker<JSONSchemaFormDocument> {}
@@ -38,17 +42,17 @@ export const FILE_TYPES: IFileTypes = {
     displayName: 'JSON Schema Form',
     mimeTypes: ['application/json', 'application/schema-instance+json'],
     extensions: ['.json', '.instance.json'],
-    iconClass: ICON_CLASS,
+    icon: formIcon,
     fileFormat: 'json',
     contentType: 'file'
   },
   'rjsf-yaml-instance': {
     name: 'yaml',
-    displayName: 'JSON Schema Form in YAML',
+    displayName: 'JSON Schema Form (YAML)',
     mimeTypes: ['text/yaml', 'text/schema-instance+yaml'],
     extensions: ['.yaml', '.yml', '.instance.yaml', '.instance.yml'],
-    iconClass: ICON_CLASS,
-    fileFormat: 'json',
+    icon: formIcon,
+    fileFormat: 'text',
     contentType: 'file'
   }
 };
