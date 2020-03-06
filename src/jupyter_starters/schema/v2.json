@@ -25,6 +25,14 @@
           "description": "Starters keyed by their API/URL names",
           "$ref": "#/definitions/starters"
         },
+        "running": {
+          "title": "Running Starters",
+          "description": "Starters currently using a process/resource",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "version": {
           "title": "API Version",
           "description": "The version of the Jupyter Starters API",

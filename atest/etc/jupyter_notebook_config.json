@@ -1,0 +1,20 @@
+{
+  "LabApp": {
+    "tornado_settings": {
+      "page_config_data": {
+        "buildCheck": false,
+        "buildAvailable": false
+      }
+    }
+  },
+  "StarterManager": {
+    "extra_starters": {
+      "noop": {
+        "src": "examples/No-Op Notebook.ipynb",
+        "type": "notebook",
+        "label": "noop",
+        "description": "noop"
+      }
+    }
+  }
+}

@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## `jupyter_starters 0.3.0a0`
+
+- [#39][] adds listing and stopping of currently-running kernels to REST API
+
+## `@deathbeds/jupyterlab-starters 0.3.0a0`
+
+- [#39][] supports JupyterLab 2.0
+- [#39][] adds listing and stopping of running kernel-backed starters
+
 ## `jupyter_starters 0.2.2a0`
 
 - [#23][] rename `_json` module to `json_`, start documentation site in earnest
@@ -66,3 +75,4 @@
 [#29]: https://github.com/deathbeds/jupyterlab-starters/pull/29
 [#34]: https://github.com/deathbeds/jupyterlab-starters/pull/34
 [#35]: https://github.com/deathbeds/jupyterlab-starters/pull/35
+[#39]: https://github.com/deathbeds/jupyterlab-starters/pull/39

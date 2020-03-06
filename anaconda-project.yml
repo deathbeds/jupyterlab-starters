@@ -48,7 +48,7 @@ env_specs:
     inherit_from:
       - default
     packages:
-      - nbsphinx
+      - nbsphinx >=0.5.0,<0.5.1a0
       - pip
       - pytest
       - recommonmark
@@ -68,7 +68,7 @@ env_specs:
     packages:
       - cookiecutter
       - importlib_metadata
-      - jupyterlab >=1.2.4,<1.3
+      - jupyterlab >=2,<2.1.0a0
       - nodejs >=11,<12
       - python >=3.7,<3.8.0a0
       - python-fastjsonschema

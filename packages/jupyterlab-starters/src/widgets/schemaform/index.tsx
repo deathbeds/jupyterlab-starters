@@ -2,7 +2,7 @@ import React from 'react';
 
 import * as rjsf from 'react-jsonschema-form';
 
-import { JSONObject, JSONValue } from '@phosphor/coreutils';
+import { JSONObject, JSONValue } from '@lumino/coreutils';
 
 import { VDomRenderer } from '@jupyterlab/apputils';
 
@@ -48,9 +48,8 @@ export class SchemaForm<T extends JSONValue> extends VDomRenderer<
     props: Partial<rjsf.FormProps<T>> = {},
     options?: SchemaFormModel.IOptions
   ) {
-    super();
+    super(new SchemaFormModel<T>(schema, props, options));
     this._idPrefix = `${SCHEMA_FORM_ID_PREFIX}-${Private.nextId()}`;
-    this.model = new SchemaFormModel<T>(schema, props, options);
     if (this.model.markdown) {
       this.model.rendered.connect(this._renderMarkdown);
     }

@@ -6,7 +6,7 @@ Resource          Keywords.robot
 Library           String
 
 *** Variables ***
-${MULTI TAB}      css:.p-DockPanel .p-TabBar-tab [data-icon\="multi-stage-notebook-starter"]
+${MULTI TAB}      css:.p-DockPanel .p-TabBar-tab [data-icon\="starters:multi-stage-notebook"]
 
 *** Test Cases ***
 Happy Path

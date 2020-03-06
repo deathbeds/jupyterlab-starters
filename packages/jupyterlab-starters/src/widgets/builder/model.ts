@@ -1,6 +1,6 @@
-import { JSONObject } from '@phosphor/coreutils';
-import { Signal } from '@phosphor/signaling';
-import { Widget } from '@phosphor/widgets';
+import { JSONObject } from '@lumino/coreutils';
+import { Signal } from '@lumino/signaling';
+import { Widget } from '@lumino/widgets';
 import { VDomModel } from '@jupyterlab/apputils';
 
 import { IStarterManager, IStartContext } from '../../tokens';
@@ -110,8 +110,8 @@ export class BuilderModel extends VDomModel {
     this._done && this._done();
   }
 
-  get iconClass() {
-    return this._manager.iconClass(this._name, this._context.starter);
+  get icon() {
+    return this._manager.icon(this._name, this._context.starter);
   }
 }
 
