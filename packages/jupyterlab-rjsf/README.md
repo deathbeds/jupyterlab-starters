@@ -23,18 +23,20 @@ Things you can `jupyter labextension install` to use this component:
 - [@deathbeds/jupyterlab-starters](https://github.com/deathbeds/jupyterlab-starters)
   uses this component in a sidebar to render things like cookiecutters and notebooks
   before making templated files
+  - the tests for this component are also mostly contained in this repo, for now
 
-- [@deathbeds/wxyz-lab](https://github.com/deathbeds/jupyterlab-starters)
+- [@deathbeds/wxyz](https://github.com/deathbeds/wxyz)
   uses an earlier version of this component to connect a JSON Schema to the
   broader Jupyter Widgets ecosystem, but also works with other `wxyz` widgets without
-  a "server" kernel
+  a "server" kernel.
 
 ## For Developers
 
 ### JupyterLab Extensions
 
 Use the `SchemaForm`, a `@lumino/widget` that you can put inside of any other
-widget (such as the `DockPanel`).
+widget (such as the `DockPanel`). It's `model` exposes the `schema`, `formData`,
+other `rjsf` specifics, and can be connected to with `model.stateChanged`.
 
 ### React
 
@@ -56,4 +58,5 @@ Several underlying libraries are used from the broader React ecosystem.
   - [ ] formatting
 - - [ ] `rjsf` 2.x
 - [ ] additional extension points
-  - readers (e.g. YAML, JSONL, TOML)
+  - [ ] readers e.g. `YAML`, `JSONL`, `TOML`
+- [ ] explore additional form libraries, e.g. `formik`
