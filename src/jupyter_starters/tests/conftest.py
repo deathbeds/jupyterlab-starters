@@ -22,6 +22,10 @@ class MockApp(LoggingConfigurable):
         """
         return MultiKernelManager(parent=self)
 
+    @property
+    def contents_manager(self):
+        return None
+
 
 @pytest.fixture
 def starter_manager(mock_app):
