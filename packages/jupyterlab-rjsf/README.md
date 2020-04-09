@@ -23,6 +23,7 @@ Things you can `jupyter labextension install` to use this component:
 - [@deathbeds/jupyterlab-starters](https://github.com/deathbeds/jupyterlab-starters)
   uses this component in a sidebar to render things like cookiecutters and notebooks
   before making templated files
+
   - the tests for this component are also mostly contained in this repo, for now
 
 - [@deathbeds/wxyz](https://github.com/deathbeds/wxyz)
@@ -43,10 +44,10 @@ other `rjsf` specifics, and can be connected to with `model.stateChanged`.
 Several underlying libraries are used from the broader React ecosystem.
 
 > `rjsf` in particular has a large pending release (2.x), so some APIs are subject
-  to change abruptly in the near future.
+> to change abruptly in the near future.
 
->> TBD: more info on `async-component`, and `rjsf`-specifics like `jsonobject`
->> and `codemirror`, `Form` and `Theme`
+> > TBD: more info on `async-component`, and `rjsf`-specifics like `jsonobject`
+> > and `codemirror`, `Form` and `Theme`
 
 ## Roadmap
 
