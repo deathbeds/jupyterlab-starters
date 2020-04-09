@@ -57,34 +57,6 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
     }
   }
 
-  _renderMarkdown = () => {
-    const markdown = this.model.markdown;
-    const hosts = Array.from(
-      this.node.querySelectorAll(
-        this.model.liveMarkdown ? UNRENDERED_LABELS : ALL_LABELS
-      )
-    );
-    if (!hosts.length && !this._initialRender) {
-      this._initialRenderDelay = this._initialRenderDelay * 2;
-      setTimeout(this._renderMarkdown, this._initialRenderDelay);
-      return;
-    }
-    for (const host of hosts) {
-      host.classList.add(...MARKDOWN_CLASSES);
-      void renderMarkdown({
-        host: host as HTMLElement,
-        source: host.textContent.trim(),
-        trusted: true,
-        sanitizer: markdown.sanitizer,
-        latexTypesetter: markdown.latexTypesetter,
-        resolver: markdown.resolver,
-        linkHandler: markdown.linkHandler,
-        shouldTypeset: true
-      });
-    }
-    this._initialRender = true;
-  };
-
   /**
    * Render the form, if the model is available
    */
@@ -124,11 +96,6 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
     return <Form {...finalProps} />;
   }
 
-  private _postRender = () => {
-    this.model.errorsObserved = !!this.node.querySelector('.errors');
-    this.model.emitRenderered();
-  };
-
   /**
    * Handle the change of a form by the user and update the model
    */
@@ -150,6 +117,49 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
       errors: this.model.errors
     };
   }
+
+  protected _renderMarkdown = async () => {
+    const hosts: HTMLElement[] = Array.from(
+      this.node.querySelectorAll(
+        this.model.liveMarkdown ? UNRENDERED_LABELS : ALL_LABELS
+      )
+    );
+    if (!hosts.length && !this._initialRender) {
+      this._initialRenderDelay = this._initialRenderDelay * 2;
+      setTimeout(this._renderMarkdown, this._initialRenderDelay);
+      return;
+    }
+    this._initialRender = true;
+    await Promise.all(hosts.map(this._renderOneMarkdown));
+  };
+
+  protected _renderOneMarkdown = async (host: HTMLElement) => {
+    const markdown = this.model.markdown;
+    host.classList.add(...MARKDOWN_CLASSES);
+    const { textContent, dataset } = host;
+    const { rawMarkdown } = dataset;
+    if (rawMarkdown) {
+      return;
+    }
+    console.log('rendering markdown', textContent);
+    dataset.rawMarkdown = textContent;
+
+    await renderMarkdown({
+      host: host as HTMLElement,
+      source: rawMarkdown || textContent,
+      trusted: true,
+      sanitizer: markdown.sanitizer,
+      latexTypesetter: markdown.latexTypesetter,
+      resolver: markdown.resolver,
+      linkHandler: markdown.linkHandler,
+      shouldTypeset: true
+    });
+  };
+
+  protected _postRender = () => {
+    this.model.errorsObserved = !!this.node.querySelector('.errors');
+    this.model.emitRenderered();
+  };
 
   /**
    * The id prefix to use for all form children
