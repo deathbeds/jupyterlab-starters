@@ -13,6 +13,7 @@ HAS_PYTEST = False
 
 try:
     import pytest_check_links
+
     print("pytest_check_links available, will check links", pytest_check_links)
     HAS_PYTEST = True
 except ImportError as err:

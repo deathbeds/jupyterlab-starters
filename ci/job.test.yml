@@ -28,6 +28,8 @@ jobs:
   - ${{ each platform in parameters.platforms }}:
       - ${{ each python in parameters.pythons}}:
           - job: ${{ platform.name }}${{ python.name }}
+            dependsOn:
+              - Lint
             pool:
               vmImage: ${{ platform.vmImage }}
             steps:

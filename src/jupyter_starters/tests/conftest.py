@@ -5,6 +5,8 @@ import nbformat.v4
 import pytest
 import traitlets
 from jupyter_client.multikernelmanager import MultiKernelManager
+from notebook.services.contents.filemanager import FileContentsManager
+from notebook.services.contents.manager import ContentsManager
 from traitlets.config import LoggingConfigurable
 
 from jupyter_starters.manager import StarterManager
@@ -15,6 +17,8 @@ class MockApp(LoggingConfigurable):
     """
 
     kernel_manager = traitlets.Instance(MultiKernelManager)
+    contents_manager = traitlets.Instance(ContentsManager)
+    notebook_dir = traitlets.Unicode()
 
     @traitlets.default("kernel_manager")
     def _kernel_manager(self):
@@ -22,9 +26,11 @@ class MockApp(LoggingConfigurable):
         """
         return MultiKernelManager(parent=self)
 
-    @property
-    def contents_manager(self):
-        return None
+    @traitlets.default("contents_manager")
+    def _contents_manager(self):
+        """ simplest reasonable kernel manager
+        """
+        return FileContentsManager(root_dir=self.notebook_dir, parent=self)
 
 
 @pytest.fixture
@@ -39,7 +45,7 @@ def mock_app(monkeypatch, tmp_path):
     """ a fake notebook app in a tmpdir
     """
     monkeypatch.chdir(tmp_path)
-    return MockApp()
+    return MockApp(notebook_dir=str(tmp_path))
 
 
 @pytest.fixture
