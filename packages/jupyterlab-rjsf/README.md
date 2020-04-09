@@ -18,6 +18,8 @@ be installed for you, if needed.
 
 ### Related Projects
 
+Things you can `jupyter labextension install` to use this component:
+
 - [@deathbeds/jupyterlab-starters](https://github.com/deathbeds/jupyterlab-starters)
   uses this component in a sidebar to render things like cookiecutters and notebooks
   before making templated files
@@ -36,10 +38,13 @@ widget (such as the `DockPanel`).
 
 ### React
 
-Several underlying libraries are used from the broader React ecosystm.
+Several underlying libraries are used from the broader React ecosystem.
 
-> TBD: more info on `async-component`, and `rjsf`-specifics like `jsonobject`
-> and `codemirror`
+> `rjsf` in particular has a large pending release (2.x), so some APIs are subject
+  to change abruptly in the near future.
+
+>> TBD: more info on `async-component`, and `rjsf`-specifics like `jsonobject`
+>> and `codemirror`, `Form` and `Theme`
 
 ## Roadmap
 
@@ -49,5 +54,6 @@ Several underlying libraries are used from the broader React ecosystm.
   - [ ] JSON Schema as form?
   - [ ] `rjsf` UI schema
   - [ ] formatting
+- - [ ] `rjsf` 2.x
 - [ ] additional extension points
   - readers (e.g. YAML, JSONL, TOML)
