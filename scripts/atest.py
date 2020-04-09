@@ -18,7 +18,9 @@ PY = "".join(map(str, sys.version_info[:2]))
 
 
 OS_PY_ARGS = {
-    # e.g. when notebook and ipykernel releases did not yet support python 3.8 on windows
+    # e.g. when notebook and ipykernel releases did not yet support python 3.8
+    #      on windows
+    #
     # ("Windows", "38"): ["--include", "not-supported", "--runemptysuite"]
 }
 
@@ -26,6 +28,8 @@ OK = 0
 
 
 def get_stem(attempt, extra_args):
+    """ predictable folder naming, based on attempt an other extra args
+    """
     stem = "_".join([OS, PY, str(attempt)]).replace(".", "_").lower()
 
     if "--dryrun" in extra_args:
@@ -38,7 +42,6 @@ def atest(attempt, extra_args):
     """ perform a single attempt of the acceptance tests
     """
     extra_args += OS_PY_ARGS.get((OS, PY), [])
-
     stem = get_stem(attempt, extra_args)
 
     if attempt != 1:
@@ -78,10 +81,7 @@ def atest(attempt, extra_args):
 
     if out_dir.exists():
         print("trying to clean out {}".format(out_dir))
-        try:
-            shutil.rmtree(out_dir)
-        except Exception as err:
-            print("Error deleting {}, hopefully harmless: {}".format(out_dir, err))
+        shutil.rmtree(out_dir, ignore_errors=True)
 
     try:
         robot.run_cli(list(map(str, args)))
