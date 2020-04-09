@@ -4,6 +4,7 @@ import os
 import platform
 import shutil
 import sys
+import time
 from pathlib import Path
 
 import robot
@@ -15,14 +16,36 @@ OUT = ATEST / "output"
 OS = platform.system()
 PY = "".join(map(str, sys.version_info[:2]))
 
+
+OS_PY_ARGS = {
+    # e.g. when notebook and ipykernel releases did not yet support python 3.8 on windows
+    # ("Windows", "38"): ["--include", "not-supported", "--runemptysuite"]
+}
+
 OK = 0
 
 
-def atest(attempt=0):
-    """ run the acceptance tests once
-    """
-    # pylint: disable=broad-except
+def get_stem(attempt, extra_args):
     stem = "_".join([OS, PY, str(attempt)]).replace(".", "_").lower()
+
+    if "--dryrun" in extra_args:
+        stem = f"dry_run_{stem}"
+
+    return stem
+
+
+def atest(attempt, extra_args):
+    """ perform a single attempt of the acceptance tests
+    """
+    extra_args += OS_PY_ARGS.get((OS, PY), [])
+
+    stem = get_stem(attempt, extra_args)
+
+    if attempt != 1:
+        previous = OUT / f"{get_stem(attempt - 1, extra_args)}.robot.xml"
+        if previous.exists():
+            extra_args += ["--rerunfailed", str(previous)]
+
     out_dir = OUT / stem
 
     args = [
@@ -42,14 +65,14 @@ def atest(attempt=0):
         f"OS:{OS}",
         "--variable",
         f"PY:{PY}",
-        "--noncritical",
-        "ospy:windows38",
         "--xunitskipnoncritical",
-        "--consolewidth",
-        "100",
-        *sys.argv[1:],
+        "--randomize",
+        "all",
+        *(extra_args or []),
         ATEST,
     ]
+
+    print("Robot Arguments\n", " ".join(["robot"] + list(map(str, args))))
 
     os.chdir(ATEST)
 
@@ -60,22 +83,30 @@ def atest(attempt=0):
         except Exception as err:
             print("Error deleting {}, hopefully harmless: {}".format(out_dir, err))
 
-    return robot.run_cli(list(map(str, args)), exit=False)
+    try:
+        robot.run_cli(list(map(str, args)))
+        return 0
+    except SystemExit as err:
+        return err.code
 
 
-def attempt_atest(retries=int(os.environ.get("ATEST_RETRIES") or "0")):
-    """ try acceptance tests a few times
+def attempt_atest_with_retries(*extra_args):
+    """ retry the robot tests a number of times
     """
     attempt = 0
-    code = -1
+    error_count = -1
 
-    while code != OK and attempt <= retries:
+    retries = int(os.environ.get("ATEST_RETRIES") or "0")
+
+    while error_count != 0 and attempt <= retries:
         attempt += 1
         print("attempt {} of {}...".format(attempt, retries + 1))
-        code = atest(attempt)
+        start_time = time.time()
+        error_count = atest(attempt=attempt, extra_args=list(extra_args))
+        print(error_count, "errors in", int(time.time() - start_time), "seconds")
 
-    return code
+    return error_count
 
 
 if __name__ == "__main__":
-    sys.exit(attempt_atest())
+    sys.exit(attempt_atest_with_retries(*sys.argv[1:]))
