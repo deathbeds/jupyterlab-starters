@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## `@deathbeds/jupyterlab-rjsf 0.4.0`
+## `@deathbeds/jupyterlab-rjsf 0.4.0a0`
 
 - [#38][] split out `rjsf` into its own package
 
