@@ -21,6 +21,7 @@ parameters:
       lab: '>=2.1,<3.0.0a0'
   env_update: conda env update -n jupyterlab-starters --file env-test.yml --quiet
   lab_ext: jupyter labextension install --no-build $(FIRST_PARTY_LABEXTENSIONS)
+  link_mod: jupyter labextension link --no-build $(FIRST_PARTY_MODULES)
   jlpm: jlpm --ignore-optional --prefer-offline --frozen-lockfile
 
 jobs:
@@ -63,6 +64,9 @@ jobs:
 
               - script: ${{ platform.activate }} jupyterlab-starters && jupyter serverextension list
                 displayName: list server extensions
+
+              - script: ${{ platform.activate }} jupyterlab-starters && ${{ parameters.link_mod }} || ${{ parameters.link_mod }} || ${{ parameters.link_mod }}
+                displayName: link modules
 
               - script: ${{ platform.activate }} jupyterlab-starters && ${{ parameters.lab_ext }} || ${{ parameters.lab_ext }} || ${{ parameters.lab_ext }}
                 displayName: install labextensions

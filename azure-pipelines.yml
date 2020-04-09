@@ -20,7 +20,8 @@ variables:
 
   FIRST_PARTY_LABEXTENSIONS: >-
     packages/jupyterlab-starters/deathbeds-jupyterlab-starters-$(JS_JLST_VERSION).tgz
-    packages/jupyterlab-rjsf/deathbeds-jupyterlab-rjsf-$(JS_RJSF_VERSION).tgz
+  FIRST_PARTY_MODULES: >-
+    packages/jupyterlab-rjsf
 
 jobs:
   - template: ci/job.lint.yml
