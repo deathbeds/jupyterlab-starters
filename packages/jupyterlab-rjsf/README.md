@@ -7,9 +7,14 @@
 
 ## For users: Do I need to install this?
 
-This project just provides some "glue" to be used by other JupyterLab extensions,
+For now, this project just provides some "glue" to be used by other JupyterLab extensions,
 and other labextensions that use it should specify it as a `dependency` so it will
 be installed for you, if needed.
+
+> A follow-on release will add more tightly-integrated Document (a la `Notebook`)
+> with a `MimeRenderer` for working with JSON instances, JSON Schema, and
+> `rjsf''s UI Schema, with support for alternate encodings like YAML and JSONL.
+> See more in the [roadmap](#Roadmap).
 
 ### Related Projects
 
@@ -18,11 +23,31 @@ be installed for you, if needed.
   before making templated files
 
 - [@deathbeds/wxyz-lab](https://github.com/deathbeds/jupyterlab-starters)
-  uses an earlier version of this project to connect a JSON schema to the
-  Jupyter Widgets ecosystem
+  uses an earlier version of this component to connect a JSON Schema to the
+  broader Jupyter Widgets ecosystem, but also works with other `wxyz` widgets without
+  a "server" kernel
 
 ## For Developers
 
 ### JupyterLab Extensions
 
-Use the `SchemaForm`, a `@lumino/widget` that you can put inside of any
+Use the `SchemaForm`, a `@lumino/widget` that you can put inside of any other
+widget (such as the `DockPanel`).
+
+### React
+
+Several underlying libraries are used from the broader React ecosystm.
+
+> TBD: more info on `async-component`, and `rjsf`-specifics like `jsonobject`
+> and `codemirror`
+
+## Roadmap
+
+- [ ] `MimeRenderer`
+- [ ] `Document`
+  - [ ] JSON Instance as form
+  - [ ] JSON Schema as form?
+  - [ ] `rjsf` UI schema
+  - [ ] formatting
+- [ ] additional extension points
+  - readers (e.g. YAML, JSONL, TOML)
