@@ -135,14 +135,14 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
 
   protected _renderOneMarkdown = async (host: HTMLElement) => {
     const markdown = this.model.markdown;
-    host.classList.add(...MARKDOWN_CLASSES);
     const { textContent, dataset } = host;
     const { rawMarkdown } = dataset;
-    if (rawMarkdown) {
+    if (rawMarkdown || !textContent.trim()) {
       return;
     }
-    console.log('rendering markdown', textContent);
+
     dataset.rawMarkdown = textContent;
+    host.classList.add(...MARKDOWN_CLASSES);
 
     await renderMarkdown({
       host: host as HTMLElement,
