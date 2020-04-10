@@ -149,38 +149,3 @@
 .jp-Starters-FormPanel .jp-RenderedHTMLCommon {
   padding: 0;
 }
-
-/* general codemirror */
-.jp-SchemaForm .react-codemirror2 {
-  border: solid var(--jp-border-width) var(--jp-border-color1);
-  display: flex;
-  flex-direction: column;
-}
-
-/* json object */
-.jp-SchemaForm fieldset .jp-SchemaForm-JSONObject-buttons {
-  display: flex;
-}
-
-.jp-SchemaForm fieldset .jp-SchemaForm-JSONObject-buttons button {
-  border: solid var(--jp-border-width) transparent;
-  flex: 1;
-  margin: 0;
-  background-color: transparent;
-}
-
-.jp-SchemaForm fieldset .jp-SchemaForm-JSONObject-buttons button[disabled] {
-  opacity: 0.25;
-}
-
-.jp-SchemaForm
-  fieldset
-  .jp-SchemaForm-JSONObject-buttons
-  button:hover:not([disabled]),
-.jp-SchemaForm
-  fieldset
-  .jp-SchemaForm-JSONObject-buttons
-  button:focus:not([disabled]) {
-  border: solid var(--jp-border-width) var(--jp-border-color1);
-  background-color: var(jp-layout-color2);
-}

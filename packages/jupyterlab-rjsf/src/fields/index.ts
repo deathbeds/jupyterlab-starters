@@ -2,6 +2,7 @@ import { CodeMirrorField } from './codemirror';
 import { JSONObjectField } from './jsonobject';
 import { MarkdownField } from './markdown';
 import { XMLField } from './xml';
+import { FormProps } from 'react-jsonschema-form';
 
 export const CUSTOM_UI_WIDGETS = {
   'codemirror-xml': XMLField,
@@ -13,7 +14,7 @@ export const CUSTOM_UI_FIELDS = {
   'codemirror-jsonobject': JSONObjectField
 };
 
-export const ALL_CUSTOM_UI = {
+export const ALL_CUSTOM_UI: Partial<FormProps<any>> = {
   fields: CUSTOM_UI_FIELDS,
   widgets: CUSTOM_UI_WIDGETS
 };

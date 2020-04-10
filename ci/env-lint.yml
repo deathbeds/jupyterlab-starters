@@ -8,7 +8,7 @@ dependencies:
   - black
   - flake8
   - isort
-  - jupyterlab >=1,<2.0.0a0
+  - jupyterlab >=2.1.0,<3.0.0a0
   - mypy
   - nodejs
   - pylint

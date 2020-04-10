@@ -4,11 +4,11 @@ import { Widget, BoxLayout } from '@lumino/widgets';
 import { IStartContext } from '../../tokens';
 import { CSS } from '../../css';
 
-import { SchemaForm } from '../schemaform';
+import { SchemaForm } from '@deathbeds/jupyterlab-rjsf/lib/schemaform';
 
 import { BuilderModel } from './model';
 import { BuilderButtons } from './buttons';
-import { ALL_CUSTOM_UI } from '../fields';
+import { ALL_CUSTOM_UI } from '@deathbeds/jupyterlab-rjsf/lib/fields';
 
 export class BodyBuilder extends Widget {
   private _form: SchemaForm<JSONObject>;

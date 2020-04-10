@@ -9,6 +9,9 @@
   "references": [
     {
       "path": "../jupyterlab-starters"
+    },
+    {
+      "path": "../jupyterlab-rjsf"
     }
   ]
 }

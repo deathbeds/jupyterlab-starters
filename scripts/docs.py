@@ -5,16 +5,19 @@ import re
 import shutil
 import sys
 from pathlib import Path
-from subprocess import check_call
+from subprocess import call, check_call
+from tempfile import TemporaryDirectory
 
 import jinja2
 
 HAS_PYTEST = False
 
 try:
-    __import__("pytest_check_links")
+    import pytest_check_links
+
+    print("pytest_check_links available, will check links", pytest_check_links)
     HAS_PYTEST = True
-except Exception as err:
+except ImportError as err:
     print("pytest_check_links not available, skipping link check", err)
 
 
@@ -65,9 +68,18 @@ HTML_REPLACEMENTS = [
     [r'"(.*?)\.md"', r'"\1.html"'],
 ]
 
-SKIPS = "not http and not ujson"
-
 SCHEMA_README = SCHEMA_DOCS / "README.md"
+
+CHECK_INI = """
+[pytest]
+junit_family = xunit2
+addopts =
+    --check-links
+    -k "not ipynb and not http and not ujson {extra_k}"
+filterwarnings =
+    ignore::PendingDeprecationWarning
+    ignore::DeprecationWarning
+"""
 
 
 def fix_schema_md():
@@ -115,6 +127,22 @@ def make_schema_index():
     index.write_text(rst)
 
 
+def check_links():
+    """ check local links with pytest-check-links in a clean directory
+    """
+    ini = CHECK_INI.format(extra_k="")
+    # do this in a temporary directory to avoid surprises
+
+    with TemporaryDirectory() as tmp:
+        tdp = Path(tmp)
+        dest = tdp / "a" / "deep" / "path"
+        dest.parent.mkdir(parents=True)
+        shutil.copytree(DOCS / "_build" / "html", dest)
+        (dest / "pytest.ini").write_text(ini)
+
+        return call(["pytest"], cwd=dest)
+
+
 def docs():
     """ build (and test) docs.
 
@@ -126,7 +154,7 @@ def docs():
         shutil.rmtree(SCHEMA_DOCS, ignore_errors=1)
         check_call(["sphinx-build", "-M", "html", DOCS, DOCS_BUILD])
         if HAS_PYTEST:
-            check_call(["pytest", "--check-links", DOCS_BUILD, "-k", SKIPS])
+            check_links()
     elif SETUP and not SCHEMA_DOCS.exists():
         check_call(["jlpm"])
         check_call(

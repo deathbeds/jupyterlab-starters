@@ -4,21 +4,22 @@ trigger:
     include:
       - master
       - refs/tags/v*
-      - 0.1.x
 
 pr:
   - master
-  - 0.1.x
 
 variables:
   PYTHONUNBUFFERED: 1
-  ATEST_RETRIES: 2
+  ATEST_RETRIES: 4
 
-  PY_JLST_VERSION: 0.3.0a0
-  JS_JLST_VERSION: 0.3.0-a0
+  PY_JLST_VERSION: 0.4.0a0
+  JS_JLST_VERSION: 0.4.0-a0
+  JS_RJSF_VERSION: 0.4.0-a0
 
   FIRST_PARTY_LABEXTENSIONS: >-
     packages/jupyterlab-starters/deathbeds-jupyterlab-starters-$(JS_JLST_VERSION).tgz
+  FIRST_PARTY_MODULES: >-
+    packages/jupyterlab-rjsf
 
 jobs:
   - template: ci/job.lint.yml

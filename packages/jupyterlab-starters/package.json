@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-starters",
-  "version": "0.3.0a0",
+  "version": "0.4.0a0",
   "description": "Parameterized files and folders for JupyterLab",
   "keywords": [
     "jupyter",
@@ -33,11 +33,10 @@
     "upload": "jlpm publish ."
   },
   "dependencies": {
-    "react-jsonschema-form": "~1.8.0",
-    "react-codemirror2": "^6.0.0"
+    "@deathbeds/jupyterlab-rjsf": "~0.4.0a0",
+    "@jupyterlab/application": "2"
   },
   "peerDependencies": {
-    "@jupyterlab/application": "2",
     "@jupyterlab/launcher": "2",
     "@jupyterlab/notebook": "2",
     "@jupyterlab/running": "2"
@@ -45,6 +44,7 @@
   "devDependencies": {
     "@types/codemirror": "^0.0.74",
     "@types/react-jsonschema-form": "^1.6.6",
+    "@deathbeds/jupyterlab-rjsf": "~0.4.0a0",
     "@jupyterlab/application": "2",
     "@jupyterlab/running": "2",
     "@jupyterlab/launcher": "2",

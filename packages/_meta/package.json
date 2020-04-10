@@ -23,7 +23,8 @@
     "watch": "tsc -b --watch"
   },
   "dependencies": {
-    "@deathbeds/jupyterlab-starters": "file:../jupyterlab-starters"
+    "@deathbeds/jupyterlab-starters": "file:../jupyterlab-starters",
+    "@deathbeds/jupyterlab-rjsf": "file:../jupyterlab-rjsf"
   },
   "devDependencies": {
     "rimraf": "~2.6.2",
