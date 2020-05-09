@@ -1,7 +1,7 @@
-import { ThemeProps } from 'react-jsonschema-form';
-import { getDefaultRegistry } from 'react-jsonschema-form/lib/utils';
+import { ThemeProps } from '@rjsf/core';
+import { utils } from '@rjsf/core';
 
-const { fields, widgets } = getDefaultRegistry();
+const { fields, widgets } = utils.getDefaultRegistry();
 
 const Theme: ThemeProps = {
   fields: { ...fields },

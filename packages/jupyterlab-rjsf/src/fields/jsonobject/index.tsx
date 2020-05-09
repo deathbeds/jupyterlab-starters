@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import ObjectField from 'react-jsonschema-form/lib/components/fields/ObjectField';
+import ObjectField from '@rjsf/core/lib/components/fields/ObjectField';
 
-import * as rjsfUtils from 'react-jsonschema-form/lib/utils';
+import { utils as rjsfUtils } from '@rjsf/core';
 
 import { UnControlled } from 'react-codemirror2';
 

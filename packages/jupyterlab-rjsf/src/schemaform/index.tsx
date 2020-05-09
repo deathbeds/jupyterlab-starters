@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as rjsf from 'react-jsonschema-form';
+import * as rjsf from '@rjsf/core';
 
 import { JSONObject, JSONValue } from '@lumino/coreutils';
 

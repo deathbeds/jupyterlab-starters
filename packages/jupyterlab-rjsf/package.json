@@ -30,7 +30,7 @@
     "upload": "jlpm publish ."
   },
   "dependencies": {
-    "react-jsonschema-form": "~1.8.1",
+    "@rjsf/core": "~2.0.0",
     "react-codemirror2": "^6.0.0"
   },
   "peerDependencies": {
@@ -38,7 +38,6 @@
   },
   "devDependencies": {
     "@types/codemirror": "^0.0.74",
-    "@types/react-jsonschema-form": "^1.6.6",
     "@jupyterlab/application": "2",
     "react": "*",
     "rimraf": "~2.6.2",
