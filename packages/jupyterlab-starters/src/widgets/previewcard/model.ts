@@ -8,7 +8,9 @@ export class PreviewCardModel extends VDomModel {
 
   constructor(options: PreviewCardModel.IOptions = {}) {
     super();
-    this._starter = options.starter;
+    if (options.starter != null) {
+      this._starter = options.starter;
+    }
   }
 
   get iconURI() {

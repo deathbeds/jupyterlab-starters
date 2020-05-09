@@ -28,10 +28,12 @@ export class BodyBuilder extends Widget {
     this.addClass(CSS.BUILDER);
     this.addClass(CSS.FORM_PANEL);
     this.title.caption = label;
-    this.title.icon = this.model.icon;
+    if (this.model.icon) {
+      this.title.icon = this.model.icon;
+    }
 
     this._form = new SchemaForm(
-      this._context.starter.schema,
+      this._context.starter.schema || {},
       {
         liveValidate: true,
         formData: this._context.body,

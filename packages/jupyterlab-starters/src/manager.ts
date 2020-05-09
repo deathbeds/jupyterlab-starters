@@ -82,7 +82,7 @@ export class StarterManager implements IStarterManager {
   }
 
   icon(name: string, starter: SCHEMA.Starter) {
-    return Private.icon(name, starter);
+    return Private.icon(name, starter) || null;
   }
 
   async fetch() {
@@ -92,7 +92,10 @@ export class StarterManager implements IStarterManager {
     this._changed.emit(void 0);
     this._ready.resolve(void 0);
 
-    if (!JSONExt.deepEqual(this._running, content.running)) {
+    if (
+      content.running != null &&
+      !JSONExt.deepEqual(this._running, content.running)
+    ) {
       this._running = content.running;
       this._runningChanged.emit(void 0);
     }
@@ -131,21 +134,21 @@ namespace Private {
   _icons.set('cookiecutter', Icons.cookiecutter);
 
   export function icon(name: string, starter: SCHEMA.Starter) {
-    if (_icons.has(name)) {
-      return _icons.get(name);
-    }
+    let icon = _icons.get(name);
+
     if (
+      icon == null &&
       starter.icon != null &&
       starter.icon.length &&
       starter.icon.indexOf('http://www.w3.org/2000/svg') > -1
     ) {
-      const newIcon = new LabIcon({
+      icon = new LabIcon({
         name: `${NS}:${name}`,
         svgstr: starter.icon
       });
-      _icons.set(name, newIcon);
-      return newIcon;
+      _icons.set(name, icon);
     }
-    return Icons.starter;
+
+    return icon || Icons.starter;
   }
 }

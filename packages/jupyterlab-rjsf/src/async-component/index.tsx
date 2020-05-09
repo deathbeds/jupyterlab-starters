@@ -16,7 +16,9 @@ export function asyncComponent<T extends asyncComponent.TImportable>(
   let COMPONENT: T;
   let PROMISE: Promise<T>;
 
-  return class extends React.Component {
+  return class extends React.Component<any, any> {
+    readonly displayName = 'AsyncComponent';
+
     state: asyncComponent.IState = {
       __async_component: null
     };
@@ -95,6 +97,6 @@ export namespace asyncComponent {
    * Apparently this can't be <T> yet...
    */
   export interface IState {
-    __async_component: TImportable;
+    __async_component: TImportable | null;
   }
 }

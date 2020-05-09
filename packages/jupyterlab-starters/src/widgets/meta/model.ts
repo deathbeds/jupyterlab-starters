@@ -5,7 +5,6 @@ import { VDomModel } from '@jupyterlab/apputils';
 
 import { NotebookPanel } from '@jupyterlab/notebook';
 
-// @ts-ignore
 import * as SCHEMA_DEFAULT from '../../_schema.json';
 
 import { IStarterManager } from '../../tokens';
@@ -129,13 +128,16 @@ export class NotebookMetadataModel extends VDomModel {
     const { formData, uiSchema } = this._form;
     if (this._notebook && formData) {
       const fromNotebook =
-        this._notebook.model.metadata.get(NOTEBOOK_META_KEY) || ({} as any);
+        this._notebook?.model?.metadata.get(NOTEBOOK_META_KEY) || ({} as any);
       const nbStarter = fromNotebook[NOTEBOOK_META_SUBKEY] || {};
       const formStarter = JSONExt.deepCopy((formData as JSONObject) || {});
 
       for (const key in uiSchema || {}) {
         if (uiSchema[key]['ui:field'] === 'codemirror-jsonobject') {
-          if (!formStarter[key] || !Object.keys(formStarter[key]).length) {
+          if (
+            !formStarter[key] ||
+            !Object.keys(formStarter[key] as any).length
+          ) {
             delete formStarter[key];
           }
         }
@@ -149,7 +151,7 @@ export class NotebookMetadataModel extends VDomModel {
         }
       };
 
-      if (!JSONExt.deepEqual(fromNotebook, candidate)) {
+      if (!JSONExt.deepEqual(fromNotebook, candidate) && this._notebook.model) {
         this._notebook.model.metadata.set(NOTEBOOK_META_KEY, candidate);
       }
     }

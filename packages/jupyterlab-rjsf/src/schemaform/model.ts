@@ -17,7 +17,7 @@ export class SchemaFormModel<T extends JSONValue> extends VDomModel {
       this.props = props;
     }
     if (options) {
-      this._markdown = options.markdown;
+      this._markdown = options.markdown || null;
       this._liveMarkdown =
         options.liveMarkdown != null
           ? options.liveMarkdown
@@ -88,6 +88,14 @@ export class SchemaFormModel<T extends JSONValue> extends VDomModel {
     return this._props;
   }
 
+  /**
+   * Set the props for the form
+   */
+  set props(props) {
+    this._props = props;
+    this.stateChanged.emit(void 0);
+  }
+
   get errorsObserved() {
     return this._errorsObserved;
   }
@@ -97,14 +105,6 @@ export class SchemaFormModel<T extends JSONValue> extends VDomModel {
       this._errorsObserved = errorsObserved;
       this.stateChanged.emit(void 0);
     }
-  }
-
-  /**
-   * Set the props for the form
-   */
-  set props(props) {
-    this._props = props;
-    this.stateChanged.emit(void 0);
   }
 
   get rendered() {
@@ -128,13 +128,13 @@ export class SchemaFormModel<T extends JSONValue> extends VDomModel {
     this.stateChanged.emit(void 0);
   }
 
-  private _formData: T = null;
+  private _formData: T;
   private _errors: rjsf.AjvError[] = [];
   private _schema: JSONObject;
   private _props: Partial<rjsf.FormProps<T>>;
   private _errorsObserved = false;
   private _rendered = new Signal<SchemaFormModel<T>, void>(this);
-  private _markdown: RenderedMarkdown;
+  private _markdown: RenderedMarkdown | null;
   private _liveMarkdown = false;
 }
 

@@ -124,7 +124,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       }
     });
 
-    let metadata: NotebookMetadata;
+    let metadata: NotebookMetadata | null;
 
     const onCurrentNotebook = () => {
       const { currentWidget } = notebooks;
@@ -134,7 +134,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
         }
         metadata = null;
         notebooks.currentChanged.disconnect(onCurrentNotebook);
-      } else {
+      } else if (metadata != null) {
         metadata.model.notebook = currentWidget;
       }
     };
