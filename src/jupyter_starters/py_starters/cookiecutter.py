@@ -132,6 +132,18 @@ def cookiecutter_pantry():
                 for m in sorted(re.findall(r"\* \[(.*?)]\((.*?)\)[\s:]*(.*?)\n", group))
             ]
 
+        specials = (
+            str(metadata("cookiecutter"))
+            .split("Cookiecutter Specials")[1]
+            .split("\n## ")[0]
+            .strip()
+        )
+
+        grouped["Cookiecutter Specials"] = [
+            dict(repo=m[1], description=m[2])
+            for m in sorted(re.findall(r"\* \[(.*?)]\((.*?)\)[\s:]*(.*?)\n", specials))
+        ]
+
     except (ImportError, ValueError, AttributeError):
         pass
 
