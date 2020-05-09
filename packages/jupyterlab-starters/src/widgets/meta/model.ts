@@ -107,7 +107,10 @@ export class NotebookMetadataModel extends VDomModel {
       (this._notebook?.model?.metadata?.get(NOTEBOOK_META_KEY) as JSONObject) ||
       {};
     const candidate = (fromNotebook[NOTEBOOK_META_SUBKEY] || {}) as JSONObject;
-    if (!JSONExt.deepEqual(this._form.formData, candidate)) {
+    if (
+      this._form.formData == null ||
+      !JSONExt.deepEqual(this._form.formData, candidate)
+    ) {
       this._form.formData = candidate;
     }
   }
