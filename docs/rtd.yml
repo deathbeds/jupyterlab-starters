@@ -10,7 +10,7 @@ dependencies:
       - fastjsonschema
       - graphviz
       - importlib_metadata
-      - jupyterlab >=2.1.0,<3.0.0a0
+      - jupyterlab >=2,<3.0.0a0
       - nbsphinx >=0.5.0,<0.5.1a0
       - pytest-check-links
       - recommonmark

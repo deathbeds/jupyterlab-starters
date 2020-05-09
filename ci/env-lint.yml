@@ -8,12 +8,12 @@ dependencies:
   - black
   - flake8
   - isort
-  - jupyterlab >=2.1.0,<3.0.0a0
+  - jupyterlab >=2,<3.0.0a0
   - mypy
   - nodejs
   - pylint
   - pytest-azurepipelines
   - python >=3.8,<3.9.0a0
-  - robotframework
+  - robotframework <3.2
   - robotframework-lint
   - ruamel_yaml

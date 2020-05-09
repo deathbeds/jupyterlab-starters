@@ -38,6 +38,7 @@ env_specs:
       - pytest-asyncio
       - pytest-cov
       - pytest-flake8
+      - robotframework <3.2
       - robotframework-lint
       - robotframework-seleniumlibrary
       - ruamel_yaml
@@ -68,7 +69,7 @@ env_specs:
     packages:
       - cookiecutter
       - importlib_metadata
-      - jupyterlab >=2.1.0,<3.0.0a0
+      - jupyterlab >=2,<3.0.0a0
       - nodejs >=11,<12
       - python >=3.7,<3.8.0a0
       - python-fastjsonschema
