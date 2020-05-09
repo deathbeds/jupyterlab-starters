@@ -37,6 +37,11 @@ const SCHEMA_FORM_ID_PREFIX = 'id-jp-schemaform';
 const SCHEMA_FORM_CLASS = 'jp-SchemaForm';
 
 /**
+ *
+ */
+const MARKDOWN_CANARY = 'jp-SchemaForm-markdown';
+
+/**
  * Am opionated widget for displaying a form defined by JSON Schema
  */
 export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
@@ -134,6 +139,9 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
   };
 
   protected _renderOneMarkdown = async (host: HTMLElement) => {
+    if (host.querySelector(`.${MARKDOWN_CANARY}`)) {
+      return;
+    }
     const markdown = this.model.markdown;
     if (markdown == null) {
       return;
@@ -161,6 +169,11 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
       linkHandler: markdown.linkHandler,
       shouldTypeset: true
     });
+
+    const canary = document.createElement('span');
+    canary.className = MARKDOWN_CANARY;
+
+    host.appendChild(canary);
   };
 
   protected _postRender = () => {
