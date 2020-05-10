@@ -2,7 +2,7 @@ import { CodeMirrorField } from './codemirror';
 import { JSONObjectField } from './jsonobject';
 import { MarkdownField } from './markdown';
 import { XMLField } from './xml';
-import { FormProps } from 'react-jsonschema-form';
+import { FormProps } from '@rjsf/core';
 
 export const CUSTOM_UI_WIDGETS = {
   'codemirror-xml': XMLField,

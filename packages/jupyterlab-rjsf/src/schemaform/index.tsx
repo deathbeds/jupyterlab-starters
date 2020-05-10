@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as rjsf from 'react-jsonschema-form';
+import * as rjsf from '@rjsf/core';
 
 import { JSONObject, JSONValue } from '@lumino/coreutils';
 
@@ -35,6 +35,11 @@ const SCHEMA_FORM_ID_PREFIX = 'id-jp-schemaform';
  * The class all JSON Schema forms will share
  */
 const SCHEMA_FORM_CLASS = 'jp-SchemaForm';
+
+/**
+ *
+ */
+const MARKDOWN_CANARY = 'jp-SchemaForm-markdown';
 
 /**
  * Am opionated widget for displaying a form defined by JSON Schema
@@ -134,19 +139,29 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
   };
 
   protected _renderOneMarkdown = async (host: HTMLElement) => {
+    if (host.querySelector(`.${MARKDOWN_CANARY}`)) {
+      return;
+    }
     const markdown = this.model.markdown;
+    if (markdown == null) {
+      return;
+    }
     const { textContent, dataset } = host;
     const { rawMarkdown } = dataset;
-    if (rawMarkdown || !textContent.trim()) {
+    const source = rawMarkdown || textContent;
+    if (source == null || !source.trim()) {
       return;
     }
 
-    dataset.rawMarkdown = textContent;
+    if (textContent) {
+      dataset.rawMarkdown = textContent;
+    }
+
     host.classList.add(...MARKDOWN_CLASSES);
 
     await renderMarkdown({
       host: host as HTMLElement,
-      source: rawMarkdown || textContent,
+      source: rawMarkdown || textContent || '',
       trusted: true,
       sanitizer: markdown.sanitizer,
       latexTypesetter: markdown.latexTypesetter,
@@ -154,6 +169,11 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
       linkHandler: markdown.linkHandler,
       shouldTypeset: true
     });
+
+    const canary = document.createElement('span');
+    canary.className = MARKDOWN_CANARY;
+
+    host.appendChild(canary);
   };
 
   protected _postRender = () => {

@@ -69,7 +69,7 @@ def cookiecutter_starters(manager):
         cookiecutter = __import__("cookiecutter")
     except (ImportError, ValueError):
         manager.log.debug(
-            f"🍪 install cookiecutter to enable the cookiecutter starter. yum!"
+            "🍪 install cookiecutter to enable the cookiecutter starter. yum!"
         )
         return {}
 
@@ -131,6 +131,18 @@ def cookiecutter_pantry():
                 dict(repo=m[1], description=m[2])
                 for m in sorted(re.findall(r"\* \[(.*?)]\((.*?)\)[\s:]*(.*?)\n", group))
             ]
+
+        specials = (
+            str(metadata("cookiecutter"))
+            .split("Cookiecutter Specials")[1]
+            .split("\n## ")[0]
+            .strip()
+        )
+
+        grouped["Cookiecutter Specials"] = [
+            dict(repo=m[1], description=m[2])
+            for m in sorted(re.findall(r"\* \[(.*?)]\((.*?)\)[\s:]*(.*?)\n", specials))
+        ]
 
     except (ImportError, ValueError, AttributeError):
         pass
@@ -238,7 +250,7 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
                 "status": Status.DONE,
             }
         except Exception as err:
-            manager.log.exception(f"🍪 error")
+            manager.log.exception("🍪 error")
             if cleanup:
                 shutil.rmtree(repo_dir)
             return {

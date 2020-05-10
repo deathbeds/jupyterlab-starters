@@ -1,12 +1,14 @@
 {
   "devDependencies": {
     "@adobe/jsonschema2md": "^4.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.27.0",
+    "@typescript-eslint/parser": "^2.27.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint": "^6.8.0",
     "lerna": "^3.13.2",
     "prettier": "^1.19.1",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-plugin-prettier": "^2.0.1",
-    "tslint-react": "^4.0.0",
-    "tslint": "^5.15.0",
     "typescript": "~3.7.2"
   },
   "private": true,
@@ -16,13 +18,13 @@
     "bundle": "lerna run --parallel bundle",
     "clean": "lerna run --parallel clean",
     "lab:link": "lerna run lab:link",
-    "lint:check": "jlpm prettier:check && jlpm tslint:check",
-    "lint": "jlpm prettier:fix && jlpm tslint:fix",
+    "lint:check": "jlpm prettier:check && jlpm eslint:check",
+    "lint": "jlpm prettier:fix && jlpm eslint:fix",
     "prettier:check": "prettier --check '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",
     "prettier:fix": "prettier --write '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",
     "test": "lerna run --stream --concurrency=1 test",
-    "tslint:check": "tslint -c tslint.json --project tsconfigbase.json 'packages/**/*{.ts,.tsx}'",
-    "tslint:fix": "tslint --fix -c tslint.json --project tsconfigbase.json 'packages/**/*{.ts,.tsx}'",
+    "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
+    "eslint:check": "eslint --ext .js,.jsx,.ts,.tsx .",
     "watch": "lerna run --parallel watch"
   },
   "workspaces": {

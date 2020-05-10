@@ -7,11 +7,10 @@ import { asyncComponent } from '../../async-component';
  */
 const Form = asyncComponent(async () => {
   const { withTheme } = await import(
-    /* webpackChunkName: "react-jsonschema-form" */ 'react-jsonschema-form'
+    /* webpackChunkName: "@rjsf/core" */ '@rjsf/core'
   );
-  const Theme = (
-    await import(/* webpackChunkName: "react-jsonschema-form" */ '../Theme')
-  ).default;
+  const Theme = (await import(/* webpackChunkName: "@rjsf/core" */ '../Theme'))
+    .default;
   return withTheme(Theme);
 });
 

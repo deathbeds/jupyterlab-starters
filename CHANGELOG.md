@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## `jupyter_starters 0.5.0a0`
+
+- [#41][] handle more recent cookiecutter metadata
+
+## `@deathbeds/jupyterlab-rjsf 0.5.0a0`
+
+- [#41][] upgrade `react-jsonschema-form` to `@rjsf/core`
+
+## `@deathbeds/jupyterlab-starters 0.5.0a0`
+
+- [#41][] upgrade `@deathbeds/jupyterlab-rjsf`
+
 ## `@deathbeds/jupyterlab-rjsf 0.4.0a0`
 
 - [#38][] split out `rjsf` into its own package
@@ -89,3 +101,4 @@
 [#35]: https://github.com/deathbeds/jupyterlab-starters/pull/35
 [#38]: https://github.com/deathbeds/jupyterlab-starters/pull/38
 [#39]: https://github.com/deathbeds/jupyterlab-starters/pull/39
+[#41]: https://github.com/deathbeds/jupyterlab-starters/pull/41
