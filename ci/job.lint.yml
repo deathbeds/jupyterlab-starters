@@ -43,7 +43,7 @@ jobs:
       - script: ${{ parameters.act }} jlpm lerna run bundle
         displayName: build npm bundles
 
-      - script: cp packages/*.tgz dist && cd dist && sha256sum * > SHA256SUMS
+      - script: cp packages/*/*.tgz dist && cd dist && sha256sum * > SHA256SUMS
         displayName: copy to dist
 
       - task: PublishPipelineArtifact@0
