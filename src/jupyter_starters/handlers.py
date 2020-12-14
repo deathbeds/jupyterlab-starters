@@ -70,7 +70,7 @@ def add_handlers(nbapp, manager) -> None:
     opts = {"manager": manager}
 
     url = ujoin(nbapp.base_url, NS)
-    starter_url = ujoin(url, "(?P<starter>.*?)", "(?P<path>.*?)", "?")
+    starter_url = ujoin(url, "(?P<starter>.*?)", "(?P<path>.*?)", "?$")
     nbapp.log.debug("💡 starters will list under %s", url)
     nbapp.log.debug("💡 starters will run under %s", starter_url)
 
