@@ -5,6 +5,9 @@
         "buildCheck": false,
         "buildAvailable": false
       }
+    },
+    "nbserver_extensions": {
+      "jupyter_starters": true
     }
   },
   "StarterManager": {

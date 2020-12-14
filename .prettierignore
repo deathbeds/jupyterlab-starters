@@ -1,11 +1,12 @@
-.ipynb_checkpoints/
-.mypy_cache/
-.pytest_cache/
 .vscode/
 *.egg-info/
+**/.ipynb_checkpoints/
+**/.mypy_cache/
+**/.pytest_cache/
+**/.yarn-packages/
+**/lib/
+**/node_modules/
 atest/
 dist/
 docs/_build/
 envs/
-lib/
-node_modules/

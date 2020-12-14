@@ -27,11 +27,23 @@ A starter is a...
 
 ## Installing
 
-> You'll need `jupyterlab >=2,<2.1.0a0`, `python >=3.6`, and `nodejs >=8`
+> You'll need `jupyterlab >=2,<3`, `python >=3.6`, and `nodejs >=12`
 
 ```bash
 pip install --pre jupyter_starters
 jupyter labextension install @deathbeds/jupyterlab-starters
+```
+
+Check your installation:
+
+```bash
+jupyter serverextension list
+```
+
+If you don't see `jupyterlab_starters` run:
+
+```bash
+jupyter serverextension enable --sys-prefix jupyterlab_starters
 ```
 
 ## Configuring
@@ -84,7 +96,7 @@ Don't like what you see here? Try these other approaches:
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
 [docs-badge]: https://readthedocs.org/projects/jupyterstarters/badge/?version=latest
 [docs]: https://jupyterstarters.readthedocs.io/en/latest/?badge=latest
-[jupyterlab-badge]: https://img.shields.io/badge/jupyterlab-1.x-orange?logo=jupyter
+[jupyterlab-badge]: https://img.shields.io/badge/jupyterlab-1.x/2.x-orange?logo=jupyter
 [launcher]: https://jupyterlab.readthedocs.io/en/stable/user/files.html#creating-files-and-activities
 [license-badge]: https://img.shields.io/github/license/deathbeds/jupyterlab-starters
 [license]: https://github.com/deathbeds/jupyterlab-starters/tree/master/LICENSE

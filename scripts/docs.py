@@ -83,8 +83,7 @@ filterwarnings =
 
 
 def fix_schema_md():
-    """ fix up generated markdown to work (somewhat better) with sphinx
-    """
+    """fix up generated markdown to work (somewhat better) with sphinx"""
     if SCHEMA_README.exists():
         SCHEMA_README.unlink()
 
@@ -104,8 +103,7 @@ def fix_schema_md():
 
 
 def fix_schema_html():
-    """ fix up generated HTML
-    """
+    """fix up generated HTML"""
     html_files = list((DOCS_BUILD / "schema").glob("*.html"))
 
     for html_file in html_files:
@@ -118,8 +116,7 @@ def fix_schema_html():
 
 
 def make_schema_index():
-    """ make an index for all the schema markdown
-    """
+    """make an index for all the schema markdown"""
     md_files = sorted(SCHEMA_DOCS.glob("*.md"))
     index = SCHEMA_DOCS / "index.rst"
 
@@ -128,8 +125,7 @@ def make_schema_index():
 
 
 def check_links():
-    """ check local links with pytest-check-links in a clean directory
-    """
+    """check local links with pytest-check-links in a clean directory"""
     ini = CHECK_INI.format(extra_k="")
     # do this in a temporary directory to avoid surprises
 
@@ -144,9 +140,9 @@ def check_links():
 
 
 def docs():
-    """ build (and test) docs.
+    """build (and test) docs.
 
-        because readthedocs, this gets called twice from inside sphinx
+    because readthedocs, this gets called twice from inside sphinx
     """
 
     if META:

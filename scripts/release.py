@@ -4,8 +4,7 @@ from subprocess import check_call
 
 
 def release():
-    """ build them
-    """
+    """build them"""
     setup = ["python", "setup.py"]
     check_call([*setup, "sdist"])
     check_call([*setup, "bdist_wheel"])

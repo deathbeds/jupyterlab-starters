@@ -24,17 +24,16 @@ DEFAULT_MSG = {
 
 
 def response_from_notebook(src):
-    """ load a path and return the metadata
-    """
+    """load a path and return the metadata"""
     nbp = Path(src).resolve()
     nbjson = loads(nbp.read_text())
     return response_from_nbjson(nbjson)
 
 
 def kernel_for_path(src):
-    """ get the kernel.
+    """get the kernel.
 
-        TODO: do better on account of freaky names
+    TODO: do better on account of freaky names
     """
     nbp = Path(src).resolve()
     nbjson = loads(nbp.read_text())
@@ -42,20 +41,17 @@ def kernel_for_path(src):
 
 
 def response_from_nbjson(nbjson):
-    """ get the starter response
-    """
+    """get the starter response"""
     return nbjson.get("metadata", {}).get(NBFORMAT_KEY, {})
 
 
 def starter_from_nbjson(nbjson):
-    """ get just the starter
-    """
+    """get just the starter"""
     return response_from_nbjson(nbjson).get("starter", {})
 
 
 async def get_kernel_and_tmpdir(name, starter, manager):
-    """ use the manager to get a kernel and working directory
-    """
+    """use the manager to get a kernel and working directory"""
     if name not in manager.kernel_dirs:
         kernel_name = kernel_for_path(manager.resolve_src(starter))
         tmpdir = tempfile.mkdtemp()
@@ -71,8 +67,7 @@ async def get_kernel_and_tmpdir(name, starter, manager):
 
 
 async def stop_kernel(name, manager):
-    """ stop the kernel (and clean the tmpdir)
-    """
+    """stop the kernel (and clean the tmpdir)"""
     kernel_id, tmpdir = manager.kernel_dirs.pop(name, [None, None])
     if kernel_id:
         manager.kernel_manager.shutdown_kernel(kernel_id, now=True)
@@ -80,8 +75,7 @@ async def stop_kernel(name, manager):
 
 
 async def notebook_starter(name, starter, path, body, manager):
-    """ (re)runs a notebook until its schema is correct
-    """
+    """(re)runs a notebook until its schema is correct"""
 
     kernel, tmpdir = await get_kernel_and_tmpdir(name, starter, manager)
 
@@ -125,8 +119,7 @@ async def notebook_starter(name, starter, path, body, manager):
 
 
 async def ensure_notebook(starter, path, body, tmpdir, manager):
-    """ ensure a notebook exists in a temporary directory
-    """
+    """ensure a notebook exists in a temporary directory"""
     nbp = manager.resolve_src(starter)
 
     tdp = Path(tmpdir)
@@ -144,8 +137,7 @@ async def ensure_notebook(starter, path, body, tmpdir, manager):
 
 
 async def copy_files(tmp_nb, path, manager):
-    """ handle retrieving the files from the temporary directory
-    """
+    """handle retrieving the files from the temporary directory"""
     first_copied = None
     tmp_nb.unlink()
 
@@ -157,8 +149,7 @@ async def copy_files(tmp_nb, path, manager):
 
 
 async def run_cells(nbjson, kernel, manager):
-    """ actually run the cells
-    """
+    """actually run the cells"""
     futures = dict()
     pubs = defaultdict(list)
 
@@ -197,7 +188,9 @@ async def run_cells(nbjson, kernel, manager):
         if cell["cell_type"] == "code":
             code = "".join(cell["source"])
             msg = kernel.session.send(
-                shell, "execute_request", content={"code": code, **DEFAULT_MSG},
+                shell,
+                "execute_request",
+                content={"code": code, **DEFAULT_MSG},
             )
             futures[msg["msg_id"]] = asyncio.Future()
 

@@ -42,8 +42,7 @@ RFLINT = sum([["--configure", rule] for rule in RFLINT_RULES], [])
 
 
 def nblint():
-    """ clean up notebooks
-    """
+    """clean up notebooks"""
     for nbp in ALL_NB:
         nbf = read(str(nbp), NO_CONVERT)
         changed = False
@@ -70,8 +69,7 @@ def nblint():
 
 
 def lint():
-    """ get that linty fresh feeling
-    """
+    """get that linty fresh feeling"""
     nblint()
 
     return max(
@@ -79,10 +77,10 @@ def lint():
             call,
             [
                 ["isort", "-rc", *ALL_PY],
-                ["black", *ALL_PY],
+                ["black", "--quiet", *ALL_PY],
                 ["flake8", *ALL_PY],
-                ["pylint", *ALL_PY],
-                ["mypy", *PY_SRC],
+                ["pylint", "--reports", "n", "--score", "n", *ALL_PY],
+                ["mypy", "--no-error-summary", *PY_SRC],
                 ["python", "-m", "robot.tidy", "--inplace", *ALL_ROBOT],
                 ["rflint", *RFLINT, *ALL_ROBOT],
             ],

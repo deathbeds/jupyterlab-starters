@@ -24,8 +24,7 @@ except ImportError:
     from jsonschema.exceptions import ValidationError as JsonSchemaException
 
     def json_validator(schema: Dict[Text, Any]) -> Callable[[Dict[Text, Any]], Any]:
-        """ implements that fastjsonschema.compile API with jsonschema
-        """
+        """implements that fastjsonschema.compile API with jsonschema"""
         validator_cls = validator_for(schema)
 
         def _validate(instance: Dict[Text, Any]) -> Any:

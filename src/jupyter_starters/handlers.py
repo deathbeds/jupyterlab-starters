@@ -15,24 +15,20 @@ if TYPE_CHECKING:
 
 
 class BaseHandler(IPythonHandler):
-    """ common base handlers
-    """
+    """common base handlers"""
 
     manager = None  # type: StarterManager
 
     def initialize(self, manager) -> None:
-        """ capture the manager
-        """
+        """capture the manager"""
         self.manager = manager
 
 
 class StartersHandler(BaseHandler):
-    """ serves the available starters
-    """
+    """serves the available starters"""
 
     async def get(self) -> None:
-        """ return the starters
-        """
+        """return the starters"""
         response = {
             "version": VERSION,
             "starters": self.manager.starters,
@@ -48,12 +44,10 @@ class StartersHandler(BaseHandler):
 
 
 class StarterHandler(BaseHandler):
-    """ acts on a single starters
-    """
+    """acts on a single starters"""
 
     async def post(self, starter, path) -> None:
-        """ start a starter
-        """
+        """start a starter"""
         body = None
 
         if self.request.body:
@@ -64,25 +58,28 @@ class StarterHandler(BaseHandler):
     # pylint: disable=unused-argument
 
     async def delete(self, starter, path=None) -> None:
-        """ forcibly stop a starter
-        """
+        """forcibly stop a starter"""
         await self.manager.stop(starter)
         self.set_status(202)
         self.finish({})
 
 
 def add_handlers(nbapp, manager) -> None:
-    """ Add starter routes to the notebook server web application
-    """
+    """Add starter routes to the notebook server web application"""
 
     opts = {"manager": manager}
+
+    url = ujoin(nbapp.base_url, NS)
+    starter_url = ujoin(url, "(?P<starter>.*?)", "(?P<path>.*?)", "?$")
+    nbapp.log.debug("💡 starters will list under %s", url)
+    nbapp.log.debug("💡 starters will run under %s", starter_url)
 
     nbapp.web_app.add_handlers(
         ".*",
         [
-            (ujoin(nbapp.base_url, NS), StartersHandler, opts),
+            (url, StartersHandler, opts),
             (
-                ujoin(nbapp.base_url, NS, "(?P<starter>.*?)", "(?P<path>.*?)"),
+                starter_url,
                 StarterHandler,
                 opts,
             ),

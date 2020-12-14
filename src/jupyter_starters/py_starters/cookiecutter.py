@@ -63,8 +63,7 @@ JUPYTER_COOKIECUTTERS = [
 
 
 def cookiecutter_starters(manager):
-    """ try to find some cookiecutters
-    """
+    """try to find some cookiecutters"""
     try:
         cookiecutter = __import__("cookiecutter")
     except (ImportError, ValueError):
@@ -112,8 +111,7 @@ def cookiecutter_starters(manager):
 
 
 def cookiecutter_pantry():
-    """ try to load the pantry from the cookiecutter metadata
-    """
+    """try to load the pantry from the cookiecutter metadata"""
     grouped = {"Jupyter": JUPYTER_COOKIECUTTERS}
 
     try:
@@ -164,8 +162,7 @@ def cookiecutter_pantry():
 
 
 async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
-    """ run cookiecutter
-    """
+    """run cookiecutter"""
     # pylint: disable=cyclic-import,broad-except,too-many-locals,unused-variable
     template = body["template"]
     checkout = body.get("checkout") or None
@@ -264,8 +261,7 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
 
 
 def cookiecutter_to_schema(cookiecutter):
-    """ convert a cookiecutter context to a JSON schema
-    """
+    """convert a cookiecutter context to a JSON schema"""
     bools = {"y": True, "n": False}
     schema = {
         "title": "Cookiecutter",

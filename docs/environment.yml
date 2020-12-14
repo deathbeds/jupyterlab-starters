@@ -9,9 +9,10 @@ dependencies:
   - importlib_metadata
   - jupyterlab >=2,<3.0.0a0
   - nbsphinx >=0.5.0,<0.5.1a0
-  - nodejs >=11,<12
+  - nodejs >=14,<15
   - pip
   - pytest
+  - pytest-check-links
   - python >=3.7,<3.8.0a0
   - python-fastjsonschema
   - python-graphviz
@@ -20,7 +21,5 @@ dependencies:
   - sphinx_rtd_theme
   - sphinx-autodoc-typehints
   - sphinx-copybutton
+  - sphinx-markdown-tables
   - ujson
-  - pip:
-      - pytest-check-links
-      - sphinx-markdown-tables

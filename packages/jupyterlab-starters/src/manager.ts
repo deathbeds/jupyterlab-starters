@@ -112,7 +112,7 @@ export class StarterManager implements IStarterManager {
       init.body = JSON.stringify(body);
     }
     const url = URLExt.join(API, name, contentsPath);
-    const response = await makeRequest(url, init, this._serverSettings);
+    const response = await makeRequest(`${url}/`, init, this._serverSettings);
     const result = (await response.json()) as SCHEMA.AResponseForStartRequest;
     return result;
   }

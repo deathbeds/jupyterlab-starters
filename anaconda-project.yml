@@ -4,7 +4,7 @@ commands:
   lab:
     unix: jupyter lab --no-browser --debug
   lint:
-    unix: python scripts/lint.py && jlpm lint
+    unix: python scripts/lint.py && jlpm --silent lint
   integrity:
     unix: python scripts/integrity.py
   atest:
@@ -16,7 +16,7 @@ commands:
   upload:
     unix: python scripts/upload.py
   docs:
-    unix: python scripts/docs.py
+    unix: python -m pip install -e . --no-deps && python scripts/docs.py
     env_spec: docs
   docs:watch:
     unix: git clean -dxf docs/_build && sphinx-autobuild docs docs/_build
@@ -28,17 +28,17 @@ env_specs:
       - jupyterlab-starters
     packages:
       - black
-      - firefox =68
+      - firefox =78
       - flake8
       - geckodriver
-      - isort
+      - isort <5
       - mypy
       - pylint
       - pytest
       - pytest-asyncio
       - pytest-cov
       - pytest-flake8
-      - robotframework <3.2
+      - robotframework >=3.2
       - robotframework-lint
       - robotframework-seleniumlibrary
       - ruamel_yaml
@@ -52,15 +52,14 @@ env_specs:
       - nbsphinx >=0.5.0,<0.5.1a0
       - pip
       - pytest
+      - pytest-check-links
       - recommonmark
       - sphinx
       - sphinx_rtd_theme
       - sphinx-autobuild
       - sphinx-autodoc-typehints
       - sphinx-copybutton
-      - pip:
-          - pytest-check-links
-          - sphinx-markdown-tables
+      - sphinx-markdown-tables
 
   jupyterlab-starters:
     channels:
@@ -70,7 +69,7 @@ env_specs:
       - cookiecutter
       - importlib_metadata
       - jupyterlab >=2,<3.0.0a0
-      - nodejs >=11,<12
+      - nodejs >=14,<15
       - python >=3.7,<3.8.0a0
       - python-fastjsonschema
       - python-graphviz

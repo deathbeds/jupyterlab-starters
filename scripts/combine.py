@@ -14,8 +14,7 @@ OK = 0
 
 
 def combine():
-    """ combine the outputs
-    """
+    """combine the outputs"""
 
     args = [
         "--outputdir",
