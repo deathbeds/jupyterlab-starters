@@ -16,7 +16,7 @@ commands:
   upload:
     unix: python scripts/upload.py
   docs:
-    unix: python scripts/docs.py
+    unix: python -m pip install -e . --no-deps && python scripts/docs.py
     env_spec: docs
   docs:watch:
     unix: git clean -dxf docs/_build && sphinx-autobuild docs docs/_build

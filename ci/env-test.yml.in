@@ -9,7 +9,7 @@ dependencies:
   - firefox =78
   - geckodriver
   - jupyterlab {lab}
-  - nodejs
+  - nodejs >=14,<15
   - pytest-asyncio
   - pytest-azurepipelines
   - pytest-cov
