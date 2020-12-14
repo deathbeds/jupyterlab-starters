@@ -11,8 +11,7 @@ from .json_ import JsonSchemaException
 
 
 class Schema(traitlets.Any):
-    """ any... but validated by a :func:`jupyter_starters.json_.json_validator`
-    """
+    """any... but validated by a :func:`jupyter_starters.json_.json_validator`"""
 
     _validator = None
 
@@ -21,8 +20,7 @@ class Schema(traitlets.Any):
         self._validator = validator
 
     def validate(self, obj, value):
-        """ applies a validator
-        """
+        """applies a validator"""
         try:
             self._validator(value)
         except JsonSchemaException as err:

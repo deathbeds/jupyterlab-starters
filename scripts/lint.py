@@ -42,8 +42,7 @@ RFLINT = sum([["--configure", rule] for rule in RFLINT_RULES], [])
 
 
 def nblint():
-    """ clean up notebooks
-    """
+    """clean up notebooks"""
     for nbp in ALL_NB:
         nbf = read(str(nbp), NO_CONVERT)
         changed = False
@@ -70,8 +69,7 @@ def nblint():
 
 
 def lint():
-    """ get that linty fresh feeling
-    """
+    """get that linty fresh feeling"""
     nblint()
 
     return max(

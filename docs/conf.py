@@ -14,8 +14,7 @@ ROOT = HERE.parent
 
 
 def build_finished(_app, exception):
-    """ handle post-build steps
-    """
+    """handle post-build steps"""
     if exception is None:
         check_call(
             ["python", "scripts/docs.py"],
@@ -25,8 +24,7 @@ def build_finished(_app, exception):
 
 
 def setup(app):
-    """ Runs before the "normal business" of sphinx. Don't go too crazy here.
-    """
+    """Runs before the "normal business" of sphinx. Don't go too crazy here."""
     app.add_css_file("css/custom.css")
 
     check_call(

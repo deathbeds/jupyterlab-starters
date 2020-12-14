@@ -12,8 +12,7 @@ SKIPS = {("Windows", "38"): ["-k", "not notebook"]}
 
 
 def utest(*extra_args):
-    """ run the tests
-    """
+    """run the tests"""
     args = [
         "--pyargs",
         "jupyter_starters",

@@ -7,8 +7,7 @@ FOR_REAL = bool(os.environ.get("FOR_REAL", "0"))
 
 
 def upload():
-    """ upload releases
-    """
+    """upload releases"""
     if not FOR_REAL:
         print("Not uploading FOR_REAL: set the environment variable for a real release")
 

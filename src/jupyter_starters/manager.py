@@ -1,6 +1,6 @@
 """ manager, for starters
 """
-# pylint: disable=no-self-use,unsubscriptable-object,fixme,bad-continuation
+# pylint: disable=no-self-use,unsubscriptable-object,fixme
 import base64
 import importlib
 from copy import deepcopy
@@ -39,8 +39,7 @@ DEFAULT_IGNORE_PATTERNS = [
 
 
 class StarterManager(LoggingConfigurable):
-    """ handlers starting starters
-    """
+    """handlers starting starters"""
 
     _starters = Schema(validator=STARTERS)
     jinja_env = T.Instance(jinja2.Environment)
@@ -53,26 +52,22 @@ class StarterManager(LoggingConfigurable):
 
     @property
     def contents_manager(self):
-        """ use the contents manager from parent
-        """
+        """use the contents manager from parent"""
         return self.parent.contents_manager
 
     @property
     def kernel_manager(self):
-        """ use the kernel manager from parent
-        """
+        """use the kernel manager from parent"""
         return self.parent.kernel_manager
 
     @property
     def running(self):
-        """ report names of all starters that could be stopped
-        """
+        """report names of all starters that could be stopped"""
         return list(self.kernel_dirs.keys())
 
     @T.default("jinja_env_extensions")
     def _default_env_extensions(self):
-        """ get env extensions from extras and config
-        """
+        """get env extensions from extras and config"""
         extensions = {}
         extensions.update(self.config_dict.get("extra_jinja_env_extensions", {}))
         extensions.update(self.extra_jinja_env_extensions)
@@ -88,17 +83,16 @@ class StarterManager(LoggingConfigurable):
 
     @T.default("config_dict")
     def _default_config_dict(self):
-        """ load merged config from more jupyter_notebook_config.d files
+        """load merged config from more jupyter_notebook_config.d files
 
-            re-uses notebook loading machinery to look through more locations
+        re-uses notebook loading machinery to look through more locations
         """
         manager = ConfigManager(read_config_path=jupyter_config_path())
         return manager.get("jupyter_notebook_config").get("StarterManager", {})
 
     @T.default("_starters")
     def _default_starters(self):
-        """ default starters
-        """
+        """default starters"""
         starters = {}
         starters.update(cookiecutter_starters(self))
         starters.update(self.config_dict.get("extra_starters", {}))
@@ -107,9 +101,9 @@ class StarterManager(LoggingConfigurable):
 
     @property
     def starters(self):
-        """ augment notebook starters
+        """augment notebook starters
 
-            TODO: caching
+        TODO: caching
         """
         starters = {}
         for name, starter in dict(self._starters).items():
@@ -129,13 +123,11 @@ class StarterManager(LoggingConfigurable):
 
     @property
     def starter_names(self) -> List[Text]:
-        """ convenience method to get names of starters
-        """
+        """convenience method to get names of starters"""
         return sorted(dict(self.starters).keys())
 
     async def start(self, name, path, body):
-        """ start a starter
-        """
+        """start a starter"""
         starter = self.starters[name]
         starter_type = starter["type"]
 
@@ -151,8 +143,7 @@ class StarterManager(LoggingConfigurable):
         raise NotImplementedError(starter["type"])
 
     async def stop(self, name):
-        """ stop a starter. presently only works for notebooks
-        """
+        """stop a starter. presently only works for notebooks"""
         starter = self.starters[name]
         starter_type = starter["type"]
 
@@ -162,8 +153,7 @@ class StarterManager(LoggingConfigurable):
         raise NotImplementedError(starter["type"])
 
     def resolve_src(self, starter):
-        """ resolve the src of a file-based starter
-        """
+        """resolve the src of a file-based starter"""
         root = Path.cwd()
         if "src" not in starter:
             self.log.error("src is required")
@@ -190,8 +180,7 @@ class StarterManager(LoggingConfigurable):
         return src
 
     async def just_copy(self, root, path):
-        """ just copy, with some dummy values
-        """
+        """just copy, with some dummy values"""
         await self.start_copy(
             "just-copy",
             {
@@ -204,8 +193,7 @@ class StarterManager(LoggingConfigurable):
         )
 
     async def start_copy(self, name, starter, path, body):
-        """ start a copy starter
-        """
+        """start a copy starter"""
         root = self.resolve_src(starter)
 
         if root is None:
@@ -225,7 +213,8 @@ class StarterManager(LoggingConfigurable):
 
         for child in iter_not_ignored(root, starter.get("ignore")):
             await self.save_one(
-                child, unquote(ujoin(dest, child.as_uri().replace(root_uri, ""))),
+                child,
+                unquote(ujoin(dest, child.as_uri().replace(root_uri, ""))),
             )
 
         return {
@@ -237,24 +226,20 @@ class StarterManager(LoggingConfigurable):
         }
 
     async def start_python(self, name, starter, path, body):
-        """ start a python starter
-        """
+        """start a python starter"""
         func = T.import_item(starter["callable"])
         return await func(name, starter, path, body, self)
 
     async def start_notebook(self, name, starter, path, body):
-        """ delegate running the notebook to a kernel
-        """
+        """delegate running the notebook to a kernel"""
         return await notebook_starter(name, starter, path, body, self)
 
     async def stop_notebook(self, name):
-        """ stop running the notebook kernel
-        """
+        """stop running the notebook kernel"""
         return await stop_kernel(name, self)
 
     async def save_one(self, src, dest):
-        """ use the contents manager to write a single file/folder
-        """
+        """use the contents manager to write a single file/folder"""
         # pylint: disable=broad-except
 
         stat = src.stat()
@@ -290,8 +275,7 @@ class StarterManager(LoggingConfigurable):
 
 
 def iter_not_ignored(root, ignore_patterns=None):
-    """ yield all children under a root that do not match the ignore patterns
-    """
+    """yield all children under a root that do not match the ignore patterns"""
     if not ignore_patterns:
         ignore_patterns = DEFAULT_IGNORE_PATTERNS
 

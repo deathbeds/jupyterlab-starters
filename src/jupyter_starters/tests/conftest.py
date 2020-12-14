@@ -13,8 +13,7 @@ from jupyter_starters.manager import StarterManager
 
 
 class MockApp(LoggingConfigurable):
-    """ not really a nbapp
-    """
+    """not really a nbapp"""
 
     kernel_manager = traitlets.Instance(MultiKernelManager)
     contents_manager = traitlets.Instance(ContentsManager)
@@ -22,36 +21,31 @@ class MockApp(LoggingConfigurable):
 
     @traitlets.default("kernel_manager")
     def _kernel_manager(self):
-        """ simplest reasonable kernel manager
-        """
+        """simplest reasonable kernel manager"""
         return MultiKernelManager(parent=self)
 
     @traitlets.default("contents_manager")
     def _contents_manager(self):
-        """ simplest reasonable kernel manager
-        """
+        """simplest reasonable kernel manager"""
         return FileContentsManager(root_dir=self.notebook_dir, parent=self)
 
 
 @pytest.fixture
 def starter_manager(mock_app):
-    """ an orphaned starter
-    """
+    """an orphaned starter"""
     return StarterManager(parent=mock_app)
 
 
 @pytest.fixture
 def mock_app(monkeypatch, tmp_path):
-    """ a fake notebook app in a tmpdir
-    """
+    """a fake notebook app in a tmpdir"""
     monkeypatch.chdir(tmp_path)
     return MockApp(notebook_dir=str(tmp_path))
 
 
 @pytest.fixture
 def example_project(tmp_path):
-    """ a minimal project
-    """
+    """a minimal project"""
     my_module = tmp_path / "my_module"
     starter_content = my_module / "starter_content"
     starter_content.mkdir(parents=True)
@@ -65,8 +59,7 @@ def example_project(tmp_path):
 
 @pytest.fixture
 def tmp_notebook(tmp_path):
-    """ make an empty python notebook on disk
-    """
+    """make an empty python notebook on disk"""
     notebook = nbformat.v4.new_notebook()
     notebook.metadata["kernelspec"] = {"name": "python3"}
     nb_path = tmp_path / "Untitled.ipynb"

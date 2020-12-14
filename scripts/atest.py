@@ -28,8 +28,7 @@ OK = 0
 
 
 def get_stem(attempt, extra_args):
-    """ predictable folder naming, based on attempt an other extra args
-    """
+    """predictable folder naming, based on attempt an other extra args"""
     stem = "_".join([OS, PY, str(attempt)]).replace(".", "_").lower()
 
     if "--dryrun" in extra_args:
@@ -39,8 +38,7 @@ def get_stem(attempt, extra_args):
 
 
 def atest(attempt, extra_args):
-    """ perform a single attempt of the acceptance tests
-    """
+    """perform a single attempt of the acceptance tests"""
     extra_args += OS_PY_ARGS.get((OS, PY), [])
     stem = get_stem(attempt, extra_args)
 
@@ -91,8 +89,7 @@ def atest(attempt, extra_args):
 
 
 def attempt_atest_with_retries(*extra_args):
-    """ retry the robot tests a number of times
-    """
+    """retry the robot tests a number of times"""
     attempt = 0
     error_count = -1
 

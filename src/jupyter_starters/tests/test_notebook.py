@@ -7,8 +7,8 @@ from jupyter_starters.types import Status
 
 @pytest.mark.asyncio
 async def test_notebook_no_schema(starter_manager, tmp_notebook):
-    """ does a notebook without a schema still work?
-        https://github.com/deathbeds/jupyterlab-starters/issues/26
+    """does a notebook without a schema still work?
+    https://github.com/deathbeds/jupyterlab-starters/issues/26
     """
 
     name = "tmp-notebook"

@@ -5,8 +5,7 @@ NS = "starters"
 
 
 class Status:
-    """ pseudo-enum for managing statuses
-    """
+    """pseudo-enum for managing statuses"""
 
     # the starter isn't done yet, and more data is required
     CONTINUING = "continuing"

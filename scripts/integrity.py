@@ -62,8 +62,7 @@ CI = ROOT / "ci"
 
 @pytest.fixture(scope="module")
 def the_meta_package():
-    """ load up the metapackage
-    """
+    """load up the metapackage"""
     meta_path, meta = PACKAGES[META_NAME]
     return (
         meta_path,
@@ -75,8 +74,7 @@ def the_meta_package():
 
 @pytest.mark.parametrize("name,env_path", [["docs", ROOT / "docs" / "environment.yml"]])
 def test_env_versions(name, env_path):
-    """ are special environments in sync with the main demo/development env?
-    """
+    """are special environments in sync with the main demo/development env?"""
     env = yaml.safe_load(env_path.read_text())
     for package in ENV["dependencies"]:
         assert package in env["dependencies"], f"{package} in {name} is out-of-date"
@@ -91,8 +89,8 @@ def test_env_versions(name, env_path):
     ],
 )
 def test_ci_variables(name, version):
-    """ are CI variables right?
-        npm includes a -
+    """are CI variables right?
+    npm includes a -
     """
     if name.startswith("JS"):
         assert PIPE_VARS[name].replace("-", "") == version
@@ -104,8 +102,7 @@ def test_ci_variables(name, version):
     "name,info", [p for p in PACKAGES.items() if p[0] != META_NAME]
 )
 def test_ts_package_integrity(name, info, the_meta_package):
-    """ are the typescript packages self-consistent
-    """
+    """are the typescript packages self-consistent"""
     m_path, m_pkg, m_tsconfig, m_index = the_meta_package
     path, pkg = info
 
@@ -140,8 +137,7 @@ def test_ts_package_integrity(name, info, the_meta_package):
     ],
 )
 def test_changelog_versions(pkg, version):
-    """ is the changelog up-to-date(ish)
-    """
+    """is the changelog up-to-date(ish)"""
     assert "## `{} {}`".format(pkg, version) in CHANGELOG.read_text()
 
 
@@ -152,8 +148,7 @@ junit_family = xunit2
 
 
 def integrity():
-    """ run the tests
-    """
+    """run the tests"""
     with tempfile.TemporaryDirectory() as tmpd:
         ini = pathlib.Path(tmpd) / "pytest.ini"
         ini.write_text(PYTEST_INI)
