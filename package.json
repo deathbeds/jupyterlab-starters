@@ -20,7 +20,7 @@
     "lab:link": "lerna run lab:link",
     "lint:check": "jlpm --silent prettier:check && jlpm --silent eslint:check",
     "lint": "jlpm --silent prettier:fix && jlpm --silent eslint:fix",
-    "prettier:check": "prettier --check --list-different '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",
+    "prettier:check": "prettier --check '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",
     "prettier:fix": "prettier  --list-different --write '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",
     "test": "lerna run --stream --concurrency=1 test",
     "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
