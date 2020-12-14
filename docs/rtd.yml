@@ -1,7 +1,7 @@
 name: jupyterlab-starters-docs
 
 dependencies:
-  - nodejs >=14,<15
+  - nodejs >=10
   - pip
   - python >=3.8,<3.9.0a0
   - pip:
