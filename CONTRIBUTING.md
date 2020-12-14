@@ -79,3 +79,5 @@ anaconda-project run docs:watch
 anaconda-project run release
 anaconda-project run upload
 ```
+
+> or better still, download the artifacts from CI
