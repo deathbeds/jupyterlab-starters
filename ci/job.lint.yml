@@ -37,6 +37,22 @@ jobs:
       - script: ${{ parameters.docs_env_update }} || ${{ parameters.docs_env_update }} || ${{ parameters.docs_env_update }}
         displayName: update conda environment with docs dependencies
 
+      - script: ${{ parameters.act }} python setup.py sdist bdist_wheel
+        displayName: build python distributions
+
+      - script: ${{ parameters.act }} jlpm lerna run bundle
+        displayName: build npm bundles
+
+      - script: cp packages/*/*.tgz dist && cd dist && sha256sum * > SHA256SUMS
+        displayName: copy to dist
+
+      - task: PublishPipelineArtifact@0
+        displayName: publish artifacts for distribution
+        inputs:
+          targetPath: dist
+          artifactName: Dist $(Build.BuildId)
+        condition: always()
+
       - script: ${{ parameters.act }} python -m pip install -e .
         displayName: setup python for examples
 

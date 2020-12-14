@@ -11,9 +11,12 @@ dependencies:
   - jupyterlab >=2,<3.0.0a0
   - mypy
   - nodejs >=14,<15
+  - pip
   - pylint
   - pytest-azurepipelines
   - python >=3.8,<3.9.0a0
   - robotframework >=3.2
   - robotframework-lint
   - ruamel_yaml
+  - twine
+  - wheel
