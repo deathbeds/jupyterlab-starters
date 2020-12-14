@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-rjsf",
-  "version": "0.5.0a0",
+  "version": "0.6.0a0",
   "description": "React JSON Schema Form for JupyterLab",
   "keywords": [
     "jupyter",
@@ -30,8 +30,8 @@
     "upload": "jlpm publish ."
   },
   "dependencies": {
-    "@rjsf/core": "~2.0.0",
-    "react-codemirror2": "^6.0.0"
+    "@rjsf/core": "~2.4.0",
+    "react-codemirror2": "^7.2.1"
   },
   "peerDependencies": {
     "@jupyterlab/application": "2"

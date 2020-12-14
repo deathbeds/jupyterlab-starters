@@ -7,13 +7,13 @@ channels:
 dependencies:
   - black
   - flake8
-  - isort
+  - isort <5
   - jupyterlab >=2,<3.0.0a0
   - mypy
   - nodejs
   - pylint
   - pytest-azurepipelines
   - python >=3.8,<3.9.0a0
-  - robotframework <3.2
+  - robotframework >=3.2
   - robotframework-lint
   - ruamel_yaml

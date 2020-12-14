@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## `jupyter_starters 0.6.0a0`
+
+- use new `@deathbeds/jupyterlab-starters 0.6.0a0`
+
+## `@deathbeds/jupyterlab-rjsf 0.6.0a0`
+
+- upgrade `@rjsf/core` for `anyOf` fixes
+- upgrade `react-codemirror2`
+
+## `@deathbeds/jupyterlab-starters 0.6.0a0`
+
+- use new `@deathbeds/jupyterlab-rjsf 0.6.0a0`
+
+---
+
 ## `jupyter_starters 0.5.0a0`
 
 - [#41][] handle more recent cookiecutter metadata
@@ -11,6 +26,8 @@
 ## `@deathbeds/jupyterlab-starters 0.5.0a0`
 
 - [#41][] upgrade `@deathbeds/jupyterlab-rjsf`
+
+---
 
 ## `@deathbeds/jupyterlab-rjsf 0.4.0a0`
 
