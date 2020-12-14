@@ -77,10 +77,10 @@ def lint():
             call,
             [
                 ["isort", "-rc", *ALL_PY],
-                ["black", *ALL_PY],
+                ["black", "--quiet", *ALL_PY],
                 ["flake8", *ALL_PY],
-                ["pylint", *ALL_PY],
-                ["mypy", *PY_SRC],
+                ["pylint", "--reports", "n", "--score", "n", *ALL_PY],
+                ["mypy", "--no-error-summary", *PY_SRC],
                 ["python", "-m", "robot.tidy", "--inplace", *ALL_ROBOT],
                 ["rflint", *RFLINT, *ALL_ROBOT],
             ],

@@ -4,7 +4,7 @@ commands:
   lab:
     unix: jupyter lab --no-browser --debug
   lint:
-    unix: python scripts/lint.py && jlpm lint
+    unix: python scripts/lint.py && jlpm --silent lint
   integrity:
     unix: python scripts/integrity.py
   atest:

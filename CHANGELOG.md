@@ -2,16 +2,17 @@
 
 ## `jupyter_starters 0.6.0a0`
 
-- use new `@deathbeds/jupyterlab-starters 0.6.0a0`
+- [#45][] use new `@deathbeds/jupyterlab-starters 0.6.0a0`
+- [#45][] be more specific on URL patterns
 
 ## `@deathbeds/jupyterlab-rjsf 0.6.0a0`
 
-- upgrade `@rjsf/core` for `anyOf` fixes
-- upgrade `react-codemirror2`
+- [#45][] upgrade `@rjsf/core` for `anyOf` fixes
+- [#45][] upgrade `react-codemirror2`
 
 ## `@deathbeds/jupyterlab-starters 0.6.0a0`
 
-- use new `@deathbeds/jupyterlab-rjsf 0.6.0a0`
+- [#45][] use new `@deathbeds/jupyterlab-rjsf 0.6.0a0`
 
 ---
 
@@ -41,6 +42,8 @@
 
 - Updated for parity with frontend
 
+---
+
 ## `jupyter_starters 0.3.0a0`
 
 - [#39][] adds listing and stopping of currently-running kernels to REST API
@@ -49,6 +52,8 @@
 
 - [#39][] supports JupyterLab 2.0
 - [#39][] adds listing and stopping of running kernel-backed starters
+
+---
 
 ## `jupyter_starters 0.2.2a0`
 
@@ -60,6 +65,8 @@
 - [#34][] add stauts indicator for starting/continuing
 - [#35][] add `/lab/tree/starter/<starter>/<path>` URL router
 
+---
+
 ## `jupyter_starters 0.2.1a0`
 
 - [#25][] add `py_src` for easier distribution of starters
@@ -69,6 +76,8 @@
 ## `@deathbeds/jupyterlab-starters 0.2.1a0`
 
 - [#29][] handle minimally specified notebook metadata
+
+---
 
 ## `jupyter_starters 0.2.0a0`
 
@@ -82,9 +91,13 @@
 - [#18][] all starters launch in right sidebar
 - [#21][] enable CodeMirror for JSON, Markdown, etc. editing
 
+---
+
 ## `jupyter_starters 0.1.0a3`
 
 - make optional dependency messages only appear in debug mode
+
+--
 
 ## `jupyter_starters 0.1.0a2`
 
@@ -94,6 +107,8 @@
 ## `@deathbeds/jupyterlab-starters 0.1.0a2`
 
 - add glob ignore patterns to schema
+
+---
 
 ## `jupyter_starters 0.1.0a1`
 
@@ -119,3 +134,4 @@
 [#38]: https://github.com/deathbeds/jupyterlab-starters/pull/38
 [#39]: https://github.com/deathbeds/jupyterlab-starters/pull/39
 [#41]: https://github.com/deathbeds/jupyterlab-starters/pull/41
+[#45]: https://github.com/deathbeds/jupyterlab-starters/pull/45

@@ -33,6 +33,12 @@ anaconda-project run lab
 
 Try out some stuff. Make some whitepapers and cookiecutters.
 
+## linting
+
+```bash
+anaconda-project run lint
+```
+
 ## testing
 
 ```bash
@@ -55,10 +61,16 @@ anaconda-project run lab --watch
 
 > _You'll have to restart lab if you add files_
 
-## linting
+## documenting
 
 ```bash
-anaconda-project run lint
+anaconda-project run docs
+```
+
+...or watch for changes
+
+```bash
+anaconda-project run docs:watch
 ```
 
 ## releasing

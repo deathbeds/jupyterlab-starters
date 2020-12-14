@@ -2,6 +2,7 @@
 .mypy_cache/
 .pytest_cache/
 .vscode/
+.yarn-packages/
 *.egg-info/
 atest/
 dist/
