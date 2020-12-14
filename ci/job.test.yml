@@ -20,8 +20,8 @@ parameters:
       spec: '>=3.8,<3.9.0a0'
       lab: '>=2,<3.0.0a0'
   env_update: conda env update -n jupyterlab-starters --file env-test.yml --quiet
-  lab_ext: jupyter labextension install --no-build $(FIRST_PARTY_LABEXTENSIONS)
-  link_mod: jupyter labextension link --no-build $(FIRST_PARTY_MODULES)
+  lab_ext: jupyter labextension install --debug --no-build $(FIRST_PARTY_LABEXTENSIONS)
+  link_mod: jupyter labextension link --debug --no-build $(FIRST_PARTY_MODULES)
   jlpm: jlpm --ignore-optional --prefer-offline --frozen-lockfile
 
 jobs:
