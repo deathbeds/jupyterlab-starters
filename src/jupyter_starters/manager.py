@@ -83,12 +83,15 @@ class StarterManager(LoggingConfigurable):
 
     @T.default("config_dict")
     def _default_config_dict(self):
-        """load merged config from more jupyter_server_config.d files
+        """load merged config from more jupyter_*_config.d files
 
         re-uses notebook loading machinery to look through more locations
         """
         manager = ConfigManager(read_config_path=jupyter_config_path())
-        return manager.get("jupyter_server_config").get("StarterManager", {})
+        conf = {}
+        for app in ["_", "_notebook_", "_server_"]:
+            conf.update(**manager.get(f"jupyter{app}config").get("StarterManager", {}))
+        return conf
 
     @T.default("_starters")
     def _default_starters(self):

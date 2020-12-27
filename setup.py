@@ -11,6 +11,10 @@ __import__("setuptools").setup(
         (
             "etc/jupyter/jupyter_server_config.d",
             ["src/jupyter_starters/etc/jupyter-starters-serverextension.json"],
+        ),
+        (
+            "etc/jupyter/jupyter_notebook_config.d",
+            ["src/jupyter_starters/etc/jupyter-starters-serverextension.json"],
         )
     ],
 

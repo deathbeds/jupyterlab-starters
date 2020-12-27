@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 set -eux
+jlpm bootstrap
+
 python -m pip install -e . --ignore-installed --no-deps
 jupyter serverextension enable --sys-prefix --py jupyter_starters
-jlpm bootstrap
+
+if [ "${NB_UID}not-on-binder" = "not-on-binder" ]; then
+    echo "not on binder, skipping cleanup"
+else
+    rm -rf node_modules/
+    jlpm cache clean
+fi
