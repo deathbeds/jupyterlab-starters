@@ -3,5 +3,3 @@ set -eux
 python -m pip install -e . --ignore-installed --no-deps
 jupyter serverextension enable --sys-prefix --py jupyter_starters
 jlpm bootstrap
-jlpm lab:link
-jupyter lab build --minimize=True --dev-build=False --debug

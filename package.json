@@ -1,7 +1,6 @@
 {
   "devDependencies": {
     "@adobe/jsonschema2md": "^4.0.0",
-    "@jupyterlab/builder": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
     "eslint-config-prettier": "^6.7.0",
@@ -15,11 +14,11 @@
   },
   "private": true,
   "scripts": {
-    "bootstrap": "jlpm --ignore-optional --prefer-offline --frozen-lockfile && lerna bootstrap && jlpm lint && jlpm clean && jlpm build",
-    "build": "lerna run build:pre && lerna run build",
+    "bootstrap": "jlpm --ignore-optional --prefer-offline --frozen-lockfile && lerna bootstrap && jlpm lint && jlpm clean && jlpm build && jlpm lab:ext",
+    "build": "lerna run build:pre && lerna run build && lerna run build:ext",
     "bundle": "lerna run --parallel bundle",
     "clean": "lerna run --parallel clean",
-    "lab:link": "lerna run lab:link",
+    "lab:ext": "lerna run --parallel lab:ext",
     "lint:check": "jlpm --silent prettier:check && jlpm --silent eslint:check",
     "lint": "jlpm --silent prettier:fix && jlpm --silent eslint:fix",
     "prettier:check": "prettier --check '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",

@@ -84,8 +84,6 @@ def test_env_versions(name, env_path):
     "name,version",
     [
         ["PY_JLST_VERSION", PY_VERSION],
-        ["JS_JLST_VERSION", MAIN_EXT_VERSION],
-        ["JS_RJSF_VERSION", RJSF_EXT_VERSION],
     ],
 )
 def test_ci_variables(name, version):

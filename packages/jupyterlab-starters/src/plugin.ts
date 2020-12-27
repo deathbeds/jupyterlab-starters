@@ -6,6 +6,7 @@ import {
   IRouter
 } from '@jupyterlab/application';
 
+import { PageConfig } from '@jupyterlab/coreutils';
 import { IRunningSessionManagers } from '@jupyterlab/running';
 
 import { ILauncher } from '@jupyterlab/launcher';
@@ -168,7 +169,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     });
 
     const starterPattern = new RegExp(
-      `^${paths.urls.tree}/starter/([^/]+)/?(.*)`
+      `^${PageConfig.getTreeUrl()}/starter/([^/]+)/?(.*)`
     );
 
     commands.addCommand(CommandIDs.routerStart, {
@@ -188,7 +189,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           return;
         }
 
-        const url = URLExt.join(paths.urls.tree, cwd);
+        const url = URLExt.join(PageConfig.getTreeUrl(), cwd);
 
         router.navigate(url);
 

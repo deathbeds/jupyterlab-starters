@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## `jupyter_starters 1.0.0a0`
+
+- [#48][] support JupyterLab 3.x
+
+## `@deathbeds/jupyterlab-rjsf 1.0.0a0`
+
+- [#48][] support JupyterLab 3.x
+
+## `@deathbeds/jupyterlab-starters 1.0.0a0`
+
+- [#48][] support JupyterLab 3.x
+
+---
+
 ## `jupyter_starters 0.6.0a0`
 
 - [#45][] use new `@deathbeds/jupyterlab-starters 0.6.0a0`
@@ -135,3 +149,4 @@
 [#39]: https://github.com/deathbeds/jupyterlab-starters/pull/39
 [#41]: https://github.com/deathbeds/jupyterlab-starters/pull/41
 [#45]: https://github.com/deathbeds/jupyterlab-starters/pull/45
+[#48]: https://github.com/deathbeds/jupyterlab-starters/issues/48

@@ -18,4 +18,6 @@ docs/schema
 envs/
 lib/
 node_modules/
+src/**/labextension/
+untitled*
 Untitled*

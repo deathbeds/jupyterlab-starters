@@ -3,8 +3,8 @@
 # pylint: disable=abstract-method
 from typing import TYPE_CHECKING
 
-from notebook.base.handlers import IPythonHandler
-from notebook.utils import url_path_join as ujoin
+from jupyter_server.base.handlers import JupyterHandler
+from jupyter_server.utils import url_path_join as ujoin
 
 from .json_ import JsonSchemaException, loads
 from .schema.v2 import ALL_STARTERS, VERSION
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from .manager import StarterManager
 
 
-class BaseHandler(IPythonHandler):
+class BaseHandler(JupyterHandler):
     """common base handlers"""
 
     manager = None  # type: StarterManager

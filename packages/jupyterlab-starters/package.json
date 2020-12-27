@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-starters",
-  "version": "0.6.0a0",
+  "version": "1.0.0a0",
   "description": "Parameterized files and folders for JupyterLab",
   "keywords": [
     "jupyter",
@@ -27,9 +27,11 @@
     "build:pre": "jlpm build:json2ts && jlpm build:copyschema",
     "build:json2ts": "json2ts ../../src/jupyter_starters/schema/v2.json --unreachableDefinitions | prettier --stdin-filepath _schema.d.ts > src/_schema.d.ts",
     "build:copyschema": "python -c \"from pathlib import Path as P; s = P('../../src/jupyter_starters/schema/v2.json').read_text(); P('lib').mkdir(exist_ok=True); P('lib/_schema.json').write_text(s); P('src/_schema.json').write_text(s)\"",
+    "build:ext": "jupyter labextension build .",
+    "build:ext:dev": "jupyter labextension build --development True .",
+    "lab:ext": "jupyter labextension develop --overwrite ../..",
     "bundle": "npm pack .",
     "clean": "rimraf lib",
-    "lab:link": "jupyter labextension link . --no-build",
     "upload": "jlpm publish ."
   },
   "dependencies": {
@@ -42,12 +44,12 @@
     "@jupyterlab/running": "3"
   },
   "devDependencies": {
-    "@types/codemirror": "^0.0.74",
+    "@types/codemirror": "^0.0.97",
     "@deathbeds/jupyterlab-rjsf": "~1.0.0a0",
-    "@jupyterlab/application": "2",
-    "@jupyterlab/running": "2",
-    "@jupyterlab/launcher": "2",
-    "@jupyterlab/notebook": "2",
+    "@jupyterlab/builder": "^3.0.0",
+    "@jupyterlab/running": "3",
+    "@jupyterlab/launcher": "3",
+    "@jupyterlab/notebook": "3",
     "json-schema-to-typescript": "^8.0.0",
     "react": "^17.0.1",
     "rimraf": "~3.0.0",
@@ -64,6 +66,7 @@
         ]
       }
     },
-    "extension": "lib/plugin.js"
+    "extension": "lib/plugin.js",
+    "outputDir": "../../src/jupyter_starters/labextension"
   }
 }

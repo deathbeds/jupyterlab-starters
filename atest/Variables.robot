@@ -1,5 +1,5 @@
 *** Variables ***
-${LAB CONF}       jupyter_notebook_config.json
+${LAB CONF}       jupyter_server_config.json
 ${LAB VERSION}    ${EMPTY}
 ${SPLASH}         id:jupyterlab-splash
 # to help catch hard-coded paths

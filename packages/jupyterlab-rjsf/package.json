@@ -26,7 +26,6 @@
   "scripts": {
     "bundle": "npm pack .",
     "clean": "rimraf lib",
-    "lab:link": "jupyter labextension link . --no-build",
     "upload": "jlpm publish ."
   },
   "dependencies": {
