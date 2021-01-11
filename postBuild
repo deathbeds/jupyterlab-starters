@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eux
+set -ex
 python -m pip install -e . --ignore-installed --no-deps
 jlpm bootstrap
 jupyter serverextension enable --sys-prefix --py jupyter_starters
