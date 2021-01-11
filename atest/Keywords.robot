@@ -51,13 +51,20 @@ Setup Suite For Screenshots
 Initialize User Settings
     [Documentation]    Make a directory for user settings
     Set Suite Variable    ${SETTINGS DIR}    ${OUTPUT DIR}${/}user-settings    children=${True}
+    # helps screenshots
     Create File    ${SETTINGS DIR}${/}@jupyterlab${/}codemirror-extension${/}commands.jupyterlab-settings
     ...    {"styleActiveLine": true}
+    # disable to avoid extra npm/node flake
     Create File    ${SETTINGS DIR}${/}@jupyterlab${/}extensionmanager-extension${/}plugin.jupyterlab-settings
     ...    {"enabled": false}
+    # disable the flaky modal command palette
     Create File
     ...    ${SETTINGS DIR}${/}@jupyterlab${/}apputils-extension${/}palette.jupyterlab-settings
     ...    {"modal": false}
+    # move this to original place because tests
+    Create File
+    ...    ${SETTINGS DIR}${/}@jupyterlab${/}application-extension${/}sidebar.jupyterlab-settings
+    ...    {"overrides": {"jp-property-inspector": "left"}}
 
 Tear Down Everything
     [Documentation]    Try to clean everything up
