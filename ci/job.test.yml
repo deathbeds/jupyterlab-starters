@@ -12,13 +12,13 @@ parameters:
   pythons:
     - name: ThreeSix
       spec: '>=3.6,<3.7.0a0'
-      lab: '>=2,<2.1.0a0'
+      lab: '>=3,<4'
     - name: ThreeSeven
       spec: '>=3.7,<3.8.0a0'
-      lab: '>=2.1,<2.2.0a0'
+      lab: '>=3,<4'
     - name: ThreeEight
       spec: '>=3.8,<3.9.0a0'
-      lab: '>=2,<3.0.0a0'
+      lab: '>=3,<4'
   env_update: mamba env update -n jupyterlab-starters --file env-test.yml --quiet
   lab_ext: jupyter labextension install --debug --no-build $(FIRST_PARTY_LABEXTENSIONS)
   link_mod: jupyter labextension link --debug --no-build $(FIRST_PARTY_MODULES)
