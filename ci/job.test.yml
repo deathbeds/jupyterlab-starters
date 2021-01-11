@@ -62,9 +62,6 @@ jobs:
               - script: ${{ platform.activate }} jupyterlab-starters && python scripts/utest.py
                 displayName: run unit tests
 
-              - script: ${{ platform.activate }} jupyterlab-starters && mamba remove --yes --force nodejs
-                displayName: uninstall node to avoid build checks
-
               - script: ${{ platform.activate }} jupyterlab-starters && python scripts/atest.py
                 displayName: run browser tests
 
