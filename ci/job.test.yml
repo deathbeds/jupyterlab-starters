@@ -59,6 +59,9 @@ jobs:
               - script: ${{ platform.activate }} jupyterlab-starters && jupyter labextension list
                 displayName: list labextensions
 
+              - script: ${{ platform.activate }} jupyterlab-starters && python scripts/preflight.py
+                displayName: preflight lab
+
               - script: ${{ platform.activate }} jupyterlab-starters && python scripts/utest.py
                 displayName: run unit tests
 

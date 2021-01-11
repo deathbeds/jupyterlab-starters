@@ -4,6 +4,7 @@ python -m pip install -e . --ignore-installed --no-deps
 jlpm bootstrap
 jupyter serverextension enable --sys-prefix --py jupyter_starters
 
+
 if [ "${NB_UID}not-on-binder" = "not-on-binder" ]; then
     echo "not on binder, skipping cleanup"
 else
@@ -11,3 +12,7 @@ else
     rm -rf node_modules/
     jlpm cache clean
 fi
+
+jupyter serverextension list
+jupyter server extension list
+jupyter labextension list

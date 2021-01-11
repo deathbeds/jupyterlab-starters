@@ -16,9 +16,6 @@ jobs:
       - script: ${{ parameters.env_update }} || ${{ parameters.env_update }} || ${{ parameters.env_update }}
         displayName: update conda environment with linting dependencies
 
-      - script: ${{ parameters.act }} python scripts/integrity.py
-        displayName: check repo integrity
-
       - script: ${{ parameters.act }} python scripts/lint.py
         displayName: lint backend
 

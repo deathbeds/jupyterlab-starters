@@ -24,10 +24,10 @@ Setup Server and Browser
     Update Examples    ${home}
     ${WORKSPACES DIR} =    Set Variable    ${OUTPUT DIR}${/}workspaces
     Initialize User Settings
-    ${app args} =    Set Variable    --no-browser --debug --NotebookApp.base_url\='${BASE}' --port\=${PORT} --NotebookApp.token\='${token}'
+    ${app args} =    Set Variable    --no-browser --debug --LabApp.base_url\='${BASE}' --port\=${PORT} --LabApp.token\='${token}'
     ${path args} =    Set Variable    --LabApp.user_settings_dir='${SETTINGS DIR.replace('\\', '\\\\')}' --LabApp.workspaces_dir\='${WORKSPACES DIR.replace('\\', '\\\\')}'
     Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots
-    ${server} =    Start Process    jupyter-lab ${app args} ${path args}    shell=yes    env:HOME=${home}    cwd=${home}    stdout=${OUTPUT DIR}${/}lab.log
+    ${server} =    Start Process    jupyter lab ${app args} ${path args}    shell=yes    env:HOME=${home}    cwd=${home}    stdout=${OUTPUT DIR}${/}lab.log
     ...    stderr=STDOUT
     Set Global Variable    ${SERVER}    ${server}
     Open JupyterLab
