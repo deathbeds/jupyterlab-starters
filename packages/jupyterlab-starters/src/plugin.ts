@@ -168,14 +168,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
       iconClass: DEFAULT_ICON_CLASS
     });
 
-    const starterPattern = new RegExp(
-      `^${PageConfig.getTreeUrl()}/starter/([^/]+)/?(.*)`
-    );
+    const starterPattern = new RegExp(`[\?&]starter=(.+?)(/.*)`);
 
     commands.addCommand(CommandIDs.routerStart, {
       execute: async args => {
+        console.log('routing', args);
         const loc = args as IRouter.ILocation;
-        const starterMatch = loc.path.match(starterPattern);
+        const starterMatch = loc.request.match(starterPattern);
         if (starterMatch == null) {
           return;
         }
@@ -189,7 +188,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
           return;
         }
 
-        const url = URLExt.join(PageConfig.getTreeUrl(), cwd);
+        const url = URLExt.join(PageConfig.getOption('treeUrl'), cwd);
+
+        console.log('navigating to', url);
 
         router.navigate(url);
 
@@ -239,6 +240,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       pattern: starterPattern,
       rank: 29
     });
+    console.log('registered', CommandIDs.routerStart);
 
     const notebookbutton = new NotebookStarter({ commands });
 

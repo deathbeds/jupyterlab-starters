@@ -8,7 +8,7 @@ Library           String
 *** Test Cases ***
 Starter Opens
     [Documentation]    Does a URL-provided starter open?
-    Go To    ${URL}lab/tree/starter/cookiecutter/examples
+    Go To    ${URL}lab?starter=cookiecutter/examples
     Wait For Splash
     ${template css} =    Set Variable    css:input[label\="Template"]
     Wait Until Page Contains Element    ${template css}    timeout=10s

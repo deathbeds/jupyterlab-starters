@@ -30,6 +30,7 @@
     "build:ext": "jupyter labextension build .",
     "build:ext:dev": "jupyter labextension build --development True .",
     "lab:ext": "jupyter labextension develop --overwrite ../..",
+    "watch": "jupyter labextension watch .",
     "bundle": "npm pack .",
     "clean": "rimraf lib",
     "upload": "jlpm publish ."
