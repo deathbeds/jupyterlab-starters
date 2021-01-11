@@ -7,8 +7,6 @@ trigger:
 
 pr:
   autoCancel: false
-  branches:
-    - master
   paths:
     # lets us tweak binder without restarting CI
     exclude:
