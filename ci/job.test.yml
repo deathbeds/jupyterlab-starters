@@ -19,7 +19,7 @@ parameters:
     - name: ThreeEight
       spec: '>=3.8,<3.9.0a0'
       lab: '>=3,<4'
-  env_update: mamba env update -n jupyterlab-starters --file env-test.yml --quiet
+  env_update: conda env update -n jupyterlab-starters --file env-test.yml --quiet
 
 jobs:
   - ${{ each platform in parameters.platforms }}:
