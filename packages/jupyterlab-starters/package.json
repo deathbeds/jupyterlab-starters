@@ -32,7 +32,7 @@
     "lab:ext": "jupyter labextension develop --overwrite ../..",
     "watch": "jupyter labextension watch .",
     "bundle": "npm pack .",
-    "clean": "rimraf lib",
+    "clean": "rimraf lib ../../src/jupyter_starters/labextension",
     "upload": "jlpm publish ."
   },
   "dependencies": {
