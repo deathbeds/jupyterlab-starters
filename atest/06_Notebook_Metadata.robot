@@ -53,7 +53,7 @@ No Empty Metadata
 Open the Example Starter Notebook
     [Documentation]    Use the file tree to open the example Notebook Starter
     Open File Browser
-    Wait Until Page Contains Element    ${CSS HOME FOLDER}
+    Wait Until Element is Visible    ${CSS HOME FOLDER}
     Click Element    ${CSS HOME FOLDER}
     Wait Until Page Contains Element    ${XP FILE TREE EXAMPLES}
     Double Click Element    ${XP FILE TREE EXAMPLES}

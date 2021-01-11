@@ -38,7 +38,7 @@ Update Examples
     Copy Directory    ${OUTPUT DIR}${/}..${/}..${/}..${/}examples    ${home}${/}examples
     Copy File    ${OUTPUT DIR}${/}..${/}..${/}..${/}${LAB CONF}    ${home}${/}${LAB CONF}
     ${atest conf txt} =    Get File    etc${/}${LAB CONF}
-    ${atest conf} =    Evaluate    __import__("json").loads('''${atest conf txt}''')
+    ${atest conf} =    Evaluate    __import__("json").loads(r'''${atest conf txt}''')
     Merge To JSON File    ${home}${/}${LAB CONF}    ${atest conf}
 
 Setup Suite For Screenshots
@@ -51,9 +51,13 @@ Setup Suite For Screenshots
 Initialize User Settings
     [Documentation]    Make a directory for user settings
     Set Suite Variable    ${SETTINGS DIR}    ${OUTPUT DIR}${/}user-settings    children=${True}
-    Create File    ${SETTINGS DIR}${/}@jupyterlab${/}codemirror-extension${/}commands.jupyterlab-settings    {"styleActiveLine": true}
+    Create File    ${SETTINGS DIR}${/}@jupyterlab${/}codemirror-extension${/}commands.jupyterlab-settings
+    ...    {"styleActiveLine": true}
     Create File    ${SETTINGS DIR}${/}@jupyterlab${/}extensionmanager-extension${/}plugin.jupyterlab-settings
     ...    {"enabled": false}
+    Create File
+    ...    ${SETTINGS DIR}${/}@jupyterlab${/}apputils-extension${/}palette.jupyterlab-settings
+    ...    {"modal": false}
 
 Tear Down Everything
     [Documentation]    Try to clean everything up
@@ -174,7 +178,7 @@ Merge To JSON File
     [Arguments]    ${path}    ${obj}
     [Documentation]    Merge a dictionary into a JSON file
     ${file} =    Get File    ${path}
-    ${json} =    Evaluate    __import__("json").loads('''${file}''')
+    ${json} =    Evaluate    __import__("json").loads(r'''${file}''')
     TCM.Recursive Update    ${json}    ${obj}
     Evaluate    __import__("pathlib").Path(r'''${path}''').write_text(__import__("json").dumps(${json}))
     [Return]    ${json}
