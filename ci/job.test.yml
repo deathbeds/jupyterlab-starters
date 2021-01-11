@@ -50,7 +50,7 @@ jobs:
               - script: conda info && conda list -n jupyterlab-starters
                 displayName: list conda packages and info
 
-              - script: ${{ platform.activate }} jupyterlab-starters && cd dist && python -m pip install jupyter_starters-$(PY_JLST_VERSION)-py3-none-any.whl --no-deps
+              - script: ${{ platform.activate }} jupyterlab-starters && python -m pip install --find-links=dist --no-index --ignore-installed --no-deps jupyter_starters
                 displayName: install python wheel
 
               - script: ${{ platform.activate }} jupyterlab-starters && jupyter serverextension list

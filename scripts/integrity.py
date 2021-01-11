@@ -81,22 +81,6 @@ def test_env_versions(name, env_path):
 
 
 @pytest.mark.parametrize(
-    "name,version",
-    [
-        ["PY_JLST_VERSION", PY_VERSION],
-    ],
-)
-def test_ci_variables(name, version):
-    """are CI variables right?
-    npm includes a -
-    """
-    if name.startswith("JS"):
-        assert PIPE_VARS[name].replace("-", "") == version
-    else:
-        assert PIPE_VARS[name] == version
-
-
-@pytest.mark.parametrize(
     "name,info", [p for p in PACKAGES.items() if p[0] != META_NAME]
 )
 def test_ts_package_integrity(name, info, the_meta_package):
