@@ -33,6 +33,13 @@ jobs:
             pool:
               vmImage: ${{ platform.vmImage }}
             steps:
+              - task: DownloadPipelineArtifact@0
+                condition: always()
+                inputs:
+                  artifactName: Dist $(Build.BuildId)
+                  targetPath: dist
+                displayName: restore dist
+
               - template: steps.conda.yml
                 parameters:
                   name: ${{ platform.name }}
@@ -46,38 +53,17 @@ jobs:
               - script: conda info && conda list -n jupyterlab-starters
                 displayName: list conda packages and info
 
-              - script: ${{ platform.activate }} jupyterlab-starters && ${{ parameters.jlpm }} || ${{ parameters.jlpm }} || ${{ parameters.jlpm }}
-                displayName: install npm dependencies
-
-              - script: ${{ platform.activate }} jupyterlab-starters && jlpm build
-                displayName: build typescript
-
-              - script: ${{ platform.activate }} jupyterlab-starters && python setup.py sdist bdist_wheel
-                displayName: build python distributions
-
-              - script: ${{ platform.activate }} jupyterlab-starters && jlpm lerna run bundle
-                displayName: build npm bundles
-
               - script: ${{ platform.activate }} jupyterlab-starters && cd dist && python -m pip install jupyter_starters-$(PY_JLST_VERSION)-py3-none-any.whl --no-deps
                 displayName: install python wheel
-
-              - script: ${{ platform.activate }} jupyterlab-starters && python scripts/utest.py
-                displayName: run unit tests
 
               - script: ${{ platform.activate }} jupyterlab-starters && jupyter serverextension list
                 displayName: list server extensions
 
-              - script: ${{ platform.activate }} jupyterlab-starters && ${{ parameters.link_mod }} || ${{ parameters.link_mod }} || ${{ parameters.link_mod }}
-                displayName: link modules
-
-              - script: ${{ platform.activate }} jupyterlab-starters && ${{ parameters.lab_ext }} || ${{ parameters.lab_ext }} || ${{ parameters.lab_ext }}
-                displayName: install labextensions
-
-              - script: ${{ platform.activate }} jupyterlab-starters && jupyter lab build || jupyter lab build --debug || jupyter lab build --debug
-                displayName: build lab
-
               - script: ${{ platform.activate }} jupyterlab-starters && jupyter labextension list
                 displayName: list labextensions
+
+              - script: ${{ platform.activate }} jupyterlab-starters && python scripts/utest.py
+                displayName: run unit tests
 
               - script: ${{ platform.activate }} jupyterlab-starters && conda remove --yes --force nodejs
                 displayName: uninstall node to avoid build checks
