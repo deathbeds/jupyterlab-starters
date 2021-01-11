@@ -13,6 +13,14 @@ HERE = pathlib.Path(__file__).parent
 ROOT = HERE.parent
 
 
+if os.environ.get("READTHEDOCS", False):
+    check_call(["jlpm", "bootstrap"], cwd=str(ROOT))
+    check_call(
+        [sys.executable, "-m", "pip", "install", "-e", ".", "--no-deps"],
+        cwd=str(ROOT)
+    )
+
+
 def build_finished(_app, exception):
     """handle post-build steps"""
     if exception is None:
@@ -26,10 +34,6 @@ def build_finished(_app, exception):
 def setup(app):
     """Runs before the "normal business" of sphinx. Don't go too crazy here."""
     app.add_css_file("css/custom.css")
-
-    if os.environ.get("READTHEDOCS", False):
-        check_call(["jlpm", "bootstrap"], cwd=str(ROOT))
-        check_call(["pip", "install", "-e", ".", "--no-deps"], cwd=str(ROOT))
 
     check_call(
         ["python", "scripts/docs.py"],
