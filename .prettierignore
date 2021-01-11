@@ -10,3 +10,4 @@ atest/
 dist/
 docs/_build/
 envs/
+src/**/labextension

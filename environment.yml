@@ -7,7 +7,7 @@ channels:
 dependencies:
   - cookiecutter
   - importlib_metadata
-  - jupyterlab >=2,<3.0.0a0
+  - jupyterlab >=3,<4
   - nodejs >=14,<15
   - python >=3.7,<3.8.0a0
   - python-fastjsonschema

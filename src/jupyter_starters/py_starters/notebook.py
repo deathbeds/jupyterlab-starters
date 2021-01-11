@@ -7,7 +7,7 @@ import tempfile
 from collections import defaultdict
 from pathlib import Path
 
-from notebook.utils import maybe_future
+from jupyter_server.utils import ensure_async
 
 from ..json_ import JsonSchemaException, dumps, json_validator, loads
 from ..types import Status
@@ -56,7 +56,7 @@ async def get_kernel_and_tmpdir(name, starter, manager):
         kernel_name = kernel_for_path(manager.resolve_src(starter))
         tmpdir = tempfile.mkdtemp()
         manager.kernel_dirs[name] = [
-            await maybe_future(
+            await ensure_async(
                 manager.kernel_manager.start_kernel(cwd=tmpdir, kernel_name=kernel_name)
             ),
             tmpdir,

@@ -1,7 +1,7 @@
 name: jupyterlab-starters-docs
 
 dependencies:
-  - nodejs >=10
+  - nodejs >=12
   - pip
   - python >=3.8,<3.9.0a0
   - pip:
@@ -10,7 +10,7 @@ dependencies:
       - fastjsonschema
       - graphviz
       - importlib_metadata
-      - jupyterlab >=2,<3.0.0a0
+      - jupyterlab >=3,<4
       - nbsphinx >=0.5.0,<0.5.1a0
       - pytest-check-links
       - recommonmark

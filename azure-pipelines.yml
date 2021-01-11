@@ -6,20 +6,16 @@ trigger:
       - refs/tags/v*
 
 pr:
-  - master
+  autoCancel: false
+  paths:
+    # lets us tweak binder without restarting CI
+    exclude:
+      - postBuild
+      - environment.yml
 
 variables:
   PYTHONUNBUFFERED: 1
   ATEST_RETRIES: 4
-
-  PY_JLST_VERSION: 0.6.0a0
-  JS_JLST_VERSION: 0.6.0-a0
-  JS_RJSF_VERSION: 0.6.0-a0
-
-  FIRST_PARTY_LABEXTENSIONS: >-
-    packages/jupyterlab-starters/deathbeds-jupyterlab-starters-$(JS_JLST_VERSION).tgz
-  FIRST_PARTY_MODULES: >-
-    packages/jupyterlab-rjsf
 
 jobs:
   - template: ci/job.lint.yml

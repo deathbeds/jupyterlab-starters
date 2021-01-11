@@ -8,6 +8,7 @@ import pathlib
 import re
 import sys
 import tempfile
+from importlib.util import find_spec
 
 import jsonschema
 import pytest
@@ -81,24 +82,6 @@ def test_env_versions(name, env_path):
 
 
 @pytest.mark.parametrize(
-    "name,version",
-    [
-        ["PY_JLST_VERSION", PY_VERSION],
-        ["JS_JLST_VERSION", MAIN_EXT_VERSION],
-        ["JS_RJSF_VERSION", RJSF_EXT_VERSION],
-    ],
-)
-def test_ci_variables(name, version):
-    """are CI variables right?
-    npm includes a -
-    """
-    if name.startswith("JS"):
-        assert PIPE_VARS[name].replace("-", "") == version
-    else:
-        assert PIPE_VARS[name] == version
-
-
-@pytest.mark.parametrize(
     "name,info", [p for p in PACKAGES.items() if p[0] != META_NAME]
 )
 def test_ts_package_integrity(name, info, the_meta_package):
@@ -141,19 +124,20 @@ def test_changelog_versions(pkg, version):
     assert "## `{} {}`".format(pkg, version) in CHANGELOG.read_text()
 
 
-PYTEST_INI = """
-[pytest]
-junit_family = xunit2
-"""
-
-
 def integrity():
-    """run the tests"""
+    """run the integrity checks"""
     with tempfile.TemporaryDirectory() as tmpd:
         ini = pathlib.Path(tmpd) / "pytest.ini"
-        ini.write_text(PYTEST_INI)
+        ini.write_text(pathlib.Path(ROOT / "scripts" / "fake_pytest.ini").read_text())
 
-        return pytest.main(["-c", str(ini), "-vv", __file__])
+        args = ["-c", str(ini), "-vv", __file__]
+        try:
+            if find_spec("pytest_azurepipelines"):
+                args += ["--no-coverage-upload"]
+        except ImportError:
+            pass
+
+        return pytest.main(args)
 
 
 if __name__ == "__main__":

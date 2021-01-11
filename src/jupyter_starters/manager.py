@@ -11,9 +11,9 @@ from urllib.parse import unquote
 import jinja2
 import traitlets as T
 from jupyter_core.paths import jupyter_config_path
-from notebook import _tz as tz
-from notebook.services.config import ConfigManager
-from notebook.utils import maybe_future, url_path_join as ujoin
+from jupyter_server import _tz as tz
+from jupyter_server.services.config import ConfigManager
+from jupyter_server.utils import ensure_async, url_path_join as ujoin
 from traitlets.config import LoggingConfigurable
 
 from .py_starters.cookiecutter import cookiecutter_starters
@@ -83,12 +83,15 @@ class StarterManager(LoggingConfigurable):
 
     @T.default("config_dict")
     def _default_config_dict(self):
-        """load merged config from more jupyter_notebook_config.d files
+        """load merged config from more jupyter_*_config.d files
 
         re-uses notebook loading machinery to look through more locations
         """
         manager = ConfigManager(read_config_path=jupyter_config_path())
-        return manager.get("jupyter_notebook_config").get("StarterManager", {})
+        conf = {}
+        for app in ["_", "_notebook_", "_server_"]:
+            conf.update(**manager.get(f"jupyter{app}config").get("StarterManager", {}))
+        return conf
 
     @T.default("_starters")
     def _default_starters(self):
@@ -266,7 +269,7 @@ class StarterManager(LoggingConfigurable):
             self.contents_manager.allow_hidden = True
 
         try:
-            await maybe_future(self.contents_manager.save(model, dest))
+            await ensure_async(self.contents_manager.save(model, dest))
         except Exception as err:
             self.log.error(f"Couldn't save {dest}: {err}")
         finally:

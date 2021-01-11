@@ -24,10 +24,10 @@ Setup Server and Browser
     Update Examples    ${home}
     ${WORKSPACES DIR} =    Set Variable    ${OUTPUT DIR}${/}workspaces
     Initialize User Settings
-    ${app args} =    Set Variable    --no-browser --debug --NotebookApp.base_url\='${BASE}' --port\=${PORT} --NotebookApp.token\='${token}'
+    ${app args} =    Set Variable    --no-browser --debug --LabApp.base_url\='${BASE}' --port\=${PORT} --LabApp.token\='${token}'
     ${path args} =    Set Variable    --LabApp.user_settings_dir='${SETTINGS DIR.replace('\\', '\\\\')}' --LabApp.workspaces_dir\='${WORKSPACES DIR.replace('\\', '\\\\')}'
     Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots
-    ${server} =    Start Process    jupyter-lab ${app args} ${path args}    shell=yes    env:HOME=${home}    cwd=${home}    stdout=${OUTPUT DIR}${/}lab.log
+    ${server} =    Start Process    jupyter lab ${app args} ${path args}    shell=yes    env:HOME=${home}    cwd=${home}    stdout=${OUTPUT DIR}${/}lab.log
     ...    stderr=STDOUT
     Set Global Variable    ${SERVER}    ${server}
     Open JupyterLab
@@ -38,7 +38,7 @@ Update Examples
     Copy Directory    ${OUTPUT DIR}${/}..${/}..${/}..${/}examples    ${home}${/}examples
     Copy File    ${OUTPUT DIR}${/}..${/}..${/}..${/}${LAB CONF}    ${home}${/}${LAB CONF}
     ${atest conf txt} =    Get File    etc${/}${LAB CONF}
-    ${atest conf} =    Evaluate    __import__("json").loads('''${atest conf txt}''')
+    ${atest conf} =    Evaluate    __import__("json").loads(r'''${atest conf txt}''')
     Merge To JSON File    ${home}${/}${LAB CONF}    ${atest conf}
 
 Setup Suite For Screenshots
@@ -51,7 +51,20 @@ Setup Suite For Screenshots
 Initialize User Settings
     [Documentation]    Make a directory for user settings
     Set Suite Variable    ${SETTINGS DIR}    ${OUTPUT DIR}${/}user-settings    children=${True}
-    Create File    ${SETTINGS DIR}${/}@jupyterlab${/}codemirror-extension${/}commands.jupyterlab-settings    {"styleActiveLine": true}
+    # helps screenshots
+    Create File    ${SETTINGS DIR}${/}@jupyterlab${/}codemirror-extension${/}commands.jupyterlab-settings
+    ...    {"styleActiveLine": true}
+    # disable to avoid extra npm/node flake
+    Create File    ${SETTINGS DIR}${/}@jupyterlab${/}extensionmanager-extension${/}plugin.jupyterlab-settings
+    ...    {"enabled": false}
+    # disable the flaky modal command palette
+    Create File
+    ...    ${SETTINGS DIR}${/}@jupyterlab${/}apputils-extension${/}palette.jupyterlab-settings
+    ...    {"modal": false}
+    # move this to original place because tests
+    Create File
+    ...    ${SETTINGS DIR}${/}@jupyterlab${/}application-extension${/}sidebar.jupyterlab-settings
+    ...    {"overrides": {"jp-property-inspector": "left"}}
 
 Tear Down Everything
     [Documentation]    Try to clean everything up
@@ -172,7 +185,7 @@ Merge To JSON File
     [Arguments]    ${path}    ${obj}
     [Documentation]    Merge a dictionary into a JSON file
     ${file} =    Get File    ${path}
-    ${json} =    Evaluate    __import__("json").loads('''${file}''')
+    ${json} =    Evaluate    __import__("json").loads(r'''${file}''')
     TCM.Recursive Update    ${json}    ${obj}
     Evaluate    __import__("pathlib").Path(r'''${path}''').write_text(__import__("json").dumps(${json}))
     [Return]    ${json}

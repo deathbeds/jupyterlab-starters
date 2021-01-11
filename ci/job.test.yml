@@ -12,17 +12,14 @@ parameters:
   pythons:
     - name: ThreeSix
       spec: '>=3.6,<3.7.0a0'
-      lab: '>=2,<2.1.0a0'
+      lab: '>=3,<4'
     - name: ThreeSeven
       spec: '>=3.7,<3.8.0a0'
-      lab: '>=2.1,<2.2.0a0'
+      lab: '>=3,<4'
     - name: ThreeEight
       spec: '>=3.8,<3.9.0a0'
-      lab: '>=2,<3.0.0a0'
+      lab: '>=3,<4'
   env_update: conda env update -n jupyterlab-starters --file env-test.yml --quiet
-  lab_ext: jupyter labextension install --debug --no-build $(FIRST_PARTY_LABEXTENSIONS)
-  link_mod: jupyter labextension link --debug --no-build $(FIRST_PARTY_MODULES)
-  jlpm: jlpm --ignore-optional --prefer-offline --frozen-lockfile
 
 jobs:
   - ${{ each platform in parameters.platforms }}:
@@ -33,6 +30,13 @@ jobs:
             pool:
               vmImage: ${{ platform.vmImage }}
             steps:
+              - task: DownloadPipelineArtifact@0
+                condition: always()
+                inputs:
+                  artifactName: Dist $(Build.BuildId)
+                  targetPath: dist
+                displayName: restore dist
+
               - template: steps.conda.yml
                 parameters:
                   name: ${{ platform.name }}
@@ -46,41 +50,20 @@ jobs:
               - script: conda info && conda list -n jupyterlab-starters
                 displayName: list conda packages and info
 
-              - script: ${{ platform.activate }} jupyterlab-starters && ${{ parameters.jlpm }} || ${{ parameters.jlpm }} || ${{ parameters.jlpm }}
-                displayName: install npm dependencies
-
-              - script: ${{ platform.activate }} jupyterlab-starters && jlpm build
-                displayName: build typescript
-
-              - script: ${{ platform.activate }} jupyterlab-starters && python setup.py sdist bdist_wheel
-                displayName: build python distributions
-
-              - script: ${{ platform.activate }} jupyterlab-starters && jlpm lerna run bundle
-                displayName: build npm bundles
-
-              - script: ${{ platform.activate }} jupyterlab-starters && cd dist && python -m pip install jupyter_starters-$(PY_JLST_VERSION)-py3-none-any.whl --no-deps
+              - script: ${{ platform.activate }} jupyterlab-starters && python -m pip install --find-links=dist --no-index --ignore-installed --no-deps jupyter_starters
                 displayName: install python wheel
-
-              - script: ${{ platform.activate }} jupyterlab-starters && python scripts/utest.py
-                displayName: run unit tests
 
               - script: ${{ platform.activate }} jupyterlab-starters && jupyter serverextension list
                 displayName: list server extensions
 
-              - script: ${{ platform.activate }} jupyterlab-starters && ${{ parameters.link_mod }} || ${{ parameters.link_mod }} || ${{ parameters.link_mod }}
-                displayName: link modules
-
-              - script: ${{ platform.activate }} jupyterlab-starters && ${{ parameters.lab_ext }} || ${{ parameters.lab_ext }} || ${{ parameters.lab_ext }}
-                displayName: install labextensions
-
-              - script: ${{ platform.activate }} jupyterlab-starters && jupyter lab build || jupyter lab build --debug || jupyter lab build --debug
-                displayName: build lab
-
               - script: ${{ platform.activate }} jupyterlab-starters && jupyter labextension list
                 displayName: list labextensions
 
-              - script: ${{ platform.activate }} jupyterlab-starters && conda remove --yes --force nodejs
-                displayName: uninstall node to avoid build checks
+              - script: ${{ platform.activate }} jupyterlab-starters && python scripts/preflight.py
+                displayName: preflight lab
+
+              - script: ${{ platform.activate }} jupyterlab-starters && python scripts/utest.py
+                displayName: run unit tests
 
               - script: ${{ platform.activate }} jupyterlab-starters && python scripts/atest.py
                 displayName: run browser tests

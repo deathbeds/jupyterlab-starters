@@ -1,5 +1,5 @@
 *** Variables ***
-${LAB CONF}       jupyter_notebook_config.json
+${LAB CONF}       jupyter_server_config.json
 ${LAB VERSION}    ${EMPTY}
 ${SPLASH}         id:jupyterlab-splash
 # to help catch hard-coded paths
@@ -17,6 +17,7 @@ ${CSS LAUNCH CARD NOTEBOOK MULTI}    ${CSS LAUNCH CARD}\[title\="Build a directo
 ${CSS LAUNCH CARD PARAM}    ${CSS LAUNCH CARD}\[title\="A renamed whitepaper"]
 ${CSS LAUNCH CARD COOKIECUTTER}    ${CSS LAUNCH CARD} [data-icon="starters:cookiecutter"]
 ${CSS LAUNCH CARD FOLDER}    ${CSS LAUNCH CARD}\[title\="Some reusable notebooks for proposing research"]
+# in lab 3, text actually appears inside a nested `span`
 ${XP FILE TREE ITEM}    xpath://span[contains(@class, 'jp-DirListing-itemText')]
 ${CSS BODYBUILDER}    css:.jp-Starters-BodyBuilder
 ${CSS BODYBUILDER ACCEPT}    css:.jp-Starters-BodyBuilder-buttons .jp-mod-accept

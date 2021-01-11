@@ -1,5 +1,32 @@
 # CHANGELOG
 
+## `jupyter_starters 1.0.0a0`
+
+- [#48][] support JupyterLab 3.x
+  - it is now only necessary (and supported) to `pip` install this package
+    to also install JupyterLab extensions
+  - JupyterLab 1/2-style installation for user Lab Apps is no longer
+    tested
+  - for downstreams extensions, releases will continue on `npmjs.org`
+    - versions sycned to the python package
+    - on-going API support TBD
+
+### Breaking changes
+
+- due to upstream changes, the router URL has, for now, has changed from:
+  - `/lab/tree/starter/<starter>/<path>` to
+  - `?starter=<starter>/<path>`
+
+## `@deathbeds/jupyterlab-rjsf 1.0.0a0`
+
+- [#48][] support JupyterLab 3.x
+
+## `@deathbeds/jupyterlab-starters 1.0.0a0`
+
+- [#48][] support JupyterLab 3.x
+
+---
+
 ## `jupyter_starters 0.6.0a0`
 
 - [#45][] use new `@deathbeds/jupyterlab-starters 0.6.0a0`
@@ -135,3 +162,4 @@
 [#39]: https://github.com/deathbeds/jupyterlab-starters/pull/39
 [#41]: https://github.com/deathbeds/jupyterlab-starters/pull/41
 [#45]: https://github.com/deathbeds/jupyterlab-starters/pull/45
+[#48]: https://github.com/deathbeds/jupyterlab-starters/issues/48

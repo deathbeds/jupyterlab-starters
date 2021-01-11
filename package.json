@@ -9,15 +9,15 @@
     "eslint": "^6.8.0",
     "lerna": "^3.13.2",
     "prettier": "^1.19.1",
-    "typescript": "~3.7.2"
+    "rimraf": "~3.0.0",
+    "typescript": "~4.1.3"
   },
   "private": true,
   "scripts": {
     "bootstrap": "jlpm --ignore-optional --prefer-offline --frozen-lockfile && lerna bootstrap && jlpm lint && jlpm clean && jlpm build",
-    "build": "lerna run build:pre && lerna run build",
+    "build": "lerna run build:pre && lerna run build && lerna run build:ext",
     "bundle": "lerna run --parallel bundle",
     "clean": "lerna run --parallel clean",
-    "lab:link": "lerna run lab:link",
     "lint:check": "jlpm --silent prettier:check && jlpm --silent eslint:check",
     "lint": "jlpm --silent prettier:fix && jlpm --silent eslint:fix",
     "prettier:check": "prettier --check '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",

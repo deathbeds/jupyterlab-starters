@@ -5,8 +5,8 @@ import nbformat.v4
 import pytest
 import traitlets
 from jupyter_client.multikernelmanager import MultiKernelManager
-from notebook.services.contents.filemanager import FileContentsManager
-from notebook.services.contents.manager import ContentsManager
+from jupyter_server.services.contents.filemanager import FileContentsManager
+from jupyter_server.services.contents.manager import ContentsManager
 from traitlets.config import LoggingConfigurable
 
 from jupyter_starters.manager import StarterManager

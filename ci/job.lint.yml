@@ -53,8 +53,11 @@ jobs:
           artifactName: Dist $(Build.BuildId)
         condition: always()
 
-      - script: ${{ parameters.act }} python -m pip install -e .
+      - script: ${{ parameters.act }} python -m pip install --find-links=dist --no-index --ignore-installed --no-deps jupyter_starters
         displayName: setup python for examples
+
+      - script: ${{ parameters.act }} python scripts/preflight.py
+        displayName: preflight installed environment
 
       - script: ${{ parameters.act }} python scripts/docs.py
         displayName: build docs

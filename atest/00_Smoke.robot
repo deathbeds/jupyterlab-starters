@@ -9,6 +9,6 @@ Lab Version
     [Documentation]    JupyterLab Version
     Capture Page Screenshot    00-smoke-did-load.png
     ${script} =    Get Element Attribute    id:jupyter-config-data    innerHTML
-    ${config} =    Evaluate    __import__("json").loads("""${script}""")
+    ${config} =    Evaluate    __import__("json").loads(r"""${script}""")
     Set Global Variable    ${PAGE CONFIG}    ${config}
     Set Global Variable    ${LAB VERSION}    ${config["appVersion"]}

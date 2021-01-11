@@ -7,6 +7,8 @@ commands:
     unix: python scripts/lint.py && jlpm --silent lint
   integrity:
     unix: python scripts/integrity.py
+  preflight:
+    unix: python scripts/preflight.py
   atest:
     unix: python scripts/atest.py --dryrun && python scripts/atest.py
   utest:
@@ -68,7 +70,7 @@ env_specs:
     packages:
       - cookiecutter
       - importlib_metadata
-      - jupyterlab >=2,<3.0.0a0
+      - jupyterlab >=3,<4
       - nodejs >=14,<15
       - python >=3.7,<3.8.0a0
       - python-fastjsonschema

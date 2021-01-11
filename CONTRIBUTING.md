@@ -45,7 +45,7 @@ anaconda-project run lint
 anaconda-project run atest
 ```
 
-> _You have to run against a "clean" lab, e.g. `apr postBuild`_
+> _You may want to run against a "clean" lab, e.g. `apr postBuild`_
 
 ## hacking
 
@@ -53,13 +53,11 @@ anaconda-project run atest
 anaconda-project run jlpm watch
 ```
 
-...and in another terminal
+...with in another terminal
 
 ```bash
-anaconda-project run lab --watch
+anaconda-project run lab
 ```
-
-> _You'll have to restart lab if you add files_
 
 ## documenting
 
