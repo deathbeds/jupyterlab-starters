@@ -27,6 +27,10 @@ def setup(app):
     """Runs before the "normal business" of sphinx. Don't go too crazy here."""
     app.add_css_file("css/custom.css")
 
+    if os.environ.get("READTHEDOCS", False):
+        check_call(["jlpm", "bootstrap"], cwd=str(ROOT))
+        check_call(["pip", "install", "-e", ".", "--no-deps"], cwd=str(ROOT))
+
     check_call(
         ["python", "scripts/docs.py"],
         cwd=ROOT,
