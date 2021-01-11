@@ -21,8 +21,8 @@ PY_NAME = "jupyter_starters"
 @pytest.mark.parametrize(
     "kind,expect",
     [
-        ["serverextension", f"{PY_NAME}.*OK"],
-        ["labextension", f"{MAIN_NAME}.*enabled.*OK"],
+        ["serverextension", f"{PY_NAME}.*ok"],
+        ["labextension", f"{MAIN_NAME}.*enabled.*ok"],
     ],
 )
 def test_extension_cli(kind, expect):
@@ -31,7 +31,7 @@ def test_extension_cli(kind, expect):
         ["jupyter", kind, "list"], stderr=subprocess.PIPE, stdout=subprocess.PIPE
     )
     out, err = proc.communicate()
-    all_out = f"""{out.decode("utf-8")}{err.decode("utf-8")}"""
+    all_out = f"""{out.decode("utf-8")}{err.decode("utf-8")}""".lower()
     assert re.findall(expect, all_out), f"failed to find {expect} in:\n{all_out}"
 
 
