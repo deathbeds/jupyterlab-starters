@@ -3,5 +3,10 @@
     "nbserver_extensions": {
       "jupyter_starters": true
     }
+  },
+  "ServerApp": {
+    "jpserver_extensions": {
+      "jupyter_starters": true
+    }
   }
 }
