@@ -1,7 +1,7 @@
 parameters:
   jlpm: jlpm --ignore-optional --prefer-offline --frozen-lockfile
-  env_update: conda env update -n jupyterlab-starters --file ci/env-lint.yml --quiet
-  docs_env_update: conda env update -n jupyterlab-starters --file docs/environment.yml --quiet
+  env_update: mamba env update -n jupyterlab-starters --file ci/env-lint.yml --quiet
+  docs_env_update: mamba env update -n jupyterlab-starters --file docs/environment.yml --quiet
   act: source activate jupyterlab-starters &&
 
 jobs:
