@@ -1,7 +1,11 @@
 name: jupyterlab-starters-docs
 
+channels:
+  - conda-forge
+  - nodefaults
+
 dependencies:
-  - nodejs >=12
+  - nodejs >=14
   - pip
   - python >=3.8,<3.9.0a0
   - pip:
