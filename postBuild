@@ -2,6 +2,8 @@
 set -ex
 jlpm bootstrap
 python -m pip install -e . --ignore-installed --no-deps
+jupyter labextension disable jupyter-offlinenotebook || echo 'jupyter-offlinenotebook not enabled'
+jupyter labextension uninstall jupyter-offlinenotebook || echo 'jupyter-offlinenotebook not installed'
 jupyter labextension develop --overwrite .
 jupyter serverextension enable --sys-prefix --py jupyter_starters
 
