@@ -1,14 +1,15 @@
 """ prepare built assets for release
 """
-from pathlib import Path
+# pylint: disable=expression-not-assigned
 import shutil
+from pathlib import Path
 from subprocess import check_call
-
 
 HERE = Path(__file__).parent
 ROOT = HERE.parent
 DIST = ROOT / "dist"
 PACKAGES = ROOT / "packages"
+
 
 def release():
     """build them"""
@@ -21,6 +22,7 @@ def release():
     setup = ["python", "setup.py"]
     check_call([*setup, "sdist"])
     check_call([*setup, "bdist_wheel"])
+
 
 if __name__ == "__main__":
     release()
