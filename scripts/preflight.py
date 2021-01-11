@@ -7,8 +7,11 @@ import re
 import subprocess
 import sys
 import tempfile
+from importlib.util import find_spec
 
 import pytest
+
+ROOT = pathlib.Path(__file__).parent.parent
 
 # TS stuff
 NPM_NS = "@deathbeds"
@@ -39,9 +42,16 @@ def preflight():
     """run the tests"""
     with tempfile.TemporaryDirectory() as tmpd:
         ini = pathlib.Path(tmpd) / "pytest.ini"
-        ini.write_text("""\n[pytest]\njunit_family = xunit2\n""")
+        ini.write_text((ROOT / "scripts" / "fake_pytest.ini").read_text())
 
-        return pytest.main(["-c", str(ini), "-vv", __file__])
+        args = ["-c", str(ini), "-vv", __file__]
+        try:
+            if find_spec("pytest_azurepipelines"):
+                args += ["--no-coverage-upload"]
+        except ImportError:
+            pass
+
+        return pytest.main(args)
 
 
 if __name__ == "__main__":

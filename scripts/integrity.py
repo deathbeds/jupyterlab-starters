@@ -8,6 +8,7 @@ import pathlib
 import re
 import sys
 import tempfile
+from importlib.util import find_spec
 
 import jsonschema
 import pytest
@@ -123,19 +124,20 @@ def test_changelog_versions(pkg, version):
     assert "## `{} {}`".format(pkg, version) in CHANGELOG.read_text()
 
 
-PYTEST_INI = """
-[pytest]
-junit_family = xunit2
-"""
-
-
 def integrity():
-    """run the tests"""
+    """run the integrity checks"""
     with tempfile.TemporaryDirectory() as tmpd:
         ini = pathlib.Path(tmpd) / "pytest.ini"
-        ini.write_text(PYTEST_INI)
+        ini.write_text(pathlib.Path(ROOT / "scripts" / "fake_pytest.ini").read_text())
 
-        return pytest.main(["-c", str(ini), "-vv", __file__])
+        args = ["-c", str(ini), "-vv", __file__]
+        try:
+            if find_spec("pytest_azurepipelines"):
+                args += ["--no-coverage-upload"]
+        except ImportError:
+            pass
+
+        return pytest.main(args)
 
 
 if __name__ == "__main__":
