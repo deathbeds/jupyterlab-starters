@@ -2,7 +2,7 @@
 set -ex
 jlpm bootstrap
 python -m pip install -e . --ignore-installed --no-deps
-jupyter labextension develop --overwrite ../..
+jupyter labextension develop --overwrite .
 jupyter serverextension enable --sys-prefix --py jupyter_starters
 
 
