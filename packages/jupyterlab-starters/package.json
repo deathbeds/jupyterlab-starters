@@ -29,7 +29,6 @@
     "build:copyschema": "python -c \"from pathlib import Path as P; s = P('../../src/jupyter_starters/schema/v2.json').read_text(); P('lib').mkdir(exist_ok=True); P('lib/_schema.json').write_text(s); P('src/_schema.json').write_text(s)\"",
     "build:ext": "jupyter labextension build .",
     "build:ext:dev": "jupyter labextension build --development True .",
-    "lab:ext": "jupyter labextension develop --overwrite ../..",
     "watch": "jupyter labextension watch .",
     "bundle": "npm pack .",
     "clean": "rimraf lib ../../src/jupyter_starters/labextension",
