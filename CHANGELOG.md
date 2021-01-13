@@ -1,8 +1,18 @@
 # CHANGELOG
 
-## `jupyter_starters 1.0.0a1` (unreleased)
+## `jupyter_starters 1.0.1a0` (unreleased)
 
-- refine TypeScript exports
+- [#51][] update of `@deathbeds/jupyterlab-rjsf` and `@deathbeds/jupyterlab-starters`.
+
+## `@deathbeds/jupyterlab-starters 1.0.1a0` (unreleased)
+
+- [#51][] uses new `@deathbeds/jupyterlab-rjsf` API
+
+## `@deathbeds/jupyterlab-rjsf 1.0.1a0` (unreleased)
+
+- [#51][] make more exports lazy loading
+
+---
 
 ## `jupyter_starters 1.0.0a0`
 
@@ -167,3 +177,4 @@
 [#41]: https://github.com/deathbeds/jupyterlab-starters/pull/41
 [#45]: https://github.com/deathbeds/jupyterlab-starters/pull/45
 [#48]: https://github.com/deathbeds/jupyterlab-starters/issues/48
+[#51]: https://github.com/deathbeds/jupyterlab-starters/pull/51

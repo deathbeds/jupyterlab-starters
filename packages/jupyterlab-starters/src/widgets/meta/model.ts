@@ -103,6 +103,9 @@ export class NotebookMetadataModel extends VDomModel {
   }
 
   onNotebookMeta() {
+    if (this._form == null) {
+      return;
+    }
     const fromNotebook =
       (this._notebook?.model?.metadata?.get(NOTEBOOK_META_KEY) as JSONObject) ||
       {};
@@ -125,6 +128,9 @@ export class NotebookMetadataModel extends VDomModel {
     }
     this._form = form;
     form.stateChanged.connect(this._change, this);
+    if (this._form) {
+      this.onNotebookMeta();
+    }
   }
 
   private _change = () => {

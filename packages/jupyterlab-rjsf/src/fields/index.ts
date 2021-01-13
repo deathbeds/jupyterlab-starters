@@ -2,16 +2,16 @@
  * An unfortunately very convoluted way to expose some custom react components
  * in the face of federated modules
  */
-import { FormProps } from '@rjsf/core';
+import { FormProps, utils } from '@rjsf/core';
 
 /**
  * a subset of an RJSF `widgets` prop
  */
 export const CUSTOM_UI_WIDGETS = async () => {
   return {
-    'codemirror-xml': (await import('./xml')).XMLField,
-    codemirror: (await import('./codemirror')).CodeMirrorField,
-    'codemirror-markdown': (await import('./markdown')).MarkdownField
+    'codemirror-xml': await XMLField(),
+    codemirror: await CodeMirrorField(),
+    'codemirror-markdown': await MarkdownField()
   };
 };
 
@@ -20,9 +20,7 @@ export const CUSTOM_UI_WIDGETS = async () => {
  */
 export const CUSTOM_UI_FIELDS = async () => {
   return {
-    // TODO: fix any
-    'codemirror-jsonobject': (await import('./jsonobject'))
-      .JSONObjectField as any
+    'codemirror-jsonobject': await JSONObjectField()
   };
 };
 
@@ -44,8 +42,12 @@ export const CodeMirrorField = async () =>
 export const MarkdownField = async () =>
   (await import('./markdown')).MarkdownField;
 export const XMLField = async () => (await import('./xml')).XMLField;
-export const JSONObjectField = async () =>
-  (await import('./jsonobject')).JSONObjectField;
+export const JSONObjectField = async () => {
+  const reg = utils.getDefaultRegistry();
+  return (await import('./jsonobject')).makeJSONObjectField(
+    reg.fields['ObjectField'] as any
+  );
+};
 
 /**
  * the RJSF uiSchema for activating these components

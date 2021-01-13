@@ -26,6 +26,7 @@ export class NotebookMetadata extends Widget {
     this.id = Private.nextId();
     this.addClass(CSS.META);
     this.addClass(CSS.FORM_PANEL);
+    this.initForm().catch(console.error);
   }
 
   protected async initForm() {
