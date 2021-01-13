@@ -13,7 +13,17 @@ import * as CodeMirror from 'codemirror';
 
 import { JSONExt } from '@lumino/coreutils';
 
+/**
+ * This is a pretty nasty way to deal with the ObjectField being very hard
+ * to reach at import time
+ *
+ * We use the upstream ObjectField at runtime to construct a private class.
+ * This could likely be improved with a namespace or something.
+ */
 export function makeJSONObjectField(ObjectField: typeof _ObjectField) {
+  /**
+   * A raw JSON Object which can be stored/edited inside an RJSF
+   */
   class JSONObjectField extends ObjectField {
     protected _editor: CodeMirror.Editor;
 
