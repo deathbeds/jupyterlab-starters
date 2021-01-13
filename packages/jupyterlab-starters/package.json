@@ -39,12 +39,14 @@
     "@jupyterlab/application": "3"
   },
   "peerDependencies": {
+    "@rjsf/core": "~2.4.0",
     "@jupyterlab/launcher": "3",
     "@jupyterlab/notebook": "3",
     "@jupyterlab/running": "3"
   },
   "devDependencies": {
     "@types/codemirror": "^0.0.97",
+    "@types/react": "^17.0.0",
     "@deathbeds/jupyterlab-rjsf": "~1.0.1a0",
     "@jupyterlab/builder": "^3.0.1",
     "@jupyterlab/running": "3",
@@ -67,6 +69,11 @@
       }
     },
     "extension": "lib/plugin.js",
-    "outputDir": "../../src/jupyter_starters/labextension"
+    "outputDir": "../../src/jupyter_starters/labextension",
+    "sharedPackages": {
+      "@rjsf/core": {
+        "bundled": true
+      }
+    }
   }
 }

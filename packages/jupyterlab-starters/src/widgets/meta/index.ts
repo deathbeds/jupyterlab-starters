@@ -26,7 +26,9 @@ export class NotebookMetadata extends Widget {
     this.id = Private.nextId();
     this.addClass(CSS.META);
     this.addClass(CSS.FORM_PANEL);
+  }
 
+  protected async initForm() {
     this._form = new SchemaForm(
       this.model.liveSchema,
       {
@@ -42,7 +44,7 @@ export class NotebookMetadata extends Widget {
             }
           }
         },
-        ...ALL_CUSTOM_UI
+        ...(await ALL_CUSTOM_UI())
       },
       { markdown: this.model.manager.markdown }
     );

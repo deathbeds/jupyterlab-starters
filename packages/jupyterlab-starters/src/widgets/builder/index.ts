@@ -31,14 +31,17 @@ export class BodyBuilder extends Widget {
     if (this.model.icon) {
       this.title.icon = this.model.icon;
     }
+    this.initForm().catch(console.warn);
+  }
 
+  protected async initForm() {
     this._form = new SchemaForm(
       this._context.starter.schema || {},
       {
         liveValidate: true,
         formData: this._context.body,
         uiSchema: this._context.starter.uiSchema || {},
-        ...ALL_CUSTOM_UI
+        ...(await ALL_CUSTOM_UI())
       },
       { markdown: this.model.manager.markdown }
     );
