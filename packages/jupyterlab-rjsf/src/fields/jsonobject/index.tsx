@@ -1,8 +1,11 @@
 import * as React from 'react';
 
-import ObjectField from '@rjsf/core/lib/components/fields/ObjectField';
-
+/* order might matter on these imports */
+/* first core... */
 import { utils as rjsfUtils } from '@rjsf/core';
+
+/* ...then lib imports */
+import ObjectField from '@rjsf/core/lib/components/fields/ObjectField';
 
 import { UnControlled } from 'react-codemirror2';
 

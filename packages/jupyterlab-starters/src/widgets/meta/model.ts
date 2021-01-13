@@ -9,7 +9,7 @@ import * as SCHEMA_DEFAULT from '../../_schema.json';
 
 import { IStarterManager } from '../../tokens';
 
-import { SchemaFormModel } from '@deathbeds/jupyterlab-rjsf/lib/schemaform/model';
+import { SchemaFormModel } from '@deathbeds/jupyterlab-rjsf';
 
 const RAW_SCHEMA = (SCHEMA_DEFAULT as any).default;
 const NOTEBOOK_META_KEY = 'jupyter_starters';

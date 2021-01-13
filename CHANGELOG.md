@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## `jupyter_starters 1.0.0a1` (unreleased)
+
+- refine TypeScript exports
+
 ## `jupyter_starters 1.0.0a0`
 
 - [#48][] support JupyterLab 3.x
