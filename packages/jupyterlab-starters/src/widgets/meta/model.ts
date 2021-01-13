@@ -9,7 +9,7 @@ import * as SCHEMA_DEFAULT from '../../_schema.json';
 
 import { IStarterManager } from '../../tokens';
 
-import { SchemaFormModel } from '@deathbeds/jupyterlab-rjsf/lib/schemaform/model';
+import { SchemaFormModel } from '@deathbeds/jupyterlab-rjsf';
 
 const RAW_SCHEMA = (SCHEMA_DEFAULT as any).default;
 const NOTEBOOK_META_KEY = 'jupyter_starters';
@@ -103,6 +103,9 @@ export class NotebookMetadataModel extends VDomModel {
   }
 
   onNotebookMeta() {
+    if (this._form == null) {
+      return;
+    }
     const fromNotebook =
       (this._notebook?.model?.metadata?.get(NOTEBOOK_META_KEY) as JSONObject) ||
       {};
@@ -125,6 +128,9 @@ export class NotebookMetadataModel extends VDomModel {
     }
     this._form = form;
     form.stateChanged.connect(this._change, this);
+    if (this._form) {
+      this.onNotebookMeta();
+    }
   }
 
   private _change = () => {

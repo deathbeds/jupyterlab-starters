@@ -2,14 +2,14 @@ import { JSONObject } from '@lumino/coreutils';
 import { Widget, BoxLayout } from '@lumino/widgets';
 
 import { CSS } from '../../css';
-import { SchemaForm } from '@deathbeds/jupyterlab-rjsf/lib/schemaform';
+import { SchemaForm } from '@deathbeds/jupyterlab-rjsf';
 import { PreviewCard } from '../previewcard';
 import {
   ALL_CUSTOM_UI,
   AS_JSONOBJECT,
   AS_TEXTAREA,
   AS_XML
-} from '@deathbeds/jupyterlab-rjsf/lib/fields';
+} from '@deathbeds/jupyterlab-rjsf';
 
 import { NotebookMetadataModel } from './model';
 
@@ -26,7 +26,10 @@ export class NotebookMetadata extends Widget {
     this.id = Private.nextId();
     this.addClass(CSS.META);
     this.addClass(CSS.FORM_PANEL);
+    this.initForm().catch(console.error);
+  }
 
+  protected async initForm() {
     this._form = new SchemaForm(
       this.model.liveSchema,
       {
@@ -42,7 +45,7 @@ export class NotebookMetadata extends Widget {
             }
           }
         },
-        ...ALL_CUSTOM_UI
+        ...(await ALL_CUSTOM_UI())
       },
       { markdown: this.model.manager.markdown }
     );

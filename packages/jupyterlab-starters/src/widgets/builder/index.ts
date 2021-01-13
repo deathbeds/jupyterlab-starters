@@ -4,11 +4,11 @@ import { Widget, BoxLayout } from '@lumino/widgets';
 import { IStartContext } from '../../tokens';
 import { CSS } from '../../css';
 
-import { SchemaForm } from '@deathbeds/jupyterlab-rjsf/lib/schemaform';
+import { SchemaForm } from '@deathbeds/jupyterlab-rjsf';
 
 import { BuilderModel } from './model';
 import { BuilderButtons } from './buttons';
-import { ALL_CUSTOM_UI } from '@deathbeds/jupyterlab-rjsf/lib/fields';
+import { ALL_CUSTOM_UI } from '@deathbeds/jupyterlab-rjsf';
 
 export class BodyBuilder extends Widget {
   private _form: SchemaForm<JSONObject>;
@@ -31,14 +31,17 @@ export class BodyBuilder extends Widget {
     if (this.model.icon) {
       this.title.icon = this.model.icon;
     }
+    this.initForm().catch(console.warn);
+  }
 
+  protected async initForm() {
     this._form = new SchemaForm(
       this._context.starter.schema || {},
       {
         liveValidate: true,
         formData: this._context.body,
         uiSchema: this._context.starter.uiSchema || {},
-        ...ALL_CUSTOM_UI
+        ...(await ALL_CUSTOM_UI())
       },
       { markdown: this.model.manager.markdown }
     );

@@ -1,12 +1,12 @@
 {
-  "LabApp": {
+  "ServerApp": {
     "tornado_settings": {
       "page_config_data": {
         "buildCheck": false,
         "buildAvailable": false
       }
     },
-    "nbserver_extensions": {
+    "jpserver_extensions": {
       "jupyter_starters": true
     }
   },

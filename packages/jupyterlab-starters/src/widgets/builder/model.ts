@@ -5,7 +5,7 @@ import { VDomModel } from '@jupyterlab/apputils';
 
 import { IStarterManager, IStartContext } from '../../tokens';
 
-import { SchemaFormModel } from '@deathbeds/jupyterlab-rjsf/lib/schemaform/model';
+import { SchemaFormModel } from '@deathbeds/jupyterlab-rjsf';
 
 export class BuilderModel extends VDomModel {
   private _context: IStartContext;
