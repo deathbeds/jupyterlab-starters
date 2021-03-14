@@ -9,16 +9,17 @@ from pathlib import Path
 
 
 def task_lock():
+    """generate conda locks for all envs"""
     if C.SKIP_LOCKS:
         return
-    """generate conda locks for all envs"""
     for subdir in C.SUBDIRS:
         for py in C.PYTHONS:
-            yield U.lock(f"run", py, subdir)
-        yield U.lock("build", C.DEFAULT_PY, subdir)
+            yield U.lock(f"utest", py, subdir, ["run", "lab"])
+        yield U.lock("build", C.DEFAULT_PY, subdir, ["node", "lab"])
         yield U.lock("atest", C.DEFAULT_PY, subdir)
-        yield U.lock("lint", C.DEFAULT_PY, subdir)
-        yield U.lock("docs", C.DEFAULT_PY, subdir, ["build", "lint", "atest"])
+        yield U.lock("docs", C.DEFAULT_PY, subdir,
+            ["node", "build", "lint", "atest", "utest", "lab", "run"]
+        )
 
 def task_lint():
     """improve and ensure code quality"""
@@ -77,7 +78,7 @@ class U:
 
     @classmethod
     def lock(cls, env_name, py, subdir, extra_env_names=[], include_base=True):
-        args = ["conda-lock", "--mamba", "--platform", subdir]
+        args = ["conda-lock", "--mamba", "--platform", subdir, "-c", "conda-forge"]
         stem = f"{env_name}-{subdir}-{py}"
         lockfile = P.LOCKS / f"{stem}.conda.lock"
 
@@ -87,7 +88,7 @@ class U:
             specs += [P.SPECS / "_base.yml"]
 
         for env in [env_name, *extra_env_names]:
-            for fname in [f"{env}", f"{env}-{subdir}", f"{env}-{subdir}-{py}"]:
+            for fname in [f"{env}", f"py{py}", f"{env}-{subdir}"]:
                 spec = P.SPECS / f"{fname}.yml"
                 if spec.exists():
                     specs += [spec]
@@ -98,7 +99,7 @@ class U:
             env_name + "-{platform}-" + f"{py}.conda.lock",
         ]
         return dict(
-            name=f"""{env_name}:{py}:{subdir}""",
+            name=f"""{py}:{subdir}:{env_name}""",
             file_dep=specs,
             actions=[
                 (doit.tools.create_folder, [P.LOCKS]),
