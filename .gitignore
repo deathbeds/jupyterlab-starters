@@ -3,6 +3,7 @@ _*.d.ts
 _*.json
 _build
 .coverage
+.doit*
 .ipynb_checkpoints/
 .mypy_cache/
 .pytest_cache/
