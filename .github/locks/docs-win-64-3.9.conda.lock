@@ -1,5 +1,5 @@
 # platform: win-64
-# env_hash: 1a57b7420646f1192b807c00b91921d77e004c2c513da47c5a9ef61862a1b1a3
+# env_hash: 50dfaf1dcbcdcae8893bff1a1a77a51d5a6cb52a27a1ad48044113b4338cf0ce
 @EXPLICIT
 https://conda.anaconda.org/conda-forge/win-64/nodejs-14.15.4-h57928b3_1.tar.bz2#5b09be096b135eea885ba5855b3450c1
 https://conda.anaconda.org/conda-forge/win-64/ca-certificates-2020.12.5-h5b45459_0.tar.bz2#f36a2988a9f57cffdc43929ba67a3a2a
@@ -30,6 +30,7 @@ https://conda.anaconda.org/conda-forge/win-64/pixman-0.40.0-h8ffe710_0.tar.bz2#3
 https://conda.anaconda.org/conda-forge/win-64/rxspencer-3.9.0-h8ffe710_0.tar.bz2#d17defe5cdf83124ed4c8c2020c3b837
 https://conda.anaconda.org/conda-forge/win-64/sqlite-3.34.0-h8ffe710_0.tar.bz2#0887d420b945a5342cd03429d475658c
 https://conda.anaconda.org/conda-forge/win-64/xz-5.2.5-h62dcd97_1.tar.bz2#eabcbfedd14d7c18a514afca09ea0ebb
+https://conda.anaconda.org/conda-forge/win-64/yaml-0.2.5-he774522_0.tar.bz2#d41c34441d8bbb6d141e691ae7bccf35
 https://conda.anaconda.org/conda-forge/win-64/zlib-1.2.11-h62dcd97_1010.tar.bz2#a4cdf389c5f73e60a0ca121ff77c22a9
 https://conda.anaconda.org/conda-forge/win-64/gettext-0.19.8.1-h1a89ca6_1005.tar.bz2#9c6f6abe9d77d69553c2b287f4c5f0e6
 https://conda.anaconda.org/conda-forge/win-64/libpng-1.6.37-ha81a0f5_2.tar.bz2#cc8f11542031225ef813cbc7b60713fc
@@ -131,6 +132,7 @@ https://conda.anaconda.org/conda-forge/win-64/pyzmq-22.0.3-py39he46f08e_1.tar.bz
 https://conda.anaconda.org/conda-forge/win-64/regex-2020.11.13-py39hb82d6ee_1.tar.bz2#bf6cc5e719ed032f3519152bf84fccfb
 https://conda.anaconda.org/conda-forge/noarch/robotframework-lint-1.1-pyh9f0ad1d_0.tar.bz2#c3fa280c4a10c06e83f23193ef4ea5cc
 https://conda.anaconda.org/conda-forge/noarch/robotframework-pythonlibcore-2.2.0-pyhd8ed1ab_0.tar.bz2#29a329f0b817038d27d7bdfb2ca04b5a
+https://conda.anaconda.org/conda-forge/win-64/ruamel_yaml-0.15.80-py39hb82d6ee_1004.tar.bz2#dd90b008d01555e8b231f106b3f346c9
 https://conda.anaconda.org/conda-forge/win-64/sniffio-1.2.0-py39hcbf5309_1.tar.bz2#02d836312fbfc68177aa78322ad59d1c
 https://conda.anaconda.org/conda-forge/win-64/tornado-6.1-py39hb82d6ee_1.tar.bz2#450d9630dd8efbdf387c80efb851ae31
 https://conda.anaconda.org/conda-forge/noarch/traitlets-5.0.5-py_0.tar.bz2#99618ee9ab1323e40f231acdab92fe60

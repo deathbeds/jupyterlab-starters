@@ -1,7 +1,8 @@
 dependencies:
   - black
+  - flake8
   - isort
   - mypy
-  - flake8
   - pylint
   - robotframework-lint
+  - ruamel_yaml

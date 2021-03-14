@@ -1,5 +1,5 @@
 # platform: osx-64
-# env_hash: c83593aa9c348498273cd6d915d6ab7efa5d2855b94cb8975a62f19f79e2d98c
+# env_hash: cfc090682509e7b87992a3c2f91e0f05ba7a269ce431915463d7896cb2f6f114
 @EXPLICIT
 https://conda.anaconda.org/conda-forge/osx-64/ca-certificates-2020.12.5-h033912b_0.tar.bz2#4483d8ea13bd57b52e3539e741501a7d
 https://conda.anaconda.org/conda-forge/noarch/font-ttf-dejavu-sans-mono-2.37-hab24e00_0.tar.bz2#0c96522c6bdaed4b1566d11387caaf45
@@ -20,6 +20,7 @@ https://conda.anaconda.org/conda-forge/osx-64/pandoc-2.12-h0d85af4_0.tar.bz2#5a9
 https://conda.anaconda.org/conda-forge/osx-64/pixman-0.40.0-hbcb3906_0.tar.bz2#09a583a6f172715be21d93aaa1b42d71
 https://conda.anaconda.org/conda-forge/noarch/tzdata-2021a-he74cb21_0.tar.bz2#6f36861f102249fc54861ff9343c3fdd
 https://conda.anaconda.org/conda-forge/osx-64/xz-5.2.5-haf1e3a3_1.tar.bz2#41116deb499e9bc58048c297d6403ce6
+https://conda.anaconda.org/conda-forge/osx-64/yaml-0.2.5-haf1e3a3_0.tar.bz2#84c2fc186995c25a43e86ed708065572
 https://conda.anaconda.org/conda-forge/osx-64/zlib-1.2.11-h7795811_1010.tar.bz2#7d39e47e16ed0107f37c7224d5b5be8b
 https://conda.anaconda.org/conda-forge/osx-64/expat-2.2.10-h1c7c35f_0.tar.bz2#5963a2ace3da084372d292a9bc44a220
 https://conda.anaconda.org/conda-forge/osx-64/firefox-78.8.0esr-h1c7c35f_0.tar.bz2#507f8192c25c922d29e1e4037d810001
@@ -138,6 +139,7 @@ https://conda.anaconda.org/conda-forge/osx-64/pyzmq-22.0.3-py39h7fec2f1_1.tar.bz
 https://conda.anaconda.org/conda-forge/osx-64/regex-2020.11.13-py39hcbf5805_1.tar.bz2#d40a804b7e11a3042ae7b6c5834e742b
 https://conda.anaconda.org/conda-forge/noarch/robotframework-lint-1.1-pyh9f0ad1d_0.tar.bz2#c3fa280c4a10c06e83f23193ef4ea5cc
 https://conda.anaconda.org/conda-forge/noarch/robotframework-pythonlibcore-2.2.0-pyhd8ed1ab_0.tar.bz2#29a329f0b817038d27d7bdfb2ca04b5a
+https://conda.anaconda.org/conda-forge/osx-64/ruamel_yaml-0.15.80-py39h4b0b724_1004.tar.bz2#86d87ea0766dc2d41f63f538ddb2dc94
 https://conda.anaconda.org/conda-forge/osx-64/sniffio-1.2.0-py39h6e9494a_1.tar.bz2#87b5527d122577e0f35273a6c35acb3c
 https://conda.anaconda.org/conda-forge/osx-64/tornado-6.1-py39hcbf5805_1.tar.bz2#0cf5e7624c99a7bdb806ed665eac145a
 https://conda.anaconda.org/conda-forge/noarch/traitlets-5.0.5-py_0.tar.bz2#99618ee9ab1323e40f231acdab92fe60
