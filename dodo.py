@@ -1,10 +1,24 @@
 """development automation for jupyter[lab]-starter"""
 import os
+import json
 from datetime import datetime
 import doit.reporter
+import doit.tools
 
 from pathlib import Path
 
+
+def task_lock():
+    if C.SKIP_LOCKS:
+        return
+    """generate conda locks for all envs"""
+    for subdir in C.SUBDIRS:
+        for py in C.PYTHONS:
+            yield U.lock(f"run", py, subdir)
+        yield U.lock("build", C.DEFAULT_PY, subdir)
+        yield U.lock("atest", C.DEFAULT_PY, subdir)
+        yield U.lock("lint", C.DEFAULT_PY, subdir)
+        yield U.lock("docs", C.DEFAULT_PY, subdir, ["build", "lint", "atest"])
 
 def task_lint():
     """improve and ensure code quality"""
@@ -37,6 +51,10 @@ def task_docs():
 
 class C:
     """constants"""
+    SUBDIRS = ["linux-64", "osx-64", "win-64"]
+    PYTHONS = ["3.6", "3.9"]
+    DEFAULT_PY = "3.9"
+    SKIP_LOCKS = bool(json.loads(os.environ.get("SKIP_LOCKS", "1")))
 
 class P:
     """paths"""
@@ -44,10 +62,50 @@ class P:
     ROOT = DODO.parent
     GITHUB = ROOT / ".github"
     CONDARC = GITHUB / ".condarc"
+    SPECS = GITHUB / "specs"
+    LOCKS = GITHUB / "locks"
+    SCRIPTS = ROOT / "scripts"
 
 
 class D:
     """data"""
+
+class U:
+    """utilities"""
+    cmd = lambda *args, **kwargs: doit.tools.CmdAction(*args, **kwargs, shell=False)
+    script = lambda *args, **kwargs: U.cmd(*args, **kwargs, cwd=str(P.SCRIPTS))
+
+    @classmethod
+    def lock(cls, env_name, py, subdir, extra_env_names=[], include_base=True):
+        args = ["conda-lock", "--mamba", "--platform", subdir]
+        stem = f"{env_name}-{subdir}-{py}"
+        lockfile = P.LOCKS / f"{stem}.conda.lock"
+
+        specs = []
+
+        if include_base:
+            specs += [P.SPECS / "_base.yml"]
+
+        for env in [env_name, *extra_env_names]:
+            for fname in [f"{env}", f"{env}-{subdir}", f"{env}-{subdir}-{py}"]:
+                spec = P.SPECS / f"{fname}.yml"
+                if spec.exists():
+                    specs += [spec]
+
+        args += sum([["--file", spec] for spec in specs], [])
+        args += [
+            "--filename-template",
+            env_name + "-{platform}-" + f"{py}.conda.lock",
+        ]
+        return dict(
+            name=f"""{env_name}:{py}:{subdir}""",
+            file_dep=specs,
+            actions=[
+                (doit.tools.create_folder, [P.LOCKS]),
+                U.cmd(args, cwd=str(P.LOCKS)),
+            ],
+            targets=[lockfile],
+        )
 
 
 class R(doit.reporter.ConsoleReporter):

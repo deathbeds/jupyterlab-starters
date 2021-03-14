@@ -1,0 +1,9 @@
+dependencies:
+  - cookiecutter
+  - importlib_metadata
+  - jupyterlab >=3,<4
+  - nodejs >=12,!=13.*,<15
+  - python >=3.6,<3.10
+  - python-fastjsonschema
+  - python-graphviz
+  - ujson
