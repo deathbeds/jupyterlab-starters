@@ -20,6 +20,8 @@ def task_lock():
         yield U.lock("docs", C.DEFAULT_PY, subdir,
             ["node", "build", "lint", "atest", "utest", "lab", "run"]
         )
+        if subdir == "linux-64":
+            yield U.lock("binder", C.DEFAULT_PY, subdir, ["run", "lab"])
 
 def task_lint():
     """improve and ensure code quality"""
