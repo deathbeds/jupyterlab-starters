@@ -79,6 +79,27 @@ def task_lint():
         **U.run_in("docs", [rflint + P.ALL_ROBOT], file_dep=P.ALL_ROBOT),
     )
 
+    yield dict(
+        name="prettier",
+        **U.run_in(
+            "docs",
+            [["jlpm", "prettier", "--list-different", "--write", *P.ALL_PRETTIER]],
+            file_dep=[P.YARN_INTEGRITY, *P.ALL_PRETTIER],
+        ),
+    )
+
+
+def task_jlpm():
+    yield dict(
+        name="install",
+        **U.run_in(
+            "build",
+            [["jlpm"]],
+            file_dep=[P.YARNRC, *P.ALL_PACKAGE_JSON],
+            targets=[P.YARN_INTEGRITY],
+        ),
+    )
+
 
 def task_build():
     """build intermediate artifacts"""
@@ -139,11 +160,7 @@ class P:
     SPECS = GITHUB / "specs"
     LOCKS = GITHUB / "locks"
     SCRIPTS = ROOT / "scripts"
-    ENVS = ROOT / ".envs"
-
-    DEV_PREFIX = ENVS / "dev"
-    DEV_LOCKFILE = LOCKS / f"docs-{C.THIS_SUBDIR}-{C.DEFAULT_PY}.conda.lock"
-    DEV_HISTORY = DEV_PREFIX / "conda-meta/history"
+    ATEST = ROOT / "atest"
 
     PY_SRC = sorted((ROOT / "src").rglob("*.py"))
     PY_SCRIPTS = sorted((ROOT / "scripts").rglob("*.py"))
@@ -154,6 +171,43 @@ class P:
     ALL_ROBOT = list((ROOT / "atest").rglob("*.robot"))
 
     SETUP_CFG = ROOT / "setup.cfg"
+
+    YARNRC = ROOT / ".yarnrc"
+
+    PACKAGE_JSON = ROOT / "package.json"
+    PACKAGES = ROOT / "packages"
+    PACKAGES_JSON = sorted(PACKAGES.glob("*/package.json"))
+    ALL_PACKAGE_JSON = [PACKAGE_JSON, *PACKAGES_JSON]
+
+    # generated but checked in
+    YARN_LOCK = ROOT / "yarn.lock"
+
+    # not checked in
+    ENVS = ROOT / ".envs"
+    DEV_PREFIX = ENVS / "dev"
+    DEV_LOCKFILE = LOCKS / f"docs-{C.THIS_SUBDIR}-{C.DEFAULT_PY}.conda.lock"
+    DEV_HISTORY = DEV_PREFIX / "conda-meta/history"
+    NODE_MODULES = ROOT / "node_modules"
+    YARN_INTEGRITY = NODE_MODULES / ".yarn-integrity"
+
+    ALL_TS = sum(
+        (
+            [*(p.parent / "src").rglob("*.ts"), *(p.parent / "src").rglob("*.tsx")]
+            for p in PACKAGES_JSON
+        ),
+        [],
+    )
+    ALL_CSS = sum(
+        (
+            [*(p.parent / "style").rglob("*.ts"), *(p.parent / "style").rglob("*.css")]
+            for p in PACKAGES_JSON
+        ),
+        [],
+    )
+    ALL_YAML = [*SPECS.glob("*.yml"), *ROOT.glob("*.yml"), *GITHUB.rglob("*.yml")]
+    ALL_MD = [*ROOT.glob("*.md")]
+    ALL_JSON = [*ALL_PACKAGE_JSON, *ROOT.glob("*.json"), *ATEST.rglob("*.json")]
+    ALL_PRETTIER = [*ALL_TS, *ALL_JSON, *ALL_CSS, *ALL_YAML]
 
 
 class D:
