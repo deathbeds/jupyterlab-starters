@@ -6,6 +6,7 @@ import os
 import platform
 import typing
 from datetime import datetime
+from hashlib import sha256
 from pathlib import Path
 
 import doit.reporter
@@ -47,7 +48,9 @@ def task_lint():
     yield dict(
         name="py:isort:black",
         **U.run_in(
-            "docs", [["isort", *P.ALL_PY], ["black", *P.ALL_PY]], file_dep=[*P.ALL_PY]
+            "docs",
+            [["isort", *P.ALL_PY], ["black", "--quiet", *P.ALL_PY]],
+            file_dep=[*P.ALL_PY],
         ),
     )
 
@@ -88,7 +91,10 @@ def task_lint():
         **U.run_in(
             "docs",
             [[*prettier, *P.ALL_PRETTIER]],
-            file_dep=[P.YARN_INTEGRITY, *P.ALL_PRETTIER],
+            file_dep=[
+                P.YARN_INTEGRITY,
+                *[p for p in P.ALL_PRETTIER if not p.name.startswith("_")],
+            ],
         ),
     )
 
@@ -121,10 +127,123 @@ def task_jlpm():
 
 def task_build():
     """build intermediate artifacts"""
+    yield dict(
+        name="lerna:pre",
+        **U.run_in(
+            "build",
+            [
+                ["jlpm", "lerna", "run", "--stream", "build:pre"],
+                [
+                    "jlpm",
+                    "prettier",
+                    "--write",
+                    P.JS_SRC_SCHEMA,
+                    P.JS_LIB_SCHEMA,
+                    P.JS_SRC_SCHEMA_D_TS,
+                ],
+            ],
+            file_dep=[P.YARN_INTEGRITY, *P.ALL_PY_SCHEMA, *P.ALL_PACKAGE_JSON],
+            targets=[P.JS_SRC_SCHEMA, P.JS_LIB_SCHEMA, P.JS_SRC_SCHEMA_D_TS],
+        ),
+    )
+
+    yield dict(
+        name="lerna:lib",
+        **U.run_in(
+            "build",
+            [
+                ["jlpm", "lerna", "run", "--stream", "build"],
+            ],
+            file_dep=[
+                P.YARN_INTEGRITY,
+                P.JS_SRC_SCHEMA,
+                P.JS_SRC_SCHEMA_D_TS,
+                *P.ALL_TS,
+                *P.ALL_PACKAGE_JSON,
+                *P.ALL_TSCONFIG,
+            ],
+            targets=[P.TSBUILDINFO],
+        ),
+    )
+
+    yield dict(
+        name="lerna:ext",
+        **U.run_in(
+            "build",
+            [
+                ["jlpm", "lerna", "run", "--stream", "build:ext"],
+            ],
+            file_dep=[
+                P.YARN_INTEGRITY,
+                P.TSBUILDINFO,
+                P.JS_LIB_SCHEMA,
+                *P.ALL_PACKAGE_JSON,
+                *P.ALL_CSS,
+            ],
+            targets=[P.EXT_PACKAGE_JSON],
+        ),
+    )
 
 
 def task_dist():
     """prepare release artifacts"""
+    yield dict(
+        name="pypi",
+        **U.run_in(
+            "build",
+            [
+                ["python", "setup.py", "sdist"],
+                ["python", "setup.py", "bdist_wheel"],
+                ["twine", "check", "dist/*"],
+            ],
+            file_dep=[
+                *P.PY_SRC,
+                P.README,
+                P.LICENSE,
+                P.SETUP_CFG,
+                P.SETUP_PY,
+                P.EXT_PACKAGE_JSON,
+            ],
+            targets=[P.WHEEL, P.SDIST],
+        ),
+    )
+
+    for path, tarball in P.NPM_TARBALLS.items():
+        yield dict(
+            name=f"npm:{path.name}",
+            **U.run_in(
+                "build",
+                [["npm", "pack", path]],
+                file_dep=[
+                    P.TSBUILDINFO,
+                    path / "README.md",
+                    path / "LICENSE",
+                    path / "package.json",
+                ],
+                cwd=str(P.DIST),
+            ),
+        )
+
+    def _run_hash():
+        # mimic sha256sum CLI
+        if P.SHA256SUMS.exists():
+            P.SHA256SUMS.unlink()
+
+        lines = []
+
+        for p in P.HASH_DEPS:
+            lines += ["  ".join([sha256(p.read_bytes()).hexdigest(), p.name])]
+
+        output = "\n".join(lines)
+        print(output)
+        P.SHA256SUMS.write_text(output)
+
+    yield dict(
+        name="hash",
+        file_dep=P.HASH_DEPS,
+        targets=[P.SHA256SUMS],
+        actions=[_run_hash],
+    )
 
 
 def task_lab():
@@ -179,16 +298,18 @@ class P:
     LOCKS = GITHUB / "locks"
     SCRIPTS = ROOT / "scripts"
     ATEST = ROOT / "atest"
+    DOCS = ROOT / "docs"
 
-    PY_SRC = sorted((ROOT / "src").rglob("*.py"))
-    PY_SCRIPTS = sorted((ROOT / "scripts").rglob("*.py"))
-    PY_DOCS = sorted((ROOT / "docs").rglob("*.py"))
-    PY_ATEST = sorted((ROOT / "atest").rglob("*.py"))
-
-    ALL_PY = [DODO, *PY_SRC, *PY_SCRIPTS, *PY_DOCS, *PY_ATEST]
-    ALL_ROBOT = list((ROOT / "atest").rglob("*.robot"))
-
+    SRC = ROOT / "src"
+    PY_SRC = sorted(SRC.rglob("*.py"))
+    PY_SCRIPTS = sorted(SCRIPTS.rglob("*.py"))
+    PY_DOCS = sorted(DOCS.rglob("*.py"))
+    PY_ATEST = sorted(ATEST.rglob("*.py"))
     SETUP_CFG = ROOT / "setup.cfg"
+    SETUP_PY = ROOT / "setup.py"
+
+    ALL_PY = [DODO, *PY_SRC, *PY_SCRIPTS, *PY_DOCS, *PY_ATEST, SETUP_PY]
+    ALL_ROBOT = list(ATEST.rglob("*.robot"))
 
     YARNRC = ROOT / ".yarnrc"
 
@@ -207,7 +328,35 @@ class P:
     DEV_HISTORY = DEV_PREFIX / "conda-meta/history"
     NODE_MODULES = ROOT / "node_modules"
     YARN_INTEGRITY = NODE_MODULES / ".yarn-integrity"
+    DIST = ROOT / "dist"
+    # TODO: single-source version
+    PY_VERSION = "1.0.0a0"
+    JS_VERSION = "1.0.0-a0"
+    SDIST = DIST / f"jupyter_starters-{PY_VERSION}.tar.gz"
+    WHEEL = DIST / f"jupyter_starters-{PY_VERSION}-py3-none-any.whl"
+    NPM_TARBALLS = {
+        PACKAGES
+        / "jupyterlab-starters": DIST
+        / f"deathbeds-jupyterlab-starters-{JS_VERSION}.tgz",
+        PACKAGES
+        / "jupyterlab-rjsf": DIST
+        / f"deathbeds-jupyterlab-rjsf-{JS_VERSION}.tgz",
+    }
+    HASH_DEPS = [SDIST, WHEEL, *NPM_TARBALLS.values()]
+    SHA256SUMS = DIST / "SHA256SUMS"
 
+    # js stuff
+    TSBUILDINFO = PACKAGES / "_meta/tsconfig.tsbuildinfo"
+    PY_SCHEMA = SRC / "jupyter_starters/schema"
+    ALL_PY_SCHEMA = PY_SCHEMA.glob("*.json")
+    JS_SRC_SCHEMA_D_TS = PACKAGES / "jupyterlab-starters/src/_schema.d.ts"
+    JS_SRC_SCHEMA = PACKAGES / "jupyterlab-starters/src/_schema.json"
+    JS_LIB_SCHEMA = PACKAGES / "jupyterlab-starters/lib/_schema.json"
+    LABEXT = SRC / "jupyter_starters/labextension"
+    EXT_PACKAGE_JSON = LABEXT / "package.json"
+
+    # collections of things
+    ALL_TSCONFIG = [ROOT / "tsconfigbase.json", *PACKAGES.rglob("src/*/tsconfig.json")]
     ALL_TS = sum(
         (
             [*(p.parent / "src").rglob("*.ts"), *(p.parent / "src").rglob("*.tsx")]
@@ -223,8 +372,15 @@ class P:
         [],
     )
     ALL_YAML = [*SPECS.glob("*.yml"), *ROOT.glob("*.yml"), *GITHUB.rglob("*.yml")]
+    README = ROOT / "README.md"
+    LICENSE = ROOT / "LICENSE"
     ALL_MD = [*ROOT.glob("*.md")]
-    ALL_JSON = [*ALL_PACKAGE_JSON, *ROOT.glob("*.json"), *ATEST.rglob("*.json")]
+    ALL_JSON = [
+        *ALL_PACKAGE_JSON,
+        *ROOT.glob("*.json"),
+        *ATEST.rglob("*.json"),
+        *ALL_PY_SCHEMA,
+    ]
     ALL_PRETTIER = [*ALL_TS, *ALL_JSON, *ALL_CSS, *ALL_YAML]
 
 
