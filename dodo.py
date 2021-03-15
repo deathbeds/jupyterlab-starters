@@ -45,7 +45,7 @@ def task_env():
 def task_lint():
     """improve and ensure code quality"""
     yield dict(
-        name="py:format",
+        name="py:isort:black",
         **U.run_in(
             "docs", [["isort", *P.ALL_PY], ["black", *P.ALL_PY]], file_dep=[*P.ALL_PY]
         ),
@@ -58,9 +58,26 @@ def task_lint():
     ]:
         yield dict(
             name=f"py:{linter[0]}",
-            task_dep=["lint:py:format"],
+            task_dep=["lint:py:isort:black"],
             **U.run_in("docs", [linter + file_dep], file_dep=[P.SETUP_CFG, *file_dep]),
         )
+
+    yield dict(
+        name="rf:tidy",
+        **U.run_in(
+            "docs",
+            [["python", "-m", "robot.tidy", "--inplace", *P.ALL_ROBOT]],
+            file_dep=P.ALL_ROBOT,
+        ),
+    )
+
+    rflint = ["rflint", *sum([["--configure", rule] for rule in C.RFLINT_RULES], [])]
+
+    yield dict(
+        name="rf:rflint",
+        task_dep=["lint:rf:tidy"],
+        **U.run_in("docs", [rflint + P.ALL_ROBOT], file_dep=P.ALL_ROBOT),
+    )
 
 
 def task_build():
@@ -105,6 +122,11 @@ class C:
     SKIP_LOCKS = bool(json.loads(os.environ.get("SKIP_LOCKS", "1")))
     CI = bool(json.loads(os.environ.get("CI", "0")))
     RUNNING_LOCALLY = not CI
+    RFLINT_RULES = [
+        "LineTooLong:200",
+        "TooFewKeywordSteps:0",
+        "TooManyTestSteps:30",
+    ]
 
 
 class P:
@@ -129,6 +151,7 @@ class P:
     PY_ATEST = sorted((ROOT / "atest").rglob("*.py"))
 
     ALL_PY = [DODO, *PY_SRC, *PY_SCRIPTS, *PY_DOCS, *PY_ATEST]
+    ALL_ROBOT = list((ROOT / "atest").rglob("*.robot"))
 
     SETUP_CFG = ROOT / "setup.cfg"
 
