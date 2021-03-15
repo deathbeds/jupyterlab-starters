@@ -79,12 +79,30 @@ def task_lint():
         **U.run_in("docs", [rflint + P.ALL_ROBOT], file_dep=P.ALL_ROBOT),
     )
 
+    prettier = ["jlpm", "prettier"] + (
+        ["--write", "--list-different"] if C.RUNNING_LOCALLY else ["--check"]
+    )
+
     yield dict(
         name="prettier",
         **U.run_in(
             "docs",
-            [["jlpm", "prettier", "--list-different", "--write", *P.ALL_PRETTIER]],
+            [[*prettier, *P.ALL_PRETTIER]],
             file_dep=[P.YARN_INTEGRITY, *P.ALL_PRETTIER],
+        ),
+    )
+
+    eslint = ["jlpm", "eslint", "--ext", ".js,.jsx,.ts,.tsx"] + (
+        ["--fix"] if C.RUNNING_LOCALLY else []
+    )
+
+    yield dict(
+        name="eslint",
+        task_dep=["lint:prettier"],
+        **U.run_in(
+            "docs",
+            [[*eslint, P.PACKAGES]],
+            file_dep=[P.YARN_INTEGRITY, *P.ALL_TS, *P.ROOT.glob(".eslint*")],
         ),
     )
 
@@ -240,6 +258,7 @@ class U:
                         "run",
                         "--prefix",
                         prefix,
+                        "--live-stream",
                         "--no-capture-output",
                         *action,
                     ],
