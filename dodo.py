@@ -1,11 +1,15 @@
 """development automation for jupyter[lab]-starter"""
-import os
+# pylint: disable=invalid-name,too-many-arguments,import-error
+# pylint: disable=too-few-public-methods,missing-function-docstring
 import json
+import os
+import platform
+import typing
 from datetime import datetime
+from pathlib import Path
+
 import doit.reporter
 import doit.tools
-
-from pathlib import Path
 
 
 def task_lock():
@@ -14,53 +18,98 @@ def task_lock():
         return
     for subdir in C.SUBDIRS:
         for py in C.PYTHONS:
-            yield U.lock(f"utest", py, subdir, ["run", "lab"])
+            yield U.lock("utest", py, subdir, ["run", "lab"])
         yield U.lock("build", C.DEFAULT_PY, subdir, ["node", "lab"])
         yield U.lock("atest", C.DEFAULT_PY, subdir)
-        yield U.lock("docs", C.DEFAULT_PY, subdir,
-            ["node", "build", "lint", "atest", "utest", "lab", "run"]
+        yield U.lock(
+            "docs",
+            C.DEFAULT_PY,
+            subdir,
+            ["node", "build", "lint", "atest", "utest", "lab", "run"],
         )
         if subdir == "linux-64":
             yield U.lock("binder", C.DEFAULT_PY, subdir, ["run", "lab"])
 
+
+def task_env():
+    yield dict(
+        name="dev",
+        file_dep=[P.DEV_LOCKFILE],
+        actions=[
+            ["mamba", "create", "--prefix", P.DEV_PREFIX, "--file", P.DEV_LOCKFILE]
+        ],
+        targets=[P.DEV_HISTORY],
+    )
+
+
 def task_lint():
     """improve and ensure code quality"""
+    yield dict(
+        name="py:format",
+        **U.run_in(
+            "docs", [["isort", *P.ALL_PY], ["black", *P.ALL_PY]], file_dep=[*P.ALL_PY]
+        ),
+    )
+
+    for file_dep, linter in [
+        [P.ALL_PY, ["flake8"]],
+        [P.PY_SRC, ["pylint", "--reports", "n", "--score", "n"]],
+        [P.PY_SRC, ["mypy", "--no-error-summary", "--config-file", P.SETUP_CFG]],
+    ]:
+        yield dict(
+            name=f"py:{linter[0]}",
+            task_dep=["lint:py:format"],
+            **U.run_in("docs", [linter + file_dep], file_dep=[P.SETUP_CFG, *file_dep]),
+        )
+
 
 def task_build():
     """build intermediate artifacts"""
 
+
 def task_dist():
     """prepare release artifacts"""
+
 
 def task_lab():
     """run jupyterlab"""
 
+
 def task_integrity():
     """ensure integrity of the repo"""
+
 
 def task_preflight():
     """ensure various stages are ready for development"""
 
-    yield dict(
-        name="lab",
-        actions=[["echo", "TODO"]]
-    )
+    yield dict(name="lab", actions=[["echo", "TODO"]])
+
 
 def task_test():
     """run automated tests"""
 
+
 def task_docs():
     """build documentation"""
 
+
 class C:
     """constants"""
+
     SUBDIRS = ["linux-64", "osx-64", "win-64"]
+    THIS_SUBDIR = {"Linux": "linux-64", "Darwin": "osx-64", "Windows": "win-64"}[
+        platform.system()
+    ]
     PYTHONS = ["3.6", "3.9"]
     DEFAULT_PY = "3.9"
     SKIP_LOCKS = bool(json.loads(os.environ.get("SKIP_LOCKS", "1")))
+    CI = bool(json.loads(os.environ.get("CI", "0")))
+    RUNNING_LOCALLY = not CI
+
 
 class P:
     """paths"""
+
     DODO = Path(__file__)
     ROOT = DODO.parent
     GITHUB = ROOT / ".github"
@@ -68,18 +117,65 @@ class P:
     SPECS = GITHUB / "specs"
     LOCKS = GITHUB / "locks"
     SCRIPTS = ROOT / "scripts"
+    ENVS = ROOT / ".envs"
+
+    DEV_PREFIX = ENVS / "dev"
+    DEV_LOCKFILE = LOCKS / f"docs-{C.THIS_SUBDIR}-{C.DEFAULT_PY}.conda.lock"
+    DEV_HISTORY = DEV_PREFIX / "conda-meta/history"
+
+    PY_SRC = sorted((ROOT / "src").rglob("*.py"))
+    PY_SCRIPTS = sorted((ROOT / "scripts").rglob("*.py"))
+    PY_DOCS = sorted((ROOT / "docs").rglob("*.py"))
+    PY_ATEST = sorted((ROOT / "atest").rglob("*.py"))
+
+    ALL_PY = [DODO, *PY_SRC, *PY_SCRIPTS, *PY_DOCS, *PY_ATEST]
+
+    SETUP_CFG = ROOT / "setup.cfg"
 
 
 class D:
     """data"""
 
+
 class U:
     """utilities"""
-    cmd = lambda *args, **kwargs: doit.tools.CmdAction(*args, **kwargs, shell=False)
-    script = lambda *args, **kwargs: U.cmd(*args, **kwargs, cwd=str(P.SCRIPTS))
 
     @classmethod
-    def lock(cls, env_name, py, subdir, extra_env_names=[], include_base=True):
+    def cmd(cls, *args, **kwargs):
+        if "shell" not in kwargs:
+            kwargs["shell"] = False
+        return doit.tools.CmdAction(*args, **kwargs)
+
+    @classmethod
+    def run_in(cls, env, actions, **kwargs):
+        if C.RUNNING_LOCALLY:
+            env = "dev"
+        prefix = P.ENVS / env
+        history = prefix / "conda-meta/history"
+        file_dep = kwargs.pop("file_dep", [])
+        targets = kwargs.pop("targets", [])
+        return dict(
+            file_dep=[history, *file_dep],
+            actions=[
+                U.cmd(
+                    [
+                        "conda",
+                        "run",
+                        "--prefix",
+                        prefix,
+                        "--no-capture-output",
+                        *action,
+                    ],
+                    **kwargs,
+                )
+                for action in actions
+            ],
+            targets=targets,
+        )
+
+    @classmethod
+    def lock(cls, env_name, py, subdir, extra_env_names=None, include_base=True):
+        extra_env_names = extra_env_names or []
         args = ["conda-lock", "--mamba", "--platform", subdir, "-c", "conda-forge"]
         stem = f"{env_name}-{subdir}-{py}"
         lockfile = P.LOCKS / f"{stem}.conda.lock"
@@ -112,16 +208,15 @@ class U:
 
 
 class R(doit.reporter.ConsoleReporter):
+    """fancy reporter"""
+
     TIMEFMT = "%H:%M:%S"
     SKIP = " " * len(TIMEFMT)
-    _timings = {}
+    _timings = {}  # type: typing.Dict[str, datetime]
     ISTOP = "🛑"
     ISTART = "🐛"
     ISKIP = "⏩"
     IPASS = "🦋"
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     def execute_task(self, task):
         start = datetime.now()
@@ -155,7 +250,6 @@ class R(doit.reporter.ConsoleReporter):
     skip_ignore = skip_uptodate
 
 
-
 DOIT_CONFIG = {
     "backend": "sqlite3",
     "verbosity": 2,
@@ -175,6 +269,7 @@ os.environ.update(
 try:
     # for windows, mostly, but whatever
     import colorama
+
     colorama.init()
 except ImportError:
     pass

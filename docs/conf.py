@@ -16,8 +16,7 @@ ROOT = HERE.parent
 if os.environ.get("READTHEDOCS", False):
     check_call(["jlpm", "bootstrap"], cwd=str(ROOT))
     check_call(
-        [sys.executable, "-m", "pip", "install", "-e", ".", "--no-deps"],
-        cwd=str(ROOT)
+        [sys.executable, "-m", "pip", "install", "-e", ".", "--no-deps"], cwd=str(ROOT)
     )
 
 

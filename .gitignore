@@ -4,6 +4,7 @@ _*.json
 _build
 .coverage
 .doit*
+.envs/
 .ipynb_checkpoints/
 .mypy_cache/
 .pytest_cache/
