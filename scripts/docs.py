@@ -4,6 +4,7 @@ import os
 import re
 import shutil
 import sys
+from argparse import ArgumentParser
 from pathlib import Path
 from subprocess import call, check_call
 from tempfile import TemporaryDirectory
@@ -13,13 +14,10 @@ import jinja2
 HAS_PYTEST = False
 
 try:
-    import pytest_check_links
-
-    print("pytest_check_links available, will check links", pytest_check_links)
+    __import__("pytest_check_links")
     HAS_PYTEST = True
-except ImportError as err:
-    print("pytest_check_links not available, skipping link check", err)
-
+except (AttributeError, ImportError):
+    pass
 
 SPHINX_STAGE = os.environ.get("STARTERS_SPHINX_STAGE")
 
@@ -83,14 +81,44 @@ filterwarnings =
 """
 
 
+def make_parser():
+    parser = ArgumentParser("docs")
+    parser.add_argument("--check-links", default=True)
+    parser.add_argument("--only-check-links", default=False)
+    parser.add_argument("--schema", default=True)
+    parser.add_argument("--only-schema", default=False)
+    return parser
+
+
+def make_schema_docs() -> int:
+    check_call(["jlpm"])
+    check_call(
+        [
+            "jlpm",
+            "jsonschema2md",
+            "-x",
+            "docs/schema/raw",
+            "-d",
+            SCHEMA_SRC,
+            "-e",
+            "json",
+            "-o",
+            SCHEMA_DOCS,
+        ]
+    )
+    fix_schema_md()
+    return make_schema_index()
+
+
 def fix_schema_md():
     """fix up generated markdown to work (somewhat better) with sphinx"""
     if SCHEMA_README.exists():
         SCHEMA_README.unlink()
 
     md_files = list(SCHEMA_DOCS.glob("*.md"))
+    prettier = ["jlpm", "--silent", "prettier", "--write", "--loglevel", "silent"]
 
-    check_call(["jlpm", "prettier", "--write", "--loglevel", "silent", *md_files])
+    check_call([*prettier, *md_files])
 
     for md_file in md_files:
         md_txt = md_file.read_text()
@@ -100,10 +128,10 @@ def fix_schema_md():
 
         md_file.write_text(md_txt)
 
-    check_call(["jlpm", "prettier", "--write", "--loglevel", "silent", *md_files])
+    check_call([*prettier, *md_files])
 
 
-def fix_schema_html():
+def fix_schema_html() -> int:
     """fix up generated HTML"""
     html_files = list((DOCS_BUILD / "schema").glob("*.html"))
 
@@ -115,17 +143,20 @@ def fix_schema_html():
 
         html_file.write_text(html_txt)
 
+    return 0
 
-def make_schema_index():
+
+def make_schema_index() -> int:
     """make an index for all the schema markdown"""
     md_files = sorted(SCHEMA_DOCS.glob("*.md"))
     index = SCHEMA_DOCS / "index.rst"
 
     rst = RST_TEMPLATE.render(paths=md_files)
     index.write_text(rst)
+    return 0
 
 
-def check_links():
+def run_check_links() -> int:
     """check local links with pytest-check-links in a clean directory"""
     ini = CHECK_INI.format(extra_k="")
     # do this in a temporary directory to avoid surprises
@@ -140,41 +171,30 @@ def check_links():
         return call(["pytest"], cwd=dest)
 
 
-def docs():
+def docs(check_links=True, schema=True, only_schema=False, only_check_links=False):
     """build (and test) docs.
 
     because readthedocs, this gets called twice from inside sphinx
     """
+    if only_check_links:
+        return run_check_links()
+
+    if only_schema:
+        shutil.rmtree(SCHEMA_DOCS, ignore_errors=1)
+        return make_schema_docs()
 
     if META:
         shutil.rmtree(DOCS_BUILD, ignore_errors=1)
-        shutil.rmtree(SCHEMA_DOCS, ignore_errors=1)
-        check_call(["sphinx-build", "-M", "html", DOCS, DOCS_BUILD])
-        if HAS_PYTEST:
-            check_links()
-    elif SETUP and not SCHEMA_DOCS.exists():
-        check_call(["jlpm"])
-        check_call(
-            [
-                "jlpm",
-                "jsonschema2md",
-                "-x",
-                "docs/schema/raw",
-                "-d",
-                SCHEMA_SRC,
-                "-e",
-                "json",
-                "-o",
-                SCHEMA_DOCS,
-            ]
-        )
-        fix_schema_md()
-        make_schema_index()
-    elif FINISHED:
-        fix_schema_html()
+        if schema:
+            shutil.rmtree(SCHEMA_DOCS, ignore_errors=1)
+        return call(["sphinx-build", "-M", "html", DOCS, DOCS_BUILD])
 
-    return 0
+    if SETUP and not SCHEMA_DOCS.exists():
+        return make_schema_docs()
+
+    if FINISHED:
+        return fix_schema_html()
 
 
 if __name__ == "__main__":
-    sys.exit(docs())
+    sys.exit(docs(**dict(vars(make_parser().parse_args()))))

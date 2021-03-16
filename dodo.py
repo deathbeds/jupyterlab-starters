@@ -300,7 +300,32 @@ def task_dev():
 
 
 def task_lab():
-    """run jupyterlab"""
+    """run JupyterLab "normally" (not watching sources)"""
+    if not C.RUNNING_LOCALLY:
+        return
+
+    def lab():
+        prefix, run_args = U.run_args("docs")
+        proc = subprocess.Popen(
+            list(map(str, [*run_args, "jupyter", "lab", "--no-browser", "--debug"])),
+            stdin=subprocess.PIPE,
+        )
+
+        try:
+            proc.wait()
+        except KeyboardInterrupt:
+            print("attempting to stop lab, you may want to check your process monitor")
+            proc.terminate()
+            proc.communicate(b"y\n")
+
+        proc.wait()
+        return True
+
+    return dict(
+        uptodate=[lambda: False],
+        task_dep=["preflight"],
+        actions=[doit.tools.PythonInteractiveAction(lab)],
+    )
 
 
 def task_integrity():
@@ -385,21 +410,58 @@ def task_test():
 
 def task_docs():
     """build documentation"""
-
     yield dict(
-        name="all",
-        task_dep=["dev:pip:check"],
+        name="schema",
         **U.run_in(
             "docs",
-            [["python", "-m", "scripts.docs"]],
+            [["python", "-m", "scripts.docs", "--only-schema=1"]],
+            file_dep=[P.SCRIPTS / "docs.py", *P.PY_SCHEMA.rglob("*.json")],
+            targets=[P.DOCS_SCHEMA_INDEX],
+        ),
+    )
+
+    yield dict(
+        name="sphinx",
+        **U.run_in(
+            "docs",
+            [["python", "-m", "scripts.docs", "--schema=0", "--check-links=0"]],
             file_dep=[
                 P.SCRIPTS / "docs.py",
-                *[p for p in P.DOCS.rglob("*") if not p.is_dir()],
                 *P.PY_SRC,
                 *P.PY_SCHEMA.rglob("*.json"),
+                P.DOCS_SCHEMA_INDEX,
+                *P.ALL_DOCS_DEPS,
             ],
-            targets=[P.DOCS_INDEX],
+            targets=[P.DOCS_INDEX, P.DOCS_BUILDINFO],
         ),
+    )
+
+    yield dict(
+        name="check:links",
+        **U.run_in(
+            "docs",
+            [["python", "-m", "scripts.docs", "--only-check-links=1"]],
+            file_dep=[
+                P.SCRIPTS / "docs.py",
+                P.DOCS_SCHEMA_INDEX,
+                P.DOCS_BUILDINFO,
+            ],
+        ),
+    )
+
+
+def task_watch():
+    """watch for live developing"""
+    if not C.RUNNING_LOCALLY:
+        return
+
+    prefix, run_args = U.run_args("docs")
+    yield dict(
+        name="lab", uptodate=[lambda: False], actions=[[*run_args, "jlpm", "watch"]]
+    )
+
+    yield dict(
+        name="docs", actions=[[*run_args, "sphinx-autobuild", P.DOCS, P.DOCS_OUT]]
     )
 
 
@@ -458,6 +520,11 @@ class P:
     PACKAGES_JSON = sorted(PACKAGES.glob("*/package.json"))
     ALL_PACKAGE_JSON = [PACKAGE_JSON, *PACKAGES_JSON]
 
+    DOCS_NOTEBOOKS = sorted(DOCS.rglob("*.ipynb"))
+    DOCS_STATIC = [p for p in (DOCS / "_static").rglob("*") if not p.is_dir()]
+    DOCS_CONF = DOCS / "conf.py"
+    ALL_DOCS_DEPS = [*DOCS_NOTEBOOKS, DOCS_CONF, *DOCS_STATIC]
+
     # generated but checked in
     YARN_LOCK = ROOT / "yarn.lock"
 
@@ -491,6 +558,8 @@ class P:
     ATEST_OUT = BUILD / "atest"
     DOCS_OUT = BUILD / "docs"
     DOCS_INDEX = DOCS_OUT / "html/index.html"
+    DOCS_BUILDINFO = DOCS_OUT / "html/.buildinfo"
+    DOCS_SCHEMA_INDEX = DOCS / "schema" / "index.rst"
 
     # js stuff
     TSBUILDINFO = PACKAGES / "_meta/tsconfig.tsbuildinfo"
@@ -788,6 +857,7 @@ DOIT_CONFIG = {
     "verbosity": 2,
     "par_type": "thread",
     "reporter": R,
+    "default_tasks": ["lint", "integrity", "test", "docs"],
 }
 
 # patch environment for all child tasks
