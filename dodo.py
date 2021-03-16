@@ -5,6 +5,8 @@ import json
 import os
 import platform
 import re
+import shutil
+import subprocess
 import sys
 import typing
 from datetime import datetime
@@ -197,7 +199,7 @@ def task_dist():
             [
                 ["python", "setup.py", "sdist"],
                 ["python", "setup.py", "bdist_wheel"],
-                ["twine", "check", "dist/*"],
+                ["twine", "check", "dist/*.whl", "dist/*.tar.gz"],
             ],
             file_dep=[
                 *P.PY_SRC,
@@ -266,6 +268,32 @@ def task_dev():
         **U.run_in("utest", [freeze, check], file_dep=[P.SETUP_CFG, P.SETUP_PY]),
     )
 
+    yield dict(
+        name="ext:server",
+        task_dep=["dev:pip:check"],
+        **U.run_in(
+            "utest",
+            [
+                ["jupyter", *app, "enable", "--sys-prefix", "--py", "jupyter_starters"]
+                for app in [["serverextension"], ["server", "extension"]]
+            ],
+            file_dep=[P.SETUP_CFG, P.SETUP_PY],
+        ),
+    )
+
+    yield dict(
+        name="ext:lab",
+        task_dep=["dev:pip:check"],
+        **U.run_in(
+            "utest",
+            [["jupyter", "labextension", "develop", ".", "--overwrite"]],
+            file_dep=[
+                P.SETUP_CFG,
+                P.SETUP_PY,
+            ],
+        ),
+    )
+
 
 def task_lab():
     """run jupyterlab"""
@@ -323,6 +351,16 @@ def task_test():
 
     yield utask
 
+    yield dict(
+        name="atest",
+        task_dep=["dev:ext:server", "dev:ext:lab"],
+        file_dep=[*P.ALL_ROBOT],
+        actions=[(U.atest, [])],
+        targets=[
+            P.ATEST_OUT / f"{C.THIS_ATEST_STEM}-0.robot.xml",
+        ],
+    )
+
 
 def task_docs():
     """build documentation"""
@@ -347,6 +385,9 @@ class C:
         "TooManyTestSteps:30",
     ]
     UTEST_ARGS = safe_load(os.environ.get("UTEST_ARGS", "[]"))
+    ATEST_RETRIES = int(os.environ.get("ATEST_RETRIES", "1"))
+    ATEST_ARGS = safe_load(os.environ.get("ATEST_ARGS", "[]"))
+    THIS_ATEST_STEM = f"{THIS_SUBDIR}-py{THIS_PY}"
 
 
 class P:
@@ -410,6 +451,7 @@ class P:
     HTML_UTEST = BUILD / "utest"
     HTML_COV = BUILD / "coverage"
     COVERAGE = ROOT / ".coverage"
+    ATEST_OUT = BUILD / "atest"
 
     # js stuff
     TSBUILDINFO = PACKAGES / "_meta/tsconfig.tsbuildinfo"
@@ -464,13 +506,10 @@ class U:
         return doit.tools.CmdAction(*args, **kwargs)
 
     @classmethod
-    def run_in(cls, env, actions, **kwargs):
+    def run_args(cls, env=None):
         if C.RUNNING_LOCALLY:
             env = "dev"
         prefix = P.ENVS / env
-        history = prefix / "conda-meta/history"
-        file_dep = kwargs.pop("file_dep", [])
-        targets = kwargs.pop("targets", [])
         run_args = [
             "conda",
             "run",
@@ -479,18 +518,17 @@ class U:
             "--live-stream",
             "--no-capture-output",
         ]
+        return prefix, run_args
+
+    @classmethod
+    def run_in(cls, env, actions, **kwargs):
+        prefix, run_args = U.run_args(env)
+        history = prefix / "conda-meta/history"
+        file_dep = kwargs.pop("file_dep", [])
+        targets = kwargs.pop("targets", [])
         return dict(
             file_dep=[history, *file_dep],
-            actions=[
-                U.cmd(
-                    [
-                        *run_args,
-                        *action,
-                    ],
-                    **kwargs,
-                )
-                for action in actions
-            ],
+            actions=[U.cmd([*run_args, *action], **kwargs) for action in actions],
             targets=targets,
         )
 
@@ -548,6 +586,114 @@ class U:
                         text,
                     )
                 )
+
+    @classmethod
+    def atest(cls):
+        return_code = 1
+        for attempt in range(C.ATEST_RETRIES + 1):
+            return_code = U.atest_attempt(attempt)
+            if return_code == 0:
+                break
+        U.rebot()
+        return return_code == 0
+
+    @classmethod
+    def atest_attempt(cls, attempt):
+        prefix, run_args = U.run_args("atest")
+        extra_args = []
+        stem = f"{C.THIS_ATEST_STEM}-{attempt}"
+        out_dir = P.ATEST_OUT / stem
+
+        if out_dir.exists():
+            try:
+                shutil.rmtree(out_dir)
+            except Exception as err:
+                print(err)
+
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+        if attempt:
+            extra_args += ["--loglevel", "TRACE"]
+            previous = P.ATEST_OUT / f"{C.THIS_ATEST_STEM}-{attempt - 1}.robot.xml"
+            if previous.exists():
+                extra_args += ["--rerunfailed", str(previous)]
+
+        extra_args += C.ATEST_ARGS
+
+        variables = dict(
+            ATTEMPT=attempt,
+            NAME=C.THIS_ATEST_STEM,
+            OS=platform.system(),
+            Py=C.THIS_PY,
+        )
+
+        extra_args += sum(
+            [["--variable", f"{key}:{value}"] for key, value in variables.items()], []
+        )
+
+        args = [
+            "--name",
+            C.THIS_ATEST_STEM,
+            "--outputdir",
+            out_dir,
+            "--output",
+            P.ATEST_OUT / f"{stem}.robot.xml",
+            "--log",
+            P.ATEST_OUT / f"{stem}.log.html",
+            "--report",
+            P.ATEST_OUT / f"{stem}.report.html",
+            "--xunit",
+            P.ATEST_OUT / f"{stem}.xunit.xml",
+            "--randomize",
+            "all",
+            *extra_args,
+            # the folder must always go last
+            P.ATEST,
+        ]
+
+        str_args = [*map(str, run_args), "python", "-m", "robot", *map(str, args)]
+        print(">>>", " ".join(str_args))
+        proc = subprocess.Popen(str_args, cwd=P.ATEST)
+
+        try:
+            return proc.wait()
+        except KeyboardInterrupt:
+            proc.kill()
+            return 1
+
+    @classmethod
+    def rebot(cls):
+        prefix, run_args = U.run_args("atest")
+        args = [
+            *run_args,
+            "python",
+            "-m",
+            "robot.rebot",
+            "--name",
+            "🤖",
+            "--nostatusrc",
+            "--merge",
+            "--output",
+            P.ATEST_OUT / "robot.xml",
+            "--log",
+            P.ATEST_OUT / "log.html",
+            "--report",
+            P.ATEST_OUT / "report.html",
+            "--xunit",
+            P.ATEST_OUT / "xunit.xml",
+        ] + sorted(P.ATEST_OUT.glob("*.robot.xml"))
+
+        str_args = [*map(str, args)]
+
+        print(">>> rebot args:", " ".join(str_args))
+
+        proc = subprocess.Popen(str_args)
+
+        try:
+            return proc.wait()
+        except KeyboardInterrupt:
+            proc.kill()
+            return 1
 
 
 class R(doit.reporter.ConsoleReporter):
