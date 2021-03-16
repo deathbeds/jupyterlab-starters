@@ -375,7 +375,7 @@ def task_test():
     yield dict(
         name="atest",
         task_dep=["preflight"],
-        file_dep=[*P.ALL_ROBOT],
+        file_dep=[*P.ALL_ROBOT, *P.NPM_TARBALLS.values(), P.WHEEL],
         actions=[(U.atest, [])],
         targets=[
             P.ATEST_OUT / f"{C.THIS_ATEST_STEM}-0.robot.xml",
@@ -471,8 +471,8 @@ class P:
     YARN_INTEGRITY = NODE_MODULES / ".yarn-integrity"
     DIST = ROOT / "dist"
     # TODO: single-source version
-    PY_VERSION = "1.0.0a0"
-    JS_VERSION = "1.0.0-a0"
+    PY_VERSION = "1.0.1a0"
+    JS_VERSION = "1.0.1-a0"
     SDIST = DIST / f"jupyter_starters-{PY_VERSION}.tar.gz"
     WHEEL = DIST / f"jupyter_starters-{PY_VERSION}-py3-none-any.whl"
     NPM_TARBALLS = {
