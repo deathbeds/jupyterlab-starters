@@ -1,5 +1,4 @@
-import { ThemeProps } from '@rjsf/core';
-import { utils } from '@rjsf/core';
+import { ThemeProps, utils } from '@rjsf/core';
 
 const { fields, widgets } = utils.getDefaultRegistry();
 

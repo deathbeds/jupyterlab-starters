@@ -43,4 +43,4 @@ Starter Form Should Contain Markdown Elements
     Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.field-description em
     Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.field-description blockquote a
     Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.help-block code
-    Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.help-block .MathJax
+    Wait Until Keyword Succeeds    3x    1s    Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.help-block .MathJax

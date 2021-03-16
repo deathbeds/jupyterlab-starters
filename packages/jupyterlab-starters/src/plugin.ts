@@ -240,7 +240,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
       pattern: starterPattern,
       rank: 29
     });
-    console.log('registered', CommandIDs.routerStart);
 
     const notebookbutton = new NotebookStarter({ commands });
 

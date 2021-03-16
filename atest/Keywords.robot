@@ -24,7 +24,7 @@ Setup Server and Browser
     Update Examples    ${home}
     ${WORKSPACES DIR} =    Set Variable    ${OUTPUT DIR}${/}workspaces
     Initialize User Settings
-    ${app args} =    Set Variable    --no-browser --debug --LabApp.base_url\='${BASE}' --port\=${PORT} --LabApp.token\='${token}'
+    ${app args} =    Set Variable    --no-browser --debug --ServerApp.base_url\='${BASE}' --port\=${PORT} --ServerApp.token\='${token}' --NotebookApp.mathjax_url\='http://localhost:${PORT}${MATHJAX}'
     ${path args} =    Set Variable    --LabApp.user_settings_dir='${SETTINGS DIR.replace('\\', '\\\\')}' --LabApp.workspaces_dir\='${WORKSPACES DIR.replace('\\', '\\\\')}'
     Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots
     ${server} =    Start Process    jupyter lab ${app args} ${path args}    shell=yes    env:HOME=${home}    cwd=${home}    stdout=${OUTPUT DIR}${/}lab.log
@@ -88,7 +88,7 @@ Open JupyterLab
     Create WebDriver    Firefox    executable_path=${geckodriver}    firefox_binary=${firefox}    service_log_path=${OUTPUT DIR}${/}geckodriver.log
     Wait Until Keyword Succeeds    10x    5s    Go To    ${URL}lab?token=${TOKEN}&reset
     Set Window Size    1920    1080
-    Wait For Splash
+    Run Keyword And Ignore Error    Wait For Splash
 
 Close JupyterLab
     [Documentation]    Just close all the browsers
@@ -99,7 +99,7 @@ Reset Application State
     Lab Command    Close All Tabs
     Ensure All Kernels Are Shut Down
     Wait Until Keyword Succeeds    3x    0.5s    Lab Command    Reset Application State
-    Wait For Splash
+    Run Keyword And Ignore Error    Wait For Splash
     Wait Until Keyword Succeeds    3x    0.5s    Lab Command    Close All Tabs
 
 Ensure All Kernels Are Shut Down
