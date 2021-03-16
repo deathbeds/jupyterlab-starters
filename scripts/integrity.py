@@ -13,24 +13,11 @@ from importlib.util import find_spec
 import jsonschema
 import pytest
 
-try:
-    import ruamel.yaml as yaml
-except ImportError:
-    import ruamel_yaml as yaml
-
 ROOT = pathlib.Path.cwd()
 
 # docs
 MAIN_README = ROOT / "README.md"
 CHANGELOG = ROOT / "CHANGELOG.md"
-
-# dependencies
-ENV = yaml.safe_load((ROOT / "environment.yml").read_text())
-LAB_SPEC = [
-    d.split(" ", 1)[1]
-    for d in ENV["dependencies"]
-    if isinstance(d, str) and d.startswith("jupyterlab ")
-][0]
 
 # TS stuff
 NPM_NS = "@deathbeds"
