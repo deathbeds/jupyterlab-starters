@@ -301,6 +301,14 @@ def task_lab():
 
 def task_integrity():
     """ensure integrity of the repo"""
+    yield dict(
+        name="all",
+        **U.run_in(
+            "utest",
+            [["python", "-m", "scripts.integrity"]],
+            file_dep=[P.README, P.CHANGELOG, P.SCRIPTS / "integrity.py"],
+        ),
+    )
 
 
 def task_preflight():
@@ -481,6 +489,7 @@ class P:
     )
     ALL_YAML = [*SPECS.glob("*.yml"), *ROOT.glob("*.yml"), *GITHUB.rglob("*.yml")]
     README = ROOT / "README.md"
+    CHANGELOG = ROOT / "CHANGELOG.md"
     LICENSE = ROOT / "LICENSE"
     ALL_MD = [*ROOT.glob("*.md")]
     ALL_JSON = [
