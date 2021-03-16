@@ -113,7 +113,11 @@ def task_lint():
         **U.run_in(
             "docs",
             [[*eslint, P.PACKAGES]],
-            file_dep=[P.YARN_INTEGRITY, *P.ALL_TS, *P.ROOT.glob(".eslint*")],
+            file_dep=[
+                P.YARN_INTEGRITY,
+                *[p for p in P.ALL_TS if not p.name.startswith("_")],
+                *P.ROOT.glob(".eslint*"),
+            ],
         ),
     )
 
@@ -570,6 +574,7 @@ class P:
     JS_LIB_SCHEMA = PACKAGES / "jupyterlab-starters/lib/_schema.json"
     LABEXT = SRC / "jupyter_starters/labextension"
     EXT_PACKAGE_JSON = LABEXT / "package.json"
+    EXT_REMOTE_ENTRY = LABEXT.rglob("remoteEntry*.js")
 
     # collections of things
     ALL_TSCONFIG = [ROOT / "tsconfigbase.json", *PACKAGES.rglob("src/*/tsconfig.json")]
