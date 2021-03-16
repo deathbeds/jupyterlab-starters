@@ -36,7 +36,7 @@ jobs:
             ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-
 
       - name: cache (node_modules)
-        uses: actions/cache@vs
+        uses: actions/cache@v2
         with:
           path: node_modules
           key: |
@@ -57,6 +57,7 @@ jobs:
 
       - name: publish (reports)
         if: ${{ always() }}
+        uses: actions/upload-artifact@v2
         with:
           name: jupyter-starters reports ${{ github.run_number }}
           path: |
@@ -65,6 +66,7 @@ jobs:
             build/utest
 
       - name: publish (docs)
+        uses: actions/upload-artifact@v2
         with:
           name: jupyter-starters docs ${{ github.run_number }}
           path: |
