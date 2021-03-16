@@ -123,11 +123,16 @@ def task_lint():
 
 
 def task_jlpm():
+    if C.SKIP_JLPM_IF_CACHED and P.YARN_INTEGRITY.exists():
+        return
+
+    jlpm_args = ["--frozen-lockfile"] if C.CI else []
+
     yield dict(
         name="install",
         **U.run_in(
             "build",
-            [["jlpm"]],
+            [["jlpm", *jlpm_args]],
             file_dep=[P.YARNRC, *P.ALL_PACKAGE_JSON],
             targets=[P.YARN_INTEGRITY],
         ),
@@ -151,7 +156,12 @@ def task_build():
                     P.JS_SRC_SCHEMA_D_TS,
                 ],
             ],
-            file_dep=[P.YARN_INTEGRITY, *P.ALL_PY_SCHEMA, *P.ALL_PACKAGE_JSON],
+            file_dep=[
+                P.YARN_INTEGRITY,
+                *P.ALL_PY_SCHEMA,
+                *P.ALL_PACKAGE_JSON,
+                P.YARN_LOCK,
+            ],
             targets=[P.JS_SRC_SCHEMA, P.JS_LIB_SCHEMA, P.JS_SRC_SCHEMA_D_TS],
         ),
     )
@@ -164,12 +174,13 @@ def task_build():
                 ["jlpm", "lerna", "run", "--stream", "build"],
             ],
             file_dep=[
-                P.YARN_INTEGRITY,
-                P.JS_SRC_SCHEMA,
-                P.JS_SRC_SCHEMA_D_TS,
-                *P.ALL_TS,
                 *P.ALL_PACKAGE_JSON,
+                *P.ALL_TS,
                 *P.ALL_TSCONFIG,
+                P.JS_SRC_SCHEMA_D_TS,
+                P.JS_SRC_SCHEMA,
+                P.YARN_INTEGRITY,
+                P.YARN_LOCK,
             ],
             targets=[P.TSBUILDINFO],
         ),
@@ -183,11 +194,12 @@ def task_build():
                 ["jlpm", "lerna", "run", "--stream", "build:ext"],
             ],
             file_dep=[
-                P.YARN_INTEGRITY,
-                P.TSBUILDINFO,
-                P.JS_LIB_SCHEMA,
-                *P.ALL_PACKAGE_JSON,
                 *P.ALL_CSS,
+                *P.ALL_PACKAGE_JSON,
+                P.JS_LIB_SCHEMA,
+                P.TSBUILDINFO,
+                P.YARN_INTEGRITY,
+                P.YARN_LOCK,
             ],
             targets=[P.EXT_PACKAGE_JSON],
         ),
@@ -481,6 +493,7 @@ class C:
     DEFAULT_PY = "3.9"
     SKIP_LOCKS = bool(json.loads(os.environ.get("SKIP_LOCKS", "1")))
     CI = bool(json.loads(os.environ.get("CI", "0")))
+    SKIP_JLPM_IF_CACHED = bool(json.loads(os.environ.get("CI", "1")))
     RUNNING_LOCALLY = not CI
     RFLINT_RULES = [
         "LineTooLong:200",
