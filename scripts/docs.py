@@ -39,6 +39,7 @@ All JSON Schema
 )
 
 ROOT = Path(__file__).parent.parent
+NODE_MODULES = ROOT / "node_modules"
 SCHEMA_SRC = ROOT / "src" / "jupyter_starters" / "schema"
 DOCS = ROOT / "docs"
 BUILD = ROOT / "build"
@@ -91,7 +92,8 @@ def make_parser():
 
 
 def make_schema_docs() -> int:
-    check_call(["jlpm"])
+    if not NODE_MODULES.exists():
+        check_call(["jlpm", "--frozen-lockfile"])
     check_call(
         [
             "jlpm",
