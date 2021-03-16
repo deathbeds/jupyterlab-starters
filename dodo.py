@@ -1,6 +1,4 @@
 """development automation for jupyter[lab]-starter"""
-# pylint: disable=invalid-name,too-many-arguments,import-error
-# pylint: disable=too-few-public-methods,missing-function-docstring
 import json
 import os
 import platform
