@@ -221,10 +221,12 @@ def task_dist():
                 [["npm", "pack", path]],
                 file_dep=[
                     P.TSBUILDINFO,
+                    P.WHEEL,
                     path / "README.md",
                     path / "LICENSE",
                     path / "package.json",
                 ],
+                targets=[tarball],
                 cwd=str(P.DIST),
             ),
         )
@@ -259,7 +261,9 @@ def task_dev():
     check = [*pip, "check"]
     yield dict(
         name="pip:install",
-        **U.run_in("utest", [install], file_dep=[P.SETUP_CFG, P.SETUP_PY]),
+        **U.run_in(
+            "utest", [install], file_dep=[P.SETUP_CFG, P.SETUP_PY, P.EXT_PACKAGE_JSON]
+        ),
     )
 
     yield dict(
@@ -314,7 +318,15 @@ def task_integrity():
 def task_preflight():
     """ensure various stages are ready for development"""
 
-    yield dict(name="lab", actions=[["echo", "TODO"]])
+    yield dict(
+        name="all",
+        task_dep=["dev:ext:lab", "dev:ext:server"],
+        **U.run_in(
+            "utest",
+            [["python", "-m", "scripts.preflight"]],
+            file_dep=[P.SCRIPTS / "preflight.py"],
+        ),
+    )
 
 
 def task_test():
@@ -352,6 +364,7 @@ def task_test():
     )
 
     utask["actions"] = [
+        (doit.tools.create_folder, [P.BUILD / "utest"]),
         (U.strip_timestamps, [P.HTML_UTEST]),
         *utask["actions"],
         (U.strip_timestamps, [P.HTML_COV]),
@@ -361,7 +374,7 @@ def task_test():
 
     yield dict(
         name="atest",
-        task_dep=["dev:ext:server", "dev:ext:lab"],
+        task_dep=["preflight"],
         file_dep=[*P.ALL_ROBOT],
         actions=[(U.atest, [])],
         targets=[
@@ -752,7 +765,6 @@ DOIT_CONFIG = {
     "backend": "sqlite3",
     "verbosity": 2,
     "par_type": "thread",
-    "default_tasks": ["preflight:lab"],
     "reporter": R,
 }
 
