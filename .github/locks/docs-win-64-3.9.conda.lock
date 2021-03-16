@@ -1,5 +1,5 @@
 # platform: win-64
-# env_hash: f6df8566d92c682c8c0481208faed513c8e5dc4747c9d5f4911571f9975fe720
+# env_hash: 61c690099a56e05e58cb0151cb20176e070b2b62ff4ad99f6d9e70648f590ea1
 @EXPLICIT
 https://conda.anaconda.org/conda-forge/win-64/nodejs-14.15.4-h57928b3_1.tar.bz2#5b09be096b135eea885ba5855b3450c1
 https://conda.anaconda.org/conda-forge/win-64/ca-certificates-2020.12.5-h5b45459_0.tar.bz2#f36a2988a9f57cffdc43929ba67a3a2a
@@ -48,6 +48,7 @@ https://conda.anaconda.org/conda-forge/noarch/attrs-20.3.0-pyhd3deb0d_0.tar.bz2#
 https://conda.anaconda.org/conda-forge/noarch/backcall-0.2.0-pyh9f0ad1d_0.tar.bz2#6006a6d08a3fa99268a2681c7fb55213
 https://conda.anaconda.org/conda-forge/noarch/backports-1.0-py_2.tar.bz2#0da16b293affa6ac31812376f8eb79dd
 https://conda.anaconda.org/conda-forge/noarch/click-7.1.2-pyh9f0ad1d_0.tar.bz2#bd50a970ce07e660c319fdc4d730d3f1
+https://conda.anaconda.org/conda-forge/noarch/cloudpickle-1.6.0-py_0.tar.bz2#76d764d8881719e305f6fa368dc2b65e
 https://conda.anaconda.org/conda-forge/noarch/colorama-0.4.4-pyh9f0ad1d_0.tar.bz2#c08b4c1326b880ed44f3ffb04803332f
 https://conda.anaconda.org/conda-forge/noarch/dataclasses-0.8-pyhc8e2a94_1.tar.bz2#28e0de0ecba81334619a777fdc00febc
 https://conda.anaconda.org/conda-forge/noarch/decorator-4.4.2-py_0.tar.bz2#d2eabb9cabd212e1ec6a9463bd846243
@@ -107,6 +108,7 @@ https://conda.anaconda.org/conda-forge/win-64/cffi-1.14.5-py39h0878f49_0.tar.bz2
 https://conda.anaconda.org/conda-forge/win-64/chardet-4.0.0-py39hcbf5309_1.tar.bz2#2c220000bcacdf633723cd56d0cb4cca
 https://conda.anaconda.org/conda-forge/win-64/coverage-5.5-py39hb82d6ee_0.tar.bz2#fe00f3cec98f23b7aec5c31f0721bacd
 https://conda.anaconda.org/conda-forge/win-64/docutils-0.16-py39hcbf5309_3.tar.bz2#c3dc5fe33c3c5afdfca2017bbd877e70
+https://conda.anaconda.org/conda-forge/win-64/doit-0.33.1-py39hde42818_1.tar.bz2#0045b388ae5161d72eef25b04a8d49b8
 https://conda.anaconda.org/conda-forge/win-64/entrypoints-0.3-py39hde42818_1002.tar.bz2#3a07c848ddee7575b2fe56294a6a4bae
 https://conda.anaconda.org/conda-forge/win-64/fontconfig-2.13.1-h1989441_1004.tar.bz2#9e66e4923712c0f7f7d64927d6fb3260
 https://conda.anaconda.org/conda-forge/win-64/future-0.18.2-py39hcbf5309_3.tar.bz2#ac59111cf87fc89d8d64a7a86e8ebf4e

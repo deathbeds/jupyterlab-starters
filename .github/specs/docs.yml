@@ -8,4 +8,3 @@ dependencies:
   - sphinx-autodoc-typehints
   - sphinx-copybutton
   - sphinx-markdown-tables
-  - doit
