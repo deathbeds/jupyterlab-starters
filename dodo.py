@@ -36,6 +36,8 @@ def task_lock():
 
 
 def task_env():
+    if C.CI:
+        return
     yield dict(
         name="dev",
         file_dep=[P.DEV_LOCKFILE],
@@ -547,7 +549,11 @@ class U:
     def run_args(cls, env=None):
         if C.RUNNING_LOCALLY:
             env = "dev"
-        prefix = P.ENVS / env
+            prefix = P.ENVS / env
+
+        if C.CI:
+            prefix = Path(os.environ["CONDA_PREFIX"])
+
         run_args = [
             "conda",
             "run",

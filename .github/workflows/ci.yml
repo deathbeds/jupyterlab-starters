@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+env:
+  PYTHONIOENCODING: utf-8
+  PYTHONUNBUFFERED: '1'
+  PIP_DISABLE_PIP_VERSION_CHECK: '1'
+  # our stuff
+  SKIP_CONDA_PREFLIGHT: 1
+  CACHE_EPOCH: 0
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu]
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v2
+
+      - name: cache (conda)
+        uses: actions/cache@v2
+        with:
+          path: ~/conda_pkgs_dir
+          key:
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ hashFiles('.github/locks/docs-linux-64-3.9.conda.lock') }}
+          restore-keys: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-
+
+      - name: cache (node_modules)
+        uses: actions/cache@vs
+        with:
+          path: node_modules
+          key: |
+            ${{ env.CACHE_EPOCH }}-node_modules-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc') }}
+
+      - name: base env (conda)
+        uses: conda-incubator/setup-miniconda@master
+        with:
+          environment-file: .github/locks/docs-linux-64-3.9.conda.lock
+          miniforge-variant: Mambaforge
+          use-mamba: true
+          use-only-tar-bz2: true
+
+      - name: build
+        shell: bash -l {0}
+        run: |
+          doit -n8 || doit || exit 1
+
+      - name: publish (reports)
+        if: ${{ always() }}
+        with:
+          name: jupyter-starters reports ${{ github.run_number }}
+          path: |
+            build/atest
+            build/coverage
+            build/utest
+
+      - name: publish (docs)
+        with:
+          name: jupyter-starters docs ${{ github.run_number }}
+          path: |
+            build/docs/html
+
+      - name: publish (dists)
+        uses: actions/upload-artifact@v2
+        with:
+          name: jupyter-starters dist ${{ github.run_number }}
+          path: ./dist
