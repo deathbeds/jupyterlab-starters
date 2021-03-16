@@ -438,6 +438,7 @@ def task_docs():
 
     yield dict(
         name="sphinx",
+        task_dep=["dev:pip:check"],
         **U.run_in(
             "docs",
             [["python", "-m", "scripts.docs", "--schema=0", "--check-links=0"]],
