@@ -77,8 +77,7 @@ Tear Down Everything
 Wait For Splash
     [Documentation]    Wait for the JupyterLab splash screen, and de-instrument window close
     Wait Until Page Contains Element    ${SPLASH}    timeout=30s
-    Run Keyword and Ignore Errors
-    ...    Wait Until Page Does Not Contain Element    ${SPLASH}    timeout=30s
+    Wait Until Page Does Not Contain Element    ${SPLASH}    timeout=30s
     Execute Javascript    window.onbeforeunload \= function (){}
 
 Open JupyterLab
@@ -113,8 +112,9 @@ Ensure All Kernels Are Shut Down
 
 Open Command Palette
     [Documentation]    Open the command palette
+    Wait Until Element is Visible    id:main
     Press Keys    id:main    ${ACCEL}+SHIFT+c
-    Wait Until Page Contains Element    ${CMD PALETTE INPUT}
+    Wait Until Element Is Enabled    ${CMD PALETTE INPUT}
     Click Element    ${CMD PALETTE INPUT}
 
 Open File Browser
