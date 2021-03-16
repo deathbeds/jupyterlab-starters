@@ -67,7 +67,7 @@ https://conda.anaconda.org/conda-forge/linux-64/chardet-4.0.0-py39hf3d152e_1.tar
 https://conda.anaconda.org/conda-forge/linux-64/dbus-1.13.6-hfdff14a_1.tar.bz2#4caaca6356992ee545080c7d7193b5a3
 https://conda.anaconda.org/conda-forge/linux-64/docutils-0.16-py39hf3d152e_3.tar.bz2#4f0fa7459a1f40a969aaad418b1c428c
 https://conda.anaconda.org/conda-forge/linux-64/entrypoints-0.3-py39hde42818_1002.tar.bz2#dad6134fb73bfd57f9658c30c7296355
-https://conda.anaconda.org/conda-forge/linux-64/importlib-metadata-3.7.2-py39hf3d152e_0.tar.bz2#8749afd9d46ea466a7c3d0dcc195d87a
+https://conda.anaconda.org/conda-forge/linux-64/importlib-metadata-3.7.3-py39hf3d152e_0.tar.bz2#9458992306f5181ee29ce4eed6c8f045
 https://conda.anaconda.org/conda-forge/linux-64/jedi-0.18.0-py39hf3d152e_2.tar.bz2#cb9b5c105fb10e59bf5a263880735235
 https://conda.anaconda.org/conda-forge/linux-64/markupsafe-1.1.1-py39h3811e60_3.tar.bz2#ba89fd2d0e9871ac81116e3008c830b4
 https://conda.anaconda.org/conda-forge/linux-64/mistune-0.8.4-py39h3811e60_1003.tar.bz2#716b1f4d19fdedf318dd100682399a76
@@ -103,7 +103,7 @@ https://conda.anaconda.org/conda-forge/noarch/jupyterlab_pygments-0.1.2-pyh9f0ad
 https://conda.anaconda.org/conda-forge/linux-64/keyring-22.3.0-py39hf3d152e_0.tar.bz2#91c3fa38de5dcf6c157d415783d336b3
 https://conda.anaconda.org/conda-forge/noarch/nbformat-5.1.2-pyhd8ed1ab_1.tar.bz2#9633dbb668ac1f9266427672816899dc
 https://conda.anaconda.org/conda-forge/noarch/readme_renderer-27.0-pyh9f0ad1d_0.tar.bz2#38446dff7f69efd3fab98ab4dc68c0c8
-https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.3-pyhd8ed1ab_0.tar.bz2#25573e57774dd54cfa848e5dd44503ed
+https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.4-pyhd8ed1ab_0.tar.bz2#d7b20b328e23d993994ea02077c009c0
 https://conda.anaconda.org/conda-forge/noarch/wcwidth-0.2.5-pyh9f0ad1d_2.tar.bz2#5266fcd697043c59621fda522b3d78ee
 https://conda.anaconda.org/conda-forge/noarch/nbclient-0.5.3-pyhd8ed1ab_0.tar.bz2#67f12831640fde52fe9be1bbc6b699e7
 https://conda.anaconda.org/conda-forge/noarch/prompt-toolkit-3.0.17-pyha770c72_0.tar.bz2#d3ff1dc51da26f2757c8d95c3522138e

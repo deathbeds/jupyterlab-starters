@@ -52,7 +52,7 @@ https://conda.anaconda.org/conda-forge/win-64/cffi-1.14.5-py39h0878f49_0.tar.bz2
 https://conda.anaconda.org/conda-forge/win-64/chardet-4.0.0-py39hcbf5309_1.tar.bz2#2c220000bcacdf633723cd56d0cb4cca
 https://conda.anaconda.org/conda-forge/win-64/docutils-0.16-py39hcbf5309_3.tar.bz2#c3dc5fe33c3c5afdfca2017bbd877e70
 https://conda.anaconda.org/conda-forge/win-64/entrypoints-0.3-py39hde42818_1002.tar.bz2#3a07c848ddee7575b2fe56294a6a4bae
-https://conda.anaconda.org/conda-forge/win-64/importlib-metadata-3.7.2-py39hcbf5309_0.tar.bz2#a5fd2acb1d365df11deaf6a5c2d052a4
+https://conda.anaconda.org/conda-forge/win-64/importlib-metadata-3.7.3-py39hcbf5309_0.tar.bz2#d4673b846097b4b89e9f9da78bc20944
 https://conda.anaconda.org/conda-forge/win-64/jedi-0.18.0-py39hcbf5309_2.tar.bz2#3fe801f843f884be4e2d7a6b01656f05
 https://conda.anaconda.org/conda-forge/win-64/markupsafe-1.1.1-py39hb82d6ee_3.tar.bz2#0c14148a89de7af36a654019e7e331b0
 https://conda.anaconda.org/conda-forge/win-64/mistune-0.8.4-py39hb82d6ee_1003.tar.bz2#5d3ee1b0b4d1ab7cb54b44eeeebd0b89
@@ -91,7 +91,7 @@ https://conda.anaconda.org/conda-forge/noarch/pyopenssl-20.0.1-pyhd8ed1ab_0.tar.
 https://conda.anaconda.org/conda-forge/noarch/jupyterlab_pygments-0.1.2-pyh9f0ad1d_0.tar.bz2#2cbd910890bb328e8959246a1e16fac7
 https://conda.anaconda.org/conda-forge/noarch/nbformat-5.1.2-pyhd8ed1ab_1.tar.bz2#9633dbb668ac1f9266427672816899dc
 https://conda.anaconda.org/conda-forge/noarch/readme_renderer-27.0-pyh9f0ad1d_0.tar.bz2#38446dff7f69efd3fab98ab4dc68c0c8
-https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.3-pyhd8ed1ab_0.tar.bz2#25573e57774dd54cfa848e5dd44503ed
+https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.4-pyhd8ed1ab_0.tar.bz2#d7b20b328e23d993994ea02077c009c0
 https://conda.anaconda.org/conda-forge/noarch/wcwidth-0.2.5-pyh9f0ad1d_2.tar.bz2#5266fcd697043c59621fda522b3d78ee
 https://conda.anaconda.org/conda-forge/noarch/nbclient-0.5.3-pyhd8ed1ab_0.tar.bz2#67f12831640fde52fe9be1bbc6b699e7
 https://conda.anaconda.org/conda-forge/noarch/prompt-toolkit-3.0.17-pyha770c72_0.tar.bz2#d3ff1dc51da26f2757c8d95c3522138e

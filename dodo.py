@@ -4,6 +4,8 @@
 import json
 import os
 import platform
+import re
+import sys
 import typing
 from datetime import datetime
 from hashlib import sha256
@@ -11,6 +13,7 @@ from pathlib import Path
 
 import doit.reporter
 import doit.tools
+from ruamel_yaml import safe_load
 
 
 def task_lock():
@@ -246,6 +249,24 @@ def task_dist():
     )
 
 
+def task_dev():
+    """prepare local development"""
+    pip = ["python", "-m", "pip"]
+    install = [*pip, "install", "-e", ".", "--ignore-installed", "--no-deps"]
+    freeze = [*pip, "freeze"]
+    check = [*pip, "check"]
+    yield dict(
+        name="pip:install",
+        **U.run_in("utest", [install], file_dep=[P.SETUP_CFG, P.SETUP_PY]),
+    )
+
+    yield dict(
+        name="pip:check",
+        task_dep=["dev:pip:install"],
+        **U.run_in("utest", [freeze, check], file_dep=[P.SETUP_CFG, P.SETUP_PY]),
+    )
+
+
 def task_lab():
     """run jupyterlab"""
 
@@ -262,6 +283,45 @@ def task_preflight():
 
 def task_test():
     """run automated tests"""
+    html_utest = P.HTML_UTEST / f"{C.THIS_SUBDIR}-py{C.THIS_PY}.html"
+    html_cov = P.HTML_COV / f"{C.THIS_SUBDIR}-py{C.THIS_PY}"
+    utest_args = [
+        "pytest",
+        "--pyargs",
+        "jupyter_starters",
+        "--cov=jupyter_starters",
+        "--cov-report=term-missing:skip-covered",
+        f"--cov-report=html:{html_cov}",
+        "--no-cov-on-fail",
+        "-p",
+        "no:warnings",
+        "--flake8",
+        "--black",
+        "--mypy",
+        "--html",
+        html_utest,
+        "--self-contained-html",
+        *C.UTEST_ARGS,
+    ]
+    utask = dict(
+        name="unit",
+        task_dep=["dev:pip:install"],
+        uptodate=[doit.tools.config_changed({"args": str(utest_args)})],
+        **U.run_in(
+            "utest",
+            [utest_args],
+            targets=[P.COVERAGE, html_utest, html_cov / "index.html"],
+            file_dep=[*P.PY_SRC, P.SETUP_CFG, *P.PY_SCHEMA.glob("*.json")],
+        ),
+    )
+
+    utask["actions"] = [
+        (U.strip_timestamps, [P.HTML_UTEST]),
+        *utask["actions"],
+        (U.strip_timestamps, [P.HTML_COV]),
+    ]
+
+    yield utask
 
 
 def task_docs():
@@ -275,6 +335,7 @@ class C:
     THIS_SUBDIR = {"Linux": "linux-64", "Darwin": "osx-64", "Windows": "win-64"}[
         platform.system()
     ]
+    THIS_PY = "{}.{}".format(*sys.version_info)
     PYTHONS = ["3.6", "3.9"]
     DEFAULT_PY = "3.9"
     SKIP_LOCKS = bool(json.loads(os.environ.get("SKIP_LOCKS", "1")))
@@ -285,6 +346,7 @@ class C:
         "TooFewKeywordSteps:0",
         "TooManyTestSteps:30",
     ]
+    UTEST_ARGS = safe_load(os.environ.get("UTEST_ARGS", "[]"))
 
 
 class P:
@@ -322,6 +384,7 @@ class P:
     YARN_LOCK = ROOT / "yarn.lock"
 
     # not checked in
+    BUILD = ROOT / "build"
     ENVS = ROOT / ".envs"
     DEV_PREFIX = ENVS / "dev"
     DEV_LOCKFILE = LOCKS / f"docs-{C.THIS_SUBDIR}-{C.DEFAULT_PY}.conda.lock"
@@ -344,6 +407,9 @@ class P:
     }
     HASH_DEPS = [SDIST, WHEEL, *NPM_TARBALLS.values()]
     SHA256SUMS = DIST / "SHA256SUMS"
+    HTML_UTEST = BUILD / "utest"
+    HTML_COV = BUILD / "coverage"
+    COVERAGE = ROOT / ".coverage"
 
     # js stuff
     TSBUILDINFO = PACKAGES / "_meta/tsconfig.tsbuildinfo"
@@ -405,17 +471,20 @@ class U:
         history = prefix / "conda-meta/history"
         file_dep = kwargs.pop("file_dep", [])
         targets = kwargs.pop("targets", [])
+        run_args = [
+            "conda",
+            "run",
+            "--prefix",
+            prefix,
+            "--live-stream",
+            "--no-capture-output",
+        ]
         return dict(
             file_dep=[history, *file_dep],
             actions=[
                 U.cmd(
                     [
-                        "conda",
-                        "run",
-                        "--prefix",
-                        prefix,
-                        "--live-stream",
-                        "--no-capture-output",
+                        *run_args,
                         *action,
                     ],
                     **kwargs,
@@ -457,6 +526,28 @@ class U:
             ],
             targets=[lockfile],
         )
+
+    RE_TIMESTAMPS = [
+        r"\d{4}-\d{2}-\d{2} \d{2}:\d{2} -\d*",
+        r"\d+-[^\-]{3}-\d{4} at \d{2}:\d{2}:\d{2}",
+    ]
+
+    @classmethod
+    def strip_timestamps(cls, root):
+        paths = root.rglob("*.html") if root.is_dir() else [root]
+        for path in paths:
+            text = path.read_text(encoding="utf-8")
+            for pattern in U.RE_TIMESTAMPS:
+                if not re.findall(pattern, text):
+                    continue
+
+                path.write_text(
+                    re.sub(
+                        pattern,
+                        "TIMESTAMP",
+                        text,
+                    )
+                )
 
 
 class R(doit.reporter.ConsoleReporter):

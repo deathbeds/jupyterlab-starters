@@ -54,7 +54,7 @@ https://conda.anaconda.org/conda-forge/osx-64/cffi-1.14.5-py39h319c39b_0.tar.bz2
 https://conda.anaconda.org/conda-forge/osx-64/chardet-4.0.0-py39h6e9494a_1.tar.bz2#f514d534fca0f9876720954703250c88
 https://conda.anaconda.org/conda-forge/osx-64/docutils-0.16-py39h6e9494a_3.tar.bz2#c251f3d6defc0e68aef889b41e43df60
 https://conda.anaconda.org/conda-forge/osx-64/entrypoints-0.3-py39hde42818_1002.tar.bz2#fb8afe91904c7e3544dab6801b23436e
-https://conda.anaconda.org/conda-forge/osx-64/importlib-metadata-3.7.2-py39h6e9494a_0.tar.bz2#598805748cadbe34208e0b5953c908c5
+https://conda.anaconda.org/conda-forge/osx-64/importlib-metadata-3.7.3-py39h6e9494a_0.tar.bz2#4b6106bc0053cdc179919ee4e706ad7e
 https://conda.anaconda.org/conda-forge/osx-64/jedi-0.18.0-py39h6e9494a_2.tar.bz2#e744e49642242ea6ab59b56d11df9466
 https://conda.anaconda.org/conda-forge/osx-64/keyring-22.3.0-py39h6e9494a_0.tar.bz2#acd402160d64c82743b4d64cb0c2b652
 https://conda.anaconda.org/conda-forge/osx-64/markupsafe-1.1.1-py39hcbf5805_3.tar.bz2#61c917431de9a4f98044c1e97b167995
@@ -89,7 +89,7 @@ https://conda.anaconda.org/conda-forge/noarch/pyopenssl-20.0.1-pyhd8ed1ab_0.tar.
 https://conda.anaconda.org/conda-forge/noarch/jupyterlab_pygments-0.1.2-pyh9f0ad1d_0.tar.bz2#2cbd910890bb328e8959246a1e16fac7
 https://conda.anaconda.org/conda-forge/noarch/nbformat-5.1.2-pyhd8ed1ab_1.tar.bz2#9633dbb668ac1f9266427672816899dc
 https://conda.anaconda.org/conda-forge/noarch/readme_renderer-27.0-pyh9f0ad1d_0.tar.bz2#38446dff7f69efd3fab98ab4dc68c0c8
-https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.3-pyhd8ed1ab_0.tar.bz2#25573e57774dd54cfa848e5dd44503ed
+https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.4-pyhd8ed1ab_0.tar.bz2#d7b20b328e23d993994ea02077c009c0
 https://conda.anaconda.org/conda-forge/noarch/wcwidth-0.2.5-pyh9f0ad1d_2.tar.bz2#5266fcd697043c59621fda522b3d78ee
 https://conda.anaconda.org/conda-forge/noarch/nbclient-0.5.3-pyhd8ed1ab_0.tar.bz2#67f12831640fde52fe9be1bbc6b699e7
 https://conda.anaconda.org/conda-forge/noarch/prompt-toolkit-3.0.17-pyha770c72_0.tar.bz2#d3ff1dc51da26f2757c8d95c3522138e
