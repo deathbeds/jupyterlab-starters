@@ -374,7 +374,7 @@ def task_test():
 
     yield dict(
         name="atest",
-        task_dep=["preflight"],
+        task_dep=["preflight", "lint:rf:rflint"],
         file_dep=[*P.ALL_ROBOT, *P.NPM_TARBALLS.values(), P.WHEEL],
         actions=[(U.atest, [])],
         targets=[

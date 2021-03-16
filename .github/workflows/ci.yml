@@ -15,6 +15,7 @@ env:
   # our stuff
   SKIP_CONDA_PREFLIGHT: 1
   CACHE_EPOCH: 0
+  ATEST_RETRIES: 3
 
 jobs:
   build:
@@ -52,8 +53,11 @@ jobs:
 
       - name: build
         shell: bash -l {0}
-        run: |
-          doit -n8 || doit || exit 1
+        run: doit -n8 || echo "uh oh, will try again"
+
+      - name: build
+        shell: bash -l {0}
+        run: doit
 
       - name: publish (reports)
         if: ${{ always() }}
