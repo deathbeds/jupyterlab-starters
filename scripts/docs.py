@@ -43,7 +43,8 @@ All JSON Schema
 ROOT = Path(__file__).parent.parent
 SCHEMA_SRC = ROOT / "src" / "jupyter_starters" / "schema"
 DOCS = ROOT / "docs"
-DOCS_BUILD = DOCS / "_build"
+BUILD = ROOT / "build"
+DOCS_BUILD = BUILD / "docs"
 SCHEMA_DOCS = DOCS / "schema"
 RGH = "https://raw.githubusercontent.com"
 SCHEMA_STEM = f"{RGH}/deathbeds/jupyterlab-starters/master/src/jupyter_starters/schema/"
@@ -133,7 +134,7 @@ def check_links():
         tdp = Path(tmp)
         dest = tdp / "a" / "deep" / "path"
         dest.parent.mkdir(parents=True)
-        shutil.copytree(DOCS / "_build" / "html", dest)
+        shutil.copytree(DOCS_BUILD / "html", dest)
         (dest / "pytest.ini").write_text(ini)
 
         return call(["pytest"], cwd=dest)

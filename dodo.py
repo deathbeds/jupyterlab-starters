@@ -386,6 +386,22 @@ def task_test():
 def task_docs():
     """build documentation"""
 
+    yield dict(
+        name="all",
+        task_dep=["dev:pip:check"],
+        **U.run_in(
+            "docs",
+            [["python", "-m", "scripts.docs"]],
+            file_dep=[
+                P.SCRIPTS / "docs.py",
+                *[p for p in P.DOCS.rglob("*") if not p.is_dir()],
+                *P.PY_SRC,
+                *P.PY_SCHEMA.rglob("*.json"),
+            ],
+            targets=[P.DOCS_INDEX],
+        ),
+    )
+
 
 class C:
     """constants"""
@@ -473,6 +489,8 @@ class P:
     HTML_COV = BUILD / "coverage"
     COVERAGE = ROOT / ".coverage"
     ATEST_OUT = BUILD / "atest"
+    DOCS_OUT = BUILD / "docs"
+    DOCS_INDEX = DOCS_OUT / "html/index.html"
 
     # js stuff
     TSBUILDINFO = PACKAGES / "_meta/tsconfig.tsbuildinfo"
