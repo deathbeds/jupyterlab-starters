@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+env:
+  PYTHONIOENCODING: utf-8
+  PYTHONUNBUFFERED: '1'
+  PIP_DISABLE_PIP_VERSION_CHECK: '1'
+  # our stuff
+  SKIP_CONDA_PREFLIGHT: 1
+  CACHE_EPOCH: 0
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu]
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v2
