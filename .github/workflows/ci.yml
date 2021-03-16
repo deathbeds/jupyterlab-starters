@@ -53,7 +53,7 @@ jobs:
 
       - name: build
         shell: bash -l {0}
-        run: doit -n8 || echo "uh oh, will try again"
+        run: doit -n8 || doit list --all --status
 
       - name: build
         shell: bash -l {0}
