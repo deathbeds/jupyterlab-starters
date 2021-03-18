@@ -289,7 +289,9 @@ def task_dev():
     yield dict(
         name="pip:install",
         **U.run_in(
-            "utest", [C.INSTALL], file_dep=[P.SETUP_CFG, P.SETUP_PY, P.EXT_PACKAGE_JSON]
+            "utest",
+            [[*C.INSTALL, "-e", ".", "--ignore-installed", "--no-deps"]],
+            file_dep=[P.SETUP_CFG, P.SETUP_PY, P.EXT_PACKAGE_JSON],
         ),
     )
 
@@ -334,8 +336,8 @@ def task_prod():
         name="pip:install",
         **U.run_in(
             "utest",
-            [["python", "-m", "pip", "install", P.WHEEL]],
-            file_dep=[P.WHEEL, P.SDIST],
+            [[*C.INSTALL, P.WHEEL]],
+            file_dep=[P.WHEEL],
         ),
     )
 
@@ -564,7 +566,7 @@ class C:
     THIS_ATEST_STEM = f"{THIS_SUBDIR}-py{THIS_PY}"
 
     PIP = ["python", "-m", "pip"]
-    INSTALL = [*PIP, "install", "-e", ".", "--ignore-installed", "--no-deps"]
+    INSTALL = [*PIP, "install"]
     FREEZE = [*PIP, "freeze"]
     CHECK = [*PIP, "check"]
 
