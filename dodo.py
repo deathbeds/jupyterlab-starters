@@ -331,7 +331,7 @@ def task_prod():
         return
 
     yield dict(
-        name="install",
+        name="pip:install",
         **U.run_in(
             "utest",
             [
@@ -353,7 +353,7 @@ def task_prod():
     yield dict(
         name="pip:check",
         task_dep=["prod:pip:install"],
-        **U.run_in("utest", [C.FREEZE, C.CHECK1]),
+        **U.run_in("utest", [C.FREEZE, C.CHECK]),
     )
 
 
