@@ -14,8 +14,9 @@ env:
   PIP_DISABLE_PIP_VERSION_CHECK: '1'
   # our stuff
   SKIP_JLPM_IF_CACHED: 1
-  CACHE_EPOCH: 2
+  CACHE_EPOCH: 3
   ATEST_RETRIES: 3
+  DIST_NAME: jupyter-starters dist ${{ github.run_number }}
 
 jobs:
   build:
@@ -24,6 +25,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu]
+    env:
+      LOCKFILE: .github/locks/build-linux-64-3.9.conda.lock
     steps:
       - name: git checkout
         uses: actions/checkout@v2
@@ -32,7 +35,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/conda_pkgs_dir
-          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-${{ hashFiles('.github/locks/build-linux-64-3.9.conda.lock') }}
+          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-${{ hashFiles(env.LOCKFILE) }}
           restore-keys: |
             ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-
 
@@ -46,7 +49,7 @@ jobs:
       - name: base env (conda)
         uses: conda-incubator/setup-miniconda@master
         with:
-          environment-file: .github/locks/docs-linux-64-3.9.conda.lock
+          environment-file: ${{ env.LOCKFILE }}
           miniforge-variant: Mambaforge
           use-mamba: true
           use-only-tar-bz2: true
@@ -62,7 +65,7 @@ jobs:
       - name: publish (dists)
         uses: actions/upload-artifact@v2
         with:
-          name: jupyter-starters dist ${{ github.run_number }}
+          name: ${{ env.DIST_NAME }}
           path: ./dist
 
   docs:
@@ -70,6 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCS_IN_CI: 1
+      LOCKFILE: .github/locks/docs-linux-64-3.9.conda.lock
     steps:
       - name: git checkout
         uses: actions/checkout@v2
@@ -78,7 +82,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/conda_pkgs_dir
-          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-${{ hashFiles('.github/locks/docs-linux-64-3.9.conda.lock') }}
+          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-${{ hashFiles(env.LOCKFILE) }}
           restore-keys: |
             ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-
 
@@ -92,7 +96,7 @@ jobs:
       - name: base env (conda)
         uses: conda-incubator/setup-miniconda@master
         with:
-          environment-file: .github/locks/docs-linux-64-3.9.conda.lock
+          environment-file: ${{ env.LOCKFILE }}
           miniforge-variant: Mambaforge
           use-mamba: true
           use-only-tar-bz2: true
@@ -100,7 +104,7 @@ jobs:
       - name: download (dists)
         uses: actions/download-artifact@v2
         with:
-          name: jupyter-starters dist ${{ github.run_number }}
+          name: ${{ env.DIST_NAME }}
           path: ./dist
 
       - name: docs/test
@@ -133,6 +137,7 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     env:
       TEST_IN_CI: 1
+      LOCKFILE: .github/locks/atest-${{ matrix.subdir }}-${{ matrix.py }}.conda.lock
     strategy:
       fail-fast: false
       matrix:
@@ -156,14 +161,14 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/conda_pkgs_dir
-          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-test-${{ hashFiles('.github/locks/atest-${{ matrix.subdir }}-${{ matrix.py }}.conda.lock') }}
+          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-test-${{ hashFiles(env.LOCKFILE) }}
           restore-keys: |
             ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-test-
 
       - name: base env (conda)
         uses: conda-incubator/setup-miniconda@master
         with:
-          environment-file: .github/locks/atest-${{ matrix.subdir }}-${{ matrix.py }}.conda.lock
+          environment-file: ${{ env.LOCKFILE }}
           miniforge-variant: Mambaforge
           use-mamba: true
           use-only-tar-bz2: true
