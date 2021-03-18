@@ -333,18 +333,7 @@ def task_prod():
         name="pip:install",
         **U.run_in(
             "utest",
-            [
-                [
-                    "python",
-                    "-m",
-                    "pip",
-                    "install",
-                    "--no-index",
-                    "--find-links",
-                    P.DIST,
-                    "jupyter_starters",
-                ]
-            ],
+            [["python", "-m", "pip", "install", P.WHEEL]],
             file_dep=[P.WHEEL, P.SDIST],
         ),
     )
