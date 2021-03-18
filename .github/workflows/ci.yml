@@ -92,7 +92,7 @@ jobs:
       - name: base env (conda)
         uses: conda-incubator/setup-miniconda@master
         with:
-          environment-file: .github/locks/docs-linmux-64-3.9.conda.lock
+          environment-file: .github/locks/docs-linux-64-3.9.conda.lock
           miniforge-variant: Mambaforge
           use-mamba: true
           use-only-tar-bz2: true
@@ -126,7 +126,7 @@ jobs:
     needs: [build]
     runs-on: ${{ matrix.os }}-latest
     env:
-      TESTING_IN_CI: 1
+      TEST_IN_CI: 1
     strategy:
       fail-fast: false
       matrix:

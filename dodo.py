@@ -50,6 +50,9 @@ def task_env():
 
 def task_lint():
     """improve and ensure code quality"""
+    if C.TEST_IN_CI or C.DOCS_IN_CI:
+        return
+
     yield dict(
         name="py:isort:black",
         **U.run_in(
@@ -123,6 +126,9 @@ def task_lint():
 
 
 def task_jlpm():
+    if C.TEST_IN_CI or C.DOCS_IN_CI:
+        return
+
     if C.SKIP_JLPM_IF_CACHED and P.YARN_INTEGRITY.exists():
         return
 
@@ -141,6 +147,9 @@ def task_jlpm():
 
 def task_build():
     """build intermediate artifacts"""
+    if C.TEST_IN_CI or C.DOCS_IN_CI:
+        return
+
     yield dict(
         name="lerna:pre",
         **U.run_in(
@@ -208,6 +217,9 @@ def task_build():
 
 def task_dist():
     """prepare release artifacts"""
+    if C.TEST_IN_CI or C.DOCS_IN_CI:
+        return
+
     yield dict(
         name="pypi",
         **U.run_in(
@@ -271,6 +283,9 @@ def task_dist():
 
 def task_dev():
     """prepare local development"""
+    if C.TEST_IN_CI or C.DOCS_IN_CI:
+        return
+
     pip = ["python", "-m", "pip"]
     install = [*pip, "install", "-e", ".", "--ignore-installed", "--no-deps"]
     freeze = [*pip, "freeze"]
@@ -315,6 +330,31 @@ def task_dev():
     )
 
 
+def task_install():
+    if not (C.TEST_IN_CI or C.DOCS_IN_CI):
+        return
+
+    yield dict(
+        name="pip",
+        **U.run_in(
+            "utest",
+            [
+                [
+                    "python",
+                    "-m",
+                    "pip",
+                    "install",
+                    "--no-index",
+                    "--find-links",
+                    P.DIST,
+                    "jupyter_starters",
+                ]
+            ],
+            file_dep=[P.WHEEL, P.SDIST],
+        ),
+    )
+
+
 def task_lab():
     """run JupyterLab "normally" (not watching sources)"""
     if not C.RUNNING_LOCALLY:
@@ -346,6 +386,9 @@ def task_lab():
 
 def task_integrity():
     """ensure integrity of the repo"""
+    if C.TEST_IN_CI or C.DOCS_IN_CI:
+        return
+
     yield dict(
         name="all",
         **U.run_in(
@@ -358,7 +401,6 @@ def task_integrity():
 
 def task_preflight():
     """ensure various stages are ready for development"""
-
     yield dict(
         name="all",
         task_dep=["dev:ext:lab", "dev:ext:server"],
@@ -425,6 +467,8 @@ def task_test():
 
 
 def task_docs():
+    if C.TEST_IN_CI:
+        return
     """build documentation"""
     yield dict(
         name="schema",
@@ -494,7 +538,9 @@ class C:
     DEFAULT_PY = "3.9"
     SKIP_LOCKS = bool(json.loads(os.environ.get("SKIP_LOCKS", "1")))
     CI = bool(json.loads(os.environ.get("CI", "0")))
-    SKIP_JLPM_IF_CACHED = bool(json.loads(os.environ.get("CI", "1")))
+    SKIP_JLPM_IF_CACHED = bool(json.loads(os.environ.get("SKIP_JLPM_IF_CACHED", "1")))
+    DOCS_IN_CI = bool(json.loads(os.environ.get("DOCS_IN_CI", "0")))
+    TEST_IN_CI = bool(json.loads(os.environ.get("TEST_IN_CI", "0")))
     RUNNING_LOCALLY = not CI
     RFLINT_RULES = [
         "LineTooLong:200",
