@@ -286,21 +286,17 @@ def task_dev():
     if C.TEST_IN_CI or C.DOCS_IN_CI:
         return
 
-    pip = ["python", "-m", "pip"]
-    install = [*pip, "install", "-e", ".", "--ignore-installed", "--no-deps"]
-    freeze = [*pip, "freeze"]
-    check = [*pip, "check"]
     yield dict(
         name="pip:install",
         **U.run_in(
-            "utest", [install], file_dep=[P.SETUP_CFG, P.SETUP_PY, P.EXT_PACKAGE_JSON]
+            "utest", [C.INSTALL], file_dep=[P.SETUP_CFG, P.SETUP_PY, P.EXT_PACKAGE_JSON]
         ),
     )
 
     yield dict(
         name="pip:check",
         task_dep=["dev:pip:install"],
-        **U.run_in("utest", [freeze, check], file_dep=[P.SETUP_CFG, P.SETUP_PY]),
+        **U.run_in("utest", [C.FREEZE, C.CHECK], file_dep=[P.SETUP_CFG, P.SETUP_PY]),
     )
 
     yield dict(
@@ -330,12 +326,12 @@ def task_dev():
     )
 
 
-def task_install():
+def task_prod():
     if not (C.TEST_IN_CI or C.DOCS_IN_CI):
         return
 
     yield dict(
-        name="pip",
+        name="install",
         **U.run_in(
             "utest",
             [
@@ -352,6 +348,12 @@ def task_install():
             ],
             file_dep=[P.WHEEL, P.SDIST],
         ),
+    )
+
+    yield dict(
+        name="pip:check",
+        task_dep=["prod:pip:install"],
+        **U.run_in("utest", [C.FREEZE, C.CHECK1]),
     )
 
 
@@ -401,9 +403,14 @@ def task_integrity():
 
 def task_preflight():
     """ensure various stages are ready for development"""
+    if C.RUNNING_LOCALLY:
+        task_dep = ["dev:ext:lab", "dev:ext:server"]
+    else:
+        task_dep = ["prod:pip:check"]
+
     yield dict(
         name="all",
-        task_dep=["dev:ext:lab", "dev:ext:server"],
+        task_dep=task_dep,
         **U.run_in(
             "utest",
             [["python", "-m", "scripts.preflight"]],
@@ -434,9 +441,15 @@ def task_test():
         "--self-contained-html",
         *C.UTEST_ARGS,
     ]
+
+    if C.RUNNING_LOCALLY:
+        task_dep = ["dev:pip:check"]
+    else:
+        task_dep = ["prod:pip:check"]
+
     utask = dict(
         name="unit",
-        task_dep=["dev:pip:install"],
+        task_dep=task_dep,
         uptodate=[doit.tools.config_changed({"args": str(utest_args)})],
         **U.run_in(
             "utest",
@@ -455,9 +468,14 @@ def task_test():
 
     yield utask
 
+    if C.RUNNING_LOCALLY:
+        task_dep = ["preflight", "lint:rf:rflint"]
+    else:
+        task_dep = ["prod:install"]
+
     yield dict(
         name="atest",
-        task_dep=["preflight", "lint:rf:rflint"],
+        task_dep=task_dep,
         file_dep=[*P.ALL_ROBOT, *P.NPM_TARBALLS.values(), P.WHEEL],
         actions=[(U.atest, [])],
         targets=[
@@ -551,6 +569,11 @@ class C:
     ATEST_RETRIES = int(os.environ.get("ATEST_RETRIES", "1"))
     ATEST_ARGS = safe_load(os.environ.get("ATEST_ARGS", "[]"))
     THIS_ATEST_STEM = f"{THIS_SUBDIR}-py{THIS_PY}"
+
+    PIP = ["python", "-m", "pip"]
+    INSTALL = [*PIP, "install", "-e", ".", "--ignore-installed", "--no-deps"]
+    FREEZE = [*PIP, "freeze"]
+    CHECK = [*PIP, "check"]
 
 
 class P:
