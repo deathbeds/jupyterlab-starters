@@ -97,6 +97,12 @@ jobs:
           use-mamba: true
           use-only-tar-bz2: true
 
+      - name: download (dists)
+        uses: actions/download-artifact@v2
+        with:
+          name: jupyter-starters dist ${{ github.run_number }}
+          path: ./dist
+
       - name: docs/test
         shell: bash -l {0}
         run: doit -n8 test docs || doit list --all --status
@@ -161,6 +167,12 @@ jobs:
           miniforge-variant: Mambaforge
           use-mamba: true
           use-only-tar-bz2: true
+
+      - name: download (dists)
+        uses: actions/download-artifact@v2
+        with:
+          name: jupyter-starters dist ${{ github.run_number }}
+          path: ./dist
 
       - name: docs/test
         shell: bash -l {0}
