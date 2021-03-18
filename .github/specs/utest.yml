@@ -1,8 +1,5 @@
 dependencies:
   - pytest
   - pytest-asyncio
-  - pytest-black
   - pytest-cov
-  - pytest-flake8
   - pytest-html
-  - pytest-mypy

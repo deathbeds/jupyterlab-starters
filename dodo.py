@@ -413,6 +413,7 @@ def task_test():
     html_cov = P.HTML_COV / f"{C.THIS_SUBDIR}-py{C.THIS_PY}"
     utest_args = [
         "pytest",
+        "-vv",
         "--pyargs",
         "jupyter_starters",
         "--cov=jupyter_starters",
@@ -421,9 +422,6 @@ def task_test():
         "--no-cov-on-fail",
         "-p",
         "no:warnings",
-        "--flake8",
-        "--black",
-        "--mypy",
         "--html",
         html_utest,
         "--self-contained-html",

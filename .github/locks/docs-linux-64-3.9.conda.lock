@@ -1,5 +1,5 @@
 # platform: linux-64
-# env_hash: c0f3ab06071dc7d62a51e900c2035e2be734162f23bcd6f130a38448d67299a4
+# env_hash: 8d0e6616ad1b92c02585cb21afe83a9c426ccce9ea5f2c0cd3167914dc797f4b
 @EXPLICIT
 https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2#d7c89558ba9fa0495403155b64376d81
 https://conda.anaconda.org/conda-forge/linux-64/ca-certificates-2020.12.5-ha878542_0.tar.bz2#7eb5d4ffeee663caa1635cd67071bc1b
@@ -84,7 +84,6 @@ https://conda.anaconda.org/conda-forge/noarch/colorama-0.4.4-pyh9f0ad1d_0.tar.bz
 https://conda.anaconda.org/conda-forge/noarch/dataclasses-0.8-pyhc8e2a94_1.tar.bz2#28e0de0ecba81334619a777fdc00febc
 https://conda.anaconda.org/conda-forge/noarch/decorator-4.4.2-py_0.tar.bz2#d2eabb9cabd212e1ec6a9463bd846243
 https://conda.anaconda.org/conda-forge/noarch/defusedxml-0.7.1-pyhd8ed1ab_0.tar.bz2#961b3a227b437d82ad7054484cfa71b2
-https://conda.anaconda.org/conda-forge/noarch/filelock-3.0.12-pyh9f0ad1d_0.tar.bz2#7544ed05bbbe9bb687bc9bcbe4d6cb46
 https://conda.anaconda.org/conda-forge/linux-64/glib-2.66.7-h9c3ff4c_1.tar.bz2#83a66185b0f99b33ba9de260fc0f51f4
 https://conda.anaconda.org/conda-forge/noarch/idna-2.10-pyh9f0ad1d_0.tar.bz2#f95a12b4f435aae6680fe55ae2eb1b06
 https://conda.anaconda.org/conda-forge/noarch/imagesize-1.2.0-py_0.tar.bz2#5879bd2c4b399a5072468e5fe587bf1b
@@ -204,10 +203,8 @@ https://conda.anaconda.org/conda-forge/noarch/pip-21.0.1-pyhd8ed1ab_0.tar.bz2#84
 https://conda.anaconda.org/conda-forge/noarch/pygments-2.8.1-pyhd8ed1ab_0.tar.bz2#196e0cff141677f430fc06eb0d0ad94d
 https://conda.anaconda.org/conda-forge/noarch/pyopenssl-20.0.1-pyhd8ed1ab_0.tar.bz2#92371c25994d0f5d28a01c1fb75ebf86
 https://conda.anaconda.org/conda-forge/linux-64/pytest-asyncio-0.14.0-py39hf3d152e_0.tar.bz2#a57bf9d12577bd7fe282a78974aec1c0
-https://conda.anaconda.org/conda-forge/noarch/pytest-black-0.3.12-py_0.tar.bz2#4fd4c25b6bacd90856cb0ec8d5dc35ed
 https://conda.anaconda.org/conda-forge/noarch/pytest-cov-2.11.1-pyh44b312d_0.tar.bz2#67e256d6c8a3082d3f29f8cefce17bbf
 https://conda.anaconda.org/conda-forge/noarch/pytest-metadata-1.11.0-pyhd3deb0d_0.tar.bz2#2e92f7ccb8d9a03966fc36e3861522ec
-https://conda.anaconda.org/conda-forge/noarch/pytest-mypy-0.8.0-pyhd8ed1ab_0.tar.bz2#4e81c96e5f875c09e5b9f999035b9d8e
 https://conda.anaconda.org/conda-forge/linux-64/secretstorage-3.3.1-py39hf3d152e_0.tar.bz2#13af3872e0244e8b105031ad425c9ff3
 https://conda.anaconda.org/conda-forge/linux-64/graphviz-2.47.0-h93c640b_0.tar.bz2#024e8a6f78f55f175b2afcc24e02d427
 https://conda.anaconda.org/conda-forge/noarch/jinja2-time-0.2.0-py_2.tar.bz2#6e8d28fac1864c623fd4402168ca4d46
@@ -215,7 +212,6 @@ https://conda.anaconda.org/conda-forge/noarch/jupyterlab_pygments-0.1.2-pyh9f0ad
 https://conda.anaconda.org/conda-forge/linux-64/keyring-23.0.0-py39hf3d152e_0.tar.bz2#447ed1120e932ee2c0831a7b9f2540a9
 https://conda.anaconda.org/conda-forge/noarch/nbformat-5.1.2-pyhd8ed1ab_1.tar.bz2#9633dbb668ac1f9266427672816899dc
 https://conda.anaconda.org/conda-forge/linux-64/pylint-2.7.2-py39hf3d152e_0.tar.bz2#b27da916fcc184c182c74051b34197fd
-https://conda.anaconda.org/conda-forge/noarch/pytest-flake8-1.0.7-pyhd3deb0d_0.tar.bz2#c0660652e9542e5ae84cfd8f0baa13dd
 https://conda.anaconda.org/conda-forge/noarch/pytest-html-3.1.1-pyhd8ed1ab_0.tar.bz2#88b638753087926088c778ea5b2f4b97
 https://conda.anaconda.org/conda-forge/noarch/readme_renderer-27.0-pyh9f0ad1d_0.tar.bz2#38446dff7f69efd3fab98ab4dc68c0c8
 https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.4-pyhd8ed1ab_0.tar.bz2#d7b20b328e23d993994ea02077c009c0
