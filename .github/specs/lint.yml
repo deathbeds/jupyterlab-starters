@@ -4,5 +4,7 @@ dependencies:
   - isort
   - mypy
   - pylint
+  - pytest
   - robotframework-lint
+  - robotframework-seleniumlibrary
   - ruamel_yaml

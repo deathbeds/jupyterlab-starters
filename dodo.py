@@ -20,6 +20,10 @@ def task_lock():
     """generate conda locks for all envs"""
     if C.SKIP_LOCKS:
         return
+
+    yield U.lock("build", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["node", "lab", "lint"])
+    yield U.lock("binder", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["run", "lab"])
+
     for subdir in C.SUBDIRS:
         for py in C.PYTHONS:
             yield U.lock("atest", py, subdir, ["run", "lab", "utest"])
@@ -29,9 +33,6 @@ def task_lock():
             subdir,
             ["node", "build", "lint", "atest", "utest", "lab", "run"],
         )
-        if subdir == "linux-64":
-            yield U.lock("build", C.DEFAULT_PY, subdir, ["node", "lab", "lint"])
-            yield U.lock("binder", C.DEFAULT_PY, subdir, ["run", "lab"])
 
 
 def task_env():
@@ -545,6 +546,7 @@ class C:
     THIS_PY = "{}.{}".format(*sys.version_info)
     PYTHONS = ["3.6", "3.9"]
     DEFAULT_PY = "3.9"
+    DEFAULT_SUBDIR = "linux-64"
     SKIP_LOCKS = bool(json.loads(os.environ.get("SKIP_LOCKS", "1")))
     CI = bool(json.loads(os.environ.get("CI", "0")))
     SKIP_JLPM_IF_CACHED = bool(json.loads(os.environ.get("SKIP_JLPM_IF_CACHED", "1")))
