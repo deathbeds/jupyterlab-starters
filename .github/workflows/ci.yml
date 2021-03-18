@@ -146,10 +146,13 @@ jobs:
         include:
           - os: ubuntu
             subdir: linux-64
+            shell: bash -l {0}
           - os: macos
             subdir: osx-64
+            shell: bash -l {0}
           - os: windows
             subdir: win-64
+            shell: cmd /C CALL {0}
         exclude:
           - os: ubuntu
             py: 3.9
@@ -180,11 +183,7 @@ jobs:
           path: ./dist
 
       - name: docs/test
-        shell: bash -l {0}
-        run: doit -n8 test || doit list --all --status
-
-      - name: docs/test (again)
-        shell: bash -l {0}
+        shell: ${{ matrix.shell }}
         run: doit test
 
       - name: publish (reports)
