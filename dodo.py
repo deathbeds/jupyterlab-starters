@@ -470,7 +470,7 @@ def task_test():
 
     task_dep = ["preflight"]
 
-    if not C.DOCS_IN_CI or C.TEST_IN_CI:
+    if not (C.DOCS_IN_CI or C.TEST_IN_CI):
         task_dep += ["lint:rf:rflint"]
 
     yield dict(
@@ -498,9 +498,14 @@ def task_docs():
         ),
     )
 
+    if C.DOCS_IN_CI:
+        task_dep = ["prod:pip:check"]
+    else:
+        task_dep = ["dev:pip:check"]
+
     yield dict(
         name="sphinx",
-        task_dep=["dev:pip:check"],
+        task_dep=task_dep,
         **U.run_in(
             "docs",
             [["python", "-m", "scripts.docs", "--schema=0", "--check-links=0"]],
