@@ -924,7 +924,7 @@ class R(doit.reporter.ConsoleReporter):
     def outtro(self, task, emoji, status):
         title = task.title()
         start, end = self._timings[title] = [
-            *self._timings[title],
+            *self._timings.get(title, []),
             datetime.now(),
         ]
         delta = end - start
