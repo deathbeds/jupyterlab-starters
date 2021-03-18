@@ -21,13 +21,12 @@ https://conda.anaconda.org/conda-forge/win-64/jpeg-9d-he774522_0.tar.bz2#093a3f2
 https://conda.anaconda.org/conda-forge/win-64/libffi-3.3-h0e60522_2.tar.bz2#b7d85288d380da17d1024358f18e9b62
 https://conda.anaconda.org/conda-forge/win-64/libiconv-1.16-he774522_0.tar.bz2#bdfeadc9348e4d9fbe4821e81bf8f221
 https://conda.anaconda.org/conda-forge/win-64/libsodium-1.0.18-h62dcd97_1.tar.bz2#5e0709275ea686866988ac69c3850d35
-https://conda.anaconda.org/conda-forge/win-64/libwebp-base-1.2.0-h8ffe710_0.tar.bz2#00525396457ebab552866f33e6d18775
+https://conda.anaconda.org/conda-forge/win-64/libwebp-base-1.2.0-h8ffe710_2.tar.bz2#39dd3497178fd93c31898a24c53bbfc7
 https://conda.anaconda.org/conda-forge/win-64/lz4-c-1.9.3-h8ffe710_0.tar.bz2#5c9a617ed4fbd41f8c564fab236dda60
 https://conda.anaconda.org/conda-forge/win-64/m2w64-gcc-libs-core-5.3.0-7.tar.bz2#4289d80fb4d272f1f3b56cfe87ac90bd
 https://conda.anaconda.org/conda-forge/win-64/openssl-1.1.1j-h8ffe710_0.tar.bz2#3f98c6e8d40701b975943feda6fd2cfc
 https://conda.anaconda.org/conda-forge/win-64/pcre-8.44-ha925a31_0.tar.bz2#a958ae62e7723fa5c0720d78efed5e7f
 https://conda.anaconda.org/conda-forge/win-64/pixman-0.40.0-h8ffe710_0.tar.bz2#32b45d3fcffddc84cc1a014a0b5f0d58
-https://conda.anaconda.org/conda-forge/win-64/rxspencer-3.9.0-h8ffe710_0.tar.bz2#d17defe5cdf83124ed4c8c2020c3b837
 https://conda.anaconda.org/conda-forge/win-64/sqlite-3.34.0-h8ffe710_0.tar.bz2#0887d420b945a5342cd03429d475658c
 https://conda.anaconda.org/conda-forge/win-64/xz-5.2.5-h62dcd97_1.tar.bz2#eabcbfedd14d7c18a514afca09ea0ebb
 https://conda.anaconda.org/conda-forge/win-64/yaml-0.2.5-he774522_0.tar.bz2#d41c34441d8bbb6d141e691ae7bccf35
@@ -161,7 +160,6 @@ https://conda.anaconda.org/conda-forge/noarch/commonmark-0.9.1-py_0.tar.bz2#6aa0
 https://conda.anaconda.org/conda-forge/win-64/cryptography-3.4.6-py39hd8d06c1_0.tar.bz2#75d14ea93558a4cdfd0283f610f2f952
 https://conda.anaconda.org/conda-forge/noarch/importlib_metadata-3.7.3-hd8ed1ab_0.tar.bz2#ad08b40b6f4550b6fad9806d16df8050
 https://conda.anaconda.org/conda-forge/win-64/jupyter_core-4.7.1-py39hcbf5309_0.tar.bz2#1b2f4d216f73727efc1f688b9dd4f348
-https://conda.anaconda.org/conda-forge/win-64/keyring-22.3.0-py39hcbf5309_0.tar.bz2#74632e3b7ab099db14c468528c72b0d0
 https://conda.anaconda.org/conda-forge/win-64/libxcb-1.13-hcd874cb_1003.tar.bz2#ad49ca9a2c88b8bd38c22181d60b4e56
 https://conda.anaconda.org/conda-forge/noarch/markdown-3.3.4-pyhd8ed1ab_0.tar.bz2#b8054f74fbed2b282f032219f114421a
 https://conda.anaconda.org/conda-forge/noarch/mypy-0.812-pyhd8ed1ab_0.tar.bz2#517ce8d8863ba1d315ea99854f9e8449
@@ -180,6 +178,7 @@ https://conda.anaconda.org/conda-forge/noarch/jinja2-2.11.3-pyh44b312d_0.tar.bz2
 https://conda.anaconda.org/conda-forge/noarch/jsonschema-3.2.0-pyhd8ed1ab_3.tar.bz2#66125e28711d8ffc04a207a2b170316d
 https://conda.anaconda.org/conda-forge/noarch/jupyter-packaging-0.7.12-pyhd8ed1ab_0.tar.bz2#ab2fd67d07b63afe5ea6db6c5f32b5fd
 https://conda.anaconda.org/conda-forge/noarch/jupyter_client-6.1.12-pyhd8ed1ab_0.tar.bz2#f58b38ddb9f94fa3cafea4ba2b17f93b
+https://conda.anaconda.org/conda-forge/win-64/keyring-23.0.0-py39hcbf5309_0.tar.bz2#0b70fe27fb572255d6e9b5ff258506a4
 https://conda.anaconda.org/conda-forge/noarch/livereload-2.6.3-pyh9f0ad1d_0.tar.bz2#b7190e3ec3eff52839434bf4698e2d62
 https://conda.anaconda.org/conda-forge/noarch/pip-21.0.1-pyhd8ed1ab_0.tar.bz2#849477e10d78cbc283c78fd53bfbb567
 https://conda.anaconda.org/conda-forge/noarch/pygments-2.8.1-pyhd8ed1ab_0.tar.bz2#196e0cff141677f430fc06eb0d0ad94d
@@ -213,7 +212,7 @@ https://conda.anaconda.org/conda-forge/win-64/nbconvert-6.0.7-py39hcbf5309_3.tar
 https://conda.anaconda.org/conda-forge/noarch/requests-toolbelt-0.9.1-py_0.tar.bz2#402668adee8fcba9a9c265cdc2a88f5a
 https://conda.anaconda.org/conda-forge/noarch/robotframework-seleniumlibrary-5.1.1-pyhd8ed1ab_0.tar.bz2#3eacc90d82d69cb1b78d6459be33fd8e
 https://conda.anaconda.org/conda-forge/noarch/sphinx-3.5.2-pyhd8ed1ab_0.tar.bz2#f0efd303f2d13fc085d910b91072cb5c
-https://conda.anaconda.org/conda-forge/win-64/graphviz-2.46.1-h08d4dcb_4.tar.bz2#3e379f46453b3fe5156adfe06c229491
+https://conda.anaconda.org/conda-forge/win-64/graphviz-2.47.0-h08d4dcb_0.tar.bz2#cc2a6278b741919bdc91e920d8149a24
 https://conda.anaconda.org/conda-forge/win-64/ipykernel-5.5.0-py39h832f523_1.tar.bz2#701e346d0b188288b679bfe9b182a753
 https://conda.anaconda.org/conda-forge/win-64/jupyter_server-1.4.1-py39hcbf5309_0.tar.bz2#19c261242452e67ff3e2b32e376e37ab
 https://conda.anaconda.org/conda-forge/noarch/nbsphinx-0.5.0-py_0.tar.bz2#aee9218e8d5ccbba0990a6683b1d0ba9
@@ -223,10 +222,10 @@ https://conda.anaconda.org/conda-forge/noarch/sphinx-autobuild-2021.3.14-pyhd8ed
 https://conda.anaconda.org/conda-forge/noarch/sphinx-autodoc-typehints-1.11.1-py_0.tar.bz2#c55b995a94ad51b4b71596573794ec1d
 https://conda.anaconda.org/conda-forge/noarch/sphinx-copybutton-0.3.1-pyhd8ed1ab_0.tar.bz2#decad13214a2a545944560eccf4a9815
 https://conda.anaconda.org/conda-forge/noarch/sphinx_rtd_theme-0.5.1-pyhd3deb0d_0.tar.bz2#c050f3a32c6e361917a54d10259b41bc
-https://conda.anaconda.org/conda-forge/win-64/twine-3.3.0-py39hcbf5309_1.tar.bz2#2bc18b45f5ba2a88ea1f3906549e6289
+https://conda.anaconda.org/conda-forge/noarch/twine-3.4.1-pyhd8ed1ab_0.tar.bz2#c7d4ab21a13c919f9ae59eae7bcebf2a
 https://conda.anaconda.org/conda-forge/noarch/jupyterlab_server-2.3.0-pyhd8ed1ab_0.tar.bz2#e1ab43655ba7ede6917e2daa37c7b217
 https://conda.anaconda.org/conda-forge/win-64/notebook-6.2.0-py39hcbf5309_0.tar.bz2#5d049ca1a0be80c3b3af88250a54d8b3
 https://conda.anaconda.org/conda-forge/noarch/python-graphviz-0.16-pyh243d235_2.tar.bz2#8a37b68eb6fd242a4112781c2f7b4b98
 https://conda.anaconda.org/conda-forge/noarch/sphinx-markdown-tables-0.0.15-pyhd3deb0d_0.tar.bz2#bf5af559bf01ec01729b73452585106e
 https://conda.anaconda.org/conda-forge/noarch/nbclassic-0.2.6-pyhd8ed1ab_0.tar.bz2#49be35e31b49012ea91fcd667ebdf4ad
-https://conda.anaconda.org/conda-forge/noarch/jupyterlab-3.0.10-pyhd8ed1ab_0.tar.bz2#655a5c763a38ffe047dab1fb7498564a
+https://conda.anaconda.org/conda-forge/noarch/jupyterlab-3.0.11-pyhd8ed1ab_0.tar.bz2#af8e216cd0b7f5e4f9adc17b68857d41

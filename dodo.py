@@ -22,9 +22,7 @@ def task_lock():
         return
     for subdir in C.SUBDIRS:
         for py in C.PYTHONS:
-            yield U.lock("utest", py, subdir, ["run", "lab"])
-        yield U.lock("build", C.DEFAULT_PY, subdir, ["node", "lab"])
-        yield U.lock("atest", C.DEFAULT_PY, subdir)
+            yield U.lock("atest", py, subdir, ["run", "lab", "utest"])
         yield U.lock(
             "docs",
             C.DEFAULT_PY,
@@ -32,6 +30,7 @@ def task_lock():
             ["node", "build", "lint", "atest", "utest", "lab", "run"],
         )
         if subdir == "linux-64":
+            yield U.lock("build", C.DEFAULT_PY, subdir, ["node", "lab", "lint"])
             yield U.lock("binder", C.DEFAULT_PY, subdir, ["run", "lab"])
 
 

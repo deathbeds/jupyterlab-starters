@@ -14,7 +14,7 @@ env:
   PIP_DISABLE_PIP_VERSION_CHECK: '1'
   # our stuff
   SKIP_JLPM_IF_CACHED: 1
-  CACHE_EPOCH: 1
+  CACHE_EPOCH: 2
   ATEST_RETRIES: 3
 
 jobs:
@@ -32,9 +32,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/conda_pkgs_dir
-          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-${{ hashFiles('.github/locks/docs-linux-64-3.9.conda.lock') }}
+          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-${{ hashFiles('.github/locks/build-linux-64-3.9.conda.lock') }}
           restore-keys: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-
 
       - name: cache (node_modules)
         uses: actions/cache@v2
@@ -156,14 +156,14 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/conda_pkgs_dir
-          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-test-${{ hashFiles('.github/locks/utest-${{ matrix.subdir }}-${{ matrix.py }}.conda.lock') }}
+          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-test-${{ hashFiles('.github/locks/atest-${{ matrix.subdir }}-${{ matrix.py }}.conda.lock') }}
           restore-keys: |
             ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-test-
 
       - name: base env (conda)
         uses: conda-incubator/setup-miniconda@master
         with:
-          environment-file: .github/locks/utest-${{ matrix.subdir }}-${{ matrix.py }}.conda.lock
+          environment-file: .github/locks/atest-${{ matrix.subdir }}-${{ matrix.py }}.conda.lock
           miniforge-variant: Mambaforge
           use-mamba: true
           use-only-tar-bz2: true
