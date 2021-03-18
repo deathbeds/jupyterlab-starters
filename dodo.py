@@ -565,7 +565,10 @@ class C:
     ATEST_ARGS = safe_load(os.environ.get("ATEST_ARGS", "[]"))
     THIS_ATEST_STEM = f"{THIS_SUBDIR}-py{THIS_PY}"
 
-    PY = "python.exe" if THIS_SUBDIR == "win-64" else "python"
+    if CI:
+        PY = sys.executable
+    else:
+        PY = "python.exe" if THIS_SUBDIR == "win-64" else "python"
     PIP = [PY, "-m", "pip"]
     INSTALL = [*PIP, "install"]
     FREEZE = [*PIP, "freeze"]
