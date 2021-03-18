@@ -77,7 +77,7 @@ def task_lint():
         name="rf:tidy",
         **U.run_in(
             "docs",
-            [["python", "-m", "robot.tidy", "--inplace", *P.ALL_ROBOT]],
+            [[C.PY, "-m", "robot.tidy", "--inplace", *P.ALL_ROBOT]],
             file_dep=P.ALL_ROBOT,
         ),
     )
@@ -225,8 +225,8 @@ def task_dist():
         **U.run_in(
             "build",
             [
-                ["python", "setup.py", "sdist"],
-                ["python", "setup.py", "bdist_wheel"],
+                [C.PY, "setup.py", "sdist"],
+                [C.PY, "setup.py", "bdist_wheel"],
                 ["twine", "check", "dist/*.whl", "dist/*.tar.gz"],
             ],
             file_dep=[
@@ -386,7 +386,7 @@ def task_integrity():
         name="all",
         **U.run_in(
             "utest",
-            [["python", "-m", "scripts.integrity"]],
+            [[C.PY, "-m", "scripts.integrity"]],
             file_dep=[P.README, P.CHANGELOG, P.SCRIPTS / "integrity.py"],
         ),
     )
@@ -404,7 +404,7 @@ def task_preflight():
         task_dep=task_dep,
         **U.run_in(
             "utest",
-            [["python", "-m", "scripts.preflight"]],
+            [[C.PY, "-m", "scripts.preflight"]],
             file_dep=[P.SCRIPTS / "preflight.py"],
         ),
     )
@@ -481,7 +481,7 @@ def task_docs():
         name="schema",
         **U.run_in(
             "docs",
-            [["python", "-m", "scripts.docs", "--only-schema=1"]],
+            [[C.PY, "-m", "scripts.docs", "--only-schema=1"]],
             file_dep=[P.SCRIPTS / "docs.py", *P.PY_SCHEMA.rglob("*.json")],
             targets=[P.DOCS_SCHEMA_INDEX],
         ),
@@ -497,7 +497,7 @@ def task_docs():
         task_dep=task_dep,
         **U.run_in(
             "docs",
-            [["python", "-m", "scripts.docs", "--schema=0", "--check-links=0"]],
+            [[C.PY, "-m", "scripts.docs", "--schema=0", "--check-links=0"]],
             file_dep=[
                 P.SCRIPTS / "docs.py",
                 *P.PY_SRC,
@@ -513,7 +513,7 @@ def task_docs():
         name="check:links",
         **U.run_in(
             "docs",
-            [["python", "-m", "scripts.docs", "--only-check-links=1"]],
+            [[C.PY, "-m", "scripts.docs", "--only-check-links=1"]],
             file_dep=[
                 P.SCRIPTS / "docs.py",
                 P.DOCS_SCHEMA_INDEX,
@@ -565,7 +565,8 @@ class C:
     ATEST_ARGS = safe_load(os.environ.get("ATEST_ARGS", "[]"))
     THIS_ATEST_STEM = f"{THIS_SUBDIR}-py{THIS_PY}"
 
-    PIP = ["python", "-m", "pip"]
+    PY = "python.exe" if THIS_SUBDIR == "win-64" else "python"
+    PIP = [PY, "-m", "pip"]
     INSTALL = [*PIP, "install"]
     FREEZE = [*PIP, "freeze"]
     CHECK = [*PIP, "check"]
@@ -847,7 +848,7 @@ class U:
             P.ATEST,
         ]
 
-        str_args = [*map(str, run_args), "python", "-m", "robot", *map(str, args)]
+        str_args = [*map(str, run_args), C.PY, "-m", "robot", *map(str, args)]
         print(">>>", " ".join(str_args))
         proc = subprocess.Popen(str_args, cwd=P.ATEST)
 
@@ -862,7 +863,7 @@ class U:
         prefix, run_args = U.run_args("atest")
         args = [
             *run_args,
-            "python",
+            C.PY,
             "-m",
             "robot.rebot",
             "--name",
