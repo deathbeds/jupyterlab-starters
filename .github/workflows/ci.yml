@@ -32,9 +32,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/conda_pkgs_dir
-          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-${{ hashFiles('.github/locks/docs-linux-64-3.9.conda.lock') }}
+          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-${{ hashFiles('.github/locks/docs-linux-64-3.9.conda.lock') }}
           restore-keys: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-
 
       - name: cache (node_modules)
         uses: actions/cache@v2
@@ -53,17 +53,63 @@ jobs:
 
       - name: build
         shell: bash -l {0}
-        run: doit -n8 || doit list --all --status
+        run: doit -n8 integrity lint dist || doit list --all --status
 
-      - name: build
+      - name: build (again)
         shell: bash -l {0}
-        run: doit
+        run: doit integrity lint dist
+
+      - name: publish (dists)
+        uses: actions/upload-artifact@v2
+        with:
+          name: jupyter-starters dist ${{ github.run_number }}
+          path: ./dist
+
+  docs:
+    needs: [build]
+    runs-on: ubuntu-latest
+    env:
+      DOCS_IN_CI: 1
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v2
+
+      - name: cache (conda)
+        uses: actions/cache@v2
+        with:
+          path: ~/conda_pkgs_dir
+          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-${{ hashFiles('.github/locks/docs-linux-64-3.9.conda.lock') }}
+          restore-keys: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-
+
+      - name: cache (node_modules)
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: |
+            ${{ env.CACHE_EPOCH }}-node_modules-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc') }}
+
+      - name: base env (conda)
+        uses: conda-incubator/setup-miniconda@master
+        with:
+          environment-file: .github/locks/docs-linmux-64-3.9.conda.lock
+          miniforge-variant: Mambaforge
+          use-mamba: true
+          use-only-tar-bz2: true
+
+      - name: docs/test
+        shell: bash -l {0}
+        run: doit -n8 test docs || doit list --all --status
+
+      - name: docs/test (again)
+        shell: bash -l {0}
+        run: doit test docs
 
       - name: publish (reports)
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
-          name: jupyter-starters reports ${{ github.run_number }}
+          name: jupyter-starters reports linux-64 3.9 ${{ github.run_number }}
           path: |
             build/atest
             build/coverage
@@ -76,8 +122,60 @@ jobs:
           path: |
             build/docs/html
 
-      - name: publish (dists)
+  test:
+    needs: [build]
+    runs-on: ${{ matrix.os }}-latest
+    env:
+      TESTING_IN_CI: 1
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu, macos, windows]
+        py: [3.6, 3.9]
+        include:
+          - os: ubuntu
+            subdir: linux-64
+          - os: macos
+            subdir: osx-64
+          - os: windows
+            subdir: win-64
+        exclude:
+          - os: ubuntu
+            py: 3.9
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v2
+
+      - name: cache (conda)
+        uses: actions/cache@v2
+        with:
+          path: ~/conda_pkgs_dir
+          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-test-${{ hashFiles('.github/locks/utest-${{ matrix.subdir }}-${{ matrix.py }}.conda.lock') }}
+          restore-keys: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-test-
+
+      - name: base env (conda)
+        uses: conda-incubator/setup-miniconda@master
+        with:
+          environment-file: .github/locks/utest-${{ matrix.subdir }}-${{ matrix.py }}.conda.lock
+          miniforge-variant: Mambaforge
+          use-mamba: true
+          use-only-tar-bz2: true
+
+      - name: docs/test
+        shell: bash -l {0}
+        run: doit -n8 test || doit list --all --status
+
+      - name: docs/test (again)
+        shell: bash -l {0}
+        run: doit test
+
+      - name: publish (reports)
+        if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
-          name: jupyter-starters dist ${{ github.run_number }}
-          path: ./dist
+          name: jupyter-starters reports ${{ matrix.os }} ${{ matrix.py }} ${{ github.run_number }}
+          path: |
+            build/atest
+            build/coverage
+            build/utest
