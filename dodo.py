@@ -50,7 +50,7 @@ def task_env():
 
 def task_lint():
     """improve and ensure code quality"""
-    if C.TEST_IN_CI or C.DOCS_IN_CI:
+    if C.DOCS_IN_CI or C.TEST_IN_CI:
         return
 
     yield dict(
@@ -126,7 +126,7 @@ def task_lint():
 
 
 def task_jlpm():
-    if C.TEST_IN_CI or C.DOCS_IN_CI:
+    if C.DOCS_IN_CI or C.TEST_IN_CI:
         return
 
     if C.SKIP_JLPM_IF_CACHED and P.YARN_INTEGRITY.exists():
@@ -147,7 +147,7 @@ def task_jlpm():
 
 def task_build():
     """build intermediate artifacts"""
-    if C.TEST_IN_CI or C.DOCS_IN_CI:
+    if C.DOCS_IN_CI or C.TEST_IN_CI:
         return
 
     yield dict(
@@ -217,7 +217,7 @@ def task_build():
 
 def task_dist():
     """prepare release artifacts"""
-    if C.TEST_IN_CI or C.DOCS_IN_CI:
+    if C.DOCS_IN_CI or C.TEST_IN_CI:
         return
 
     yield dict(
@@ -283,7 +283,7 @@ def task_dist():
 
 def task_dev():
     """prepare local development"""
-    if C.TEST_IN_CI or C.DOCS_IN_CI:
+    if C.DOCS_IN_CI or C.TEST_IN_CI:
         return
 
     yield dict(
@@ -327,7 +327,7 @@ def task_dev():
 
 
 def task_prod():
-    if not (C.TEST_IN_CI or C.DOCS_IN_CI):
+    if not (C.DOCS_IN_CI or C.TEST_IN_CI):
         return
 
     yield dict(
@@ -388,7 +388,7 @@ def task_lab():
 
 def task_integrity():
     """ensure integrity of the repo"""
-    if C.TEST_IN_CI or C.DOCS_IN_CI:
+    if C.DOCS_IN_CI or C.TEST_IN_CI:
         return
 
     yield dict(
@@ -403,10 +403,10 @@ def task_integrity():
 
 def task_preflight():
     """ensure various stages are ready for development"""
-    if C.RUNNING_LOCALLY:
-        task_dep = ["dev:ext:lab", "dev:ext:server"]
-    else:
+    if C.DOCS_IN_CI or C.TEST_IN_CI:
         task_dep = ["prod:pip:check"]
+    else:
+        task_dep = ["dev:ext:lab", "dev:ext:server"]
 
     yield dict(
         name="all",
@@ -442,10 +442,10 @@ def task_test():
         *C.UTEST_ARGS,
     ]
 
-    if C.RUNNING_LOCALLY:
-        task_dep = ["dev:pip:check"]
-    else:
+    if C.DOCS_IN_CI or C.TEST_IN_CI:
         task_dep = ["prod:pip:check"]
+    else:
+        task_dep = ["dev:pip:check"]
 
     utask = dict(
         name="unit",
