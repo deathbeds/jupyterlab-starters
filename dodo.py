@@ -468,10 +468,10 @@ def task_test():
 
     yield utask
 
-    if C.RUNNING_LOCALLY:
-        task_dep = ["preflight", "lint:rf:rflint"]
-    else:
-        task_dep = ["prod:install"]
+    task_dep = ["preflight"]
+
+    if not C.DOCS_IN_CI or C.TEST_IN_CI:
+        task_dep += ["lint:rf:rflint"]
 
     yield dict(
         name="atest",
