@@ -96,7 +96,7 @@ Don't like what you see here? Try these other approaches:
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
 [docs-badge]: https://readthedocs.org/projects/jupyterstarters/badge/?version=latest
 [docs]: https://jupyterstarters.readthedocs.io/en/latest/?badge=latest
-[jupyterlab-badge]: https://img.shields.io/badge/jupyterlab-1.x/2.x-orange?logo=jupyter
+[jupyterlab-badge]: https://img.shields.io/badge/jupyterlab-3.x-orange?logo=jupyter
 [launcher]: https://jupyterlab.readthedocs.io/en/stable/user/files.html#creating-files-and-activities
 [license-badge]: https://img.shields.io/github/license/deathbeds/jupyterlab-starters
 [license]: https://github.com/deathbeds/jupyterlab-starters/tree/master/LICENSE
