@@ -758,7 +758,7 @@ class U:
             env = "dev"
             prefix = P.ENVS / env
 
-        if C.CI:
+        if C.CI or C.DEMO_IN_BINDER:
             prefix = Path(os.environ["CONDA_PREFIX"])
 
         run_args = [
