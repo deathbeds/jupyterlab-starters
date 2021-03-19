@@ -333,7 +333,7 @@ def task_prod():
     if not (C.DOCS_IN_CI or C.TEST_IN_CI):
         return
 
-    warnings.warn(f"Python Will Install {C.INSTALL}")
+    warnings.warn(f"Python Will Install: {C.INSTALL} {P.WHEEL}")
 
     yield dict(
         name="pip:install",
