@@ -1,7 +1,6 @@
 import re
 from pathlib import Path
 
-import setuptools
 
 HERE = Path(__file__).parent
 SRC = HERE / "src" / "jupyter_starters"
@@ -23,10 +22,6 @@ for ext_path in [EXT] + [d for d in EXT.rglob("*") if d.is_dir()]:
     ]
 
 ALL_FILES = sum(EXT_FILES.values(), [])
-
-assert (
-    len([p for p in ALL_FILES if "remoteEntry" in str(p)]) == 1
-), "expected _exactly one_ remoteEntry.*.js"
 
 EXT_FILES[SHARE] += [str((ETC / "install.json").relative_to(HERE).as_posix())]
 
@@ -50,4 +45,21 @@ SETUP_ARGS = dict(
 )
 
 if __name__ == "__main__":
+    import setuptools
+    import sys
+    import pprint
+
+    if "sdist" in sys.argv or "bdist_wheel" in sys.argv:
+        remote_entry = [p for p in ALL_FILES if "remoteEntry" in str(p) and str(p).endswith(".js")]
+        if len(remote_entry) != 1:
+            print(f"""
+                Expected _exactly one_ remoteEntry.*.js, found.
+                    {pprint.pformat(remote_entry)}
+                Please run:
+
+                   git clean -dxf src
+                   doit dist
+            """)
+            sys.exit(1)
+
     setuptools.setup(**SETUP_ARGS)
