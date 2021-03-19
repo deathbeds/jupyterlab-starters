@@ -7,7 +7,6 @@ import shutil
 import subprocess
 import sys
 import typing
-import warnings
 from datetime import datetime
 from hashlib import sha256
 from pathlib import Path
@@ -341,8 +340,6 @@ def task_prod():
     if not (C.DOCS_IN_CI or C.TEST_IN_CI):
         return
 
-    warnings.warn(f"Python Will Install: {C.INSTALL} {P.WHEEL}")
-
     yield dict(
         name="pip:install",
         **U.run_in(
@@ -594,7 +591,6 @@ class C:
         PY = "python.exe" if THIS_SUBDIR == "win-64" else "python"
         CONDA = "conda"
         JLPM = "jlpm"
-    warnings.warn(f"Python is {PY}, conda is {CONDA}")
     PYM = [PY, "-m"]
     PIP = [*PYM, "pip"]
     INSTALL = [*PIP, "install"]
@@ -729,7 +725,6 @@ class U:
     def cmd(cls, *args, **kwargs):
         if "shell" not in kwargs:
             kwargs["shell"] = False
-        warnings.warn(f"Cmd {args} {kwargs}")
         return doit.tools.CmdAction(*args, **kwargs)
 
     @classmethod
@@ -882,7 +877,7 @@ class U:
             P.ATEST,
         ]
 
-        str_args = [*map(str, run_args), *C.PYM, "robot", *map(str, args)]
+        str_args = [*map(str, [*run_args, *C.PYM, "robot", args])]
         print(">>>", " ".join(str_args))
         proc = subprocess.Popen(str_args, cwd=P.ATEST)
 
