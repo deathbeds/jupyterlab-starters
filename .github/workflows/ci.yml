@@ -181,12 +181,19 @@ jobs:
 
       - name: docs/test (unix)
         if: ${{ matrix.os != 'windows' }}
-        run: doit test
+        run: |
+          set -eux
+          ls dist
+          doit test
 
       - name: docs/test (win)
         if: ${{ matrix.os == 'windows' }}
         shell: cmd /C CALL {0}
-        run: doit test
+        run: |
+          @echo on
+          dir dist
+          python --version
+          doit test || exit 1
 
       - name: publish (reports)
         if: ${{ always() }}

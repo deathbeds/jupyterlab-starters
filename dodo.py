@@ -713,6 +713,7 @@ class U:
     def cmd(cls, *args, **kwargs):
         if "shell" not in kwargs:
             kwargs["shell"] = False
+        warnings.warn(f"Cmd {args} {kwargs}")
         return doit.tools.CmdAction(*args, **kwargs)
 
     @classmethod
