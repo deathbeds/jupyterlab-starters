@@ -575,7 +575,7 @@ class C:
             or shutil.which("python.exe")
         ).resolve()
         warnings.warn(f"Found {PY}")
-        PY = PY.parent / PY.name.lower()
+        PY = str(PY.parent / PY.name.lower())
         warnings.warn(f"Normalized {PY}")
     else:
         PY = "python.exe" if THIS_SUBDIR == "win-64" else "python"
