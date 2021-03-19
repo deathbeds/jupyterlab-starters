@@ -71,7 +71,7 @@ async def stop_kernel(name, manager):
     kernel_id, tmpdir = manager.kernel_dirs.pop(name, [None, None])
     if kernel_id:
         manager.kernel_manager.shutdown_kernel(kernel_id, now=True)
-        shutil.rmtree(tmpdir)
+        shutil.rmtree(tmpdir, ignore_errors=True)
 
 
 async def notebook_starter(name, starter, path, body, manager):
