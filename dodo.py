@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 import typing
+import warnings
 from datetime import datetime
 from hashlib import sha256
 from pathlib import Path
@@ -332,6 +333,8 @@ def task_prod():
     if not (C.DOCS_IN_CI or C.TEST_IN_CI):
         return
 
+    warnings.warn(f"Python Will Install {C.INSTALL}")
+
     yield dict(
         name="pip:install",
         **U.run_in(
@@ -566,9 +569,14 @@ class C:
     THIS_ATEST_STEM = f"{THIS_SUBDIR}-py{THIS_PY}"
 
     if CI:
-        PY = sys.executable
+        PY = (
+            shutil.which("python")
+            or shutil.which("python3")
+            or shutil.which("python.exe")
+        )
     else:
         PY = "python.exe" if THIS_SUBDIR == "win-64" else "python"
+    warnings.warn(f"Python is {PY}")
     PIP = [PY, "-m", "pip"]
     INSTALL = [*PIP, "install"]
     FREEZE = [*PIP, "freeze"]
