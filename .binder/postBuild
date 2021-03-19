@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-
 set -eux
-
 
 mamba create --yes \
     --prefix "${NB_PYTHON_PREFIX}" \
@@ -13,5 +11,8 @@ source activate "${NB_PYTHON_PREFIX}"
 
 # some things we just don't need to do on binder
 export DEMO_IN_BINDER=1
+
+jlpm cache clean
+rm -rf ${NB_PYTHON_PREFIX}/share/jupyter/lab
 
 doit -n8 preflight docs
