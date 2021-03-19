@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-# some things we just don't need to do on binder
-export DEMO_IN_BINDER=1
 
 set -eux
+
 
 mamba create --yes \
     --prefix "${NB_PYTHON_PREFIX}" \
@@ -11,5 +10,8 @@ mamba create --yes \
 
 # do a proper activation
 source activate "${NB_PYTHON_PREFIX}"
+
+# some things we just don't need to do on binder
+export DEMO_IN_BINDER=1
 
 doit -n8 preflight docs
