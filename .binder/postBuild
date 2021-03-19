@@ -13,7 +13,6 @@ source activate "${NB_PYTHON_PREFIX}"
 export DEMO_IN_BINDER=1
 
 jlpm cache clean
-rm -rf ${NB_PYTHON_PREFIX}/share/jupyter/lab
 
 doit -n8 preflight || doit preflight
 doit -n8 docs || echo "no docs for you"
