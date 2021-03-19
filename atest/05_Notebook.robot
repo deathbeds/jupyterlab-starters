@@ -21,7 +21,7 @@ Happy Path
     Capture Page Screenshot    02-notebook-accepted-answet.png
     Advance Starter Form
     ${txt} =    Set Variable    ${XP FILE TREE ITEM}/span[text() = 'good job ${name}.txt']
-    Wait Until Page Contains Element    ${txt}
+    Wait Until Page Contains Element    ${txt}    timeout=20s
     Double Click Element    ${txt}
     Wait Until Page Contains    fjords
     Capture Page Screenshot    03-notebook-created-file.png

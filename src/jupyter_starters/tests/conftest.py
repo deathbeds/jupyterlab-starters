@@ -4,7 +4,7 @@
 import nbformat.v4
 import pytest
 import traitlets
-from jupyter_client.multikernelmanager import MultiKernelManager
+from jupyter_client.multikernelmanager import AsyncMultiKernelManager
 from jupyter_server.services.contents.filemanager import FileContentsManager
 from jupyter_server.services.contents.manager import ContentsManager
 from traitlets.config import LoggingConfigurable
@@ -15,14 +15,14 @@ from jupyter_starters.manager import StarterManager
 class MockApp(LoggingConfigurable):
     """not really a nbapp"""
 
-    kernel_manager = traitlets.Instance(MultiKernelManager)
+    kernel_manager = traitlets.Instance(AsyncMultiKernelManager)
     contents_manager = traitlets.Instance(ContentsManager)
     notebook_dir = traitlets.Unicode()
 
     @traitlets.default("kernel_manager")
     def _kernel_manager(self):
         """simplest reasonable kernel manager"""
-        return MultiKernelManager(parent=self)
+        return AsyncMultiKernelManager(parent=self)
 
     @traitlets.default("contents_manager")
     def _contents_manager(self):

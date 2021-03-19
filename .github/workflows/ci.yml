@@ -13,8 +13,14 @@ env:
   PYTHONUNBUFFERED: '1'
   PIP_DISABLE_PIP_VERSION_CHECK: '1'
   # our stuff
-  SKIP_CONDA_PREFLIGHT: 1
-  CACHE_EPOCH: 0
+  SKIP_JLPM_IF_CACHED: 1
+  CACHE_EPOCH: 3
+  ATEST_RETRIES: 3
+  DIST_NAME: jupyter-starters dist ${{ github.run_number }}
+
+defaults:
+  run:
+    shell: bash -l {0}
 
 jobs:
   build:
@@ -23,6 +29,178 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu]
+    env:
+      LOCKFILE: .github/locks/build-linux-64-3.9.conda.lock
     steps:
       - name: git checkout
         uses: actions/checkout@v2
+
+      - name: cache (conda)
+        uses: actions/cache@v2
+        with:
+          path: ~/conda_pkgs_dir
+          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-${{ hashFiles(env.LOCKFILE) }}
+          restore-keys: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-
+
+      - name: cache (node_modules)
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: |
+            ${{ env.CACHE_EPOCH }}-node_modules-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc') }}
+
+      - name: base env (conda)
+        uses: conda-incubator/setup-miniconda@master
+        with:
+          environment-file: ${{ env.LOCKFILE }}
+          miniforge-variant: Mambaforge
+          use-mamba: true
+          use-only-tar-bz2: true
+
+      - name: build
+        run: doit -n8 integrity lint dist || doit list --all --status
+
+      - name: build (again)
+        run: doit integrity lint dist
+
+      - name: publish (dists)
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.DIST_NAME }}
+          path: ./dist
+
+  docs:
+    needs: [build]
+    runs-on: ubuntu-latest
+    env:
+      DOCS_IN_CI: 1
+      LOCKFILE: .github/locks/docs-linux-64-3.9.conda.lock
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v2
+
+      - name: cache (conda)
+        uses: actions/cache@v2
+        with:
+          path: ~/conda_pkgs_dir
+          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-${{ hashFiles(env.LOCKFILE) }}
+          restore-keys: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-
+
+      - name: cache (node_modules)
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: |
+            ${{ env.CACHE_EPOCH }}-node_modules-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc') }}
+
+      - name: base env (conda)
+        uses: conda-incubator/setup-miniconda@master
+        with:
+          environment-file: ${{ env.LOCKFILE }}
+          miniforge-variant: Mambaforge
+          use-mamba: true
+          use-only-tar-bz2: true
+
+      - name: download (dists)
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ env.DIST_NAME }}
+          path: ./dist
+
+      - name: docs/test
+        run: doit -n8 test docs || doit list --all --status
+
+      - name: docs/test (again)
+        run: doit test docs
+
+      - name: publish (reports)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: jupyter-starters reports linux-64 3.9 ${{ github.run_number }}
+          path: |
+            build/atest
+            build/coverage
+            build/utest
+
+      - name: publish (docs)
+        uses: actions/upload-artifact@v2
+        with:
+          name: jupyter-starters docs ${{ github.run_number }}
+          path: |
+            build/docs/html
+
+  test:
+    needs: [build]
+    runs-on: ${{ matrix.os }}-latest
+    env:
+      TEST_IN_CI: 1
+      LOCKFILE: .github/locks/atest-${{ matrix.subdir }}-${{ matrix.py }}.conda.lock
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu, macos, windows]
+        py: [3.6, 3.9]
+        include:
+          - os: ubuntu
+            subdir: linux-64
+          - os: macos
+            subdir: osx-64
+          - os: windows
+            subdir: win-64
+        exclude:
+          - os: ubuntu
+            py: 3.9
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v2
+
+      - name: cache (conda)
+        uses: actions/cache@v2
+        with:
+          path: ~/conda_pkgs_dir
+          key: ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-test-${{ hashFiles(env.LOCKFILE) }}
+          restore-keys: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-test-
+
+      - name: base env (conda)
+        uses: conda-incubator/setup-miniconda@master
+        with:
+          environment-file: ${{ env.LOCKFILE }}
+          miniforge-variant: Mambaforge
+          use-mamba: true
+          use-only-tar-bz2: true
+
+      - name: download (dists)
+        uses: actions/download-artifact@v2
+        with:
+          name: jupyter-starters dist ${{ github.run_number }}
+          path: ./dist
+
+      - name: docs/test (unix)
+        if: ${{ matrix.os != 'windows' }}
+        run: |
+          set -eux
+          ls dist
+          doit test
+
+      - name: docs/test (win)
+        if: ${{ matrix.os == 'windows' }}
+        shell: cmd /C CALL {0}
+        run: |
+          @echo on
+          dir dist
+          python --version
+          doit test || exit 1
+
+      - name: publish (reports)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: jupyter-starters reports ${{ matrix.os }} ${{ matrix.py }} ${{ github.run_number }}
+          path: |
+            build/atest
+            build/coverage
+            build/utest

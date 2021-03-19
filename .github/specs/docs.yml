@@ -1,0 +1,10 @@
+dependencies:
+  - nbsphinx >=0.5.0,<0.5.1a0
+  - pytest-check-links
+  - recommonmark
+  - sphinx
+  - sphinx_rtd_theme
+  - sphinx-autobuild
+  - sphinx-autodoc-typehints
+  - sphinx-copybutton
+  - sphinx-markdown-tables

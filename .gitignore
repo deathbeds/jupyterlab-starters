@@ -3,6 +3,8 @@ _*.d.ts
 _*.json
 _build
 .coverage
+.doit*
+.envs/
 .ipynb_checkpoints/
 .mypy_cache/
 .pytest_cache/
@@ -21,3 +23,4 @@ node_modules/
 src/**/labextension/
 untitled*
 Untitled*
+*.tsbuildinfo

@@ -20,8 +20,8 @@ try:
     from fastjsonschema import JsonSchemaException
 except ImportError:
     from jsonschema import validate
-    from jsonschema.validators import validator_for
     from jsonschema.exceptions import ValidationError as JsonSchemaException
+    from jsonschema.validators import validator_for
 
     def json_validator(schema: Dict[Text, Any]) -> Callable[[Dict[Text, Any]], Any]:
         """implements that fastjsonschema.compile API with jsonschema"""

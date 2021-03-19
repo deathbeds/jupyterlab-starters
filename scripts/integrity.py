@@ -13,24 +13,11 @@ from importlib.util import find_spec
 import jsonschema
 import pytest
 
-try:
-    import ruamel.yaml as yaml
-except ImportError:
-    import ruamel_yaml as yaml
-
 ROOT = pathlib.Path.cwd()
 
 # docs
 MAIN_README = ROOT / "README.md"
 CHANGELOG = ROOT / "CHANGELOG.md"
-
-# dependencies
-ENV = yaml.safe_load((ROOT / "environment.yml").read_text())
-LAB_SPEC = [
-    d.split(" ", 1)[1]
-    for d in ENV["dependencies"]
-    if isinstance(d, str) and d.startswith("jupyterlab ")
-][0]
 
 # TS stuff
 NPM_NS = "@deathbeds"
@@ -53,13 +40,6 @@ PY_NAME = "jupyter_starters"
 _VERSION_PY = ROOT / "src" / "jupyter_starters" / "_version.py"
 PY_VERSION = re.findall(r'= "(.*)"$', (_VERSION_PY).read_text())[0]
 
-# CI stuff
-PIPE_FILE = ROOT / "azure-pipelines.yml"
-PIPELINES = yaml.safe_load(PIPE_FILE.read_text())
-PIPE_VARS = PIPELINES["variables"]
-
-CI = ROOT / "ci"
-
 
 @pytest.fixture(scope="module")
 def the_meta_package():
@@ -71,14 +51,6 @@ def the_meta_package():
         json.loads((meta_path / "tsconfig.json").read_text()),
         (meta_path / "src" / "index.ts").read_text(),
     )
-
-
-@pytest.mark.parametrize("name,env_path", [["docs", ROOT / "docs" / "environment.yml"]])
-def test_env_versions(name, env_path):
-    """are special environments in sync with the main demo/development env?"""
-    env = yaml.safe_load(env_path.read_text())
-    for package in ENV["dependencies"]:
-        assert package in env["dependencies"], f"{package} in {name} is out-of-date"
 
 
 @pytest.mark.parametrize(

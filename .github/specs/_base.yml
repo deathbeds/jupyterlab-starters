@@ -1,0 +1,7 @@
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - doit
+  - pip
+  - ruamel_yaml

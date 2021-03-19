@@ -1,0 +1,10 @@
+dependencies:
+  - black
+  - flake8
+  - isort
+  - mypy
+  - pylint
+  - pytest
+  - robotframework-lint
+  - robotframework-seleniumlibrary
+  - ruamel_yaml

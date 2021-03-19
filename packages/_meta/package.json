@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsc -b",
     "clean": "rimraf lib",
-    "watch": "tsc -b --watch"
+    "watch": "tsc -b --watch --preserveWatchOutput"
   },
   "dependencies": {
     "@deathbeds/jupyterlab-starters": "file:../jupyterlab-starters",

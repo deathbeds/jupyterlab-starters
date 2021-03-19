@@ -12,23 +12,21 @@ by the contributors, time-permitting.
 > _There are probably other ways, but I haven't tried them_
 
 - Be on Linux/OSX
-- Get [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
-- Get [anaconda-project](https://github.com/Anaconda-Platform/anaconda-project)
-  - `anaconda-project` is a lot to type
-  - go ahead and add
-    ```bash
-    alias "apr=anaconda-project run"
-    ```
-    to your `.<your shell>rc`
+- Get [Miniforge or Mambaforge](https://github.com/conda-forge/miniforge/releases)
+- Get [doit](https://pydoit.org)
 
 ```bash
-anaconda-project run postBuild
+conda install doit
 ```
 
-Now you have a working Lab.
+```bash
+doit
+```
+
+Now you should have a working Lab.
 
 ```bash
-anaconda-project run lab
+doit lab
 ```
 
 Try out some stuff. Make some whitepapers and cookiecutters.
@@ -36,46 +34,47 @@ Try out some stuff. Make some whitepapers and cookiecutters.
 ## linting
 
 ```bash
-anaconda-project run lint
+doit lint
 ```
 
 ## testing
 
 ```bash
-anaconda-project run atest
+doit atest
 ```
 
-> _You may want to run against a "clean" lab, e.g. `apr postBuild`_
+> _You may want to run against a "clean" lab, e.g. `doit`_
 
 ## hacking
 
 ```bash
-anaconda-project run jlpm watch
+doit watch:lab
 ```
 
-...with in another terminal
+...in another terminal
 
 ```bash
-anaconda-project run lab
+doit lab
 ```
 
 ## documenting
 
 ```bash
-anaconda-project run docs
+doit docs
 ```
 
 ...or watch for changes
 
 ```bash
-anaconda-project run docs:watch
+doit watch:docs
 ```
 
 ## releasing
 
+- Download and unpack the artifacts from CI into `dist`
+- Make a GitHub release with all of the release artifacts
+- Upload the releases
 ```bash
-anaconda-project run release
-anaconda-project run upload
+twine upload dist/*.whl dist/*.tar.gz
+npm publish dist/*.tgz
 ```
-
-> or better still, download the artifacts from CI

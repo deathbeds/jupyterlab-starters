@@ -1,0 +1,6 @@
+dependencies:
+  - firefox =78
+  - flake8
+  - geckodriver
+  - robotframework >=3.2
+  - robotframework-seleniumlibrary
