@@ -201,7 +201,7 @@ def task_build():
         **U.run_in(
             "build",
             [
-                ["jlpm", "lerna", "run", "--stream", "build:ext"],
+                [*P.HACKED_LABEXTENSION, "build", P.EXT_PACKAGE],
             ],
             file_dep=[
                 *P.ALL_CSS,
@@ -320,7 +320,7 @@ def task_dev():
         task_dep=["dev:pip:check"],
         **U.run_in(
             "utest",
-            [["jupyter", "labextension", "develop", ".", "--overwrite"]],
+            [[*P.HACKED_LABEXTENSION, "develop", ".", "--overwrite"]],
             file_dep=[
                 P.SETUP_CFG,
                 P.SETUP_PY,
@@ -612,6 +612,7 @@ class P:
     PACKAGE_JSON = ROOT / "package.json"
     PACKAGES = ROOT / "packages"
     PACKAGES_JSON = sorted(PACKAGES.glob("*/package.json"))
+    EXT_PACKAGE = PACKAGES / "jupyterlab-starters"
     ALL_PACKAGE_JSON = [PACKAGE_JSON, *PACKAGES_JSON]
 
     DOCS_NOTEBOOKS = sorted(DOCS.rglob("*.ipynb"))
@@ -694,6 +695,8 @@ class P:
         *ALL_PY_SCHEMA,
     ]
     ALL_PRETTIER = [*ALL_TS, *ALL_JSON, *ALL_CSS, *ALL_YAML]
+
+    HACKED_LABEXTENSION = [C.PY, SCRIPTS / "hacked-labextension.py"]
 
 
 class D:
