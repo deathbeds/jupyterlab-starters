@@ -132,6 +132,18 @@ def task_lint():
         ),
     )
 
+    nblint = P.SCRIPTS / "nblint.py"
+
+    for ipynb in P.ALL_IPYNB:
+        yield dict(
+            name=f"ipynb:{ipynb.relative_to(P.ROOT)}",
+            **U.run_in(
+                "docs",
+                [[C.PY, nblint, ipynb]],
+                file_dep=[P.YARN_INTEGRITY, nblint],
+            ),
+        )
+
 
 def task_jlpm():
     if C.DOCS_IN_CI or C.TEST_IN_CI:
@@ -700,6 +712,7 @@ class P:
     )
     ALL_YAML = [*SPECS.glob("*.yml"), *ROOT.glob("*.yml"), *GITHUB.rglob("*.yml")]
     README = ROOT / "README.md"
+    EXAMPLES = ROOT / "examples"
     CHANGELOG = ROOT / "CHANGELOG.md"
     LICENSE = ROOT / "LICENSE"
     ALL_MD = [*ROOT.glob("*.md")]
@@ -710,6 +723,11 @@ class P:
         *ALL_PY_SCHEMA,
     ]
     ALL_PRETTIER = [*ALL_TS, *ALL_JSON, *ALL_CSS, *ALL_YAML]
+    ALL_IPYNB = [
+        p
+        for p in [*DOCS.rglob("*.ipynb"), *EXAMPLES.rglob("*.ipynb")]
+        if "checkpoints" not in str(p)
+    ]
 
     HACKED_LABEXTENSION = [C.PY, SCRIPTS / "hacked-labextension.py"]
 

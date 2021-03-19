@@ -13,7 +13,8 @@ import traitlets as T
 from jupyter_core.paths import jupyter_config_path
 from jupyter_server import _tz as tz
 from jupyter_server.services.config import ConfigManager
-from jupyter_server.utils import ensure_async, url_path_join as ujoin
+from jupyter_server.utils import ensure_async
+from jupyter_server.utils import url_path_join as ujoin
 from traitlets.config import LoggingConfigurable
 
 from .py_starters.cookiecutter import cookiecutter_starters
