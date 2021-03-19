@@ -18,6 +18,10 @@ env:
   ATEST_RETRIES: 3
   DIST_NAME: jupyter-starters dist ${{ github.run_number }}
 
+defaults:
+  run:
+    shell: bash -l {0}
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}-latest
@@ -55,11 +59,9 @@ jobs:
           use-only-tar-bz2: true
 
       - name: build
-        shell: bash -l {0}
         run: doit -n8 integrity lint dist || doit list --all --status
 
       - name: build (again)
-        shell: bash -l {0}
         run: doit integrity lint dist
 
       - name: publish (dists)
@@ -108,11 +110,9 @@ jobs:
           path: ./dist
 
       - name: docs/test
-        shell: bash -l {0}
         run: doit -n8 test docs || doit list --all --status
 
       - name: docs/test (again)
-        shell: bash -l {0}
         run: doit test docs
 
       - name: publish (reports)
