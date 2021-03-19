@@ -146,13 +146,10 @@ jobs:
         include:
           - os: ubuntu
             subdir: linux-64
-            shell: bash -l {0}
           - os: macos
             subdir: osx-64
-            shell: bash -l {0}
           - os: windows
             subdir: win-64
-            shell: cmd /C CALL {0}
         exclude:
           - os: ubuntu
             py: 3.9
@@ -182,8 +179,13 @@ jobs:
           name: jupyter-starters dist ${{ github.run_number }}
           path: ./dist
 
-      - name: docs/test
-        shell: ${{ matrix.shell }}
+      - name: docs/test (unix)
+        if: ${{ matrix.os != 'windows' }}
+        run: doit test
+
+      - name: docs/test (win)
+        if: ${{ matrix.os == 'windows' }}
+        shell: cmd /C CALL {0}
         run: doit test
 
       - name: publish (reports)
