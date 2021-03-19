@@ -574,6 +574,7 @@ class C:
             or shutil.which("python3")
             or shutil.which("python.exe")
         )
+        PY = PY.parent / PY.name.lower()
     else:
         PY = "python.exe" if THIS_SUBDIR == "win-64" else "python"
     warnings.warn(f"Python is {PY}")
