@@ -22,7 +22,9 @@ def task_lock():
         return
 
     yield U.lock("build", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["node", "lab", "lint"])
-    yield U.lock("binder", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["run", "lab", "node"])
+    yield U.lock(
+        "binder", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["run", "lab", "node", "docs"]
+    )
 
     for subdir in C.SUBDIRS:
         for py in C.PYTHONS:
@@ -432,6 +434,9 @@ def task_preflight():
 
 def task_test():
     """run automated tests"""
+    if C.DEMO_IN_BINDER:
+        return
+
     html_utest = P.HTML_UTEST / f"{C.THIS_SUBDIR}-py{C.THIS_PY}.html"
     html_cov = P.HTML_COV / f"{C.THIS_SUBDIR}-py{C.THIS_PY}"
     utest_args = [
@@ -529,18 +534,19 @@ def task_docs():
         ),
     )
 
-    yield dict(
-        name="check:links",
-        **U.run_in(
-            "docs",
-            [[*C.PYM, "scripts.docs", "--only-check-links=1"]],
-            file_dep=[
-                P.SCRIPTS / "docs.py",
-                P.DOCS_SCHEMA_INDEX,
-                P.DOCS_BUILDINFO,
-            ],
-        ),
-    )
+    if not C.DEMO_IN_BINDER:
+        yield dict(
+            name="check:links",
+            **U.run_in(
+                "docs",
+                [[*C.PYM, "scripts.docs", "--only-check-links=1"]],
+                file_dep=[
+                    P.SCRIPTS / "docs.py",
+                    P.DOCS_SCHEMA_INDEX,
+                    P.DOCS_BUILDINFO,
+                ],
+            ),
+        )
 
 
 def task_watch():
