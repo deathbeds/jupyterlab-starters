@@ -7,7 +7,7 @@ set -eux
 
 mamba create --yes \
     --prefix "${NB_PYTHON_PREFIX}" \
-    --file ".github/locks/binder-linux-64-3.9/conda.lock"
+    --file ".github/locks/binder-linux-64-3.9.conda.lock"
 
 # do a proper activation
 source activate "${NB_PYTHON_PREFIX}"
