@@ -58,32 +58,40 @@ def task_lint():
         name="py:isort:black",
         **U.run_in(
             "docs",
-            [["isort", *P.ALL_PY], ["black", "--quiet", *P.ALL_PY]],
+            [[*C.PYM, "isort", *P.ALL_PY], [*C.PYM, "black", "--quiet", *P.ALL_PY]],
             file_dep=[*P.ALL_PY],
         ),
     )
 
-    for file_dep, linter in [
-        [P.ALL_PY, ["flake8"]],
-        [P.PY_SRC, ["pylint", "--reports", "n", "--score", "n"]],
-        [P.PY_SRC, ["mypy", "--no-error-summary", "--config-file", P.SETUP_CFG]],
-    ]:
+    for linter, file_dep_cmd in {
+        "flake8": [P.ALL_PY, [*C.PYM, "flake8"]],
+        "pylint": [P.PY_SRC, [*C.PYM, "pylint", "--reports", "n", "--score", "n"]],
+        "mypy": [
+            P.PY_SRC,
+            [*C.PYM, "mypy", "--no-error-summary", "--config-file", P.SETUP_CFG],
+        ],
+    }.items():
+        file_dep, cmd = file_dep_cmd
         yield dict(
-            name=f"py:{linter[0]}",
+            name=f"py:{linter}",
             task_dep=["lint:py:isort:black"],
-            **U.run_in("docs", [linter + file_dep], file_dep=[P.SETUP_CFG, *file_dep]),
+            **U.run_in("docs", [cmd + file_dep], file_dep=[P.SETUP_CFG, *file_dep]),
         )
 
     yield dict(
         name="rf:tidy",
         **U.run_in(
             "docs",
-            [[C.PY, "-m", "robot.tidy", "--inplace", *P.ALL_ROBOT]],
+            [[*C.PYM, "robot.tidy", "--inplace", *P.ALL_ROBOT]],
             file_dep=P.ALL_ROBOT,
         ),
     )
 
-    rflint = ["rflint", *sum([["--configure", rule] for rule in C.RFLINT_RULES], [])]
+    rflint = [
+        *C.PYM,
+        "rflint",
+        *sum([["--configure", rule] for rule in C.RFLINT_RULES], []),
+    ]
 
     yield dict(
         name="rf:rflint",
@@ -91,7 +99,7 @@ def task_lint():
         **U.run_in("docs", [rflint + P.ALL_ROBOT], file_dep=P.ALL_ROBOT),
     )
 
-    prettier = ["jlpm", "prettier"] + (
+    prettier = [C.JLPM, "prettier"] + (
         ["--write", "--list-different"] if C.RUNNING_LOCALLY else ["--check"]
     )
 
@@ -107,7 +115,7 @@ def task_lint():
         ),
     )
 
-    eslint = ["jlpm", "eslint", "--ext", ".js,.jsx,.ts,.tsx"] + (
+    eslint = [C.JLPM, "eslint", "--ext", ".js,.jsx,.ts,.tsx"] + (
         ["--fix"] if C.RUNNING_LOCALLY else []
     )
 
@@ -139,7 +147,7 @@ def task_jlpm():
         name="install",
         **U.run_in(
             "build",
-            [["jlpm", *jlpm_args]],
+            [[C.JLPM, *jlpm_args]],
             file_dep=[P.YARNRC, *P.ALL_PACKAGE_JSON],
             targets=[P.YARN_INTEGRITY],
         ),
@@ -156,9 +164,9 @@ def task_build():
         **U.run_in(
             "build",
             [
-                ["jlpm", "lerna", "run", "--stream", "build:pre"],
+                [C.JLPM, "lerna", "run", "--stream", "build:pre"],
                 [
-                    "jlpm",
+                    C.JLPM,
                     "prettier",
                     "--write",
                     P.JS_SRC_SCHEMA,
@@ -181,7 +189,7 @@ def task_build():
         **U.run_in(
             "build",
             [
-                ["jlpm", "lerna", "run", "--stream", "build"],
+                [C.JLPM, "lerna", "run", "--stream", "build"],
             ],
             file_dep=[
                 *P.ALL_PACKAGE_JSON,
@@ -389,7 +397,7 @@ def task_integrity():
         name="all",
         **U.run_in(
             "utest",
-            [[C.PY, "-m", "scripts.integrity"]],
+            [[*C.PYM, "scripts.integrity"]],
             file_dep=[P.README, P.CHANGELOG, P.SCRIPTS / "integrity.py"],
         ),
     )
@@ -407,7 +415,7 @@ def task_preflight():
         task_dep=task_dep,
         **U.run_in(
             "utest",
-            [[C.PY, "-m", "scripts.preflight"]],
+            [[*C.PYM, "scripts.preflight"]],
             file_dep=[P.SCRIPTS / "preflight.py"],
         ),
     )
@@ -484,7 +492,7 @@ def task_docs():
         name="schema",
         **U.run_in(
             "docs",
-            [[C.PY, "-m", "scripts.docs", "--only-schema=1"]],
+            [[*C.PYM, "scripts.docs", "--only-schema=1"]],
             file_dep=[P.SCRIPTS / "docs.py", *P.PY_SCHEMA.rglob("*.json")],
             targets=[P.DOCS_SCHEMA_INDEX],
         ),
@@ -500,7 +508,7 @@ def task_docs():
         task_dep=task_dep,
         **U.run_in(
             "docs",
-            [[C.PY, "-m", "scripts.docs", "--schema=0", "--check-links=0"]],
+            [[*C.PYM, "scripts.docs", "--schema=0", "--check-links=0"]],
             file_dep=[
                 P.SCRIPTS / "docs.py",
                 *P.PY_SRC,
@@ -516,7 +524,7 @@ def task_docs():
         name="check:links",
         **U.run_in(
             "docs",
-            [[C.PY, "-m", "scripts.docs", "--only-check-links=1"]],
+            [[*C.PYM, "scripts.docs", "--only-check-links=1"]],
             file_dep=[
                 P.SCRIPTS / "docs.py",
                 P.DOCS_SCHEMA_INDEX,
@@ -533,7 +541,7 @@ def task_watch():
 
     prefix, run_args = U.run_args("docs")
     yield dict(
-        name="lab", uptodate=[lambda: False], actions=[[*run_args, "jlpm", "watch"]]
+        name="lab", uptodate=[lambda: False], actions=[[*run_args, C.JLPM, "watch"]]
     )
 
     yield dict(
@@ -574,13 +582,21 @@ class C:
             or shutil.which("python3")
             or shutil.which("python.exe")
         ).resolve()
-        warnings.warn(f"Found {PY}")
-        PY = str(PY.parent / PY.name.lower())
-        warnings.warn(f"Normalized {PY}")
+        CONDA = Path(
+            shutil.which("conda")
+            or shutil.which("conda.exe")
+            or shutil.which("conda.cmd")
+        ).resolve()
+        JLPM = Path(
+            shutil.which("jlpm") or shutil.which("jlpm.exe") or shutil.which("jlpm.cmd")
+        ).resolve()
     else:
         PY = "python.exe" if THIS_SUBDIR == "win-64" else "python"
-    warnings.warn(f"Python is {PY}")
-    PIP = [PY, "-m", "pip"]
+        CONDA = "conda"
+        JLPM = "jlpm"
+    warnings.warn(f"Python is {PY}, conda is {CONDA}")
+    PYM = [PY, "-m"]
+    PIP = [PYM, "pip"]
     INSTALL = [*PIP, "install"]
     FREEZE = [*PIP, "freeze"]
     CHECK = [*PIP, "check"]
@@ -726,7 +742,7 @@ class U:
             prefix = Path(os.environ["CONDA_PREFIX"])
 
         run_args = [
-            "conda",
+            C.CONDA,
             "run",
             "--prefix",
             prefix,
@@ -866,7 +882,7 @@ class U:
             P.ATEST,
         ]
 
-        str_args = [*map(str, run_args), C.PY, "-m", "robot", *map(str, args)]
+        str_args = [*map(str, run_args), *C.PYM, "robot", *map(str, args)]
         print(">>>", " ".join(str_args))
         proc = subprocess.Popen(str_args, cwd=P.ATEST)
 
