@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # some things we just don't need to do on binder
-export IN_BINDER=1
+export DEMO_IN_BINDER=1
 
 set -eux
 
