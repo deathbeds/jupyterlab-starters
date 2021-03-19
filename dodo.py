@@ -569,12 +569,14 @@ class C:
     THIS_ATEST_STEM = f"{THIS_SUBDIR}-py{THIS_PY}"
 
     if CI:
-        PY = (
+        PY = Path(
             shutil.which("python")
             or shutil.which("python3")
             or shutil.which("python.exe")
-        )
+        ).resolve()
+        warnings.warn(f"Found {PY}")
         PY = PY.parent / PY.name.lower()
+        warnings.warn(f"Normalized {PY}")
     else:
         PY = "python.exe" if THIS_SUBDIR == "win-64" else "python"
     warnings.warn(f"Python is {PY}")
