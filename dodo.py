@@ -22,7 +22,7 @@ def task_lock():
         return
 
     yield U.lock("build", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["node", "lab", "lint"])
-    yield U.lock("binder", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["run", "lab"])
+    yield U.lock("binder", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["run", "lab", "node"])
 
     for subdir in C.SUBDIRS:
         for py in C.PYTHONS:
@@ -36,7 +36,7 @@ def task_lock():
 
 
 def task_env():
-    if C.CI:
+    if C.CI or C.DEMO_IN_BINDER:
         return
     yield dict(
         name="dev",
@@ -50,7 +50,7 @@ def task_env():
 
 def task_lint():
     """improve and ensure code quality"""
-    if C.DOCS_IN_CI or C.TEST_IN_CI:
+    if C.DOCS_IN_CI or C.TEST_IN_CI or C.DEMO_IN_BINDER:
         return
 
     yield dict(
@@ -574,6 +574,7 @@ class C:
     SKIP_JLPM_IF_CACHED = bool(json.loads(os.environ.get("SKIP_JLPM_IF_CACHED", "1")))
     DOCS_IN_CI = bool(json.loads(os.environ.get("DOCS_IN_CI", "0")))
     TEST_IN_CI = bool(json.loads(os.environ.get("TEST_IN_CI", "0")))
+    DEMO_IN_BINDER = bool(json.loads(os.environ.get("DEMO_IN_BINDER", "0")))
     RUNNING_LOCALLY = not CI
     RFLINT_RULES = [
         "LineTooLong:200",

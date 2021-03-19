@@ -1,5 +1,5 @@
 # platform: linux-64
-# env_hash: a7626e7cbac5e2aafbc0a04c19c3b37f0e5cc4c6d952684a83a1bbbd13b34911
+# env_hash: 1dfa4bb8800e870b4cc822050b801e38364bc2033cd5b712ed6429b8d307f18c
 @EXPLICIT
 https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2#d7c89558ba9fa0495403155b64376d81
 https://conda.anaconda.org/conda-forge/linux-64/ca-certificates-2020.12.5-ha878542_0.tar.bz2#7eb5d4ffeee663caa1635cd67071bc1b
@@ -27,6 +27,7 @@ https://conda.anaconda.org/conda-forge/linux-64/libiconv-1.16-h516909a_0.tar.bz2
 https://conda.anaconda.org/conda-forge/linux-64/libsodium-1.0.18-h516909a_1.tar.bz2#e1ca1a4b82f7b51b29318f80cebae84a
 https://conda.anaconda.org/conda-forge/linux-64/libtool-2.4.6-h58526e2_1007.tar.bz2#7f6569a0c2f27acb8fc90600b382e544
 https://conda.anaconda.org/conda-forge/linux-64/libuuid-2.32.1-h14c3975_1000.tar.bz2#39c6326f6ee5297632c47db6520546fe
+https://conda.anaconda.org/conda-forge/linux-64/libuv-1.41.0-h7f98852_0.tar.bz2#808b41ebae1d9bd4aa8ffbc365d468c6
 https://conda.anaconda.org/conda-forge/linux-64/libwebp-base-1.2.0-h7f98852_2.tar.bz2#fb63a035a3b552c88a30d84b89ebf4c4
 https://conda.anaconda.org/conda-forge/linux-64/lz4-c-1.9.3-h9c3ff4c_0.tar.bz2#4eb64ee0d5cd43096ffcf843c76b05d4
 https://conda.anaconda.org/conda-forge/linux-64/ncurses-6.2-h58526e2_4.tar.bz2#509f2a21c4a09214cd737a480dfd80c9
@@ -48,6 +49,7 @@ https://conda.anaconda.org/conda-forge/linux-64/gettext-0.19.8.1-h0b5b191_1005.t
 https://conda.anaconda.org/conda-forge/linux-64/libpng-1.6.37-hed695b0_2.tar.bz2#5685fb1f2e761545e9f5ea34411efd98
 https://conda.anaconda.org/conda-forge/linux-64/libxcb-1.13-h7f98852_1003.tar.bz2#a9371e9e40aded194dcba1447606c9a1
 https://conda.anaconda.org/conda-forge/linux-64/libxml2-2.9.10-h72842e0_3.tar.bz2#5ed2c4742d5f1141783f484fe8974ccf
+https://conda.anaconda.org/conda-forge/linux-64/nodejs-14.15.4-h92b4a50_1.tar.bz2#c892d4910dee3eb4da7a8840d9e8806e
 https://conda.anaconda.org/conda-forge/linux-64/readline-8.0-he28a2e2_2.tar.bz2#4d0ae8d473f863696088f76800ef9d38
 https://conda.anaconda.org/conda-forge/linux-64/tk-8.6.10-hed695b0_1.tar.bz2#7ef837cd455bd0f19f49b8b62d4cb568
 https://conda.anaconda.org/conda-forge/linux-64/xorg-libsm-1.2.3-hd9c2040_1000.tar.bz2#9e856f78d5c80d5a78f61e72d1d473a3
@@ -75,6 +77,7 @@ https://conda.anaconda.org/conda-forge/noarch/click-7.1.2-pyh9f0ad1d_0.tar.bz2#b
 https://conda.anaconda.org/conda-forge/noarch/cloudpickle-1.6.0-py_0.tar.bz2#76d764d8881719e305f6fa368dc2b65e
 https://conda.anaconda.org/conda-forge/noarch/decorator-4.4.2-py_0.tar.bz2#d2eabb9cabd212e1ec6a9463bd846243
 https://conda.anaconda.org/conda-forge/noarch/defusedxml-0.7.1-pyhd8ed1ab_0.tar.bz2#961b3a227b437d82ad7054484cfa71b2
+https://conda.anaconda.org/conda-forge/noarch/escapism-1.0.1-pyh9f0ad1d_0.tar.bz2#598755324d753727149360b89bcf14b3
 https://conda.anaconda.org/conda-forge/noarch/idna-2.10-pyh9f0ad1d_0.tar.bz2#f95a12b4f435aae6680fe55ae2eb1b06
 https://conda.anaconda.org/conda-forge/noarch/ipython_genutils-0.2.0-py_1.tar.bz2#5071c982548b3a20caf70462f04f5287
 https://conda.anaconda.org/conda-forge/noarch/json5-0.9.5-pyh9f0ad1d_0.tar.bz2#10759827a94e6b14996e81fb002c0bda
@@ -167,3 +170,4 @@ https://conda.anaconda.org/conda-forge/linux-64/notebook-6.2.0-py39hf3d152e_0.ta
 https://conda.anaconda.org/conda-forge/noarch/nbclassic-0.2.6-pyhd8ed1ab_0.tar.bz2#49be35e31b49012ea91fcd667ebdf4ad
 https://conda.anaconda.org/conda-forge/noarch/nbgitpuller-0.9.0-py_0.tar.bz2#ce05504b25f7e0234c99e7ef1f746cbd
 https://conda.anaconda.org/conda-forge/noarch/jupyterlab-3.0.11-pyhd8ed1ab_0.tar.bz2#af8e216cd0b7f5e4f9adc17b68857d41
+https://conda.anaconda.org/conda-forge/noarch/jupyter-videochat-0.5.1-pyhd8ed1ab_0.tar.bz2#714c09e7292c416dcbe49e90b5c77cab
