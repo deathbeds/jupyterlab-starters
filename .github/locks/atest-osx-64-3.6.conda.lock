@@ -41,7 +41,7 @@ https://conda.anaconda.org/conda-forge/osx-64/libxml2-2.9.10-h802ca4f_3.tar.bz2#
 https://conda.anaconda.org/conda-forge/osx-64/sqlite-3.34.0-h17101e1_0.tar.bz2#9e9694f119bb1a2362a0cc0249651835
 https://conda.anaconda.org/conda-forge/osx-64/zstd-1.4.9-h582d3a0_0.tar.bz2#551e04087371339ee63524f2988faa62
 https://conda.anaconda.org/conda-forge/osx-64/fontconfig-2.13.1-hd23ceaa_1004.tar.bz2#f7a97ed909ce3b2653e8ec5752a6923c
-https://conda.anaconda.org/conda-forge/osx-64/libglib-2.66.7-hd556434_1.tar.bz2#2eca4d0cfaadc22b61dc2034cfcc93ee
+https://conda.anaconda.org/conda-forge/osx-64/libglib-2.68.0-hd556434_1.tar.bz2#5311441563f3e26299de6cca89b7cbe4
 https://conda.anaconda.org/conda-forge/osx-64/libtiff-4.2.0-h355d032_0.tar.bz2#ad3cbf0f77b9f89df082eef584d9009a
 https://conda.anaconda.org/conda-forge/osx-64/python-3.6.13-h7728216_0_cpython.tar.bz2#607359d4e340d0f87f0fb13d18008967
 https://conda.anaconda.org/conda-forge/noarch/async_generator-1.10-py_0.tar.bz2#d56c596e61b1c4952acf0a9920856c12
@@ -129,7 +129,7 @@ https://conda.anaconda.org/conda-forge/noarch/importlib_metadata-3.7.3-hd8ed1ab_
 https://conda.anaconda.org/conda-forge/osx-64/jupyter_core-4.7.1-py36h79c6626_0.tar.bz2#5bd2cfc13115919991063f1cfe7ddd93
 https://conda.anaconda.org/conda-forge/osx-64/pango-1.42.4-ha86e081_5.tar.bz2#23cc7aeb9c983f9bba284efb9de48078
 https://conda.anaconda.org/conda-forge/osx-64/setuptools-49.6.0-py36h79c6626_3.tar.bz2#47c2e464861798d6ce4422f76ce3ea5f
-https://conda.anaconda.org/conda-forge/osx-64/terminado-0.9.2-py36h79c6626_0.tar.bz2#2e70e88df2a56296839c55697693d6df
+https://conda.anaconda.org/conda-forge/osx-64/terminado-0.9.3-py36h79c6626_0.tar.bz2#fa00bec7e6c69a8f27dbf6207da755fe
 https://conda.anaconda.org/conda-forge/noarch/backports.functools_lru_cache-1.6.1-py_0.tar.bz2#d36df15eaef96549ce6231e3088fba54
 https://conda.anaconda.org/conda-forge/noarch/bleach-3.3.0-pyh44b312d_0.tar.bz2#abf6b76c39358ca36ca706c46f054f2a
 https://conda.anaconda.org/conda-forge/noarch/flake8-3.9.0-pyhd8ed1ab_0.tar.bz2#36aeeb659dc3084b68c39f8649e813e8

@@ -53,7 +53,7 @@ https://conda.anaconda.org/conda-forge/noarch/idna-2.10-pyh9f0ad1d_0.tar.bz2#f95
 https://conda.anaconda.org/conda-forge/noarch/iniconfig-1.1.1-pyh9f0ad1d_0.tar.bz2#39161f81cc5e5ca45b8226fbb06c6905
 https://conda.anaconda.org/conda-forge/noarch/ipython_genutils-0.2.0-py_1.tar.bz2#5071c982548b3a20caf70462f04f5287
 https://conda.anaconda.org/conda-forge/noarch/json5-0.9.5-pyh9f0ad1d_0.tar.bz2#10759827a94e6b14996e81fb002c0bda
-https://conda.anaconda.org/conda-forge/win-64/libglib-2.66.7-h1e62bf3_1.tar.bz2#0eeb17066bc33db7e0fe3061feb0ceb2
+https://conda.anaconda.org/conda-forge/win-64/libglib-2.68.0-h1e62bf3_1.tar.bz2#5fe0046f4d1a68ff81c97f3ecfc91b9a
 https://conda.anaconda.org/conda-forge/win-64/libtiff-4.2.0-hc10be44_0.tar.bz2#7f2eeddf7e5a137f488377fc4aeec849
 https://conda.anaconda.org/conda-forge/win-64/m2w64-gcc-libs-5.3.0-7.tar.bz2#fe759119b8b3bfa720b8762c6fdc35de
 https://conda.anaconda.org/conda-forge/noarch/mccabe-0.6.1-py_1.tar.bz2#a326cb400c1ccd91789f3e7d02124d61
@@ -134,7 +134,7 @@ https://conda.anaconda.org/conda-forge/win-64/pango-1.42.4-hec34917_5.tar.bz2#1e
 https://conda.anaconda.org/conda-forge/win-64/pysocks-1.7.1-py39hcbf5309_3.tar.bz2#76b07f5b989c96632eb7d6f2bd0c26aa
 https://conda.anaconda.org/conda-forge/win-64/pytest-6.2.2-py39hcbf5309_0.tar.bz2#d03d0004d8d1c0765384064592797144
 https://conda.anaconda.org/conda-forge/win-64/setuptools-49.6.0-py39hcbf5309_3.tar.bz2#135507b182371e6d0cd97c875b7e4913
-https://conda.anaconda.org/conda-forge/win-64/terminado-0.9.2-py39hcbf5309_0.tar.bz2#5b57f75bf27ada9d3b6269efcc9cef7a
+https://conda.anaconda.org/conda-forge/win-64/terminado-0.9.3-py39hcbf5309_0.tar.bz2#5cb226c5c5560b352b53c9bce431a6b1
 https://conda.anaconda.org/conda-forge/win-64/xorg-libsm-1.2.3-hcd874cb_1000.tar.bz2#76a765e735668a9922da3d58e746a7a6
 https://conda.anaconda.org/conda-forge/noarch/backports.functools_lru_cache-1.6.1-py_0.tar.bz2#d36df15eaef96549ce6231e3088fba54
 https://conda.anaconda.org/conda-forge/noarch/bleach-3.3.0-pyh44b312d_0.tar.bz2#abf6b76c39358ca36ca706c46f054f2a

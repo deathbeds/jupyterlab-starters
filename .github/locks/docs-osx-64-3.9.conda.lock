@@ -44,7 +44,7 @@ https://conda.anaconda.org/conda-forge/osx-64/nodejs-14.15.4-hb529b34_1.tar.bz2#
 https://conda.anaconda.org/conda-forge/osx-64/sqlite-3.34.0-h17101e1_0.tar.bz2#9e9694f119bb1a2362a0cc0249651835
 https://conda.anaconda.org/conda-forge/osx-64/zstd-1.4.9-h582d3a0_0.tar.bz2#551e04087371339ee63524f2988faa62
 https://conda.anaconda.org/conda-forge/osx-64/fontconfig-2.13.1-hd23ceaa_1004.tar.bz2#f7a97ed909ce3b2653e8ec5752a6923c
-https://conda.anaconda.org/conda-forge/osx-64/libglib-2.66.7-hd556434_1.tar.bz2#2eca4d0cfaadc22b61dc2034cfcc93ee
+https://conda.anaconda.org/conda-forge/osx-64/libglib-2.68.0-hd556434_1.tar.bz2#5311441563f3e26299de6cca89b7cbe4
 https://conda.anaconda.org/conda-forge/osx-64/libtiff-4.2.0-h355d032_0.tar.bz2#ad3cbf0f77b9f89df082eef584d9009a
 https://conda.anaconda.org/conda-forge/osx-64/python-3.9.2-h2502468_0_cpython.tar.bz2#57dbdb212b9437aed31875d015885bee
 https://conda.anaconda.org/conda-forge/noarch/alabaster-0.7.12-py_0.tar.bz2#2489a97287f90176ecdc3ca982b4b0a0
@@ -137,7 +137,7 @@ https://conda.anaconda.org/conda-forge/osx-64/pysocks-1.7.1-py39h6e9494a_3.tar.b
 https://conda.anaconda.org/conda-forge/noarch/python-dateutil-2.8.1-py_0.tar.bz2#0d0150ed9c2d25817f5324108d3f7571
 https://conda.anaconda.org/conda-forge/noarch/python-slugify-4.0.1-pyh9f0ad1d_0.tar.bz2#c97da61221ef1dce6a0cb5a1d36f0019
 https://conda.anaconda.org/conda-forge/osx-64/pyzmq-22.0.3-py39h7fec2f1_1.tar.bz2#0483668c0babf2bb2d493833dc81823b
-https://conda.anaconda.org/conda-forge/osx-64/regex-2020.11.13-py39hcbf5805_1.tar.bz2#d40a804b7e11a3042ae7b6c5834e742b
+https://conda.anaconda.org/conda-forge/osx-64/regex-2021.3.17-py39h89e85a6_0.tar.bz2#d2273bfc9ed7751898a9244c35d90ce9
 https://conda.anaconda.org/conda-forge/noarch/robotframework-lint-1.1-pyh9f0ad1d_0.tar.bz2#c3fa280c4a10c06e83f23193ef4ea5cc
 https://conda.anaconda.org/conda-forge/noarch/robotframework-pythonlibcore-2.2.0-pyhd8ed1ab_0.tar.bz2#29a329f0b817038d27d7bdfb2ca04b5a
 https://conda.anaconda.org/conda-forge/osx-64/ruamel_yaml-0.15.80-py39h4b0b724_1004.tar.bz2#86d87ea0766dc2d41f63f538ddb2dc94
@@ -164,7 +164,7 @@ https://conda.anaconda.org/conda-forge/noarch/mypy-0.812-pyhd8ed1ab_0.tar.bz2#51
 https://conda.anaconda.org/conda-forge/osx-64/pango-1.42.4-ha86e081_5.tar.bz2#23cc7aeb9c983f9bba284efb9de48078
 https://conda.anaconda.org/conda-forge/osx-64/pytest-6.2.2-py39h6e9494a_0.tar.bz2#238a96eff72eddaab41876dd9e8efc70
 https://conda.anaconda.org/conda-forge/osx-64/setuptools-49.6.0-py39h6e9494a_3.tar.bz2#f4f757b28d82aae4f8c7f5aac5c9e477
-https://conda.anaconda.org/conda-forge/osx-64/terminado-0.9.2-py39h6e9494a_0.tar.bz2#a1a55663672d10836ab57a8d3155c5d1
+https://conda.anaconda.org/conda-forge/osx-64/terminado-0.9.3-py39h6e9494a_0.tar.bz2#3d5ed90969f285756ec8153815edfafe
 https://conda.anaconda.org/conda-forge/osx-64/astroid-2.5.1-py39h6e9494a_0.tar.bz2#14c07427873eaff011f6e00571f8766e
 https://conda.anaconda.org/conda-forge/noarch/backports.functools_lru_cache-1.6.1-py_0.tar.bz2#d36df15eaef96549ce6231e3088fba54
 https://conda.anaconda.org/conda-forge/noarch/bleach-3.3.0-pyh44b312d_0.tar.bz2#abf6b76c39358ca36ca706c46f054f2a
@@ -207,7 +207,7 @@ https://conda.anaconda.org/conda-forge/noarch/sphinx-3.5.2-pyhd8ed1ab_0.tar.bz2#
 https://conda.anaconda.org/conda-forge/osx-64/ipykernel-5.5.0-py39h71a6800_1.tar.bz2#fbf8de98d646a6243e32cceea49e9f71
 https://conda.anaconda.org/conda-forge/osx-64/jupyter_server-1.4.1-py39h6e9494a_0.tar.bz2#96e795210a9af4659e3d5f4ceaff6b4a
 https://conda.anaconda.org/conda-forge/noarch/nbsphinx-0.5.0-py_0.tar.bz2#aee9218e8d5ccbba0990a6683b1d0ba9
-https://conda.anaconda.org/conda-forge/noarch/pytest-check-links-0.4.4-pyhd8ed1ab_0.tar.bz2#adf9f0c2f01015fdf6ea9e0d885a8998
+https://conda.anaconda.org/conda-forge/noarch/pytest-check-links-0.5.0-pyhd8ed1ab_0.tar.bz2#5aeb7760b5d994d0599d76eccea9d165
 https://conda.anaconda.org/conda-forge/noarch/recommonmark-0.7.1-pyhd8ed1ab_0.tar.bz2#b3becf9905b8c7ba839072f65e693253
 https://conda.anaconda.org/conda-forge/noarch/sphinx-autobuild-2021.3.14-pyhd8ed1ab_0.tar.bz2#1909f784dc37b4ab97afe2c95aeeabaa
 https://conda.anaconda.org/conda-forge/noarch/sphinx-autodoc-typehints-1.11.1-py_0.tar.bz2#c55b995a94ad51b4b71596573794ec1d

@@ -596,7 +596,7 @@ class C:
         JLPM = "jlpm"
     warnings.warn(f"Python is {PY}, conda is {CONDA}")
     PYM = [PY, "-m"]
-    PIP = [PYM, "pip"]
+    PIP = [*PYM, "pip"]
     INSTALL = [*PIP, "install"]
     FREEZE = [*PIP, "freeze"]
     CHECK = [*PIP, "check"]
