@@ -877,7 +877,7 @@ class U:
             P.ATEST,
         ]
 
-        str_args = [*map(str, [*run_args, *C.PYM, "robot", args])]
+        str_args = [*map(str, [*run_args, *C.PYM, "robot", *args])]
         print(">>>", " ".join(str_args))
         proc = subprocess.Popen(str_args, cwd=P.ATEST)
 
