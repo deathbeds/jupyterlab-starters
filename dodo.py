@@ -22,7 +22,9 @@ def task_lock():
         return
 
     yield U.lock("build", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["node", "lab", "lint"])
-    yield U.lock("binder", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["run", "lab"])
+    yield U.lock(
+        "binder", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["run", "lab", "node", "docs"]
+    )
 
     for subdir in C.SUBDIRS:
         for py in C.PYTHONS:
@@ -36,7 +38,7 @@ def task_lock():
 
 
 def task_env():
-    if C.CI:
+    if C.CI or C.DEMO_IN_BINDER:
         return
     yield dict(
         name="dev",
@@ -50,7 +52,7 @@ def task_env():
 
 def task_lint():
     """improve and ensure code quality"""
-    if C.DOCS_IN_CI or C.TEST_IN_CI:
+    if C.DOCS_IN_CI or C.TEST_IN_CI or C.DEMO_IN_BINDER:
         return
 
     yield dict(
@@ -432,6 +434,9 @@ def task_preflight():
 
 def task_test():
     """run automated tests"""
+    if C.DEMO_IN_BINDER:
+        return
+
     html_utest = P.HTML_UTEST / f"{C.THIS_SUBDIR}-py{C.THIS_PY}.html"
     html_cov = P.HTML_COV / f"{C.THIS_SUBDIR}-py{C.THIS_PY}"
     utest_args = [
@@ -529,18 +534,19 @@ def task_docs():
         ),
     )
 
-    yield dict(
-        name="check:links",
-        **U.run_in(
-            "docs",
-            [[*C.PYM, "scripts.docs", "--only-check-links=1"]],
-            file_dep=[
-                P.SCRIPTS / "docs.py",
-                P.DOCS_SCHEMA_INDEX,
-                P.DOCS_BUILDINFO,
-            ],
-        ),
-    )
+    if not C.DEMO_IN_BINDER:
+        yield dict(
+            name="check:links",
+            **U.run_in(
+                "docs",
+                [[*C.PYM, "scripts.docs", "--only-check-links=1"]],
+                file_dep=[
+                    P.SCRIPTS / "docs.py",
+                    P.DOCS_SCHEMA_INDEX,
+                    P.DOCS_BUILDINFO,
+                ],
+            ),
+        )
 
 
 def task_watch():
@@ -574,6 +580,7 @@ class C:
     SKIP_JLPM_IF_CACHED = bool(json.loads(os.environ.get("SKIP_JLPM_IF_CACHED", "1")))
     DOCS_IN_CI = bool(json.loads(os.environ.get("DOCS_IN_CI", "0")))
     TEST_IN_CI = bool(json.loads(os.environ.get("TEST_IN_CI", "0")))
+    DEMO_IN_BINDER = bool(json.loads(os.environ.get("DEMO_IN_BINDER", "0")))
     RUNNING_LOCALLY = not CI
     RFLINT_RULES = [
         "LineTooLong:200",
@@ -751,7 +758,7 @@ class U:
             env = "dev"
             prefix = P.ENVS / env
 
-        if C.CI:
+        if C.CI or C.DEMO_IN_BINDER:
             prefix = Path(os.environ["CONDA_PREFIX"])
 
         run_args = [

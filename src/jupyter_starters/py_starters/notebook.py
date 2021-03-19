@@ -70,7 +70,7 @@ async def stop_kernel(name, manager):
     """stop the kernel (and clean the tmpdir)"""
     kernel_id, tmpdir = manager.kernel_dirs.pop(name, [None, None])
     if kernel_id:
-        await manager.kernel_manager.shutdown_kernel(kernel_id, now=True)
+        await ensure_async(manager.kernel_manager.shutdown_kernel(kernel_id, now=True))
         shutil.rmtree(tmpdir, ignore_errors=True)
 
 

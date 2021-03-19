@@ -89,8 +89,8 @@ Don't like what you see here? Try these other approaches:
 [binder]: https://mybinder.org/v2/gh/deathbeds/jupyterlab-starters/master?urlpath=lab
 [changelog-badge]: https://img.shields.io/badge/docs-changelog-purple
 [changelog]: https://github.com/deathbeds/jupyterlab-starters/tree/master/CHANGELOG.md
-[ci-badge]: https://img.shields.io/azure-devops/build/nickbollweg/ec62cb62-c61a-4bf3-931c-089d81718737/8
-[ci]: https://dev.azure.com/nickbollweg/deathbeds/_build/latest?definitionId=8&branchName=master
+[ci-badge]: https://github.com/deathbeds/jupyterlab-starters/actions/workflows/ci.yml/badge.svg
+[ci]: https://github.com/deathbeds/jupyterlab-starters/actions/workflows/ci.yml
 [conf]: https://github.com/deathbeds/jupyterlab-starters/tree/master/jupyter_server_config.json
 [contributing]: https://github.com/deathbeds/jupyterlab-starters/tree/master/CONTRIBUTING.md
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter

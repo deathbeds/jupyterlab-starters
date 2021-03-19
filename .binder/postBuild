@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -eux
+
+mamba create --yes \
+    --prefix "${NB_PYTHON_PREFIX}" \
+    --file ".github/locks/binder-linux-64-3.9.conda.lock"
+
+# do a proper activation
+source activate "${NB_PYTHON_PREFIX}"
+
+# some things we just don't need to do on binder
+export DEMO_IN_BINDER=1
+
+jlpm cache clean
+
+doit -n8 preflight || doit preflight
+doit -n8 docs || echo "no docs for you"
