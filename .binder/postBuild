@@ -5,7 +5,8 @@ export IN_BINDER=1
 
 set -eux
 
-mamba env update "${NB_PYTHON_PREFIX}" \
+mamba create --yes \
+    --prefix "${NB_PYTHON_PREFIX}" \
     --file ".github/locks/binder-linux-64-3.9/conda.lock"
 
 # do a proper activation
