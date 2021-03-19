@@ -1,5 +1,5 @@
 # platform: win-64
-# env_hash: 1d46f8385285fed98a7c81655fda5842433d42f3250702987161f27131e0ada8
+# env_hash: 3db9ba8259ee84995fe376bd9b7e09811aff1e4c61a091103d6c375ced92e977
 @EXPLICIT
 https://conda.anaconda.org/conda-forge/win-64/ca-certificates-2020.12.5-h5b45459_0.tar.bz2#f36a2988a9f57cffdc43929ba67a3a2a
 https://conda.anaconda.org/conda-forge/win-64/msys2-conda-epoch-20160418-1.tar.bz2#b0309b72560df66f71a9d5e34a5efdfa

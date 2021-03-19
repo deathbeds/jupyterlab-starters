@@ -1,6 +1,7 @@
 dependencies:
   - cookiecutter
   - importlib_metadata
+  - jupyter_client >=6.1.0
   - python-fastjsonschema
   - python-graphviz
   - ujson

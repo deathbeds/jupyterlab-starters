@@ -1,5 +1,5 @@
 # platform: osx-64
-# env_hash: 59cb39343840395d1fb288db588aab1c1f01c8641a6004ec45f7e5c2c05d87c9
+# env_hash: f68c8b8b2846fae7767183830d2c3b83abbdaffbeb7119c60d17a2dba10f41f3
 @EXPLICIT
 https://conda.anaconda.org/conda-forge/osx-64/ca-certificates-2020.12.5-h033912b_0.tar.bz2#4483d8ea13bd57b52e3539e741501a7d
 https://conda.anaconda.org/conda-forge/noarch/font-ttf-dejavu-sans-mono-2.37-hab24e00_0.tar.bz2#0c96522c6bdaed4b1566d11387caaf45
