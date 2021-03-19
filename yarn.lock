@@ -111,7 +111,17 @@
     tslib "~1.13.0"
 
 "@deathbeds/jupyterlab-rjsf@file:packages/jupyterlab-rjsf":
+  version "1.0.2-a0"
+  dependencies:
+    "@jupyterlab/apputils" "3"
+    "@jupyterlab/rendermime" "3"
+    "@rjsf/core" "~2.4.0"
+    react-codemirror2 "^7.2.1"
+
+"@deathbeds/jupyterlab-rjsf@~1.0.1a0":
   version "1.0.1-a0"
+  resolved "https://registry.yarnpkg.com/@deathbeds/jupyterlab-rjsf/-/jupyterlab-rjsf-1.0.1-a0.tgz#d0965128edaea38da9016c0fdf4113edaa7510f2"
+  integrity sha512-5sg/YuioClIv6gqZEQIMuzcCsXCqxv0gxoBSxvntdLYl9b7Vu08eUm9TtiKJSfIovdsOyPp/sylwXrSkFvGF3w==
   dependencies:
     "@jupyterlab/apputils" "3"
     "@jupyterlab/rendermime" "3"
@@ -119,7 +129,7 @@
     react-codemirror2 "^7.2.1"
 
 "@deathbeds/jupyterlab-starters@file:packages/jupyterlab-starters":
-  version "1.0.1-a0"
+  version "1.0.2-a0"
   dependencies:
     "@deathbeds/jupyterlab-rjsf" "~1.0.1a0"
     "@jupyterlab/application" "3"
@@ -204,9 +214,9 @@
     which "^1.3.1"
 
 "@fortawesome/fontawesome-free@^5.12.0":
-  version "5.15.2"
-  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.15.2.tgz#218cd7276ab4f9ab57cc3d2efa2697e6a579f25d"
-  integrity sha512-7l/AX41m609L/EXI9EKH3Vs3v0iA8tKlIOGtw+kgcoanI7p+e4I4GYLqW3UXWiTnjSFymKSmTTPKYrivzbxxqA==
+  version "5.15.3"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.15.3.tgz#c36ffa64a2a239bf948541a97b6ae8d729e09a9a"
+  integrity sha512-rFnSUN/QOtnOAgqFRooTA3H57JLDm0QEG/jPdk+tLQNL/eWd+Aok8g3qCI+Q1xuDPWpGW/i9JySpJVsq8Q0s9w==
 
 "@hypnosphi/create-react-context@^0.3.1":
   version "0.3.1"
@@ -283,11 +293,11 @@
     "@lumino/signaling" "^1.4.3"
 
 "@jupyterlab/builder@^3.0.1":
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/@jupyterlab/builder/-/builder-3.0.5.tgz#284a97aa8fc236761df694b9c051d82fe4a92a27"
-  integrity sha512-UmKPA+KS2ut+l7uMclJDmuHNuL41K3vfIRVFI1YvDJXsQszmotQqtvEyPpw3wKamy/1aXZSAlA/56hpY3qrg+Q==
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@jupyterlab/builder/-/builder-3.0.6.tgz#e4b47896b19b17cb7f1b6750d554f010c5d70a94"
+  integrity sha512-u/YAoDvU8BUbCDc97Nkq50yX5//BNrpztKpJAegvGJQOXycTeOvIftKyPQxHGd/EBU3C7SQzT7gT9Ut29pAzrQ==
   dependencies:
-    "@jupyterlab/buildutils" "^3.0.3"
+    "@jupyterlab/buildutils" "^3.0.4"
     "@lumino/algorithm" "^1.3.3"
     "@lumino/application" "^1.13.1"
     "@lumino/commands" "^1.12.0"
@@ -309,6 +319,7 @@
     glob "~7.1.6"
     mini-css-extract-plugin "~1.3.2"
     path-browserify "^1.0.0"
+    process "^0.11.10"
     raw-loader "~4.0.0"
     style-loader "~2.0.0"
     supports-color "^7.2.0"
@@ -321,10 +332,10 @@
     webpack-merge "^5.1.2"
     worker-loader "^3.0.2"
 
-"@jupyterlab/buildutils@^3.0.3":
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/@jupyterlab/buildutils/-/buildutils-3.0.3.tgz#b56a920cec69560e859eba5112e8b75c58e08d6d"
-  integrity sha512-sAk4BTcbP6ZP7N8WTEuZM4XfN7+KAwaqvvRX2rLwgeKhJeZkeFgidkGacXcGt3TuKQIgySins6UWejs68P8/Aw==
+"@jupyterlab/buildutils@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@jupyterlab/buildutils/-/buildutils-3.0.4.tgz#5eb7abbbc74aaaaa753a12b68b4263556cef77ff"
+  integrity sha512-BM3uPb7WON/r4upIcAE262urcKkZ/h5ytlkevATzX2+ACTxDBZ8uks4rMIUBoxt28oNSVjoArMLU9g/DP9ciEQ==
   dependencies:
     "@lumino/coreutils" "^1.5.3"
     "@yarnpkg/lockfile" "^1.1.0"
@@ -3453,9 +3464,9 @@ ecc-jsbn@~0.1.1:
     safer-buffer "^2.1.0"
 
 electron-to-chromium@^1.3.649:
-  version "1.3.689"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.689.tgz#0f4082467c109844b79a7b32a2649c9ab6a6c822"
-  integrity sha512-WCn+ZaU3V8WttlLNSOGOAlR2XpxibGre7slwGrYBB6oTjYPgP29LNDGG6wLvLTMseLdE+G1vno7PfY7JyDV48g==
+  version "1.3.692"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.692.tgz#4d00479055a7282cdd1b19caec09ed7779529640"
+  integrity sha512-Ix+zDUAXWZuUzqKdhkgN5dP7ZM+IwMG4yAGFGDLpGJP/3vNEEwuHG1LIhtXUfW0FFV0j38t5PUv2n/3MFSRviQ==
 
 "emoji-regex@>=6.0.0 <=6.1.1":
   version "6.1.1"
@@ -4530,10 +4541,10 @@ hosted-git-info@^2.1.4, hosted-git-info@^2.7.1:
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.8.8.tgz#7539bd4bc1e0e0a895815a2e0262420b12858488"
   integrity sha512-f/wzC2QaWBs7t9IYqB4T3sR1xviIViXJRJTWBlx2Gf3g0Xi5vI7Yy4koXQ1c9OYDGHN9sBy1DQ2AB8fqZBWhUg==
 
-hosted-git-info@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-4.0.0.tgz#9f06639a90beff66cacae6e77f8387b431d61ddc"
-  integrity sha512-fqhGdjk4av7mT9fU/B01dUtZ+WZSc/XEXMoLXDVZukiQRXxeHSSz3AqbeWRJHtF8EQYHlAgB1NSAHU0Cm7aqZA==
+hosted-git-info@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-4.0.1.tgz#710ef5452ea429a844abc33c981056e7371edab7"
+  integrity sha512-eT7NrxAsppPRQEBSwKSosReE+v8OzABwEScQYk5d4uxaEPlzxTIku7LINXtBGalthkLhJnq5lBI89PfK43zAKg==
   dependencies:
     lru-cache "^6.0.0"
 
@@ -6127,13 +6138,13 @@ normalize-package-data@^2.0.0, normalize-package-data@^2.3.0, normalize-package-
     validate-npm-package-license "^3.0.1"
 
 normalize-package-data@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/normalize-package-data/-/normalize-package-data-3.0.1.tgz#98dc56dfe6755d99b1c53f046e1e3d2dde55a1c7"
-  integrity sha512-D/ttLdxo71msR4FF3VgSwK4blHfE3/vGByz1NCeE7/Dh8reQOKNJJjk5L10mLq9jxa+ZHzT1/HLgxljzbXE7Fw==
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/normalize-package-data/-/normalize-package-data-3.0.2.tgz#cae5c410ae2434f9a6c1baa65d5bc3b9366c8699"
+  integrity sha512-6CdZocmfGaKnIHPVFhJJZ3GuR8SsLKvDANFp47Jmy51aKIr8akjAWTSxtpI+MBgBFdSMRyo4hMpDlT6dTffgZg==
   dependencies:
-    hosted-git-info "^4.0.0"
-    resolve "^1.17.0"
-    semver "^7.3.2"
+    hosted-git-info "^4.0.1"
+    resolve "^1.20.0"
+    semver "^7.3.4"
     validate-npm-package-license "^3.0.1"
 
 normalize-url@^3.3.0:
@@ -6845,6 +6856,11 @@ process-nextick-args@~2.0.0:
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
   integrity sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==
 
+process@^0.11.10:
+  version "0.11.10"
+  resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
+  integrity sha1-czIwDoQBYb2j5podHZGn1LwW8YI=
+
 progress@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
@@ -6949,9 +6965,11 @@ q@^1.5.1:
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
 
 qs@^6.9.4:
-  version "6.9.6"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.6.tgz#26ed3c8243a431b2924aca84cc90471f35d5a0ee"
-  integrity sha512-TIRk4aqYLNoJUbd+g2lEdz5kLWIuTMRagAXxl78Q0RiVjAOugHmeKNGdd3cwo/ktpf9aL9epCfFqWDEKysUlLQ==
+  version "6.10.0"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.0.tgz#8b6519121ab291c316a3e4d49cecf6d13d8c7fe5"
+  integrity sha512-yjACOWijC6L/kmPZZAsVBNY2zfHSIbpdpL977quseu56/8BZ2LoF5axK2bGhbzhVKt7V9xgWTtpyLbxwIoER0Q==
+  dependencies:
+    side-channel "^1.0.4"
 
 qs@~6.5.2:
   version "6.5.2"
@@ -7431,7 +7449,7 @@ resolve-url@^0.2.1:
   resolved "https://registry.yarnpkg.com/resolve-url/-/resolve-url-0.2.1.tgz#2c637fe77c893afd2a663fe21aa9080068e2052a"
   integrity sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=
 
-resolve@^1.10.0, resolve@^1.17.0, resolve@^1.18.1, resolve@^1.9.0:
+resolve@^1.10.0, resolve@^1.18.1, resolve@^1.20.0, resolve@^1.9.0:
   version "1.20.0"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.20.0.tgz#629a013fb3f70755d6f0b7935cc1c2c5378b1975"
   integrity sha512-wENBPt4ySzg4ybFQW2TT1zMQucPK95HSh/nq2CFTZVOGut2+pQvSsgtda4d26YrYcr067wjbmzOG8byDPBX63A==
@@ -8244,9 +8262,9 @@ terser-webpack-plugin@^5.1.1:
     terser "^5.5.1"
 
 terser@^5.3.4, terser@^5.5.1:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-5.6.0.tgz#138cdf21c5e3100b1b3ddfddf720962f88badcd2"
-  integrity sha512-vyqLMoqadC1uR0vywqOZzriDYzgEkNJFK4q9GeyOBHIbiECHiWLKcWfbQWAUaPfxkjDhapSlZB9f7fkMrvkVjA==
+  version "5.6.1"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-5.6.1.tgz#a48eeac5300c0a09b36854bf90d9c26fb201973c"
+  integrity sha512-yv9YLFQQ+3ZqgWCUk+pvNJwgUTdlIxUk1WTN+RnaFJe2L7ipG2csPT0ra2XRm7Cs8cxN7QXmK1rFzEwYEQkzXw==
   dependencies:
     commander "^2.20.0"
     source-map "~0.7.2"
@@ -8892,9 +8910,9 @@ webpack-sources@^2.1.1:
     source-map "^0.6.1"
 
 webpack@^5.3.1:
-  version "5.26.0"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.26.0.tgz#269841ed7b5c6522221aa27f7efceda04c8916d7"
-  integrity sha512-9kQATUOGQBkqzNKFmFON4KXZDsXnE7xk58tBxca8aCi+6/QhAbmWIvtGqBL66XIsBFpomFH0/0KyCaySo0ta2g==
+  version "5.26.3"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.26.3.tgz#bafd439abac08fbb82657ec855d038743b725ab8"
+  integrity sha512-z/F2lt2N1fZqaud1B4SzjL3OW03eULThbBXQ2OX4LSrZX4N9k1A5d0Rje3zS2g887DTWyAV0KGqEf64ois2dhg==
   dependencies:
     "@types/eslint-scope" "^3.7.0"
     "@types/estree" "^0.0.46"

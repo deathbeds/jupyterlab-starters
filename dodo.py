@@ -648,8 +648,8 @@ class P:
     YARN_INTEGRITY = NODE_MODULES / ".yarn-integrity"
     DIST = ROOT / "dist"
     # TODO: single-source version
-    PY_VERSION = "1.0.1a0"
-    JS_VERSION = "1.0.1-a0"
+    PY_VERSION = "1.0.2a0"
+    JS_VERSION = "1.0.2-a0"
     SDIST = DIST / f"jupyter_starters-{PY_VERSION}.tar.gz"
     WHEEL = DIST / f"jupyter_starters-{PY_VERSION}-py3-none-any.whl"
     NPM_TARBALLS = {
