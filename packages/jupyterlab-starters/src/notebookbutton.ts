@@ -24,7 +24,7 @@ export class NotebookStarter
   ): IDisposable {
     let button = new CommandToolbarButton({
       commands: this._commands,
-      id: CommandIDs.notebookMeta
+      id: CommandIDs.notebookMeta,
     });
 
     panel.toolbar.insertItem(10, 'starter-notebook', button);

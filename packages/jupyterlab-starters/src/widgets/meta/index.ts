@@ -8,7 +8,7 @@ import {
   ALL_CUSTOM_UI,
   AS_JSONOBJECT,
   AS_TEXTAREA,
-  AS_XML
+  AS_XML,
 } from '@deathbeds/jupyterlab-rjsf';
 
 import { NotebookMetadataModel } from './model';
@@ -41,11 +41,11 @@ export class NotebookMetadata extends Widget {
           uiSchema: AS_JSONOBJECT,
           commands: {
             items: {
-              args: AS_JSONOBJECT
-            }
-          }
+              args: AS_JSONOBJECT,
+            },
+          },
         },
-        ...(await ALL_CUSTOM_UI())
+        ...(await ALL_CUSTOM_UI()),
       },
       { markdown: this.model.manager.markdown }
     );

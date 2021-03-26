@@ -3,7 +3,7 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin,
   ILabShell,
-  IRouter
+  IRouter,
 } from '@jupyterlab/application';
 
 import { PageConfig } from '@jupyterlab/coreutils';
@@ -24,7 +24,7 @@ import {
   CATEGORY,
   IStartContext,
   IStarterManager,
-  DEFAULT_ICON_CLASS
+  DEFAULT_ICON_CLASS,
 } from './tokens';
 import { NotebookStarter } from './notebookbutton';
 import * as SCHEMA from './_schema';
@@ -42,7 +42,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     INotebookTracker,
     IRenderMimeRegistry,
     IRouter,
-    IRunningSessionManagers
+    IRunningSessionManagers,
   ],
   autoStart: true,
   activate: (
@@ -75,7 +75,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
             }
           } else if (response.status === 'done' && response.path.length) {
             await commands.execute('filebrowser:open-path', {
-              path: response.path
+              path: response.path,
             });
           }
         };
@@ -101,7 +101,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
                   starter: response.starter,
                   name: response.name,
                   body: response.body,
-                  cwd: response.path
+                  cwd: response.path,
                 };
                 await runCommands(response);
                 content.model.status = 'ready';
@@ -122,7 +122,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       icon: (args: any) => {
         const context = (args as any) as IStartContext;
         return manager.icon(context.name, context.starter);
-      }
+      },
     });
 
     let metadata: NotebookMetadata | null;
@@ -165,13 +165,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
           ''
         )} as Starter`;
       },
-      iconClass: DEFAULT_ICON_CLASS
+      iconClass: DEFAULT_ICON_CLASS,
     });
 
     const starterPattern = new RegExp(`[\?&]starter=(.+?)(/.*)`);
 
     commands.addCommand(CommandIDs.routerStart, {
-      execute: async args => {
+      execute: async (args) => {
         console.log('routing', args);
         const loc = args as IRouter.ILocation;
         const starterMatch = loc.request.match(starterPattern);
@@ -197,7 +197,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
         void commands.execute(CommandIDs.start, {
           name,
           cwd,
-          starter
+          starter,
         });
 
         if (starter.schema) {
@@ -232,13 +232,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
         }
 
         return router.stop;
-      }
+      },
     });
 
     router.register({
       command: CommandIDs.routerStart,
       pattern: starterPattern,
-      rank: 29
+      rank: 29,
     });
 
     const notebookbutton = new NotebookStarter({ commands });
@@ -256,14 +256,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
         launcher.add({
           command: CommandIDs.start,
           args: { name, starter: starters[name] },
-          category: CATEGORY
+          category: CATEGORY,
         });
         cardsAdded.push(name);
       }
     });
 
     manager.fetch().catch(console.warn);
-  }
+  },
 };
 
 export default plugin;

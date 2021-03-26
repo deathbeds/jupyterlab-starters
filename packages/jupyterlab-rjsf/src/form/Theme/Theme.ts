@@ -4,7 +4,7 @@ const { fields, widgets } = utils.getDefaultRegistry();
 
 const Theme: ThemeProps = {
   fields: { ...fields },
-  widgets: { ...widgets }
+  widgets: { ...widgets },
 };
 
 export default Theme;

@@ -33,7 +33,7 @@ export function makeJSONObjectField(ObjectField: typeof _ObjectField) {
         formData,
         idSchema,
         name,
-        registry = rjsfUtils.getDefaultRegistry()
+        registry = rjsfUtils.getDefaultRegistry(),
       } = this.props;
       const { definitions } = registry;
       const schema = (rjsfUtils as any).retrieveSchema(
@@ -60,7 +60,7 @@ export function makeJSONObjectField(ObjectField: typeof _ObjectField) {
         mode: 'application/json',
         theme: isLight ? 'default' : 'zenburn',
         matchBrackets: true,
-        autoCloseBrackets: true
+        autoCloseBrackets: true,
       };
 
       return (
@@ -84,7 +84,7 @@ export function makeJSONObjectField(ObjectField: typeof _ObjectField) {
           </div>
           <div id={idSchema.$id}>
             <UnControlled
-              editorDidMount={editor => (this._editor = editor)}
+              editorDidMount={(editor) => (this._editor = editor)}
               value={JSON.stringify(formData, null, 2)}
               options={options}
               onChange={this.onChange}

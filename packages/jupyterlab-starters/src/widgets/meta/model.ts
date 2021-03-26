@@ -30,11 +30,11 @@ export class NotebookMetadataModel extends VDomModel {
   get liveSchema() {
     const { definitions } = RAW_SCHEMA;
 
-    let commandIds = this._commands.listCommands().filter(id => {
+    let commandIds = this._commands.listCommands().filter((id) => {
       return (id || '').trim().length;
     });
     commandIds.sort();
-    const commandLabels = commandIds.map(id => {
+    const commandLabels = commandIds.map((id) => {
       let label = '';
       try {
         label = this._commands.label(id) || this._commands.caption(id);
@@ -49,13 +49,13 @@ export class NotebookMetadataModel extends VDomModel {
         title: 'Choose from Commands',
         description: 'Commands available in this JupyterLab',
         enum: commandIds,
-        enumNames: commandLabels
+        enumNames: commandLabels,
       },
       {
         title: 'Other',
         description: 'Any command id',
-        type: 'string'
-      }
+        type: 'string',
+      },
     ];
 
     const starterMeta = definitions['starter-meta'];
@@ -63,7 +63,7 @@ export class NotebookMetadataModel extends VDomModel {
     let schema = {
       definitions,
       type: 'object',
-      ...starterMeta
+      ...starterMeta,
     };
 
     delete schema['required'];
@@ -156,8 +156,8 @@ export class NotebookMetadataModel extends VDomModel {
         ...fromNotebook,
         [NOTEBOOK_META_SUBKEY]: {
           ...nbStarter,
-          ...formStarter
-        }
+          ...formStarter,
+        },
       };
 
       if (!JSONExt.deepEqual(fromNotebook, candidate) && this._notebook.model) {

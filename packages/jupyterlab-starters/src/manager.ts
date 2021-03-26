@@ -36,14 +36,14 @@ export class StarterManager implements IStarterManager {
   }
 
   running() {
-    return (this._running || []).map(name => {
+    return (this._running || []).map((name) => {
       const starter = this.starters[name];
       const icon = this.icon(name, starter) as LabIcon;
       return {
         label: () => starter.label,
         open: () => void 0,
         shutdown: async () => await this.stop(name),
-        icon: () => icon
+        icon: () => icon,
       };
     });
   }
@@ -144,7 +144,7 @@ namespace Private {
     ) {
       icon = new LabIcon({
         name: `${NS}:${name}`,
-        svgstr: starter.icon
+        svgstr: starter.icon,
       });
       _icons.set(name, icon);
     }

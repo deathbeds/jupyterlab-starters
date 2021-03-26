@@ -20,7 +20,7 @@ export function asyncComponent<T extends asyncComponent.TImportable>(
     readonly displayName = 'AsyncComponent';
 
     state: asyncComponent.IState = {
-      __async_component: null
+      __async_component: null,
     };
 
     /**
@@ -33,7 +33,7 @@ export function asyncComponent<T extends asyncComponent.TImportable>(
       }
 
       if (PROMISE == null) {
-        PROMISE = doImport().then(component => (COMPONENT = component));
+        PROMISE = doImport().then((component) => (COMPONENT = component));
       }
 
       // the error may propagate multiple times

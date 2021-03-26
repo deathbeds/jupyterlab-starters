@@ -8,9 +8,9 @@ export function XMLField(props: any) {
     options: {
       cmOptions: {
         ...(props.options?.cmOptions || {}),
-        mode: 'text/xml'
-      }
-    }
+        mode: 'text/xml',
+      },
+    },
   };
   return <CodeMirrorField {...finalProps}></CodeMirrorField>;
 }

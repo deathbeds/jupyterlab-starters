@@ -5,7 +5,7 @@ import {
   runIcon,
   circleIcon,
   stopIcon,
-  closeIcon
+  closeIcon,
 } from '@jupyterlab/ui-components';
 
 import { VDomRenderer } from '@jupyterlab/apputils';
