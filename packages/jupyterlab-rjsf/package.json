@@ -29,7 +29,7 @@
     "upload": "jlpm publish ."
   },
   "dependencies": {
-    "@rjsf/core": "~2.4.0",
+    "@rjsf/core": "~2.5.1",
     "react-codemirror2": "^7.2.1",
     "@jupyterlab/apputils": "3",
     "@jupyterlab/rendermime": "3"
@@ -39,6 +39,6 @@
     "@types/codemirror": "^0.0.97",
     "react": "^17.0.1",
     "rimraf": "~3.0.0",
-    "typescript": "~4.1.3"
+    "typescript": "~4.2.3"
   }
 }
