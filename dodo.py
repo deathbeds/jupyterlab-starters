@@ -735,7 +735,7 @@ class P:
         *ATEST.rglob("*.json"),
         *ALL_PY_SCHEMA,
     ]
-    ALL_PRETTIER = [*ALL_TS, *ALL_JSON, *ALL_CSS, *ALL_YAML]
+    ALL_PRETTIER = [*ALL_TS, *ALL_JSON, *ALL_CSS, *ALL_YAML, *ALL_MD]
     ALL_IPYNB = [
         p
         for p in [*DOCS.rglob("*.ipynb"), *EXAMPLES.rglob("*.ipynb")]

@@ -1,11 +1,12 @@
 # Contributing to jupyter(lab)-starters
 
-`jupyter-starters` and `jupyterlab-starters` are [open source](./LICENSE) software,
-and all contributions conforming to good sense, good taste, and the
-[Jupyter Code of Conduct][code-of-conduct] are welcome, and will be reviewed
-by the contributors, time-permitting.
+`jupyter-starters` and `jupyterlab-starters` are [open source](./LICENSE) software, and
+all contributions conforming to good sense, good taste, and the [Jupyter Code of
+Conduct][code-of-conduct] are welcome, and will be reviewed by the contributors,
+time-permitting.
 
-[code-of-conduct]: https://github.com/jupyter/governance/blob/master/conduct/code_of_conduct.md
+[code-of-conduct]:
+  https://github.com/jupyter/governance/blob/master/conduct/code_of_conduct.md
 
 ## setting up
 
