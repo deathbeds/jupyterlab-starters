@@ -760,21 +760,26 @@ class U:
 
     @classmethod
     def run_args(cls, env=None):
+        conda_prefix = Path(os.environ["CONDA_PREFIX"])
+
         if C.RUNNING_LOCALLY:
             env = "dev"
             prefix = P.ENVS / env
 
         if C.CI or C.DEMO_IN_BINDER:
-            prefix = Path(os.environ["CONDA_PREFIX"])
+            prefix = conda_prefix
 
-        run_args = [
-            C.CONDA,
-            "run",
-            "--prefix",
-            prefix,
-            "--live-stream",
-            "--no-capture-output",
-        ]
+        if prefix == conda_prefix:
+            run_args = []
+        else:
+            run_args = [
+                C.CONDA,
+                "run",
+                "--prefix",
+                prefix,
+                "--live-stream",
+                "--no-capture-output",
+            ]
         return prefix, run_args
 
     @classmethod
