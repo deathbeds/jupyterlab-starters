@@ -85,10 +85,7 @@ export class NotebookMetadataModel extends VDomModel {
     }
 
     if (this._notebook?.model) {
-      this._notebook.model.metadata.changed.disconnect(
-        this.onNotebookMeta,
-        this
-      );
+      this._notebook.model.metadata.changed.disconnect(this.onNotebookMeta, this);
     }
 
     this._notebook = notebook;
@@ -107,8 +104,7 @@ export class NotebookMetadataModel extends VDomModel {
       return;
     }
     const fromNotebook =
-      (this._notebook?.model?.metadata?.get(NOTEBOOK_META_KEY) as JSONObject) ||
-      {};
+      (this._notebook?.model?.metadata?.get(NOTEBOOK_META_KEY) as JSONObject) || {};
     const candidate = (fromNotebook[NOTEBOOK_META_SUBKEY] || {}) as JSONObject;
     if (
       this._form.formData == null ||
@@ -143,10 +139,7 @@ export class NotebookMetadataModel extends VDomModel {
 
       for (const key in uiSchema || {}) {
         if (uiSchema[key]['ui:field'] === 'codemirror-jsonobject') {
-          if (
-            !formStarter[key] ||
-            !Object.keys(formStarter[key] as any).length
-          ) {
+          if (!formStarter[key] || !Object.keys(formStarter[key] as any).length) {
             delete formStarter[key];
           }
         }

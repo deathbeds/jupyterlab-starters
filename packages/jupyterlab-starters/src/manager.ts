@@ -92,10 +92,7 @@ export class StarterManager implements IStarterManager {
     this._changed.emit(void 0);
     this._ready.resolve(void 0);
 
-    if (
-      content.running != null &&
-      !JSONExt.deepEqual(this._running, content.running)
-    ) {
+    if (content.running != null && !JSONExt.deepEqual(this._running, content.running)) {
       this._running = content.running;
       this._runningChanged.emit(void 0);
     }

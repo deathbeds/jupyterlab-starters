@@ -111,6 +111,7 @@ def task_lint():
             [[*prettier, *P.ALL_PRETTIER]],
             file_dep=[
                 P.YARN_INTEGRITY,
+                *P.PRETTIER_CFG,
                 *[p for p in P.ALL_PRETTIER if not p.name.startswith("_")],
             ],
         ),
@@ -726,7 +727,8 @@ class P:
     EXAMPLES = ROOT / "examples"
     CHANGELOG = ROOT / "CHANGELOG.md"
     LICENSE = ROOT / "LICENSE"
-    ALL_MD = [*ROOT.glob("*.md")]
+    PRETTIER_CFG = [ROOT / ".prettierrc", ROOT / ".prettierignore"]
+    ALL_MD = [*ROOT.glob("*.md"), *GITHUB.rglob("*.md")]
     ALL_JSON = [
         *ALL_PACKAGE_JSON,
         *ROOT.glob("*.json"),

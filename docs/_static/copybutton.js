@@ -4,20 +4,20 @@ const messages = {
     copy: 'Copy',
     copy_to_clipboard: 'Copy to clipboard',
     copy_success: 'Copied!',
-    copy_failure: 'Failed to copy'
+    copy_failure: 'Failed to copy',
   },
   es: {
     copy: 'Copiar',
     copy_to_clipboard: 'Copiar al portapapeles',
     copy_success: '¡Copiado!',
-    copy_failure: 'Error al copiar'
+    copy_failure: 'Error al copiar',
   },
   de: {
     copy: 'Kopieren',
     copy_to_clipboard: 'In die Zwischenablage kopieren',
     copy_success: 'Kopiert!',
-    copy_failure: 'Fehler beim Kopieren'
-  }
+    copy_failure: 'Fehler beim Kopieren',
+  },
 };
 
 let locale = 'en';
@@ -32,19 +32,19 @@ if (
  * Set up copy/paste for code blocks
  */
 
-const runWhenDOMLoaded = cb => {
+const runWhenDOMLoaded = (cb) => {
   if (document.readyState != 'loading') {
     cb();
   } else if (document.addEventListener) {
     document.addEventListener('DOMContentLoaded', cb);
   } else {
-    document.attachEvent('onreadystatechange', function() {
+    document.attachEvent('onreadystatechange', function () {
       if (document.readyState == 'complete') cb();
     });
   }
 };
 
-const codeCellId = index => `codecell${index}`;
+const codeCellId = (index) => `codecell${index}`;
 
 // Clears selected text since ClipboardJS will select the text when copying
 const clearSelection = () => {
@@ -76,7 +76,7 @@ const addCopyButtonToCodeCells = () => {
     codeCell.setAttribute('id', id);
     const pre_bg = getComputedStyle(codeCell).backgroundColor;
 
-    const clipboardButton = id =>
+    const clipboardButton = (id) =>
       `<a class="copybtn o-tooltip--left" style="background-color: ${pre_bg}" data-tooltip="${messages[locale]['copy']}" data-clipboard-target="#${id}">
         <img src="${DOCUMENTATION_OPTIONS.URL_ROOT}_static/copy-button.svg" alt="${messages[locale]['copy_to_clipboard']}">
       </a>`;
@@ -84,12 +84,12 @@ const addCopyButtonToCodeCells = () => {
   });
 
   const clipboard = new ClipboardJS('.copybtn');
-  clipboard.on('success', event => {
+  clipboard.on('success', (event) => {
     clearSelection();
     temporarilyChangeTooltip(event.trigger, messages[locale]['copy_success']);
   });
 
-  clipboard.on('error', event => {
+  clipboard.on('error', (event) => {
     temporarilyChangeTooltip(event.trigger, messages[locale]['copy_failure']);
   });
 };

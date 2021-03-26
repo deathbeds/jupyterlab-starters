@@ -35,9 +35,7 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
             <folderIcon.react tag="span" width="16" />
             {path}
           </label>
-          <strong title={context.starter.description}>
-            {context.starter.label}
-          </strong>
+          <strong title={context.starter.description}>{context.starter.label}</strong>
         </footer>
         <section>
           {this.renderCancelButton()}
@@ -49,10 +47,7 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
 
   protected renderCancelButton() {
     return (
-      <button
-        onClick={this.onDone}
-        className={`${CSS.JP.styled} ${CSS.JP.reject}`}
-      >
+      <button onClick={this.onDone} className={`${CSS.JP.styled} ${CSS.JP.reject}`}>
         <closeIcon.react tag="span" verticalAlign="middle" />
         <label> CANCEL</label>
       </button>

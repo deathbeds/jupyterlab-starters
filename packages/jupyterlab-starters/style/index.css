@@ -120,9 +120,7 @@
 }
 
 .jp-Starters-BodyBuilder-buttons button.jp-mod-warn [fill]:not([fill='none']),
-.jp-Starters-BodyBuilder-buttons
-  button.jp-mod-accept
-  [fill]:not([fill='none']) {
+.jp-Starters-BodyBuilder-buttons button.jp-mod-accept [fill]:not([fill='none']) {
   fill: white;
 }
 

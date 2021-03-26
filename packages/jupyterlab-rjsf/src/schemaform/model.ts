@@ -19,9 +19,7 @@ export class SchemaFormModel<T extends JSONValue> extends VDomModel {
     if (options) {
       this._markdown = options.markdown || null;
       this._liveMarkdown =
-        options.liveMarkdown != null
-          ? options.liveMarkdown
-          : this._liveMarkdown;
+        options.liveMarkdown != null ? options.liveMarkdown : this._liveMarkdown;
     }
   }
 

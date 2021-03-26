@@ -29,5 +29,6 @@ https://github.com/deathbeds/jupyterlab-starters/blob/master/CONTRIBUTING.md
 
 - [ ] linted
 - [ ] tested
+- [ ] checked on binder
 - [ ] documented
 - [ ] changelog entry

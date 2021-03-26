@@ -74,6 +74,7 @@ doit watch:docs
 - Download and unpack the artifacts from CI into `dist`
 - Make a GitHub release with all of the release artifacts
 - Upload the releases
+
 ```bash
 twine upload dist/*.whl dist/*.tar.gz
 npm publish dist/*.tgz

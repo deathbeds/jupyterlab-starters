@@ -65,9 +65,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
         const context = (args as any) as IStartContext;
         const { starter, name, cwd, body } = context;
 
-        const runCommands = async (
-          response: SCHEMA.AResponseForStartRequest
-        ) => {
+        const runCommands = async (response: SCHEMA.AResponseForStartRequest) => {
           const starterCommands = response?.starter?.commands;
           if (starterCommands) {
             for (const cmd of starterCommands) {
@@ -160,10 +158,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
         if (!notebook) {
           return '';
         }
-        return `Configure ${notebook.title.label.replace(
-          /.ipynb$/,
-          ''
-        )} as Starter`;
+        return `Configure ${notebook.title.label.replace(/.ipynb$/, '')} as Starter`;
       },
       iconClass: DEFAULT_ICON_CLASS,
     });
@@ -209,9 +204,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
             if (retries-- <= 0) {
               clearInterval(expandInterval);
             }
-            const hidden = document.querySelector(
-              `#jp-right-stack.${CSS.P.hidden}`
-            );
+            const hidden = document.querySelector(`#jp-right-stack.${CSS.P.hidden}`);
             if (hidden) {
               shell.expandRight();
               shell.activateById(contentId);

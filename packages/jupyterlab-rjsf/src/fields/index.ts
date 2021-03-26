@@ -39,8 +39,7 @@ export const ALL_CUSTOM_UI = async (): Promise<Partial<FormProps<any>>> => {
  */
 export const CodeMirrorField = async () =>
   (await import('./codemirror')).CodeMirrorField;
-export const MarkdownField = async () =>
-  (await import('./markdown')).MarkdownField;
+export const MarkdownField = async () => (await import('./markdown')).MarkdownField;
 export const XMLField = async () => (await import('./xml')).XMLField;
 export const JSONObjectField = async () => {
   const reg = utils.getDefaultRegistry();
