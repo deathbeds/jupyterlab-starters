@@ -2,6 +2,8 @@
 
 set -eux
 
+export MAMBA_NO_BANNER=1
+
 mamba create --yes \
     --prefix "${NB_PYTHON_PREFIX}" \
     --file ".github/locks/binder-linux-64-3.9.conda.lock"
