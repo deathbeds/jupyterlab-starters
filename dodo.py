@@ -574,7 +574,7 @@ def task_watch():
     )
 
     yield dict(
-        name="docs", actions=[[*run_args, "sphinx-autobuild", P.DOCS, P.DOCS_OUT]]
+        name="docs", actions=[[*run_args, "sphinx-autobuild", P.DOCS, P.DOCS_OUT_HTML]]
     )
 
 
@@ -704,8 +704,9 @@ class P:
     COVERAGE = ROOT / ".coverage"
     ATEST_OUT = BUILD / "atest"
     DOCS_OUT = BUILD / "docs"
-    DOCS_INDEX = DOCS_OUT / "html/index.html"
-    DOCS_BUILDINFO = DOCS_OUT / "html/.buildinfo"
+    DOCS_OUT_HTML = DOCS_OUT / "html"
+    DOCS_INDEX = DOCS_OUT_HTML / "index.html"
+    DOCS_BUILDINFO = DOCS_OUT_HTML / ".buildinfo"
     DOCS_SCHEMA_INDEX = DOCS / "schema" / "index.rst"
 
     # js stuff

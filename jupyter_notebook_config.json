@@ -66,10 +66,11 @@
         "-m",
         "sphinx-autobuild",
         "docs",
-        "build/docs",
+        "build/docs/html",
         "--port",
         "{port}"
       ],
+      "absolute_url": false,
       "launcher_entry": {
         "icon_path": "/home/jovyan/packages/jupyterlab-starters/style/icons/starter.svg",
         "enabled": true,
