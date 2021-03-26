@@ -2,9 +2,9 @@
 
 > _Parameterized file and directory starters for JupyterLab._
 
-|                                  releases                                   |                  deps                   |         ci          |            demo             |                                          docs                                           |
-| :-------------------------------------------------------------------------: | :-------------------------------------: | :-----------------: | :-------------------------: | :-------------------------------------------------------------------------------------: |
-| [![pypi-badge][]][pypi] [![npm-badge][]][npm] [![license-badge][]][license] | ![python-badge][] ![jupyterlab-badge][] | [![ci-badge][]][ci] | [![binder-badge][]][binder] | [![docs-badge][]][docs] [![roadmap-badge][]][roadmap] [![changelog-badge][]][changelog] |
+|                                      releases                                       |                    deps                     |         ci          |            demo             |                                              docs                                               |
+| :---------------------------------------------------------------------------------: | :-----------------------------------------: | :-----------------: | :-------------------------: | :---------------------------------------------------------------------------------------------: |
+| [![pypi-badge][]][pypi]<br/>[![npm-badge][]][npm]<br/>[![license-badge][]][license] | ![python-badge][]<br/>![jupyterlab-badge][] | [![ci-badge][]][ci] | [![binder-badge][]][binder] | [![docs-badge][]][docs]<br/>[![roadmap-badge][]][roadmap]<br/>[![changelog-badge][]][changelog] |
 
 ![screenshot][]
 
