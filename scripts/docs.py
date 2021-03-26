@@ -99,7 +99,7 @@ def make_schema_docs() -> int:
             "jlpm",
             "jsonschema2md",
             "-x",
-            "docs/schema/raw",
+            "docs/_static/schema",
             "-d",
             SCHEMA_SRC,
             "-e",

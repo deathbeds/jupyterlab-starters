@@ -650,7 +650,11 @@ class P:
     ALL_PACKAGE_JSON = [PACKAGE_JSON, *PACKAGES_JSON]
 
     DOCS_NOTEBOOKS = sorted(DOCS.rglob("*.ipynb"))
-    DOCS_STATIC = [p for p in (DOCS / "_static").rglob("*") if not p.is_dir()]
+    DOCS_STATIC = [
+        p
+        for p in (DOCS / "_static").rglob("*")
+        if not p.is_dir() and p.parent.name != "schema"
+    ]
     DOCS_CONF = DOCS / "conf.py"
     ALL_DOCS_DEPS = [*DOCS_NOTEBOOKS, DOCS_CONF, *DOCS_STATIC]
 
