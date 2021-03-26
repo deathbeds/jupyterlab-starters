@@ -71,6 +71,8 @@
           "--port",
           "{port}"
         ],
+        "timeout": 300,
+        "new_browser_tab": false,
         "absolute_url": false,
         "launcher_entry": {
           "icon_path": "/home/jovyan/packages/jupyterlab-starters/style/icons/starter.svg",
