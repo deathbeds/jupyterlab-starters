@@ -64,9 +64,9 @@
       "command": [
         "python3",
         "-m",
-        "sphinx-autobuild",
-        "docs",
-        "build/docs/html",
+        "sphinx_autobuild",
+        "/home/jovyan/docs",
+        "/home/jovyan/build/docs/html",
         "--port",
         "{port}"
       ],
