@@ -58,5 +58,23 @@
         }
       }
     }
+  },
+  "ServerProxy": {
+    "docs": {
+      "command": [
+        "python3",
+        "-m",
+        "sphinx-autobuild",
+        "docs",
+        "build/docs",
+        "--port",
+        "{port}"
+      ],
+      "launcher_entry": {
+        "icon_path": "/home/jovyan/packages/jupyterlab-starters/style/icons/starter.svg",
+        "enabled": true,
+        "title": "Starters Documentation"
+      }
+    }
   }
 }

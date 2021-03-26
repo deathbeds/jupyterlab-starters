@@ -549,6 +549,19 @@ def task_docs():
             ),
         )
 
+    yield dict(
+        name="binder:conf",
+        file_dep=[P.DEMO_SERVER_CFG],
+        targets=[P.DEMO_NOTEBOOK_CFG],
+        actions=[
+            lambda: [
+                P.DEMO_NOTEBOOK_CFG.unlink(),
+                shutil.copy2(P.DEMO_SERVER_CFG, P.DEMO_NOTEBOOK_CFG),
+                None,
+            ][-1]
+        ],
+    )
+
 
 def task_watch():
     """watch for live developing"""
@@ -743,6 +756,8 @@ class P:
     ]
 
     HACKED_LABEXTENSION = [C.PY, SCRIPTS / "hacked-labextension.py"]
+    DEMO_SERVER_CFG = ROOT / "jupyter_server_config.json"
+    DEMO_NOTEBOOK_CFG = ROOT / "jupyter_notebook_config.json"
 
 
 class D:
