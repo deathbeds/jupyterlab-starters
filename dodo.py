@@ -685,8 +685,8 @@ class P:
     YARN_INTEGRITY = NODE_MODULES / ".yarn-integrity"
     DIST = ROOT / "dist"
     # TODO: single-source version
-    PY_VERSION = "1.0.2a0"
-    JS_VERSION = "1.0.2-a0"
+    PY_VERSION = "1.0.2"
+    JS_VERSION = "1.0.2"
     SDIST = DIST / f"jupyter_starters-{PY_VERSION}.tar.gz"
     WHEEL = DIST / f"jupyter_starters-{PY_VERSION}-py3-none-any.whl"
     NPM_TARBALLS = {
@@ -995,12 +995,16 @@ class R(doit.reporter.ConsoleReporter):
 
     def outtro(self, task, emoji, status):
         title = task.title()
-        start, end = self._timings[title] = [
-            *self._timings.get(title, []),
-            datetime.now(),
-        ]
-        delta = end - start
-        sec = str(delta.seconds).rjust(7)
+        sec = "???"
+        try:
+            start, end = self._timings[title] = [
+                *self._timings.get(title, []),
+                datetime.now(),
+            ]
+            delta = end - start
+            sec = str(delta.seconds).rjust(7)
+        except Exception:
+            pass
         self.outstream.write(f"{emoji}  {sec}s   {status}  {task.title()}\n")
 
     def add_failure(self, task, exception):

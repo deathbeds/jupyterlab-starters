@@ -1,12 +1,12 @@
 # CHANGELOG
 
-## `jupyter_starters 1.0.2a0` (unreleased)
+## `jupyter_starters 1.0.2` (unreleased)
 
 - [#54][] adapt kernel shutdown to newer `jupyter_client >=6.1` API
 
-## `@deathbeds/jupyterlab-starters 1.0.2a0` (unreleased)
+## `@deathbeds/jupyterlab-starters 1.0.2` (unreleased)
 
-## `@deathbeds/jupyterlab-rjsf 1.0.2a0` (unreleased)
+## `@deathbeds/jupyterlab-rjsf 1.0.2` (unreleased)
 
 - [#56][] upgrade to `@rjsf/core 2.5.1`
 

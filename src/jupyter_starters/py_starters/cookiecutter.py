@@ -99,13 +99,11 @@ def cookiecutter_starters(manager):
                         "title": "Checkout",
                         "description": "The branch, tag, or commit ID to use",
                         "type": "string",
+                        "default": "HEAD",
                     },
                 },
             },
-            "uiSchema": {
-                "template": {"ui:autofocus": True},
-                "checkout": {"ui:placeholder": "master"},
-            },
+            "uiSchema": {"template": {"ui:autofocus": True}},
         }
     }
 
@@ -185,21 +183,24 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
 
     context_file = Path(repo_dir) / "cookiecutter.json"
 
-    base_context = cookiecutter.main.generate_context(
-        context_file=str(context_file),
-        default_context=config_dict["default_context"],
-        extra_context={},
+    base_context = dict(
+        cookiecutter.main.generate_context(
+            context_file=str(context_file),
+            default_context=config_dict["default_context"],
+            extra_context={},
+        )
     )
 
     manager.log.debug(f"🍪 base_context: {base_context}")
 
-    schema = cookiecutter_to_schema(base_context["cookiecutter"])
+    schema, ui_schema = cookiecutter_to_schema(base_context["cookiecutter"])
 
     manager.log.debug(f"🍪 schema: {schema}")
 
     new_starter = deepcopy(starter)
     new_starter["schema"]["required"] += ["cookiecutter"]
     new_starter["schema"]["properties"]["cookiecutter"] = schema
+    new_starter.setdefault("uiSchema", {})["cookiecutter"] = ui_schema
 
     validator = json_validator(new_starter["schema"])
 
@@ -269,6 +270,7 @@ def cookiecutter_to_schema(cookiecutter):
         "type": "object",
         "properties": {},
     }
+    ui_schema = {}
     schema["properties"] = properties = {}
 
     for field, value in cookiecutter.items():
@@ -276,10 +278,13 @@ def cookiecutter_to_schema(cookiecutter):
         if isinstance(value, str):
             if value in bools:
                 properties[field] = {
-                    "type": "boolean",
-                    "default": bools[value],
+                    "type": "string",
+                    "default": value,
                     "title": title,
+                    "enum": [*bools.keys()],
+                    "enumNames": ["yes", "no"],
                 }
+                ui_schema[field] = {"ui:widget": "radio"}
                 continue
 
             value_no_tmpl = re.sub(r"{[%{].*?[%}]}", "", value)
@@ -303,4 +308,4 @@ def cookiecutter_to_schema(cookiecutter):
             continue
 
     schema["required"] = sorted(list(schema["properties"].keys()))
-    return schema
+    return schema, ui_schema
