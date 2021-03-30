@@ -8,6 +8,8 @@
 
 ## `@deathbeds/jupyterlab-rjsf 1.0.2a0` (unreleased)
 
+- [#56][] upgrade to `@rjsf/core 2.5.1`
+
 ---
 
 ## `jupyter_starters 1.0.1a0`
@@ -27,10 +29,9 @@
 ## `jupyter_starters 1.0.0a0`
 
 - [#48][] support JupyterLab 3.x
-  - it is now only necessary (and supported) to `pip` install this package
-    to also install JupyterLab extensions
-  - JupyterLab 1/2-style installation for user Lab Apps is no longer
-    tested
+  - it is now only necessary (and supported) to `pip` install this package to also
+    install JupyterLab extensions
+  - JupyterLab 1/2-style installation for user Lab Apps is no longer tested
   - for downstreams extensions, releases will continue on `npmjs.org`
     - versions sycned to the python package
     - on-going API support TBD
@@ -189,3 +190,4 @@
 [#48]: https://github.com/deathbeds/jupyterlab-starters/issues/48
 [#51]: https://github.com/deathbeds/jupyterlab-starters/pull/51
 [#54]: https://github.com/deathbeds/jupyterlab-starters/pull/54
+[#56]: https://github.com/deathbeds/jupyterlab-starters/pull/56

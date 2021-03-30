@@ -41,7 +41,7 @@ export class BodyBuilder extends Widget {
         liveValidate: true,
         formData: this._context.body,
         uiSchema: this._context.starter.uiSchema || {},
-        ...(await ALL_CUSTOM_UI())
+        ...(await ALL_CUSTOM_UI()),
       },
       { markdown: this.model.manager.markdown }
     );

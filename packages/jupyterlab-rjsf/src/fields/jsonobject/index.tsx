@@ -33,7 +33,7 @@ export function makeJSONObjectField(ObjectField: typeof _ObjectField) {
         formData,
         idSchema,
         name,
-        registry = rjsfUtils.getDefaultRegistry()
+        registry = rjsfUtils.getDefaultRegistry(),
       } = this.props;
       const { definitions } = registry;
       const schema = (rjsfUtils as any).retrieveSchema(
@@ -49,9 +49,7 @@ export function makeJSONObjectField(ObjectField: typeof _ObjectField) {
         title = schema.title === undefined ? name : schema.title;
       }
 
-      const isLight = !!document.querySelector(
-        'body[data-jp-theme-light="true"]'
-      );
+      const isLight = !!document.querySelector('body[data-jp-theme-light="true"]');
 
       const description = uiSchema['ui:description'] || schema.description;
       const { canSave } = this;
@@ -60,7 +58,7 @@ export function makeJSONObjectField(ObjectField: typeof _ObjectField) {
         mode: 'application/json',
         theme: isLight ? 'default' : 'zenburn',
         matchBrackets: true,
-        autoCloseBrackets: true
+        autoCloseBrackets: true,
       };
 
       return (
@@ -84,7 +82,7 @@ export function makeJSONObjectField(ObjectField: typeof _ObjectField) {
           </div>
           <div id={idSchema.$id}>
             <UnControlled
-              editorDidMount={editor => (this._editor = editor)}
+              editorDidMount={(editor) => (this._editor = editor)}
               value={JSON.stringify(formData, null, 2)}
               options={options}
               onChange={this.onChange}
@@ -103,9 +101,7 @@ export function makeJSONObjectField(ObjectField: typeof _ObjectField) {
     }
 
     onReset = () => {
-      this._editor
-        .getDoc()
-        .setValue(JSON.stringify(this.props.formData, null, 2));
+      this._editor.getDoc().setValue(JSON.stringify(this.props.formData, null, 2));
     };
 
     onSave = () => {

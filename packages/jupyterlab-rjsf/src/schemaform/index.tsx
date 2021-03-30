@@ -19,11 +19,11 @@ const RENDERABLE_LABELS = [
   '.control-label',
   '.help-block',
   '.field-radio-group .radio > label > span > span',
-  '.field-boolean .checkbox > label > span'
+  '.field-boolean .checkbox > label > span',
 ];
 const ALL_LABELS = RENDERABLE_LABELS.join(', ');
 const UNRENDERED_LABELS = RENDERABLE_LABELS.map(
-  s => `${s}:not(.jp-RenderedMarkdown)`
+  (s) => `${s}:not(.jp-RenderedMarkdown)`
 ).join(', ');
 
 /**
@@ -93,7 +93,7 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
         if (props.onChange) {
           props.onChange(evt, err);
         }
-      }
+      },
     };
 
     setTimeout(this._postRender, 100);
@@ -119,7 +119,7 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
   getValue() {
     return {
       formData: this.model.formData,
-      errors: this.model.errors
+      errors: this.model.errors,
     };
   }
 
@@ -167,7 +167,7 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
       latexTypesetter: markdown.latexTypesetter,
       resolver: markdown.resolver,
       linkHandler: markdown.linkHandler,
-      shouldTypeset: true
+      shouldTypeset: true,
     });
 
     const canary = document.createElement('span');

@@ -7,7 +7,7 @@ export function CodeMirrorField(props: any) {
 
   const cmOptions = {
     ...codeMirrorDefaults(),
-    ...(options?.cmOptions || {})
+    ...(options?.cmOptions || {}),
   };
 
   const onChange = (editor: CodeMirror.Editor, data: any, value: string) => {
@@ -36,6 +36,6 @@ export function codeMirrorDefaults() {
     theme: isLight ? 'default' : 'zenburn',
     matchBrackets: true,
     autoCloseBrackets: true,
-    lineWrapping: true
+    lineWrapping: true,
   };
 }

@@ -3,7 +3,7 @@ import COOKIECUTTER_SVG from '!!raw-loader!../style/icons/cookiecutter.svg';
 
 export const CSS = {
   P: {
-    hidden: 'p-mod-hidden'
+    hidden: 'p-mod-hidden',
   },
   JP: {
     accept: 'jp-mod-accept',
@@ -13,8 +13,8 @@ export const CSS = {
     icon16: 'jp-MaterialIcon jp-Icon16',
     ICON_CLASS: {
       filledCircle: 'jp-FilledCircleIcon',
-      close: 'jp-CloseIcon'
-    }
+      close: 'jp-CloseIcon',
+    },
   },
   BUILDER: 'jp-Starters-BodyBuilder',
   BUILDER_BUTTONS: 'jp-Starters-BodyBuilder-buttons',
@@ -24,10 +24,10 @@ export const CSS = {
   LAUNCHER: {
     CARD: 'jp-LauncherCard',
     ICON: 'jp-LauncherCard-icon',
-    LABEL: 'jp-LauncherCard-label'
+    LABEL: 'jp-LauncherCard-label',
   },
   SVG: {
     DEFAULT_ICON: DEFAULT_ICON_SVG,
-    COOKIECUTTER: COOKIECUTTER_SVG
-  }
+    COOKIECUTTER: COOKIECUTTER_SVG,
+  },
 };

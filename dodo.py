@@ -111,6 +111,7 @@ def task_lint():
             [[*prettier, *P.ALL_PRETTIER]],
             file_dep=[
                 P.YARN_INTEGRITY,
+                *P.PRETTIER_CFG,
                 *[p for p in P.ALL_PRETTIER if not p.name.startswith("_")],
             ],
         ),
@@ -548,6 +549,19 @@ def task_docs():
             ),
         )
 
+    yield dict(
+        name="binder:conf",
+        file_dep=[P.DEMO_SERVER_CFG],
+        targets=[P.DEMO_NOTEBOOK_CFG],
+        actions=[
+            lambda: [
+                P.DEMO_NOTEBOOK_CFG.unlink(),
+                shutil.copy2(P.DEMO_SERVER_CFG, P.DEMO_NOTEBOOK_CFG),
+                None,
+            ][-1]
+        ],
+    )
+
 
 def task_watch():
     """watch for live developing"""
@@ -560,7 +574,7 @@ def task_watch():
     )
 
     yield dict(
-        name="docs", actions=[[*run_args, "sphinx-autobuild", P.DOCS, P.DOCS_OUT]]
+        name="docs", actions=[[*run_args, "sphinx-autobuild", P.DOCS, P.DOCS_OUT_HTML]]
     )
 
 
@@ -650,7 +664,11 @@ class P:
     ALL_PACKAGE_JSON = [PACKAGE_JSON, *PACKAGES_JSON]
 
     DOCS_NOTEBOOKS = sorted(DOCS.rglob("*.ipynb"))
-    DOCS_STATIC = [p for p in (DOCS / "_static").rglob("*") if not p.is_dir()]
+    DOCS_STATIC = [
+        p
+        for p in (DOCS / "_static").rglob("*")
+        if not p.is_dir() and p.parent.name != "schema"
+    ]
     DOCS_CONF = DOCS / "conf.py"
     ALL_DOCS_DEPS = [*DOCS_NOTEBOOKS, DOCS_CONF, *DOCS_STATIC]
 
@@ -686,8 +704,9 @@ class P:
     COVERAGE = ROOT / ".coverage"
     ATEST_OUT = BUILD / "atest"
     DOCS_OUT = BUILD / "docs"
-    DOCS_INDEX = DOCS_OUT / "html/index.html"
-    DOCS_BUILDINFO = DOCS_OUT / "html/.buildinfo"
+    DOCS_OUT_HTML = DOCS_OUT / "html"
+    DOCS_INDEX = DOCS_OUT_HTML / "index.html"
+    DOCS_BUILDINFO = DOCS_OUT_HTML / ".buildinfo"
     DOCS_SCHEMA_INDEX = DOCS / "schema" / "index.rst"
 
     # js stuff
@@ -722,14 +741,15 @@ class P:
     EXAMPLES = ROOT / "examples"
     CHANGELOG = ROOT / "CHANGELOG.md"
     LICENSE = ROOT / "LICENSE"
-    ALL_MD = [*ROOT.glob("*.md")]
+    PRETTIER_CFG = [ROOT / ".prettierrc", ROOT / ".prettierignore"]
+    ALL_MD = [*ROOT.glob("*.md"), *GITHUB.rglob("*.md")]
     ALL_JSON = [
         *ALL_PACKAGE_JSON,
         *ROOT.glob("*.json"),
         *ATEST.rglob("*.json"),
         *ALL_PY_SCHEMA,
     ]
-    ALL_PRETTIER = [*ALL_TS, *ALL_JSON, *ALL_CSS, *ALL_YAML]
+    ALL_PRETTIER = [*ALL_TS, *ALL_JSON, *ALL_CSS, *ALL_YAML, *ALL_MD]
     ALL_IPYNB = [
         p
         for p in [*DOCS.rglob("*.ipynb"), *EXAMPLES.rglob("*.ipynb")]
@@ -737,6 +757,8 @@ class P:
     ]
 
     HACKED_LABEXTENSION = [C.PY, SCRIPTS / "hacked-labextension.py"]
+    DEMO_SERVER_CFG = ROOT / "jupyter_server_config.json"
+    DEMO_NOTEBOOK_CFG = ROOT / "jupyter_notebook_config.json"
 
 
 class D:
@@ -754,21 +776,26 @@ class U:
 
     @classmethod
     def run_args(cls, env=None):
+        conda_prefix = Path(os.environ["CONDA_PREFIX"])
+
         if C.RUNNING_LOCALLY:
             env = "dev"
             prefix = P.ENVS / env
 
         if C.CI or C.DEMO_IN_BINDER:
-            prefix = Path(os.environ["CONDA_PREFIX"])
+            prefix = conda_prefix
 
-        run_args = [
-            C.CONDA,
-            "run",
-            "--prefix",
-            prefix,
-            "--live-stream",
-            "--no-capture-output",
-        ]
+        if prefix == conda_prefix:
+            run_args = []
+        else:
+            run_args = [
+                C.CONDA,
+                "run",
+                "--prefix",
+                prefix,
+                "--live-stream",
+                "--no-capture-output",
+            ]
         return prefix, run_args
 
     @classmethod

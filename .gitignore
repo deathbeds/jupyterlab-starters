@@ -13,9 +13,11 @@ _build
 *.egg-info
 *.log
 *.tgz
+*.tsbuildinfo
 atest/output/
 build/
 dist/
+docs/_static/schema
 docs/schema
 envs/
 lib/
@@ -23,4 +25,3 @@ node_modules/
 src/**/labextension/
 untitled*
 Untitled*
-*.tsbuildinfo

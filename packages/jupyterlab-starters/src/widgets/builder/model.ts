@@ -94,7 +94,7 @@ export class BuilderModel extends VDomModel {
     this.status = 'starting';
     this._start.emit({
       ...this._context,
-      body: this._form.formData
+      body: this._form.formData,
     });
   }
 

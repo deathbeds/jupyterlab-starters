@@ -3,7 +3,7 @@ module.exports = {
     browser: true,
     es6: true,
     commonjs: true,
-    node: true
+    node: true,
   },
   root: true,
   extends: [
@@ -11,19 +11,16 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier/@typescript-eslint',
-    'plugin:react/recommended'
+    'plugin:react/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: 'tsconfig.eslint.json'
+    project: 'tsconfig.eslint.json',
   },
   plugins: ['@typescript-eslint'],
   rules: {
     '@typescript-eslint/no-floating-promises': ['error', { ignoreVoid: true }],
-    '@typescript-eslint/interface-name-prefix': [
-      'error',
-      { prefixWithI: 'always' }
-    ],
+    '@typescript-eslint/interface-name-prefix': ['error', { prefixWithI: 'always' }],
     '@typescript-eslint/no-unused-vars': ['warn', { args: 'none' }],
     '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/camelcase': 'off',
@@ -42,11 +39,11 @@ module.exports = {
     'no-undef': 'warn',
     'no-case-declarations': 'warn',
     'no-useless-escape': 'off',
-    'prefer-const': 'off'
+    'prefer-const': 'off',
   },
   settings: {
     react: {
-      version: 'detect'
-    }
-  }
+      version: 'detect',
+    },
+  },
 };

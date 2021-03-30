@@ -9,9 +9,9 @@ export function MarkdownField(props: any) {
       ...(props.options || {}),
       cmOptions: {
         ...(props.options?.cmOptions || {}),
-        mode: 'text/x-ipythongfm'
-      }
-    }
+        mode: 'text/x-ipythongfm',
+      },
+    },
   };
   return <CodeMirrorField {...finalProps}></CodeMirrorField>;
 }

@@ -11,7 +11,7 @@ export const CUSTOM_UI_WIDGETS = async () => {
   return {
     'codemirror-xml': await XMLField(),
     codemirror: await CodeMirrorField(),
-    'codemirror-markdown': await MarkdownField()
+    'codemirror-markdown': await MarkdownField(),
   };
 };
 
@@ -20,7 +20,7 @@ export const CUSTOM_UI_WIDGETS = async () => {
  */
 export const CUSTOM_UI_FIELDS = async () => {
   return {
-    'codemirror-jsonobject': await JSONObjectField()
+    'codemirror-jsonobject': await JSONObjectField(),
   };
 };
 
@@ -30,7 +30,7 @@ export const CUSTOM_UI_FIELDS = async () => {
 export const ALL_CUSTOM_UI = async (): Promise<Partial<FormProps<any>>> => {
   return {
     fields: await CUSTOM_UI_FIELDS(),
-    widgets: await CUSTOM_UI_WIDGETS()
+    widgets: await CUSTOM_UI_WIDGETS(),
   };
 };
 
@@ -39,8 +39,7 @@ export const ALL_CUSTOM_UI = async (): Promise<Partial<FormProps<any>>> => {
  */
 export const CodeMirrorField = async () =>
   (await import('./codemirror')).CodeMirrorField;
-export const MarkdownField = async () =>
-  (await import('./markdown')).MarkdownField;
+export const MarkdownField = async () => (await import('./markdown')).MarkdownField;
 export const XMLField = async () => (await import('./xml')).XMLField;
 export const JSONObjectField = async () => {
   const reg = utils.getDefaultRegistry();

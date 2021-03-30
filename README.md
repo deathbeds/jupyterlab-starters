@@ -2,9 +2,9 @@
 
 > _Parameterized file and directory starters for JupyterLab._
 
-|                                  releases                                   |                  deps                   |         ci          |            demo             |                                          docs                                           |
-| :-------------------------------------------------------------------------: | :-------------------------------------: | :-----------------: | :-------------------------: | :-------------------------------------------------------------------------------------: |
-| [![pypi-badge][]][pypi] [![npm-badge][]][npm] [![license-badge][]][license] | ![python-badge][] ![jupyterlab-badge][] | [![ci-badge][]][ci] | [![binder-badge][]][binder] | [![docs-badge][]][docs] [![roadmap-badge][]][roadmap] [![changelog-badge][]][changelog] |
+|                                      releases                                       |                    deps                     |         ci          |            demo             |                                              docs                                               |
+| :---------------------------------------------------------------------------------: | :-----------------------------------------: | :-----------------: | :-------------------------: | :---------------------------------------------------------------------------------------------: |
+| [![pypi-badge][]][pypi]<br/>[![npm-badge][]][npm]<br/>[![license-badge][]][license] | ![python-badge][]<br/>![jupyterlab-badge][] | [![ci-badge][]][ci] | [![binder-badge][]][binder] | [![docs-badge][]][docs]<br/>[![roadmap-badge][]][roadmap]<br/>[![changelog-badge][]][changelog] |
 
 ![screenshot][]
 
@@ -59,8 +59,8 @@ jupyter --paths
 They will be merged from bottom to top, and the directory where you launch your
 `notebook` server wins, making it easy to check in to version control.
 
-The very simplest starter, `copy`, will copy a file or folder to the location
-it is launched from in the JupyterLab [Launcher][].
+The very simplest starter, `copy`, will copy a file or folder to the location it is
+launched from in the JupyterLab [Launcher][].
 
 ```json
 {
@@ -89,15 +89,19 @@ Don't like what you see here? Try these other approaches:
 [binder]: https://mybinder.org/v2/gh/deathbeds/jupyterlab-starters/master?urlpath=lab
 [changelog-badge]: https://img.shields.io/badge/docs-changelog-purple
 [changelog]: https://github.com/deathbeds/jupyterlab-starters/tree/master/CHANGELOG.md
-[ci-badge]: https://github.com/deathbeds/jupyterlab-starters/actions/workflows/ci.yml/badge.svg
+[ci-badge]:
+  https://github.com/deathbeds/jupyterlab-starters/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/deathbeds/jupyterlab-starters/actions/workflows/ci.yml
-[conf]: https://github.com/deathbeds/jupyterlab-starters/tree/master/jupyter_server_config.json
-[contributing]: https://github.com/deathbeds/jupyterlab-starters/tree/master/CONTRIBUTING.md
+[conf]:
+  https://github.com/deathbeds/jupyterlab-starters/tree/master/jupyter_server_config.json
+[contributing]:
+  https://github.com/deathbeds/jupyterlab-starters/tree/master/CONTRIBUTING.md
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
 [docs-badge]: https://readthedocs.org/projects/jupyterstarters/badge/?version=latest
 [docs]: https://jupyterstarters.readthedocs.io/en/latest/?badge=latest
 [jupyterlab-badge]: https://img.shields.io/badge/jupyterlab-3.x-orange?logo=jupyter
-[launcher]: https://jupyterlab.readthedocs.io/en/stable/user/files.html#creating-files-and-activities
+[launcher]:
+  https://jupyterlab.readthedocs.io/en/stable/user/files.html#creating-files-and-activities
 [license-badge]: https://img.shields.io/github/license/deathbeds/jupyterlab-starters
 [license]: https://github.com/deathbeds/jupyterlab-starters/tree/master/LICENSE
 [notebook-config]: https://jupyter-notebook.readthedocs.io/en/stable/config.html
@@ -108,4 +112,5 @@ Don't like what you see here? Try these other approaches:
 [python-badge]: https://img.shields.io/badge/python-3.6+-blue?logo=python
 [roadmap-badge]: https://img.shields.io/badge/docs-roadmap-purple
 [roadmap]: https://github.com/deathbeds/jupyterlab-starters/tree/master/ROADMAP.md
-[screenshot]: https://raw.githubusercontent.com/deathbeds/jupyterlab-starters/master/docs/screenshot.png
+[screenshot]:
+  https://raw.githubusercontent.com/deathbeds/jupyterlab-starters/master/docs/screenshot.png
