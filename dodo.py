@@ -995,12 +995,16 @@ class R(doit.reporter.ConsoleReporter):
 
     def outtro(self, task, emoji, status):
         title = task.title()
-        start, end = self._timings[title] = [
-            *self._timings.get(title, []),
-            datetime.now(),
-        ]
-        delta = end - start
-        sec = str(delta.seconds).rjust(7)
+        sec = "???"
+        try:
+            start, end = self._timings[title] = [
+                *self._timings.get(title, []),
+                datetime.now(),
+            ]
+            delta = end - start
+            sec = str(delta.seconds).rjust(7)
+        except Exception:
+            pass
         self.outstream.write(f"{emoji}  {sec}s   {status}  {task.title()}\n")
 
     def add_failure(self, task, exception):
