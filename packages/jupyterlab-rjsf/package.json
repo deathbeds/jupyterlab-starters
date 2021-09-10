@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-rjsf",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "React JSON Schema Form for JupyterLab",
   "keywords": [
     "jupyter",

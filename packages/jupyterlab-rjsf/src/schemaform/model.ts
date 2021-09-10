@@ -15,6 +15,9 @@ export class SchemaFormModel<T extends JSONValue> extends VDomModel {
     this.schema = schema;
     if (props) {
       this.props = props;
+      if (props.formData) {
+        this.formData = props.formData;
+      }
     }
     if (options) {
       this._markdown = options.markdown || null;
