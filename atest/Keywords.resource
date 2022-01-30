@@ -16,17 +16,21 @@ Setup Server And Browser
     Initialize Devices
     Initialize Paths
     Initialize User Settings
-    ${app args} =    Build App Args
-    Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots
-    ${server} =    Start Process    jupyter lab ${app args}    shell=yes    env:HOME=${home}
-    ...    cwd=${home}    stdout=${OUTPUT DIR}${/}lab.log    stderr=STDOUT
-    Set Global Variable    ${SERVER}    ${server}
+    Initialize Server
     Open JupyterLab
 
 Initialize Devices
     [Documentation]    Prepare device-specific values
     ${accel} =    Evaluate    "COMMAND" if "${OS}" == "Darwin" else "CTRL"
     Set Global Variable    ${ACCEL}    ${accel}
+    Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots
+
+Initialize Server
+    [Documentation]    Actually start the server
+    ${app args} =    Build App Args
+    ${server} =    Start Process    jupyter lab ${app args}    shell=yes    env:HOME=${home}
+    ...    cwd=${home}    stdout=${OUTPUT DIR}${/}lab.log    stderr=STDOUT
+    Set Global Variable    ${SERVER}    ${server}
 
 Initialize URL
     [Documentation]    Setup URL-related values
@@ -43,20 +47,21 @@ Initialize Paths
     Set Global Variable    ${HOME}    ${home}
     Create Directory    ${home}
     Update Examples    ${home}
-    ${WORKSPACES DIR} =    Set Variable    ${OUTPUT DIR}${/}workspaces
+    ${workspaces dir} =    Set Variable    ${OUTPUT DIR}${/}workspaces
+    Set Global Variable    ${WORKSPACES DIR}    ${workspaces dir}
 
 Build App Args
     [Documentation]    Build JupyterLab CLI arguments
     ${app args} =    Set Variable
     ...    --no-browser --debug --port\=${PORT}
     ${app args} =    Set Variable
-    ...    ${app args } --ServerApp.base_url\='${BASE}' --ServerApp.token\='${TOKEN}'
+    ...    ${app args} --ServerApp.base_url\='${BASE}' --ServerApp.token\='${TOKEN}'
     ${app args} =    Set Variable
-    ...    ${app args } --NotebookApp.mathjax_url\='http://localhost:${PORT}${MATHJAX}'
+    ...    ${app args} --NotebookApp.mathjax_url\='http://localhost:${PORT}${MATHJAX}'
     ${app args} =    Set Variable
-    ...    ${app args } --LabApp.user_settings_dir='${SETTINGS DIR.replace('\\', '\\\\')}'
+    ...    ${app args} --LabApp.user_settings_dir='${SETTINGS DIR.replace('\\', '\\\\')}'
     ${app args} =    Set Variable
-    ...    ${apppath args} --LabApp.workspaces_dir\='${WORKSPACES DIR.replace('\\', '\\\\')}'
+    ...    ${app args} --LabApp.workspaces_dir\='${WORKSPACES DIR.replace('\\', '\\\\')}'
     [Return]    ${app args}
 
 Update Examples

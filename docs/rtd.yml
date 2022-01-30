@@ -16,7 +16,7 @@ dependencies:
   - pkginfo
   - pydata-sphinx-theme
   - pytest-check-links
-  - python >=3.8,<3.9.0a0
+  - python >=3.9,<3.10.0a0
   - sphinx
   - sphinx-autodoc-typehints
   - sphinx-copybutton
