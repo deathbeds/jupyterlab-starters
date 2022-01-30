@@ -48,14 +48,14 @@
     "@types/codemirror": "^0.0.97",
     "@types/react": "^17.0.0",
     "@deathbeds/jupyterlab-rjsf": "~1.1.0",
-    "@jupyterlab/builder": "^3.0.1",
+    "@jupyterlab/builder": "^3.2.1",
     "@jupyterlab/running": "3",
     "@jupyterlab/launcher": "3",
     "@jupyterlab/notebook": "3",
     "json-schema-to-typescript": "^8.0.0",
     "react": "^17.0.1",
     "rimraf": "~3.0.0",
-    "typescript": "~4.2.3"
+    "typescript": "~4.5.5"
   },
   "jupyterlab": {
     "discovery": {
@@ -71,6 +71,9 @@
     "extension": "lib/plugin.js",
     "outputDir": "../../src/jupyter_starters/labextension",
     "sharedPackages": {
+      "@deathbeds/jupyterlab-rjsf": {
+        "bundled": true
+      },
       "@rjsf/core": {
         "bundled": true
       }
