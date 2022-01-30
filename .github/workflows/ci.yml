@@ -13,9 +13,9 @@ env:
   PYTHONUNBUFFERED: '1'
   PIP_DISABLE_PIP_VERSION_CHECK: '1'
   # our stuff
-  SKIP_JLPM_IF_CACHED: 1
-  CACHE_EPOCH: 3
-  ATEST_RETRIES: 3
+  SKIP_JLPM_IF_CACHED: '1'
+  CACHE_EPOCH: '3'
+  ATEST_RETRIES: '3'
   DIST_NAME: jupyter-starters dist ${{ github.run_number }}
 
 defaults:
@@ -146,7 +146,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        py: [3.7, 3.10]
+        py: ['3.7', '3.10']
         include:
           - os: ubuntu
             subdir: linux-64
@@ -156,7 +156,7 @@ jobs:
             subdir: win-64
         exclude:
           - os: ubuntu
-            py: 3.10
+            py: '3.10'
     steps:
       - name: git checkout
         uses: actions/checkout@v2
