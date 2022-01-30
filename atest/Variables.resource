@@ -1,3 +1,6 @@
+*** Settings ***
+Documentation       Variables for jupyterlab-starters
+
 *** Variables ***
 ${LAB CONF}                             jupyter_server_config.json
 ${LAB VERSION}                          ${EMPTY}
@@ -9,7 +12,8 @@ ${MATHJAX}                              ${BASE}static/notebook/components/MathJa
 ${HEADLESS}                             1
 ${CMD PALETTE INPUT}                    css:.p-CommandPalette-input
 ${CMD PALETTE ITEM ACTIVE}              css:.p-CommandPalette-item.p-mod-active
-${XP LAUNCH SECTION}                    xpath://h2[contains(@class, 'jp-Launcher-sectionTitle')][contains(text(), 'Starters')]
+${XP LAUNCH A SECTION}                  xpath://h2[contains(@class, 'jp-Launcher-sectionTitle')]
+${XP LAUNCH SECTION}                    ${XP LAUNCH A SECTION}\[contains(text(), 'Starters')]
 ${CSS LAUNCH CARD}                      css:[data-category\="Starters"]
 ${CSS LAUNCH CARD SINGLE}               ${CSS LAUNCH CARD}\[title\="A reusable notebook for proposing research"]
 ${CSS LAUNCH CARD NOTEBOOK}             ${CSS LAUNCH CARD}\[title\="A notebook that is also a starter"]

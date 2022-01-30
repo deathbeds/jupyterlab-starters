@@ -88,11 +88,7 @@ def task_lint():
         ),
     )
 
-    robocop = [
-        *C.PYM,
-        "robocop",
-        # *sum([["--configure", rule] for rule in C.RFLINT_RULES], []),
-    ]
+    robocop = [*C.PYM, "robocop", *C.ROBOCOP_RULES]
 
     yield dict(
         name="rf:robocop",
@@ -613,10 +609,12 @@ class C:
     TEST_IN_CI = bool(json.loads(os.environ.get("TEST_IN_CI", "0")))
     DEMO_IN_BINDER = bool(json.loads(os.environ.get("DEMO_IN_BINDER", "0")))
     RUNNING_LOCALLY = not CI
-    RFLINT_RULES = [
-        "LineTooLong:200",
-        "TooFewKeywordSteps:0",
-        "TooManyTestSteps:30",
+    ROBOCOP_RULES = [
+        # "LineTooLong:200",
+        # "TooFewKeywordSteps:0",
+        # "TooManyTestSteps:30",
+        *("--configure", "empty-lines-between-sections:empty_lines:1"),
+        *("--exclude", "if-can-be-used"),
     ]
     UTEST_ARGS = safe_load(os.environ.get("UTEST_ARGS", "[]"))
     ATEST_RETRIES = int(os.environ.get("ATEST_RETRIES", "1"))
