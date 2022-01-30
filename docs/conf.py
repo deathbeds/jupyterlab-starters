@@ -7,8 +7,6 @@ import pathlib
 import sys
 from subprocess import check_call
 
-import nbsphinx
-
 HERE = pathlib.Path(__file__).parent
 ROOT = HERE.parent
 
@@ -43,12 +41,6 @@ def setup(app):
     app.connect("build-finished", build_finished)
 
 
-nbsphinx.RST_TEMPLATE = nbsphinx.RST_TEMPLATE.replace(
-    """{% block input -%}""",
-    """{% block input -%}""" """{% if not cell.metadata.get("hide_input", False) -%}""",
-).replace("""{% endblock input %}""", """{%- endif -%}{%- endblock input %}""")
-
-
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -61,7 +53,7 @@ sys.path.insert(0, str((pathlib.Path.cwd().parent / "src").resolve()))
 # -- Project information -----------------------------------------------------
 
 project = "JupyterStarters"
-copyright = "2020, Dead Pixels Collective"
+copyright = "2022, Dead Pixels Collective"
 author = "Deathbeds"
 
 # The short X.Y version
@@ -80,9 +72,6 @@ release = ""
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "recommonmark",
-    "sphinx_markdown_tables",
-    "nbsphinx",
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.coverage",
@@ -94,7 +83,7 @@ extensions = [
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinx_copybutton",
-    "sphinx_autodoc_typehints",
+    "myst_nb",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -103,7 +92,7 @@ templates_path = ["_templates"]
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-source_suffix = ".rst"
+source_suffix = [".rst", ".md", ".ipynb"]
 
 # The master toctree document.
 master_doc = "index"
@@ -121,7 +110,7 @@ language = None
 exclude_patterns = [".ipynb_checkpoints", "**/.ipynb_checkpoints", "**/~.*"]
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = "monokai"
+# pygments_style = "monokai"
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -129,7 +118,7 @@ pygments_style = "monokai"
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "pydata_sphinx_theme"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -275,8 +264,3 @@ html_context = {
 }
 
 html_logo = "../packages/jupyterlab-starters/style/icons/starter.svg"
-
-# sphinx-autodoc-typehints
-# set_type_checking_flag = True
-# always_document_param_types = True
-# typehints_document_rtype = True
