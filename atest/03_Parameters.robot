@@ -41,7 +41,7 @@ Really Input A Random String
     [Documentation]    Type and return a random string in an input
     [Arguments]    ${selector}
     ${text} =    Generate Random String
-    Really Input Text    ${selector}    ${topic}
+    Really Input Text    ${selector}    ${text}
     [Return]    ${text}
 
 Launch The Parameterized Starter
