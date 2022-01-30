@@ -145,7 +145,7 @@
 "@deathbeds/jupyterlab-starters@file:packages/jupyterlab-starters":
   version "1.1.0"
   dependencies:
-    "@deathbeds/jupyterlab-rjsf" "~1.0.1a0"
+    "@deathbeds/jupyterlab-rjsf" "~1.1.0"
     "@jupyterlab/application" "3"
 
 "@discoveryjs/json-ext@^0.5.0":
