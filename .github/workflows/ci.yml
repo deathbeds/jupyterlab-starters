@@ -23,6 +23,48 @@ defaults:
     shell: bash -l {0}
 
 jobs:
+  lint:
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu]
+    env:
+      LOCKFILE: .github/locks/build-linux-64-3.10.conda.lock
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v2
+
+      - name: cache (conda)
+        uses: actions/cache@v2
+        with:
+          path: ~/conda_pkgs_dir
+          key: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-${{ hashFiles(env.LOCKFILE) }}
+          restore-keys: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-
+
+      - name: cache (node_modules)
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: |
+            ${{ env.CACHE_EPOCH }}-node_modules-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc') }}
+
+      - name: base env (conda)
+        uses: conda-incubator/setup-miniconda@master
+        with:
+          environment-file: ${{ env.LOCKFILE }}
+          miniforge-variant: Mambaforge
+          use-mamba: true
+          use-only-tar-bz2: true
+
+      - name: lint
+        run: doit -n8 integrity lint || doit list --all --status
+
+      - name: lint (again)
+        run: doit integrity lint
+
   build:
     runs-on: ${{ matrix.os }}-latest
     strategy:
@@ -60,10 +102,10 @@ jobs:
           use-only-tar-bz2: true
 
       - name: build
-        run: doit -n8 integrity lint dist || doit list --all --status
+        run: doit -n8 dist || doit list --all --status
 
       - name: build (again)
-        run: doit integrity lint dist
+        run: doit dist
 
       - name: publish (dists)
         uses: actions/upload-artifact@v2
