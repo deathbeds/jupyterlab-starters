@@ -6,20 +6,20 @@ channels:
 
 dependencies:
   - cookiecutter
+  - fastjsonschema
+  - graphviz
   - importlib_metadata
-  - jupyterlab >=3,<4
-  - nbsphinx >=0.5.0,<0.5.1a0
-  - nodejs >=14,<15
+  - jupyterlab >=3.2,<4
+  - myst-nb
+  - nodejs >=14,!=15.*,<17
   - pip
-  - pytest
+  - pkginfo
+  - pydata-sphinx-theme
   - pytest-check-links
-  - python >=3.7,<3.8.0a0
-  - python-fastjsonschema
-  - python-graphviz
-  - recommonmark
+  - python >=3.8,<3.9.0a0
   - sphinx
-  - sphinx_rtd_theme
   - sphinx-autodoc-typehints
   - sphinx-copybutton
-  - sphinx-markdown-tables
   - ujson
+  - pip:
+    - jupyterlite ==0.1.0a20

@@ -1,5 +1,5 @@
 dependencies:
-  - firefox =78
+  - firefox =91
   - flake8
   - geckodriver
   - robotframework >=3.2

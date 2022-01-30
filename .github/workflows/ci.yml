@@ -76,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCS_IN_CI: 1
-      LOCKFILE: .github/locks/docs-linux-64-3.9.conda.lock
+      LOCKFILE: .github/locks/docs-linux-64-3.10.conda.lock
     steps:
       - name: git checkout
         uses: actions/checkout@v2
