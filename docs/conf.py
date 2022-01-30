@@ -86,6 +86,10 @@ extensions = [
     "myst_nb",
 ]
 
+autosectionlabel_prefix_document = True
+myst_heading_anchors = 3
+suppress_warnings = ["autosectionlabel.*"]
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
