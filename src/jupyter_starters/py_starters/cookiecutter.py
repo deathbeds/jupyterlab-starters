@@ -65,6 +65,12 @@ JUPYTER_COOKIECUTTERS = {
             ),
         },
     ],
+    "JupyterLite Extensions": [
+        {
+            "repo": f"{GH}/jupyterlite/serverlite-cookiecutter-ts",
+            "description": "A cookiecutter for a JupyterLite Kernel",
+        },
+    ],
 }
 
 
