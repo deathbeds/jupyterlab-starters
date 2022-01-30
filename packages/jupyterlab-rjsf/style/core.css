@@ -34,11 +34,10 @@
   font-weight: bold;
   display: block;
   position: relative;
-  display: block;
 }
 
-.jp-SchemaForm .control-label > :first-child,
-.jp-SchemaForm legend > :first-child {
+.jp-SchemaForm legend > :first-child,
+.jp-SchemaForm .control-label > :first-child {
   margin-top: 0;
   padding-top: 0;
 }
