@@ -1,7 +1,8 @@
 import { JSONObject } from '@lumino/coreutils';
-import { Signal } from '@lumino/signaling';
+import { ISignal, Signal } from '@lumino/signaling';
 import { Widget } from '@lumino/widgets';
 import { VDomModel } from '@jupyterlab/apputils';
+import type { LabIcon } from '@jupyterlab/ui-components';
 
 import { IStarterManager, IStartContext } from '../../tokens';
 
@@ -16,7 +17,7 @@ export class BuilderModel extends VDomModel {
 
   private _start: Signal<BuilderModel, IStartContext>;
   private _manager: IStarterManager;
-  private _done: Function;
+  private _done: BuilderModel.TDoneCallback;
   private _startCount = 0;
 
   constructor(options: BuilderModel.IOptions) {
@@ -27,11 +28,11 @@ export class BuilderModel extends VDomModel {
     this._start = new Signal<BuilderModel, IStartContext>(this);
   }
 
-  get startCount() {
+  get startCount(): number {
     return this._startCount;
   }
 
-  get status() {
+  get status(): BuilderModel.TStatus {
     if (!this._form) {
       return 'starting';
     } else if (this._form.errors.length || this._form.errorsObserved) {
@@ -40,35 +41,35 @@ export class BuilderModel extends VDomModel {
     return this._status;
   }
 
-  set status(status) {
+  set status(status: BuilderModel.TStatus) {
     this._status = status;
     this.stateChanged.emit(void 0);
   }
 
-  get start() {
+  get start(): ISignal<BuilderModel, IStartContext> {
     return this._start;
   }
 
-  get manager() {
+  get manager(): IStarterManager {
     return this._manager;
   }
 
-  get context() {
+  get context(): IStartContext {
     return this._context;
   }
 
-  set context(context) {
+  set context(context: IStartContext) {
     this._context = context;
     this._form.schema = context.starter.schema || {};
     this._form.formData = context.body;
     this._form.uiSchema = context.starter.uiSchema;
   }
 
-  get form() {
+  get form(): SchemaFormModel<JSONObject> {
     return this._form;
   }
 
-  set form(form) {
+  set form(form: SchemaFormModel<JSONObject>) {
     if (this._form) {
       this._form.stateChanged.disconnect(this._change, this);
     }
@@ -86,7 +87,7 @@ export class BuilderModel extends VDomModel {
     this.stateChanged.emit(void 0);
   };
 
-  onStart() {
+  onStart(): void {
     if (this._form.errors && this._form.errors.length) {
       return;
     }
@@ -98,19 +99,19 @@ export class BuilderModel extends VDomModel {
     });
   }
 
-  get done() {
+  get done(): BuilderModel.TDoneCallback {
     return this._done;
   }
 
-  set done(done) {
+  set done(done: BuilderModel.TDoneCallback) {
     this._done = done;
   }
 
-  onDone() {
+  onDone(): void {
     this._done && this._done();
   }
 
-  get icon() {
+  get icon(): LabIcon.ILabIcon {
     return this._manager.icon(this._name, this._context.starter);
   }
 }
@@ -123,4 +124,6 @@ export namespace BuilderModel {
   }
 
   export type TStatus = 'ready' | 'starting' | 'error';
+
+  export type TDoneCallback = () => void;
 }

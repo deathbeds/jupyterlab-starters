@@ -13,16 +13,16 @@ export class PreviewCardModel extends VDomModel {
     }
   }
 
-  get iconURI() {
+  get iconURI(): string {
     const icon = this._starter?.icon || CSS.SVG.DEFAULT_ICON;
     return `data:image/svg+xml;base64,${btoa(icon)}`;
   }
 
-  get starter() {
+  get starter(): SCHEMA.Starter {
     return this._starter;
   }
 
-  set starter(starter) {
+  set starter(starter: SCHEMA.Starter) {
     this._starter = starter;
     this.stateChanged.emit(void 0);
   }

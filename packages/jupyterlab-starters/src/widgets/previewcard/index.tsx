@@ -10,7 +10,7 @@ export class PreviewCard extends VDomRenderer<PreviewCardModel> {
     this.addClass(CSS.PREVIEW);
   }
 
-  render() {
+  render(): JSX.Element {
     const m = this.model;
 
     const { starter, iconURI } = m;

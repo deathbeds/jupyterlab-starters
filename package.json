@@ -22,7 +22,10 @@
       "stylelint-config-recommended",
       "stylelint-config-standard",
       "stylelint-prettier/recommended"
-    ]
+    ],
+    "rules": {
+      "selector-class-pattern": null
+    }
   },
   "private": true,
   "scripts": {

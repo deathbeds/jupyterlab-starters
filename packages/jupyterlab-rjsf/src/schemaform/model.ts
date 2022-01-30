@@ -1,6 +1,6 @@
 import * as rjsf from '@rjsf/core';
 
-import { Signal } from '@lumino/signaling';
+import { ISignal, Signal } from '@lumino/signaling';
 import { JSONObject, JSONValue } from '@lumino/coreutils';
 import { VDomModel } from '@jupyterlab/apputils';
 import { RenderedMarkdown } from '@jupyterlab/rendermime';
@@ -70,58 +70,58 @@ export class SchemaFormModel<T extends JSONValue> extends VDomModel {
     this.stateChanged.emit(void 0);
   }
 
-  set uiSchema(uiSchema: any) {
+  set uiSchema(uiSchema: rjsf.UiSchema | undefined) {
     this._props.uiSchema = uiSchema;
     this.stateChanged.emit(void 0);
   }
 
-  get uiSchema() {
+  get uiSchema(): rjsf.UiSchema | undefined {
     return this._props.uiSchema;
   }
 
   /**
    * Get the props for the form
    */
-  get props() {
+  get props(): Partial<rjsf.FormProps<T>> {
     return this._props;
   }
 
   /**
    * Set the props for the form
    */
-  set props(props) {
+  set props(props: Partial<rjsf.FormProps<T>>) {
     this._props = props;
     this.stateChanged.emit(void 0);
   }
 
-  get errorsObserved() {
+  get errorsObserved(): boolean {
     return this._errorsObserved;
   }
 
-  set errorsObserved(errorsObserved) {
+  set errorsObserved(errorsObserved: boolean) {
     if (errorsObserved !== this._errorsObserved) {
       this._errorsObserved = errorsObserved;
       this.stateChanged.emit(void 0);
     }
   }
 
-  get rendered() {
+  get rendered(): ISignal<SchemaFormModel<T>, void> {
     return this._rendered;
   }
 
-  emitRenderered() {
+  emitRenderered(): void {
     this._rendered.emit(void 0);
   }
 
-  get markdown() {
+  get markdown(): RenderedMarkdown | null {
     return this._markdown;
   }
 
-  get liveMarkdown() {
+  get liveMarkdown(): boolean {
     return this._liveMarkdown;
   }
 
-  set liveMarkdown(liveMarkdown) {
+  set liveMarkdown(liveMarkdown: boolean) {
     this._liveMarkdown = liveMarkdown;
     this.stateChanged.emit(void 0);
   }
