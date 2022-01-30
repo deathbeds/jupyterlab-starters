@@ -3,7 +3,7 @@ Documentation       All the tests
 
 Resource            Keywords.resource
 
-Suite Setup         Setup Server and Browser
+Suite Setup         Setup Server And Browser
 Suite Teardown      Tear Down Everything
 Test Setup          Reset Application State
 

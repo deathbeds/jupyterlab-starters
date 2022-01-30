@@ -614,6 +614,7 @@ class C:
         # "TooFewKeywordSteps:0",
         # "TooManyTestSteps:30",
         *("--configure", "empty-lines-between-sections:empty_lines:1"),
+        *("--configure", "too-many-calls-in-test-case:max_calls:18"),
         *("--exclude", "if-can-be-used"),
     ]
     UTEST_ARGS = safe_load(os.environ.get("UTEST_ARGS", "[]"))

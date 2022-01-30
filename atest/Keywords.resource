@@ -1,38 +1,63 @@
 *** Settings ***
-Resource    Variables.resource
-Library     SeleniumLibrary
-Library     OperatingSystem
-Library     Process
-Library     String
-Library     traitlets.config.manager    WITH NAME    TCM
-Library     ./ports.py
+Documentation       Keywords for testing starters
+
+Library             OperatingSystem
+Library             Process
+Library             String
+Library             SeleniumLibrary
+Library             traitlets.config.manager    WITH NAME    TCM
+Library             ./ports.py
+Resource            Variables.resource
 
 *** Keywords ***
-Setup Server and Browser
+Setup Server And Browser
     [Documentation]    Start JupyterLab and open in a browser
+    Initialize URL
+    Initialize Devices
+    Initialize Paths
+    Initialize User Settings
+    ${app args} =    Build App Args
+    Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots
+    ${server} =    Start Process    jupyter lab ${app args}    shell=yes    env:HOME=${home}
+    ...    cwd=${home}    stdout=${OUTPUT DIR}${/}lab.log    stderr=STDOUT
+    Set Global Variable    ${SERVER}    ${server}
+    Open JupyterLab
+
+Initialize Devices
+    [Documentation]    Prepare device-specific values
+    ${accel} =    Evaluate    "COMMAND" if "${OS}" == "Darwin" else "CTRL"
+    Set Global Variable    ${ACCEL}    ${accel}
+
+Initialize URL
+    [Documentation]    Setup URL-related values
     ${port} =    Get Unused Port
     Set Global Variable    ${PORT}    ${port}
     Set Global Variable    ${URL}    http://localhost:${PORT}${BASE}
-    ${accel} =    Evaluate    "COMMAND" if "${OS}" == "Darwin" else "CTRL"
-    Set Global Variable    ${ACCEL}    ${accel}
     ${token} =    Generate Random String
     Set Global Variable    ${TOKEN}    ${token}
+
+Initialize Paths
+    [Documentation]    Setup paths
     ${home} =    Set Variable    ${OUTPUT DIR}${/}home
     ${root} =    Normalize Path    ${OUTPUT DIR}${/}..${/}..${/}..
     Set Global Variable    ${HOME}    ${home}
     Create Directory    ${home}
     Update Examples    ${home}
     ${WORKSPACES DIR} =    Set Variable    ${OUTPUT DIR}${/}workspaces
-    Initialize User Settings
+
+Build App Args
+    [Documentation]    Build JupyterLab CLI arguments
     ${app args} =    Set Variable
-    ...    --no-browser --debug --ServerApp.base_url\='${BASE}' --port\=${PORT} --ServerApp.token\='${token}' --NotebookApp.mathjax_url\='http://localhost:${PORT}${MATHJAX}'
-    ${path args} =    Set Variable
-    ...    --LabApp.user_settings_dir='${SETTINGS DIR.replace('\\', '\\\\')}' --LabApp.workspaces_dir\='${WORKSPACES DIR.replace('\\', '\\\\')}'
-    Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots
-    ${server} =    Start Process    jupyter lab ${app args} ${path args}    shell=yes    env:HOME=${home}
-    ...    cwd=${home}    stdout=${OUTPUT DIR}${/}lab.log    stderr=STDOUT
-    Set Global Variable    ${SERVER}    ${server}
-    Open JupyterLab
+    ...    --no-browser --debug --port\=${PORT}
+    ${app args} =    Set Variable
+    ...    ${app args } --ServerApp.base_url\='${BASE}' --ServerApp.token\='${TOKEN}'
+    ${app args} =    Set Variable
+    ...    ${app args } --NotebookApp.mathjax_url\='http://localhost:${PORT}${MATHJAX}'
+    ${app args} =    Set Variable
+    ...    ${app args } --LabApp.user_settings_dir='${SETTINGS DIR.replace('\\', '\\\\')}'
+    ${app args} =    Set Variable
+    ...    ${apppath args} --LabApp.workspaces_dir\='${WORKSPACES DIR.replace('\\', '\\\\')}'
+    [Return]    ${app args}
 
 Update Examples
     [Documentation]    Add the examples and patch in non-functioning examples
@@ -119,7 +144,7 @@ Ensure All Kernels Are Shut Down
 
 Open Command Palette
     [Documentation]    Open the command palette
-    Wait Until Element is Visible    id:main
+    Wait Until Element Is Visible    id:main
     Press Keys    id:main    ${ACCEL}+SHIFT+c
     Wait Until Element Is Enabled    ${CMD PALETTE INPUT}
     Click Element    ${CMD PALETTE INPUT}
@@ -164,9 +189,9 @@ Cancel Starter Form
 Really Input Text
     [Documentation]    Really make sure some text is set
     [Arguments]    ${locator}    ${text}
-    Wait Until Keyword Succeeds    3x    200ms    Input and Check Text    ${locator}    ${text}
+    Wait Until Keyword Succeeds    3x    200ms    Input And Check Text    ${locator}    ${text}
 
-Input and Check Text
+Input And Check Text
     [Documentation]    Input (and check) text was entered
     [Arguments]    ${locator}    ${text}
     Wait Until Page Contains Element    ${locator}
