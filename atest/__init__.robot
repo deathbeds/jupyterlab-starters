@@ -1,7 +1,10 @@
 *** Settings ***
-Documentation     All the tests
-Suite Setup       Setup Server and Browser
-Suite Teardown    Tear Down Everything
-Test Setup        Reset Application State
-Force Tags        os:${OS.lower()}    py:${PY}    ospy:${OS.lower()}${PY}
-Resource          Keywords.robot
+Documentation       All the tests
+
+Resource            Keywords.resource
+
+Suite Setup         Setup Server and Browser
+Suite Teardown      Tear Down Everything
+Test Setup          Reset Application State
+
+Force Tags          os:${os.lower()}    py:${py}    ospy:${os.lower()}${py}

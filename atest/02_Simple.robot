@@ -1,8 +1,11 @@
 *** Settings ***
-Documentation     Simple
-Suite Setup       Setup Suite For Screenshots    simple
-Force Tags        example:simple
-Resource          Keywords.robot
+Documentation       Simple
+
+Resource            Keywords.resource
+
+Suite Setup         Setup Suite For Screenshots    simple
+
+Force Tags          example:simple
 
 *** Test Cases ***
 Simple Notebook

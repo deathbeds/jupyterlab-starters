@@ -83,21 +83,21 @@ def task_lint():
         name="rf:tidy",
         **U.run_in(
             "docs",
-            [[*C.PYM, "robot.tidy", "--inplace", *P.ALL_ROBOT]],
+            [[*C.PYM, "robotidy", *P.ALL_ROBOT]],
             file_dep=P.ALL_ROBOT,
         ),
     )
 
-    rflint = [
+    robocop = [
         *C.PYM,
-        "rflint",
-        *sum([["--configure", rule] for rule in C.RFLINT_RULES], []),
+        "robocop",
+        # *sum([["--configure", rule] for rule in C.RFLINT_RULES], []),
     ]
 
     yield dict(
-        name="rf:rflint",
+        name="rf:robocop",
         task_dep=["lint:rf:tidy"],
-        **U.run_in("docs", [rflint + P.ALL_ROBOT], file_dep=P.ALL_ROBOT),
+        **U.run_in("docs", [robocop + P.ALL_ROBOT], file_dep=P.ALL_ROBOT),
     )
 
     prettier = [C.JLPM, "prettier"] + (
@@ -131,6 +131,23 @@ def task_lint():
                 P.YARN_INTEGRITY,
                 *[p for p in P.ALL_TS if not p.name.startswith("_")],
                 *P.ROOT.glob(".eslint*"),
+            ],
+        ),
+    )
+
+    stylelint = [C.JLPM, "stylelint"] + (
+        ["--fix"] if C.RUNNING_LOCALLY else ["--check"]
+    )
+
+    yield dict(
+        name="stylelint",
+        task_dep=["lint:prettier"],
+        **U.run_in(
+            "docs",
+            [[*stylelint, *P.ALL_CSS]],
+            file_dep=[
+                P.YARN_INTEGRITY,
+                *P.ALL_CSS,
             ],
         ),
     )
@@ -486,7 +503,7 @@ def task_test():
     task_dep = ["preflight"]
 
     if not (C.DOCS_IN_CI or C.TEST_IN_CI):
-        task_dep += ["lint:rf:rflint"]
+        task_dep += ["lint:rf:robocop"]
 
     yield dict(
         name="atest",
@@ -653,7 +670,7 @@ class P:
     SETUP_PY = ROOT / "setup.py"
 
     ALL_PY = [DODO, *PY_SRC, *PY_SCRIPTS, *PY_DOCS, *PY_ATEST, SETUP_PY]
-    ALL_ROBOT = list(ATEST.rglob("*.robot"))
+    ALL_ROBOT = [*ATEST.rglob("*.robot"), *ATEST.rglob("*.resource")]
 
     YARNRC = ROOT / ".yarnrc"
 

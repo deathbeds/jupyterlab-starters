@@ -1,9 +1,12 @@
 *** Settings ***
-Documentation     Notebook
-Suite Setup       Setup Suite For Screenshots    notebook
-Force Tags        example:notebook
-Resource          Keywords.robot
-Library           String
+Documentation       Notebook
+
+Resource            Keywords.resource
+Library             String
+
+Suite Setup         Setup Suite For Screenshots    notebook
+
+Force Tags          example:notebook
 
 *** Test Cases ***
 Happy Path
@@ -37,9 +40,10 @@ No-op
 
 *** Keywords ***
 Change the name field
-    [Arguments]    ${previous}=${EMPTY}
     [Documentation]    Set a random name on the name field
-    ${name css} =    Set Variable If    "${previous}"    css:input[label\="Hi, ${previous}"]    css:input[label\="Name"]
+    [Arguments]    ${previous}=${EMPTY}
+    ${name css} =    Set Variable If    "${previous}"    css:input[label\="Hi, ${previous}"]
+    ...    css:input[label\="Name"]
     Wait Until Page Contains Element    ${name css}    timeout=30s
     ${name} =    Generate Random String
     Click Element    ${name css}
@@ -56,8 +60,8 @@ Change the quest field
     [Return]    ${quest}
 
 Change the answer field
-    [Arguments]    ${value}=${EMPTY}
     [Documentation]    Set the answer field
+    [Arguments]    ${value}=${EMPTY}
     ${answer css} =    Set Variable    css:input[label\="The Answer"]
     Wait Until Page Contains Element    ${answer css}    timeout=30s
     Click Element    ${answer css}

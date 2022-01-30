@@ -1,16 +1,19 @@
 *** Settings ***
-Documentation     Notebook Meta
-Suite Setup       Setup Suite For Screenshots    notebook-meta
-Force Tags        example:notebook-meta
-Resource          Keywords.robot
-Library           String
-Library           Collections
-Resource          CodeMirror.robot
+Documentation       Notebook Meta
+
+Resource            Keywords.resource
+Library             String
+Library             Collections
+Resource            CodeMirror.resource
+
+Suite Setup         Setup Suite For Screenshots    notebook-meta
+
+Force Tags          example:notebook-meta
 
 *** Variables ***
 ${XP FILE TREE EXAMPLES}    ${XP FILE TREE ITEM}/span[text() = 'examples']
 ${XP FILE TREE NOTEBOOK}    ${XP FILE TREE ITEM}/span[text() = 'Starter Notebook.ipynb']
-${SIMPLE SCHEMA}    {"required": ["name"], "properties": {"name": {"title": "Moniker", "type": "string"}}}
+${SIMPLE SCHEMA}            {"required": ["name"], "properties": {"name": {"title": "Moniker", "type": "string"}}}
 
 *** Test Cases ***
 View Example Starter Notebook
@@ -67,23 +70,24 @@ Open the Starter Notebook Metadata Sidebar
     Wait Until Page Contains Element    ${CSS NOTEBOOK STARTER META}
 
 Check Metadata Text Input
-    [Arguments]    ${label}    ${value}
     [Documentation]    Verify an input
+    [Arguments]    ${label}    ${value}
     ${sel} =    Set Variable    ${CSS NOTEBOOK STARTER META} input[label\="${label}"]
     Wait Until Page Contains Element    ${sel}    timeout=10s
     Wait Until Keyword Succeeds    2x    200ms    Element Attribute Value Should Be    ${sel}    value    ${value}
 
 Check Metadata Text Area
-    [Arguments]    ${label}    ${value}
     [Documentation]    Verify a textarea
+    [Arguments]    ${label}    ${value}
     ${sel} =    Set Variable    ${CSS NOTEBOOK STARTER META} textarea[id$\="_${label.lower()}"]
     Wait Until Page Contains Element    ${sel}    timeout=10s
     Wait Until Keyword Succeeds    2x    200ms    Element Attribute Value Should Be    ${sel}    value    ${value}
 
 Change the moniker field
-    [Arguments]    ${previous}=${EMPTY}
     [Documentation]    Set a random name on the name field
-    ${name css} =    Set Variable If    "${previous}"    css:input[label\="Hi, ${previous}"]    css:input[label\="Moniker"]
+    [Arguments]    ${previous}=${EMPTY}
+    ${name css} =    Set Variable If    "${previous}"    css:input[label\="Hi, ${previous}"]
+    ...    css:input[label\="Moniker"]
     Wait Until Page Contains Element    ${name css}    timeout=30s
     ${name} =    Generate Random String
     Click Element    ${name css}

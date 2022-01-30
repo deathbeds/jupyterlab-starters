@@ -1,12 +1,15 @@
 *** Settings ***
-Documentation     Parameters
-Suite Setup       Setup Suite For Screenshots    parameters
-Force Tags        example:params
-Resource          Keywords.robot
-Library           String
+Documentation       Parameters
+
+Resource            Keywords.resource
+Library             String
+
+Suite Setup         Setup Suite For Screenshots    parameters
+
+Force Tags          example:params
 
 *** Variables ***
-${CSS TOPIC}      css:input[label="## Topic"]
+${CSS TOPIC}    css:input[label="## Topic"]
 
 *** Test Cases ***
 Cancel

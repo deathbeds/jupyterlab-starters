@@ -1,12 +1,15 @@
 *** Settings ***
-Documentation     Multi-Stage Notebook
-Suite Setup       Setup Suite For Screenshots    notebook-multi
-Force Tags        example:notebook-multi
-Resource          Keywords.robot
-Library           String
+Documentation       Multi-Stage Notebook
+
+Resource            Keywords.resource
+Library             String
+
+Suite Setup         Setup Suite For Screenshots    notebook-multi
+
+Force Tags          example:notebook-multi
 
 *** Variables ***
-${MULTI TAB}      css:.p-DockPanel .p-TabBar-tab [data-icon\="starters:multi-stage-notebook"]
+${MULTI TAB}    css:.p-DockPanel .p-TabBar-tab [data-icon\="starters:multi-stage-notebook"]
 
 *** Test Cases ***
 Happy Path
@@ -32,8 +35,8 @@ Happy Path
 
 *** Keywords ***
 Change the name field
-    [Arguments]    ${previous}=${EMPTY}
     [Documentation]    Set a random name on the name field
+    [Arguments]    ${previous}=${EMPTY}
     ${name css} =    Set Variable    css:input[label\="Name"]
     Wait Until Page Contains Element    ${name css}    timeout=30s
     ${name} =    Generate Random String
@@ -42,15 +45,15 @@ Change the name field
     [Return]    ${name}
 
 Wait for File Prompt
-    [Arguments]    ${name}    ${number}
     [Documentation]    Accept that a file will be made
+    [Arguments]    ${name}    ${number}
     ${file} =    Set Variable    file for ${name} ${number}.txt
     Wait Until Page Contains Element    xpath://code[text() = '${file}']    timeout=30s
     [Return]    ${file}
 
 Wait for File Tab
-    [Arguments]    ${file}
     [Documentation]    Wait until a file is opened
+    [Arguments]    ${file}
     Wait Until Page Contains Element    xpath://div[contains(@class, 'p-TabBar-tabLabel')][text() = '${file}']
 
 I am done

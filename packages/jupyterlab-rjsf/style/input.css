@@ -47,11 +47,11 @@
   background-position: 99% center;
   background-size: 18px;
   border: var(--jp-border-width) solid var(--jp-input-border-color);
-  border-radius: 0px;
+  border-radius: 0;
   outline: none;
   appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  appearance: none;
+  appearance: none;
 }
 
 .jp-SchemaForm select[multiple] {

@@ -63,6 +63,7 @@
   display: flex;
   position: relative;
 }
+
 .jp-SchemaForm .array-item:not(:last-child) {
   border-bottom: var(--jp-border-width) solid var(--jp-border-color0);
   margin-bottom: var(--jp-ui-font-size1);

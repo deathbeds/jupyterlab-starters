@@ -1,9 +1,12 @@
 *** Settings ***
-Documentation     Cookiecutter
-Suite Setup       Setup Suite For Screenshots    cookiecutter
-Force Tags        example:cookiecutter
-Resource          Keywords.robot
-Library           String
+Documentation       Cookiecutter
+
+Resource            Keywords.resource
+Library             String
+
+Suite Setup         Setup Suite For Screenshots    cookiecutter
+
+Force Tags          example:cookiecutter
 
 *** Test Cases ***
 Happy Path

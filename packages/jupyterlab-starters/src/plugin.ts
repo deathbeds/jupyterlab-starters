@@ -62,7 +62,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     commands.addCommand(CommandIDs.start, {
       execute: async (args: any) => {
-        const context = (args as any) as IStartContext;
+        const context = args as any as IStartContext;
         const { starter, name, cwd, body } = context;
 
         const runCommands = async (response: SCHEMA.AResponseForStartRequest) => {
@@ -118,7 +118,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       label: (args: any) => args.starter.label,
       caption: (args: any) => args.starter.description,
       icon: (args: any) => {
-        const context = (args as any) as IStartContext;
+        const context = args as any as IStartContext;
         return manager.icon(context.name, context.starter);
       },
     });

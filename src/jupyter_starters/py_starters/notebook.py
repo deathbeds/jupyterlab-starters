@@ -26,7 +26,7 @@ DEFAULT_MSG = {
 def response_from_notebook(src):
     """load a path and return the metadata"""
     nbp = Path(src).resolve()
-    nbjson = loads(nbp.read_text())
+    nbjson = loads(nbp.read_text(encoding="utf-8"))
     return response_from_nbjson(nbjson)
 
 
@@ -36,7 +36,7 @@ def kernel_for_path(src):
     TODO: do better on account of freaky names
     """
     nbp = Path(src).resolve()
-    nbjson = loads(nbp.read_text())
+    nbjson = loads(nbp.read_text(encoding="utf-8"))
     return nbjson["metadata"]["kernelspec"]["name"]
 
 
@@ -150,7 +150,7 @@ async def copy_files(tmp_nb, path, manager):
 
 async def run_cells(nbjson, kernel, manager):
     """actually run the cells"""
-    futures = dict()
+    futures = {}
     pubs = defaultdict(list)
 
     shell = kernel.connect_shell()

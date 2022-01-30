@@ -26,20 +26,26 @@ JUPYTER_COOKIECUTTERS = {
     "Jupyter Docker Environments": {
         {
             "repo": f"{GH}/jupyter/cookiecutter-docker-stacks",
-            "description": "Cookiecutter for community-maintained Jupyter Docker images",
+            "description": (
+                "Cookiecutter for community-maintained Jupyter " "Docker images"
+            ),
         },
     },
     "Jupyter Widgets": {
         {
             "repo": f"{GH}/jupyter-widgets/widget-ts-cookiecutter",
             "description": (
-                "A highly opinionated cookiecutter template for" "ipywidget extensions."
+                (
+                    "A highly opinionated cookiecutter template for"
+                    "ipywidget extensions."
+                ),
             ),
         },
         {
             "repo": f"{GH}/jupyter-widgets/widget-cookiecutter",
             "description": (
-                "A cookiecutter template for creating a custom Jupyter" "widget project."
+                "A cookiecutter template for creating a custom Jupyter"
+                "widget project."
             ),
         },
     },
@@ -50,12 +56,15 @@ JUPYTER_COOKIECUTTERS = {
         },
         {
             "repo": f"{GH}/jupyterlab/extension-cookiecutter-ts",
-            "description": "A cookiecutter recipe for JupyterLab extensions in Typescript",
+            "description": (
+                "A cookiecutter recipe for JupyterLab extensions in Typescript"
+            ),
         },
         {
             "repo": f"{GH}/jupyterlab/mimerender-cookiecutter-ts",
             "description": (
-                "Cookie cutter for JupyterLab mimerenderer" "extensions using TypeScript"
+                "Cookie cutter for JupyterLab mimerenderer"
+                "extensions using TypeScript"
             ),
         },
     },
@@ -120,7 +129,7 @@ def cookiecutter_pantry():
                 f"""{"/".join(t["repo"].split("/")[-2:])}: {t["description"]}"""
                 for t in templates
             ],
-            "default": templates[0]["repo"],
+            "default": sorted(templates, key=lambda t: t["repo"])[0]["repo"],
         }
         for name, templates in grouped.items()
     ]

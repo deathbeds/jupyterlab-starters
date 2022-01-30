@@ -17,16 +17,26 @@
     "stylelint-prettier": "^2.0.0",
     "typescript": "~4.5.5"
   },
+  "stylelint": {
+    "extends": [
+      "stylelint-config-recommended",
+      "stylelint-config-standard",
+      "stylelint-prettier/recommended"
+    ]
+  },
   "private": true,
   "scripts": {
     "bootstrap": "jlpm --ignore-optional --prefer-offline --frozen-lockfile && lerna bootstrap && jlpm lint && jlpm clean && jlpm build",
     "build": "lerna run build:pre && lerna run build && lerna run build:ext",
     "bundle": "lerna run --parallel bundle",
     "clean": "lerna run --parallel clean",
-    "lint:check": "jlpm --silent prettier:check && jlpm --silent eslint:check",
-    "lint": "jlpm --silent prettier:fix && jlpm --silent eslint:fix",
-    "prettier:check": "prettier --check '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",
-    "prettier:fix": "prettier  --list-different --write '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",
+    "lint:check": "jlpm --silent prettier:check && jlpm --silent eslint:check && jlpm --silent stylelint:check",
+    "lint": "jlpm --silent stylelint:fix && jlpm --silent prettier:fix && jlpm --silent eslint:fix",
+    "stylelint:fix": "jlpm stylelint:check --fix",
+    "stylelint:check": "stylelint --cache \"packages/*/style/**/*.css\"",
+    "prettier:base": "prettier \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}\"",
+    "prettier:check": "jlpm prettier:base --check",
+    "prettier:fix": "jlpm prettier:base --list-different --write",
     "test": "lerna run --stream --concurrency=1 test",
     "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
     "eslint:check": "eslint --ext .js,.jsx,.ts,.tsx .",
