@@ -23,15 +23,15 @@ GITHUB_TOPIC = f"{GH}/topics/cookiecutter-template"
 GITHUB_SEARCH = f"{GH}/search?utf8=%E2%9C%93&q=path%3A%2F+filename%3Acookiecutter.json"
 
 JUPYTER_COOKIECUTTERS = {
-    "Jupyter Docker Environments": {
+    "Jupyter Docker Environments": [
         {
             "repo": f"{GH}/jupyter/cookiecutter-docker-stacks",
             "description": (
                 "Cookiecutter for community-maintained Jupyter " "Docker images"
             ),
         },
-    },
-    "Jupyter Widgets": {
+    ],
+    "Jupyter Widgets": [
         {
             "repo": f"{GH}/jupyter-widgets/widget-ts-cookiecutter",
             "description": (
@@ -48,8 +48,8 @@ JUPYTER_COOKIECUTTERS = {
                 "widget project."
             ),
         },
-    },
-    "JupyterLab Extensions": {
+    ],
+    "JupyterLab Extensions": [
         {
             "repo": f"{GH}/jupyterlab/extension-cookiecutter-js",
             "description": "A cookiecutter recipe for building JupyterLab extensions.",
@@ -67,7 +67,7 @@ JUPYTER_COOKIECUTTERS = {
                 "extensions using TypeScript"
             ),
         },
-    },
+    ],
 }
 
 
