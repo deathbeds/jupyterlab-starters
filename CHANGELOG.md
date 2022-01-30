@@ -1,12 +1,23 @@
 # CHANGELOG
 
-## `jupyter_starters 1.0.2` (unreleased)
+## `jupyter_starters 1.1.0` (unreleased)
+
+- minimum python is now 3.7
+- simplify cookiecutter integration
+
+## `@deathbeds/jupyterlab-starters 1.1.0` (unreleased)
+
+## `@deathbeds/jupyterlab-rjsf 1.1.0` (unreleased)
+
+---
+
+## `jupyter_starters 1.0.2`
 
 - [#54][] adapt kernel shutdown to newer `jupyter_client >=6.1` API
 
-## `@deathbeds/jupyterlab-starters 1.0.2` (unreleased)
+## `@deathbeds/jupyterlab-starters 1.0.2`
 
-## `@deathbeds/jupyterlab-rjsf 1.0.2` (unreleased)
+## `@deathbeds/jupyterlab-rjsf 1.0.2`
 
 - [#56][] upgrade to `@rjsf/core 2.5.1`
 

@@ -586,8 +586,8 @@ class C:
         platform.system()
     ]
     THIS_PY = "{}.{}".format(*sys.version_info)
-    PYTHONS = ["3.6", "3.9"]
-    DEFAULT_PY = "3.9"
+    PYTHONS = ["3.7", "3.10"]
+    DEFAULT_PY = "3.10"
     DEFAULT_SUBDIR = "linux-64"
     SKIP_LOCKS = bool(json.loads(os.environ.get("SKIP_LOCKS", "1")))
     CI = bool(json.loads(os.environ.get("CI", "0")))
@@ -685,8 +685,8 @@ class P:
     YARN_INTEGRITY = NODE_MODULES / ".yarn-integrity"
     DIST = ROOT / "dist"
     # TODO: single-source version
-    PY_VERSION = "1.0.2"
-    JS_VERSION = "1.0.2"
+    PY_VERSION = "1.1.0"
+    JS_VERSION = "1.1.0"
     SDIST = DIST / f"jupyter_starters-{PY_VERSION}.tar.gz"
     WHEEL = DIST / f"jupyter_starters-{PY_VERSION}-py3-none-any.whl"
     NPM_TARBALLS = {
