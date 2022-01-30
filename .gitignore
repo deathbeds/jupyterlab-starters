@@ -25,3 +25,5 @@ node_modules/
 src/**/labextension/
 untitled*
 Untitled*
+.eslintcache
+.stylelintcache

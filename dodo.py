@@ -113,7 +113,7 @@ def task_lint():
         ),
     )
 
-    eslint = [C.JLPM, "eslint", "--ext", ".js,.jsx,.ts,.tsx"] + (
+    eslint = [C.JLPM, "eslint", "--cache", "--ext", ".js,.jsx,.ts,.tsx"] + (
         ["--fix"] if C.RUNNING_LOCALLY else []
     )
 
@@ -131,7 +131,7 @@ def task_lint():
         ),
     )
 
-    stylelint = [C.JLPM, "stylelint"] + (
+    stylelint = [C.JLPM, "stylelint", "--cache"] + (
         ["--fix"] if C.RUNNING_LOCALLY else ["--check"]
     )
 
