@@ -132,16 +132,6 @@
     "@rjsf/core" "~2.5.1"
     react-codemirror2 "^7.2.1"
 
-"@deathbeds/jupyterlab-rjsf@~1.0.1a0":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@deathbeds/jupyterlab-rjsf/-/jupyterlab-rjsf-1.0.2.tgz#acfaa614a493673b42288f4d57c806dcbfab38b4"
-  integrity sha512-i2FUJIMHPXP+gF06SE0qMNJ2Ou3/35DZdweJ0JkJ4Kfj8gtZZRTjTSWBNaPNRMJVblBMI2U9UPvxRVkh0WL3DQ==
-  dependencies:
-    "@jupyterlab/apputils" "3"
-    "@jupyterlab/rendermime" "3"
-    "@rjsf/core" "~2.5.1"
-    react-codemirror2 "^7.2.1"
-
 "@deathbeds/jupyterlab-starters@file:packages/jupyterlab-starters":
   version "1.1.0"
   dependencies:

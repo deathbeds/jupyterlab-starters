@@ -137,8 +137,9 @@ export class NotebookMetadataModel extends VDomModel {
       const nbStarter = fromNotebook[NOTEBOOK_META_SUBKEY] || {};
       const formStarter = JSONExt.deepCopy((formData as JSONObject) || {});
 
-      for (const key in uiSchema || {}) {
-        if (uiSchema[key]['ui:field'] === 'codemirror-jsonobject') {
+      for (const keyValue in Object.entries(uiSchema || {})) {
+        const [key, value] = keyValue;
+        if (typeof value == 'object' && value['ui:field'] === 'codemirror-jsonobject') {
           if (!formStarter[key] || !Object.keys(formStarter[key] as any).length) {
             delete formStarter[key];
           }
