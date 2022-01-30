@@ -132,7 +132,7 @@ def task_lint():
     )
 
     stylelint = [C.JLPM, "stylelint", "--cache"] + (
-        ["--fix"] if C.RUNNING_LOCALLY else ["--check"]
+        ["--fix"] if C.RUNNING_LOCALLY else []
     )
 
     yield dict(
