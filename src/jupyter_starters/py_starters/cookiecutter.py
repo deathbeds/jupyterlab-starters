@@ -35,10 +35,7 @@ JUPYTER_COOKIECUTTERS = {
         {
             "repo": f"{GH}/jupyter-widgets/widget-ts-cookiecutter",
             "description": (
-                (
-                    "A highly opinionated cookiecutter template for"
-                    "ipywidget extensions."
-                ),
+                "A highly opinionated cookiecutter template for" "ipywidget extensions."
             ),
         },
         {
