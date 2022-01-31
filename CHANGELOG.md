@@ -4,13 +4,13 @@
 
 - [#69] minimum python is now 3.7
 - [#68] remove cookiecutter metadata parsing, as it no longer works consistently
-- [#69] minimum python is now 3.7
 
 ## `@deathbeds/jupyterlab-starters 1.1.0` (unreleased)
 
 ## `@deathbeds/jupyterlab-rjsf 1.1.0` (unreleased)
 
 - [#66] `formData` is now honored when constructing a form
+- [#69] upgrade to `@rjsf/core` 3
 
 [#66]: https://github.com/deathbeds/jupyterlab-starters/issues/66
 [#68]: https://github.com/deathbeds/jupyterlab-starters/issues/68
