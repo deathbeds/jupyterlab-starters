@@ -4,3 +4,4 @@ dependencies:
   - geckodriver
   - robotframework >=3.2
   - robotframework-seleniumlibrary
+  - robotframework-pabot

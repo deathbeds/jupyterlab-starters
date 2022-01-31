@@ -635,6 +635,7 @@ class C:
     UTEST_ARGS = safe_load(os.environ.get("UTEST_ARGS", "[]"))
     ATEST_RETRIES = int(os.environ.get("ATEST_RETRIES", "1"))
     ATEST_ARGS = safe_load(os.environ.get("ATEST_ARGS", "[]"))
+    ATEST_PROCESSES = safe_load(os.environ.get("ATEST_PROCESSES", "4"))
     THIS_ATEST_STEM = f"{THIS_SUBDIR}-py{THIS_PY}"
     LAB_ARGS = safe_load(os.environ.get("LAB_ARGS", '["--no-browser", "--debug"]'))
 
@@ -938,6 +939,13 @@ class U:
             [["--variable", f"{key}:{value}"] for key, value in variables.items()], []
         )
 
+        pabot_args = [
+            "--testlevelsplit",
+            f"--processes={C.ATEST_PROCESSES}",
+            "--artifactsinsubfolders",
+            "--artifacts=png,log,txt,ipynb",
+        ]
+
         args = [
             "--name",
             C.THIS_ATEST_STEM,
@@ -958,7 +966,7 @@ class U:
             P.ATEST,
         ]
 
-        str_args = [*map(str, [*run_args, *C.PYM, "robot", *args])]
+        str_args = [*map(str, [*run_args, *C.PYM, "pabot", *pabot_args, *args])]
         print(">>>", " ".join(str_args))
         proc = subprocess.Popen(str_args, cwd=P.ATEST)
 
