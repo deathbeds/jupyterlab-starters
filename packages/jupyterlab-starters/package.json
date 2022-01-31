@@ -40,7 +40,7 @@
     "@jupyterlab/launcher": "3",
     "@jupyterlab/notebook": "3",
     "@jupyterlab/running": "3",
-    "@rjsf/core": "~2.4.0"
+    "@rjsf/core": "~3.2.1"
   },
   "devDependencies": {
     "@types/codemirror": "^0.0.97",
