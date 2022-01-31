@@ -42,7 +42,7 @@
   color: var(--jp-ui-font-color0);
   padding: calc(var(--jp-ui-font-size1) / 2);
   padding-right: var(--jp-ui-font-size3);
-  background-image: url("~@jupyterlab/ui-components/style/icons/arrow/caret-down-empty-thin.svg");
+  background-image: url('~@jupyterlab/ui-components/style/icons/arrow/caret-down-empty-thin.svg');
   background-repeat: no-repeat;
   background-position: 99% center;
   background-size: 18px;
