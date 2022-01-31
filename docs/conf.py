@@ -88,7 +88,10 @@ extensions = [
 
 autosectionlabel_prefix_document = True
 myst_heading_anchors = 3
-suppress_warnings = ["autosectionlabel.*"]
+suppress_warnings = [
+    "autosectionlabel.*",
+    "myst.header",
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
