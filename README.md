@@ -27,7 +27,7 @@ A starter is a...
 
 ## Installing
 
-> You'll need `jupyterlab >=3,<4`, `python >=3.6`, and `nodejs >=12`
+> You'll need `jupyterlab >=3,<4`, `python >=3.7`, and `nodejs >=12`
 
 ```bash
 pip install --pre jupyter_starters
@@ -109,7 +109,7 @@ Don't like what you see here? Try these other approaches:
 [npm]: https://www.npmjs.com/package/@deathbeds/jupyterlab-starters
 [pypi-badge]: https://img.shields.io/pypi/v/jupyter-starters
 [pypi]: https://pypi.org/project/jupyter-starters
-[python-badge]: https://img.shields.io/badge/python-3.6+-blue?logo=python
+[python-badge]: https://img.shields.io/badge/python-3.7+-blue?logo=python
 [roadmap-badge]: https://img.shields.io/badge/docs-roadmap-purple
 [roadmap]: https://github.com/deathbeds/jupyterlab-starters/tree/master/ROADMAP.md
 [screenshot]:
