@@ -36,3 +36,4 @@ jupyterlab/staging/index.js
 
 envs/
 atest/
+.eslintrc.js

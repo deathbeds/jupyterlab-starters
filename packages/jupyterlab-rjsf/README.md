@@ -7,14 +7,14 @@
 
 ## For users: Do I need to install this?
 
-For now, this project just provides some "glue" to be used by other JupyterLab extensions,
-and other labextensions that use it should specify it as a `dependency` so it will
-be installed for you, if needed.
+For now, this project just provides some "glue" to be used by other JupyterLab
+extensions, and other labextensions that use it should specify it as a `dependency` so
+it will be installed for you, if needed.
 
-> A follow-on release will add more tightly-integrated Document (a la `Notebook`)
-> with a `MimeRenderer` for working with JSON instances, JSON Schema, and
-> `rjsf''s UI Schema, with support for alternate encodings like YAML and JSONL.
-> See more in the [roadmap](#Roadmap).
+> A follow-on release will add more tightly-integrated Document (a la `Notebook`) with a
+> `MimeRenderer` for working with JSON instances, JSON Schema, and `rjsf''s UI Schema,
+> with support for alternate encodings like YAML and JSONL. See more in the
+> [roadmap](#Roadmap).
 
 ### Related Projects
 
@@ -26,28 +26,27 @@ Things you can `jupyter labextension install` to use this component:
 
   - the tests for this component are also mostly contained in this repo, for now
 
-- [@deathbeds/wxyz](https://github.com/deathbeds/wxyz)
-  uses an earlier version of this component to connect a JSON Schema to the
-  broader Jupyter Widgets ecosystem, but also works with other `wxyz` widgets without
-  a "server" kernel.
+- [@deathbeds/wxyz](https://github.com/deathbeds/wxyz) uses an earlier version of this
+  component to connect a JSON Schema to the broader Jupyter Widgets ecosystem, but also
+  works with other `wxyz` widgets without a "server" kernel.
 
 ## For Developers
 
 ### JupyterLab Extensions
 
-Use the `SchemaForm`, a `@lumino/widget` that you can put inside of any other
-widget (such as the `DockPanel`). It's `model` exposes the `schema`, `formData`,
-other `rjsf` specifics, and can be connected to with `model.stateChanged`.
+Use the `SchemaForm`, a `@lumino/widget` that you can put inside of any other widget
+(such as the `DockPanel`). It's `model` exposes the `schema`, `formData`, other `rjsf`
+specifics, and can be connected to with `model.stateChanged`.
 
 ### React
 
 Several underlying libraries are used from the broader React ecosystem.
 
-> `rjsf` in particular has a large pending release (2.x), so some APIs are subject
-> to change abruptly in the near future.
+> `rjsf` in particular has a large pending release (2.x), so some APIs are subject to
+> change abruptly in the near future.
 
-> > TBD: more info on `async-component`, and `rjsf`-specifics like `jsonobject`
-> > and `codemirror`, `Form` and `Theme`
+> > TBD: more info on `async-component`, and `rjsf`-specifics like `jsonobject` and
+> > `codemirror`, `Form` and `Theme`
 
 ## Roadmap
 

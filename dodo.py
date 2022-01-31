@@ -529,9 +529,11 @@ def task_test():
 
 
 def task_docs():
+    """build documentation"""
+
     if C.TEST_IN_CI:
         return
-    """build documentation"""
+
     yield dict(
         name="schema",
         **U.run_in(
@@ -769,20 +771,26 @@ class P:
         [[*(p.parent / "style").rglob("*.css")] for p in PACKAGES_JSON],
         [*DOCS.rglob("_static/**/*.css")],
     )
-    ALL_YAML = [*SPECS.glob("*.yml"), *ROOT.glob("*.yml"), *GITHUB.rglob("*.yml")]
+    ALL_YAML = [
+        *SPECS.glob("*.yml"),
+        *ROOT.glob("*.yml"),
+        *GITHUB.rglob("*.yml"),
+        *DOCS.glob("*.yml"),
+    ]
     README = ROOT / "README.md"
     EXAMPLES = ROOT / "examples"
     CHANGELOG = ROOT / "CHANGELOG.md"
     LICENSE = ROOT / "LICENSE"
     PRETTIER_CFG = [ROOT / ".prettierrc", ROOT / ".prettierignore"]
-    ALL_MD = [*ROOT.glob("*.md"), *GITHUB.rglob("*.md")]
+    ALL_MD = [*ROOT.glob("*.md"), *GITHUB.rglob("*.md"), *PACKAGES.glob("*/README.md")]
+    ALL_JS = [ROOT / ".eslintrc.js"]
     ALL_JSON = [
         *ALL_PACKAGE_JSON,
         *ROOT.glob("*.json"),
         *ATEST.rglob("*.json"),
         *ALL_PY_SCHEMA,
     ]
-    ALL_PRETTIER = [*ALL_TS, *ALL_JSON, *ALL_CSS, *ALL_YAML, *ALL_MD]
+    ALL_PRETTIER = [*ALL_TS, *ALL_JSON, *ALL_CSS, *ALL_YAML, *ALL_MD, *ALL_JS]
     ALL_IPYNB = [
         p
         for p in [*DOCS.rglob("*.ipynb"), *EXAMPLES.rglob("*.ipynb")]

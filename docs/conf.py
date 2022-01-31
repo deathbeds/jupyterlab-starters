@@ -12,10 +12,9 @@ ROOT = HERE.parent
 
 
 if os.environ.get("READTHEDOCS", False):
-    check_call(["jlpm", "bootstrap"], cwd=str(ROOT))
-    check_call(
-        [sys.executable, "-m", "pip", "install", "-e", ".", "--no-deps"], cwd=str(ROOT)
-    )
+    check_call(["doit", "dist"], cwd=str(ROOT))
+    check_call(["doit", "dev:pip:install"], cwd=str(ROOT))
+    check_call(["doit", "docs:schema"], cwd=str(ROOT))
 
 
 def build_finished(_app, exception):

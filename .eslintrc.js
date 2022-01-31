@@ -14,7 +14,7 @@ module.exports = {
     'plugin:react/recommended',
   ],
   globals: {
-    JSX: 'readonly'
+    JSX: 'readonly',
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
