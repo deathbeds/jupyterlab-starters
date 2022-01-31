@@ -817,7 +817,7 @@ class U:
 
     @classmethod
     def run_args(cls, env=None):
-        conda_prefix = Path(os.environ["CONDA_PREFIX"])
+        conda_prefix = Path(os.environ.get("CONDA_PREFIX", sys.prefix))
 
         if C.RUNNING_LOCALLY:
             env = "dev"
