@@ -1,17 +1,19 @@
 # CHANGELOG
 
-## `jupyter_starters 1.1.0` (unreleased)
+## `jupyter_starters 1.1.0`
 
-- [#69] minimum python is now 3.7
+- [#62] adds a CLI tool, `jupyter starters list` (with option `--json`)
 - [#68] remove cookiecutter metadata parsing, as it no longer works consistently
+- [#69] minimum python is now 3.7
 
-## `@deathbeds/jupyterlab-starters 1.1.0` (unreleased)
+## `@deathbeds/jupyterlab-starters 1.1.0`
 
-## `@deathbeds/jupyterlab-rjsf 1.1.0` (unreleased)
+## `@deathbeds/jupyterlab-rjsf 1.1.0`
 
 - [#66] `formData` is now honored when constructing a form
 - [#69] upgrade to `@rjsf/core` 3
 
+[#62]: https://github.com/deathbeds/jupyterlab-starters/issues/62
 [#66]: https://github.com/deathbeds/jupyterlab-starters/issues/66
 [#68]: https://github.com/deathbeds/jupyterlab-starters/issues/68
 [#69]: https://github.com/deathbeds/jupyterlab-starters/pulls/69

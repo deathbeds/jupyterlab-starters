@@ -88,10 +88,15 @@ class StarterManager(LoggingConfigurable):
 
         re-uses notebook loading machinery to look through more locations
         """
-        manager = ConfigManager(read_config_path=jupyter_config_path())
+        config_path = jupyter_config_path()
+        cwd = str(Path.cwd())
+        if cwd not in config_path:
+            config_path = [cwd, *config_path]
+        manager = ConfigManager(read_config_path=config_path)
         conf = {}
         for app in ["_", "_notebook_", "_server_"]:
-            conf.update(**manager.get(f"jupyter{app}config").get("StarterManager", {}))
+            more_conf = manager.get(f"jupyter{app}config").get("StarterManager", {})
+            conf.update(**more_conf)
         return conf
 
     @T.default("_starters")
