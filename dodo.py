@@ -14,6 +14,7 @@ from pathlib import Path
 import doit.reporter
 import doit.tools
 from ruamel_yaml import safe_load
+from ruamel_yaml.main import safe_dump
 
 
 def task_lock():
@@ -36,6 +37,7 @@ def task_lock():
             ["node", "build", "lint", "atest", "utest", "lab", "run"],
         )
 
+    yield U.lock_to_env(P.LOCKS / f"docs-linux-64-{C.DEFAULT_PY}.conda.lock", P.RTD_ENV)
 
 def task_env():
     if C.CI or C.DEMO_IN_BINDER:
@@ -614,6 +616,7 @@ class C:
     THIS_PY = "{}.{}".format(*sys.version_info)
     PYTHONS = ["3.7", "3.10"]
     DEFAULT_PY = "3.10"
+    EXPLICIT = "@EXPLICIT"
     DEFAULT_SUBDIR = "linux-64"
     SKIP_LOCKS = bool(json.loads(os.environ.get("SKIP_LOCKS", "1")))
     CI = bool(json.loads(os.environ.get("CI", "0")))
@@ -694,6 +697,7 @@ class P:
     EXT_PACKAGE = PACKAGES / "jupyterlab-starters"
     ALL_PACKAGE_JSON = [PACKAGE_JSON, *PACKAGES_JSON]
 
+    RTD_ENV = DOCS / "rtd.yml"
     DOCS_NOTEBOOKS = sorted(DOCS.rglob("*.ipynb"))
     DOCS_STATIC = [
         p
@@ -869,6 +873,26 @@ class U:
                 U.cmd(args, cwd=str(P.LOCKS)),
             ],
             targets=[lockfile],
+        )
+
+    def lock_to_env(lockfile, env_file):
+        def _update():
+            lock_text = lockfile.read_text(encoding="utf-8")
+            lock_lines = lock_text.split(C.EXPLICIT)[1].strip().splitlines()
+            env = {
+                "name": "readthedocs",
+                "channels": ["conda-forge"],
+                "dependencies": lock_lines
+            }
+            env_file.write_text(
+                safe_dump(env, default_flow_style=False)
+            )
+
+        yield dict(
+            name=f"""{env_file.relative_to(P.ROOT)}:{lockfile.name.split(".")[0]}""",
+            actions=[_update],
+            targets=[env_file],
+            file_dep=[lockfile]
         )
 
     RE_TIMESTAMPS = [
