@@ -12,7 +12,7 @@ import React from 'react';
 export function asyncComponent<T extends asyncComponent.TImportable>(
   doImport: asyncComponent.IImporter<T>,
   onError: asyncComponent.IErrorHandler = console.error
-) {
+): asyncComponent.TImportable {
   let COMPONENT: T;
   let PROMISE: Promise<T>;
 
@@ -50,7 +50,7 @@ export function asyncComponent<T extends asyncComponent.TImportable>(
     /**
      * Render the component (or a spinner, while loading)
      */
-    render() {
+    render(): JSX.Element {
       const Component = this.state.__async_component;
       if (Component == null) {
         return (

@@ -27,7 +27,7 @@ export class NotebookMetadataModel extends VDomModel {
     this._commands = options.commands;
   }
 
-  get liveSchema() {
+  get liveSchema(): JSONObject {
     const { definitions } = RAW_SCHEMA;
 
     let commandIds = this._commands.listCommands().filter((id) => {
@@ -71,15 +71,15 @@ export class NotebookMetadataModel extends VDomModel {
     return schema;
   }
 
-  get manager() {
+  get manager(): IStarterManager {
     return this._manager;
   }
 
-  get notebook() {
+  get notebook(): NotebookPanel {
     return this._notebook;
   }
 
-  set notebook(notebook) {
+  set notebook(notebook: NotebookPanel) {
     if (notebook === this._notebook) {
       return;
     }
@@ -99,7 +99,7 @@ export class NotebookMetadataModel extends VDomModel {
     this.stateChanged.emit(void 0);
   }
 
-  onNotebookMeta() {
+  onNotebookMeta(): void {
     if (this._form == null) {
       return;
     }
@@ -114,17 +114,17 @@ export class NotebookMetadataModel extends VDomModel {
     }
   }
 
-  get form() {
+  get form(): SchemaFormModel<JSONObject> {
     return this._form;
   }
 
-  set form(form) {
+  set form(form: SchemaFormModel<JSONObject>) {
     if (this._form) {
       this._form.stateChanged.disconnect(this._change, this);
     }
     this._form = form;
-    form.stateChanged.connect(this._change, this);
     if (this._form) {
+      form.stateChanged.connect(this._change, this);
       this.onNotebookMeta();
     }
   }
@@ -137,8 +137,9 @@ export class NotebookMetadataModel extends VDomModel {
       const nbStarter = fromNotebook[NOTEBOOK_META_SUBKEY] || {};
       const formStarter = JSONExt.deepCopy((formData as JSONObject) || {});
 
-      for (const key in uiSchema || {}) {
-        if (uiSchema[key]['ui:field'] === 'codemirror-jsonobject') {
+      for (const keyValue in Object.entries(uiSchema || {})) {
+        const [key, value] = keyValue;
+        if (typeof value == 'object' && value['ui:field'] === 'codemirror-jsonobject') {
           if (!formStarter[key] || !Object.keys(formStarter[key] as any).length) {
             delete formStarter[key];
           }

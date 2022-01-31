@@ -1,44 +1,43 @@
 {
   "name": "@deathbeds/jupyterlab-rjsf",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "React JSON Schema Form for JupyterLab",
-  "keywords": [
-    "jupyter",
-    "jupyterlab",
-    "jupyterlab-extension"
-  ],
-  "homepage": "https://github.com/deathbeds/jupyterlab-starters",
-  "bugs": {
-    "url": "https://github.com/deathbeds/jupyterlab-starters/issues"
-  },
   "license": "BSD-3-Clause",
   "author": "dead pixels collective",
-  "files": [
-    "{lib,style,src}/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf,css,ts,tsx}",
-    "LICENSE"
-  ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "homepage": "https://github.com/deathbeds/jupyterlab-starters",
   "repository": {
     "type": "git",
     "url": "https://github.com/deathbeds/jupyterlab-starters.git"
   },
+  "bugs": {
+    "url": "https://github.com/deathbeds/jupyterlab-starters/issues"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "{lib,style,src}/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf,css,ts,tsx}"
+  ],
   "scripts": {
     "bundle": "npm pack .",
     "clean": "rimraf lib",
     "upload": "jlpm publish ."
   },
+  "types": "lib/index.d.ts",
   "dependencies": {
-    "@rjsf/core": "~2.5.1",
-    "react-codemirror2": "^7.2.1",
     "@jupyterlab/apputils": "3",
-    "@jupyterlab/rendermime": "3"
+    "@jupyterlab/rendermime": "3",
+    "@rjsf/core": "~3.2.1",
+    "react-codemirror2": "^7.2.1"
   },
   "devDependencies": {
-    "@types/react": "^17.0.0",
     "@types/codemirror": "^0.0.97",
+    "@types/react": "^17.0.0",
     "react": "^17.0.1",
-    "rimraf": "~3.0.0",
-    "typescript": "~4.2.3"
-  }
+    "rimraf": "~3.0.2",
+    "typescript": "~4.5.5"
+  },
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ]
 }

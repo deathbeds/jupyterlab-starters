@@ -1,49 +1,80 @@
 *** Settings ***
-Resource          Variables.robot
-Library           SeleniumLibrary
-Library           OperatingSystem
-Library           Process
-Library           String
-Library           traitlets.config.manager    WITH NAME    TCM
-Library           ./ports.py
+Documentation       Keywords for testing starters
+
+Library             OperatingSystem
+Library             Process
+Library             String
+Library             SeleniumLibrary
+Library             traitlets.config.manager    WITH NAME    TCM
+Library             ./ports.py
+Resource            Variables.resource
 
 *** Keywords ***
-Setup Server and Browser
+Setup Server And Browser
     [Documentation]    Start JupyterLab and open in a browser
+    Initialize URL
+    Initialize Devices
+    Initialize Paths
+    Initialize User Settings
+    Initialize Server
+    Open JupyterLab
+
+Initialize Devices
+    [Documentation]    Prepare device-specific values
+    ${accel} =    Evaluate    "COMMAND" if "${OS}" == "Darwin" else "CTRL"
+    Set Global Variable    ${ACCEL}    ${accel}
+    Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots
+
+Initialize Server
+    [Documentation]    Actually start the server
+    ${app args} =    Build App Args
+    ${server} =    Start Process    jupyter lab ${app args}    shell=yes    env:HOME=${home}
+    ...    cwd=${home}    stdout=${OUTPUT DIR}${/}lab.log    stderr=STDOUT
+    Set Global Variable    ${SERVER}    ${server}
+
+Initialize URL
+    [Documentation]    Setup URL-related values
     ${port} =    Get Unused Port
     Set Global Variable    ${PORT}    ${port}
     Set Global Variable    ${URL}    http://localhost:${PORT}${BASE}
-    ${accel} =    Evaluate    "COMMAND" if "${OS}" == "Darwin" else "CTRL"
-    Set Global Variable    ${ACCEL}    ${accel}
     ${token} =    Generate Random String
     Set Global Variable    ${TOKEN}    ${token}
+
+Initialize Paths
+    [Documentation]    Setup paths
     ${home} =    Set Variable    ${OUTPUT DIR}${/}home
-    ${root} =    Normalize Path    ${OUTPUT DIR}${/}..${/}..${/}..
     Set Global Variable    ${HOME}    ${home}
     Create Directory    ${home}
     Update Examples    ${home}
-    ${WORKSPACES DIR} =    Set Variable    ${OUTPUT DIR}${/}workspaces
-    Initialize User Settings
-    ${app args} =    Set Variable    --no-browser --debug --ServerApp.base_url\='${BASE}' --port\=${PORT} --ServerApp.token\='${token}' --NotebookApp.mathjax_url\='http://localhost:${PORT}${MATHJAX}'
-    ${path args} =    Set Variable    --LabApp.user_settings_dir='${SETTINGS DIR.replace('\\', '\\\\')}' --LabApp.workspaces_dir\='${WORKSPACES DIR.replace('\\', '\\\\')}'
-    Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots
-    ${server} =    Start Process    jupyter lab ${app args} ${path args}    shell=yes    env:HOME=${home}    cwd=${home}    stdout=${OUTPUT DIR}${/}lab.log
-    ...    stderr=STDOUT
-    Set Global Variable    ${SERVER}    ${server}
-    Open JupyterLab
+    ${workspaces dir} =    Set Variable    ${OUTPUT DIR}${/}workspaces
+    Set Global Variable    ${WORKSPACES DIR}    ${workspaces dir}
+
+Build App Args
+    [Documentation]    Build JupyterLab CLI arguments
+    ${app args} =    Set Variable
+    ...    --no-browser --debug --port\=${PORT}
+    ${app args} =    Set Variable
+    ...    ${app args} --ServerApp.base_url\='${BASE}' --ServerApp.token\='${TOKEN}'
+    ${app args} =    Set Variable
+    ...    ${app args} --NotebookApp.mathjax_url\='http://localhost:${PORT}${MATHJAX}'
+    ${app args} =    Set Variable
+    ...    ${app args} --LabApp.user_settings_dir='${SETTINGS DIR.replace('\\', '\\\\')}'
+    ${app args} =    Set Variable
+    ...    ${app args} --LabApp.workspaces_dir\='${WORKSPACES DIR.replace('\\', '\\\\')}'
+    [Return]    ${app args}
 
 Update Examples
-    [Arguments]    ${home}
     [Documentation]    Add the examples and patch in non-functioning examples
-    Copy Directory    ${OUTPUT DIR}${/}..${/}..${/}..${/}examples    ${home}${/}examples
-    Copy File    ${OUTPUT DIR}${/}..${/}..${/}..${/}${LAB CONF}    ${home}${/}${LAB CONF}
+    [Arguments]    ${home}
+    Copy Directory    ${ROOT}${/}examples    ${home}${/}examples
+    Copy File    ${ROOT}${/}${LAB CONF}    ${home}${/}${LAB CONF}
     ${atest conf txt} =    Get File    etc${/}${LAB CONF}
     ${atest conf} =    Evaluate    __import__("json").loads(r'''${atest conf txt}''')
     Merge To JSON File    ${home}${/}${LAB CONF}    ${atest conf}
 
 Setup Suite For Screenshots
-    [Arguments]    ${folder}
     [Documentation]    Set a screenshot folder, and tag with JupyterLab version
+    [Arguments]    ${folder}
     Pass Execution If    not "${LAB VERSION}"    Couldn't determine JupyterLab version
     Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots${/}${folder}
     Set Tags    lab:${LAB VERSION}
@@ -85,7 +116,8 @@ Open JupyterLab
     Set Environment Variable    MOZ_HEADLESS    ${HEADLESS}
     ${firefox} =    Which    firefox
     ${geckodriver} =    Which    geckodriver
-    Create WebDriver    Firefox    executable_path=${geckodriver}    firefox_binary=${firefox}    service_log_path=${OUTPUT DIR}${/}geckodriver.log
+    Create WebDriver    Firefox    executable_path=${geckodriver}    firefox_binary=${firefox}
+    ...    service_log_path=${OUTPUT DIR}${/}geckodriver.log
     Wait Until Keyword Succeeds    10x    5s    Go To    ${URL}lab?token=${TOKEN}&reset
     Set Window Size    1920    1080
     Run Keyword And Ignore Error    Wait For Splash
@@ -107,12 +139,16 @@ Ensure All Kernels Are Shut Down
     [Documentation]    Kill all the kernels
     Enter Command Name    Shut Down All Kernels
     ${els} =    Get WebElements    ${CMD PALETTE ITEM ACTIVE}
-    Run Keyword If    ${els.__len__()}    Click Element    ${CMD PALETTE ITEM ACTIVE}
-    Run Keyword If    ${els.__len__()}    Click Element    css:.jp-mod-accept.jp-mod-warn
+    IF    ${els.__len__()}
+        Click Element    ${CMD PALETTE ITEM ACTIVE}
+    END
+    IF    ${els.__len__()}
+        Click Element    css:.jp-mod-accept.jp-mod-warn
+    END
 
 Open Command Palette
     [Documentation]    Open the command palette
-    Wait Until Element is Visible    id:main
+    Wait Until Element Is Visible    id:main
     Press Keys    id:main    ${ACCEL}+SHIFT+c
     Wait Until Element Is Enabled    ${CMD PALETTE INPUT}
     Click Element    ${CMD PALETTE INPUT}
@@ -122,14 +158,14 @@ Open File Browser
     Press Keys    id:main    ${ACCEL}+SHIFT+f
 
 Enter Command Name
-    [Arguments]    ${cmd}
     [Documentation]    Start a command
+    [Arguments]    ${cmd}
     Open Command Palette
     Input Text    ${CMD PALETTE INPUT}    ${cmd}
 
 Lab Command
-    [Arguments]    ${cmd}
     [Documentation]    Run a JupyterLab command by description
+    [Arguments]    ${cmd}
     Accept Default Dialog Option
     Enter Command Name    ${cmd}
     Wait Until Page Contains Element    ${CMD PALETTE ITEM ACTIVE}
@@ -138,8 +174,8 @@ Lab Command
     Accept Default Dialog Option
 
 Which
-    [Arguments]    ${cmd}
     [Documentation]    Find a shell command
+    [Arguments]    ${cmd}
     ${path} =    Evaluate    __import__("shutil").which("${cmd}")
     [Return]    ${path}
 
@@ -155,13 +191,13 @@ Cancel Starter Form
     Wait Until Page Does Not Contain Element    ${CSS BODYBUILDER}
 
 Really Input Text
-    [Arguments]    ${locator}    ${text}
     [Documentation]    Really make sure some text is set
-    Wait Until Keyword Succeeds    3x    200ms    Input and Check Text    ${locator}    ${text}
-
-Input and Check Text
     [Arguments]    ${locator}    ${text}
+    Wait Until Keyword Succeeds    3x    200ms    Input And Check Text    ${locator}    ${text}
+
+Input And Check Text
     [Documentation]    Input (and check) text was entered
+    [Arguments]    ${locator}    ${text}
     Wait Until Page Contains Element    ${locator}
     Click Element    ${locator}
     Input Text    ${locator}    ${text}
@@ -169,8 +205,8 @@ Input and Check Text
     Element Attribute Value Should Be    ${locator}    value    ${text}
 
 Wait Until Kernel
-    [Arguments]    ${kernel}=Python 3
     [Documentation]    Wait for a kernel to be ready
+    [Arguments]    ${kernel}=Python 3
     Wait Until Element Contains    css:.jp-Toolbar-kernelName    ${kernel}
 
 Save Notebook
@@ -181,11 +217,13 @@ Save Notebook
 Accept Default Dialog Option
     [Documentation]    Accept a dialog, if it exists
     ${el} =    Get WebElements    ${CSS DIALOG OK}
-    Run Keyword If    ${el.__len__()}    Click Element    ${CSS DIALOG OK}
+    IF    ${el.__len__()}
+        Click Element    ${CSS DIALOG OK}
+    END
 
 Merge To JSON File
-    [Arguments]    ${path}    ${obj}
     [Documentation]    Merge a dictionary into a JSON file
+    [Arguments]    ${path}    ${obj}
     ${file} =    Get File    ${path}
     ${json} =    Evaluate    __import__("json").loads(r'''${file}''')
     TCM.Recursive Update    ${json}    ${obj}

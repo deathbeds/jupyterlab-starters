@@ -1,8 +1,11 @@
 *** Settings ***
-Documentation     Smoke Test
-Suite Setup       Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots${/}smoke
-Force Tags        smoke
-Resource          Keywords.robot
+Documentation       Smoke Test
+
+Resource            Keywords.resource
+
+Suite Setup         Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots${/}smoke
+
+Force Tags          smoke
 
 *** Test Cases ***
 Lab Version

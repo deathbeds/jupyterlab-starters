@@ -42,16 +42,14 @@
   color: var(--jp-ui-font-color0);
   padding: calc(var(--jp-ui-font-size1) / 2);
   padding-right: var(--jp-ui-font-size3);
-  background-image: var(--jp-ui-select-caret);
+  background-image: url('~@jupyterlab/ui-components/style/icons/arrow/caret-down-empty-thin.svg');
   background-repeat: no-repeat;
   background-position: 99% center;
   background-size: 18px;
   border: var(--jp-border-width) solid var(--jp-input-border-color);
-  border-radius: 0px;
+  border-radius: 0;
   outline: none;
   appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
 }
 
 .jp-SchemaForm select[multiple] {

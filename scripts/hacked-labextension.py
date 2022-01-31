@@ -15,7 +15,17 @@ def _ensure_builder(*args, **kwargs):
     return str(BUILDER)
 
 
+def _get_labextension_metadata(module):
+    try:
+        import jupyter_starters
+    except Exception as err:
+        print("Failed to import jupyter_starters", err)
+        raise err
+    return jupyter_starters, jupyter_starters._jupyter_labextension_paths()
+
+
 federated_labextensions._ensure_builder = _ensure_builder
+federated_labextensions._get_labextension_metadata = _get_labextension_metadata
 
 main = LabExtensionApp.launch_instance
 

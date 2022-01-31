@@ -3,6 +3,7 @@
   --jp-starters-btn-height: calc(3 * var(--jp-ui-font-size3));
   --jp-starters-btn-icon-size: calc(2 * var(--jp-ui-font-size3));
 }
+
 .jp-StartersDefaultIcon {
   background-image: url('./icons/starter.svg');
 }

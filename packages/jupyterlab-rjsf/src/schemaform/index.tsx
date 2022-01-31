@@ -65,7 +65,7 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
   /**
    * Render the form, if the model is available
    */
-  render() {
+  render(): JSX.Element | null {
     if (!this.model) {
       return null;
     }
@@ -104,7 +104,7 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
   /**
    * Handle the change of a form by the user and update the model
    */
-  onChange(evt: rjsf.IChangeEvent<T>, _err?: rjsf.ErrorSchema) {
+  onChange(evt: rjsf.IChangeEvent<T>, _err?: rjsf.ErrorSchema): void {
     const { formData, errors } = evt;
     if (formData != null) {
       this.model.errors = errors;
@@ -116,14 +116,14 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
   /**
    * Get the JSON object specified by the user, along with any validation errors
    */
-  getValue() {
+  getValue(): SchemaForm.IValue<T> {
     return {
       formData: this.model.formData,
       errors: this.model.errors,
     };
   }
 
-  protected _renderMarkdown = async () => {
+  protected _renderMarkdown = async (): Promise<void> => {
     const hosts: HTMLElement[] = Array.from(
       this.node.querySelectorAll(
         this.model.liveMarkdown ? UNRENDERED_LABELS : ALL_LABELS
@@ -138,7 +138,7 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
     await Promise.all(hosts.map(this._renderOneMarkdown));
   };
 
-  protected _renderOneMarkdown = async (host: HTMLElement) => {
+  protected _renderOneMarkdown = async (host: HTMLElement): Promise<void> => {
     if (host.querySelector(`.${MARKDOWN_CANARY}`)) {
       return;
     }
@@ -176,7 +176,7 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
     host.appendChild(canary);
   };
 
-  protected _postRender = () => {
+  protected _postRender = (): void => {
     this.model.errorsObserved = !!this.node.querySelector('.errors');
     this.model.emitRenderered();
   };
@@ -189,13 +189,20 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
   private _initialRenderDelay = 10;
 }
 
+export namespace SchemaForm {
+  export interface IValue<T extends JSONValue> {
+    formData: T;
+    errors: rjsf.AjvError[];
+  }
+}
+
 namespace Private {
   let _nextId = 0;
 
   /**
    * Return the next id to be used for the created form children
    */
-  export function nextId() {
+  export function nextId(): number {
     return _nextId++;
   }
 }

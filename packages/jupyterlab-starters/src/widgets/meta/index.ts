@@ -29,7 +29,7 @@ export class NotebookMetadata extends Widget {
     this.initForm().catch(console.error);
   }
 
-  protected async initForm() {
+  protected async initForm(): Promise<void> {
     this._form = new SchemaForm(
       this.model.liveSchema,
       {
@@ -61,11 +61,11 @@ export class NotebookMetadata extends Widget {
     this.boxLayout.addWidget(this._preview);
   }
 
-  get boxLayout() {
+  get boxLayout(): BoxLayout {
     return this.layout as BoxLayout;
   }
 
-  dispose() {
+  dispose(): void {
     super.dispose();
     if (!this.isDisposed) {
       this.model.dispose();
@@ -75,7 +75,7 @@ export class NotebookMetadata extends Widget {
 
 namespace Private {
   let _nextId = 0;
-  export function nextId() {
-    return `id-jp-starters-notebook-${name}-${_nextId++}`;
+  export function nextId(): string {
+    return `id-jp-starters-notebook-${_nextId++}`;
   }
 }

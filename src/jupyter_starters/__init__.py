@@ -12,4 +12,9 @@ def _jupyter_labextension_paths():
     return [{"src": "labextension", "dest": "@deathbeds/jupyterlab-starters"}]
 
 
-__all__ = ["load_jupyter_server_extension", "__version__"]
+__all__ = [
+    "__version__",
+    "_jupyter_labextension_paths",
+    "_jupyter_server_extension_paths",
+    "load_jupyter_server_extension",
+]

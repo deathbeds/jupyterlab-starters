@@ -1,10 +1,10 @@
 import { JSONObject, PromiseDelegate, JSONExt } from '@lumino/coreutils';
-import { Signal } from '@lumino/signaling';
+import { ISignal, Signal } from '@lumino/signaling';
 import { URLExt } from '@jupyterlab/coreutils';
 import { ServerConnection } from '@jupyterlab/services';
 import { LabIcon } from '@jupyterlab/ui-components';
 import { IRenderMimeRegistry, RenderedMarkdown } from '@jupyterlab/rendermime';
-
+import { IRunningSessions } from '@jupyterlab/running';
 import { IStarterManager, API, NS } from './tokens';
 
 import * as SCHEMA from './_schema';
@@ -30,33 +30,34 @@ export class StarterManager implements IStarterManager {
     this._runningChanged = new Signal<IStarterManager, void>(this);
   }
 
-  // running stuff
-  shutdownAll() {
-    //
+  shutdownAll(): void {
+    this.fetch()
+      .then(() => this.running().map((runner) => runner.shutdown()))
+      .catch(console.warn);
   }
 
-  running() {
+  running(): IRunningSessions.IRunningItem[] {
     return (this._running || []).map((name) => {
       const starter = this.starters[name];
       const icon = this.icon(name, starter) as LabIcon;
       return {
         label: () => starter.label,
         open: () => void 0,
-        shutdown: async () => await this.stop(name),
+        shutdown: async () => this.stop(name).catch(console.warn),
         icon: () => icon,
-      };
+      } as IRunningSessions.IRunningItem;
     });
   }
 
-  refreshRunning() {
+  refreshRunning(): void {
     this.fetch().catch(console.warn);
   }
 
-  get runningChanged() {
+  get runningChanged(): ISignal<IStarterManager, void> {
     return this._runningChanged;
   }
 
-  get markdown() {
+  get markdown(): RenderedMarkdown {
     if (!this._markdown) {
       this._markdown = this._rendermime.createRenderer(
         'text/markdown'
@@ -65,11 +66,11 @@ export class StarterManager implements IStarterManager {
     return this._markdown;
   }
 
-  get ready() {
+  get ready(): Promise<void> {
     return this._ready.promise;
   }
 
-  get changed() {
+  get changed(): ISignal<IStarterManager, void> {
     return this._changed;
   }
 
@@ -77,15 +78,15 @@ export class StarterManager implements IStarterManager {
     return { ...this._starters };
   }
 
-  starter(name: string) {
+  starter(name: string): SCHEMA.Starter {
     return this._starters[name];
   }
 
-  icon(name: string, starter: SCHEMA.Starter) {
+  icon(name: string, starter: SCHEMA.Starter): LabIcon.ILabIcon {
     return Private.icon(name, starter) || null;
   }
 
-  async fetch() {
+  async fetch(): Promise<void> {
     const response = await makeRequest(API, {}, this._serverSettings);
     const content = (await response.json()) as SCHEMA.AResponseForAnStartersRequest;
     this._starters = content.starters;
@@ -103,7 +104,7 @@ export class StarterManager implements IStarterManager {
     _starter: SCHEMA.Starter,
     contentsPath: string,
     body?: JSONObject
-  ) {
+  ): Promise<SCHEMA.AResponseForStartRequest> {
     const init = { method: 'POST' } as RequestInit;
     if (body) {
       init.body = JSON.stringify(body);
@@ -114,7 +115,7 @@ export class StarterManager implements IStarterManager {
     return result;
   }
 
-  async stop(name: string) {
+  async stop(name: string): Promise<void> {
     const init: RequestInit = { method: 'DELETE' };
     const url = URLExt.join(API, name);
     const response = await makeRequest(`${url}/`, init, this._serverSettings);
@@ -130,7 +131,7 @@ namespace Private {
 
   _icons.set('cookiecutter', Icons.cookiecutter);
 
-  export function icon(name: string, starter: SCHEMA.Starter) {
+  export function icon(name: string, starter: SCHEMA.Starter): LabIcon.ILabIcon {
     let icon = _icons.get(name);
 
     if (

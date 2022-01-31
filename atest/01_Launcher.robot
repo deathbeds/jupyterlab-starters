@@ -1,8 +1,11 @@
 *** Settings ***
-Documentation     Launcher
-Suite Setup       Setup Suite For Screenshots    launcher
-Force Tags        launcher
-Resource          Keywords.robot
+Documentation       Launcher
+
+Resource            Keywords.resource
+
+Suite Setup         Setup Suite For Screenshots    launcher
+
+Force Tags          launcher
 
 *** Test Cases ***
 Launcher

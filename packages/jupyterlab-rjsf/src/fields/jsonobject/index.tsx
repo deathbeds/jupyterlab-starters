@@ -2,7 +2,7 @@ import * as React from 'react';
 
 /* order might matter on these imports */
 /* first core... */
-import { utils as rjsfUtils } from '@rjsf/core';
+import { utils as rjsfUtils, Field } from '@rjsf/core';
 
 /* ...then lib imports */
 import _ObjectField from '@rjsf/core/lib/components/fields/ObjectField';
@@ -20,14 +20,14 @@ import { JSONExt } from '@lumino/coreutils';
  * We use the upstream ObjectField at runtime to construct a private class.
  * This could likely be improved with a namespace or something.
  */
-export function makeJSONObjectField(ObjectField: typeof _ObjectField) {
+export function makeJSONObjectField(ObjectField: typeof _ObjectField): Field {
   /**
    * A raw JSON Object which can be stored/edited inside an RJSF
    */
   class JSONObjectField extends ObjectField {
     protected _editor: CodeMirror.Editor;
 
-    render() {
+    render(): JSX.Element {
       const {
         uiSchema,
         formData,
@@ -118,5 +118,5 @@ export function makeJSONObjectField(ObjectField: typeof _ObjectField) {
     };
   }
 
-  return JSONObjectField as any;
+  return JSONObjectField as any as Field;
 }

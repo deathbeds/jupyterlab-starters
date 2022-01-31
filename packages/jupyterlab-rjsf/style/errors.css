@@ -33,6 +33,7 @@
   margin: 0;
   padding: 0;
 }
+
 .jp-SchemaForm .field .error-detail li {
   margin-top: calc(var(--jp-ui-font-size1) / 2);
 }

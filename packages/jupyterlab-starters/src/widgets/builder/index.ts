@@ -34,7 +34,7 @@ export class BodyBuilder extends Widget {
     this.initForm().catch(console.warn);
   }
 
-  protected async initForm() {
+  protected async initForm(): Promise<void> {
     this._form = new SchemaForm(
       this._context.starter.schema || {},
       {
@@ -51,18 +51,18 @@ export class BodyBuilder extends Widget {
     this.boxLayout.addWidget(this._buttons);
   }
 
-  get boxLayout() {
+  get boxLayout(): BoxLayout {
     return this.layout as BoxLayout;
   }
 
-  dispose() {
+  dispose(): void {
     super.dispose();
     if (!this.isDisposed) {
       this.model.dispose();
     }
   }
 
-  makeButtons() {
+  makeButtons(): BuilderButtons {
     const buttons = new BuilderButtons(this.model);
 
     buttons.model.form = this._form.model;
@@ -73,7 +73,7 @@ export class BodyBuilder extends Widget {
 
 namespace Private {
   let _nextId = 0;
-  export function nextId() {
-    return `id-jp-starters-${name}-${_nextId++}`;
+  export function nextId(): string {
+    return `id-jp-starters-${_nextId++}`;
   }
 }

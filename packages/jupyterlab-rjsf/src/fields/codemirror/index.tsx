@@ -2,7 +2,9 @@ import * as React from 'react';
 
 import { UnControlled } from 'react-codemirror2';
 
-export function CodeMirrorField(props: any) {
+import type CodeMirror from 'codemirror';
+
+export function CodeMirrorField(props: Record<string, any>): JSX.Element {
   const { options } = props;
 
   const cmOptions = {
@@ -29,7 +31,7 @@ export function CodeMirrorField(props: any) {
   );
 }
 
-export function codeMirrorDefaults() {
+export function codeMirrorDefaults(): Record<string, any> {
   const isLight = !!document.querySelector('body[data-jp-theme-light="true"]');
 
   return {

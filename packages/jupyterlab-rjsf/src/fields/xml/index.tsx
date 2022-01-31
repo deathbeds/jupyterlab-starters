@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { CodeMirrorField } from '../codemirror';
 
-export function XMLField(props: any) {
+export function XMLField(props: Record<string, any>): JSX.Element {
   const finalProps = {
     ...props,
     options: {

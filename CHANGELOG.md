@@ -1,34 +1,52 @@
 # CHANGELOG
 
-## `jupyter_starters 1.0.2` (unreleased)
+## `jupyter_starters 1.1.0` (unreleased)
 
-- [#54][] adapt kernel shutdown to newer `jupyter_client >=6.1` API
+- [#69] minimum python is now 3.7
+- [#68] remove cookiecutter metadata parsing, as it no longer works consistently
 
-## `@deathbeds/jupyterlab-starters 1.0.2` (unreleased)
+## `@deathbeds/jupyterlab-starters 1.1.0` (unreleased)
 
-## `@deathbeds/jupyterlab-rjsf 1.0.2` (unreleased)
+## `@deathbeds/jupyterlab-rjsf 1.1.0` (unreleased)
 
-- [#56][] upgrade to `@rjsf/core 2.5.1`
+- [#66] `formData` is now honored when constructing a form
+- [#69] upgrade to `@rjsf/core` 3
+
+[#66]: https://github.com/deathbeds/jupyterlab-starters/issues/66
+[#68]: https://github.com/deathbeds/jupyterlab-starters/issues/68
+[#69]: https://github.com/deathbeds/jupyterlab-starters/pulls/69
+
+---
+
+## `jupyter_starters 1.0.2`
+
+- [#54] adapt kernel shutdown to newer `jupyter_client >=6.1` API
+
+## `@deathbeds/jupyterlab-starters 1.0.2`
+
+## `@deathbeds/jupyterlab-rjsf 1.0.2`
+
+- [#56] upgrade to `@rjsf/core 2.5.1`
 
 ---
 
 ## `jupyter_starters 1.0.1a0`
 
-- [#51][] update of `@deathbeds/jupyterlab-rjsf` and `@deathbeds/jupyterlab-starters`.
+- [#51] update of `@deathbeds/jupyterlab-rjsf` and `@deathbeds/jupyterlab-starters`.
 
 ## `@deathbeds/jupyterlab-starters 1.0.1a0`
 
-- [#51][] uses new `@deathbeds/jupyterlab-rjsf` API
+- [#51] uses new `@deathbeds/jupyterlab-rjsf` API
 
 ## `@deathbeds/jupyterlab-rjsf 1.0.1a0`
 
-- [#51][] make more exports lazy loading
+- [#51] make more exports lazy loading
 
 ---
 
 ## `jupyter_starters 1.0.0a0`
 
-- [#48][] support JupyterLab 3.x
+- [#48] support JupyterLab 3.x
   - it is now only necessary (and supported) to `pip` install this package to also
     install JupyterLab extensions
   - JupyterLab 1/2-style installation for user Lab Apps is no longer tested
@@ -44,51 +62,51 @@
 
 ## `@deathbeds/jupyterlab-rjsf 1.0.0a0`
 
-- [#48][] support JupyterLab 3.x
+- [#48] support JupyterLab 3.x
 
 ## `@deathbeds/jupyterlab-starters 1.0.0a0`
 
-- [#48][] support JupyterLab 3.x
+- [#48] support JupyterLab 3.x
 
 ---
 
 ## `jupyter_starters 0.6.0a0`
 
-- [#45][] use new `@deathbeds/jupyterlab-starters 0.6.0a0`
-- [#45][] be more specific on URL patterns
+- [#45] use new `@deathbeds/jupyterlab-starters 0.6.0a0`
+- [#45] be more specific on URL patterns
 
 ## `@deathbeds/jupyterlab-rjsf 0.6.0a0`
 
-- [#45][] upgrade `@rjsf/core` for `anyOf` fixes
-- [#45][] upgrade `react-codemirror2`
+- [#45] upgrade `@rjsf/core` for `anyOf` fixes
+- [#45] upgrade `react-codemirror2`
 
 ## `@deathbeds/jupyterlab-starters 0.6.0a0`
 
-- [#45][] use new `@deathbeds/jupyterlab-rjsf 0.6.0a0`
+- [#45] use new `@deathbeds/jupyterlab-rjsf 0.6.0a0`
 
 ---
 
 ## `jupyter_starters 0.5.0a0`
 
-- [#41][] handle more recent cookiecutter metadata
+- [#41] handle more recent cookiecutter metadata
 
 ## `@deathbeds/jupyterlab-rjsf 0.5.0a0`
 
-- [#41][] upgrade `react-jsonschema-form` to `@rjsf/core`
+- [#41] upgrade `react-jsonschema-form` to `@rjsf/core`
 
 ## `@deathbeds/jupyterlab-starters 0.5.0a0`
 
-- [#41][] upgrade `@deathbeds/jupyterlab-rjsf`
+- [#41] upgrade `@deathbeds/jupyterlab-rjsf`
 
 ---
 
 ## `@deathbeds/jupyterlab-rjsf 0.4.0a0`
 
-- [#38][] split out `rjsf` into its own package
+- [#38] split out `rjsf` into its own package
 
 ## `@deathbeds/jupyterlab-starters 0.4.0a0`
 
-- [#38][] depend on `@deathbeds/jupyterlab-rjsf`
+- [#38] depend on `@deathbeds/jupyterlab-rjsf`
 
 ## `jupyter_starters 0.4.0a0`
 
@@ -98,50 +116,50 @@
 
 ## `jupyter_starters 0.3.0a0`
 
-- [#39][] adds listing and stopping of currently-running kernels to REST API
+- [#39] adds listing and stopping of currently-running kernels to REST API
 
 ## `@deathbeds/jupyterlab-starters 0.3.0a0`
 
-- [#39][] supports JupyterLab 2.0
-- [#39][] adds listing and stopping of running kernel-backed starters
+- [#39] supports JupyterLab 2.0
+- [#39] adds listing and stopping of running kernel-backed starters
 
 ---
 
 ## `jupyter_starters 0.2.2a0`
 
-- [#23][] rename `_json` module to `json_`, start documentation site in earnest
+- [#23] rename `_json` module to `json_`, start documentation site in earnest
 
 ## `@deathbeds/jupyterlab-starters 0.2.2a0`
 
-- [#29][] some updated class names based on schema
-- [#34][] add stauts indicator for starting/continuing
-- [#35][] add `/lab/tree/starter/<starter>/<path>` URL router
+- [#29] some updated class names based on schema
+- [#34] add stauts indicator for starting/continuing
+- [#35] add `/lab/tree/starter/<starter>/<path>` URL router
 
 ---
 
 ## `jupyter_starters 0.2.1a0`
 
-- [#25][] add `py_src` for easier distribution of starters
-- [#25][] add unit tests
-- [#29][] handle minimally specified notebook metadata
+- [#25] add `py_src` for easier distribution of starters
+- [#25] add unit tests
+- [#29] handle minimally specified notebook metadata
 
 ## `@deathbeds/jupyterlab-starters 0.2.1a0`
 
-- [#29][] handle minimally specified notebook metadata
+- [#29] handle minimally specified notebook metadata
 
 ---
 
 ## `jupyter_starters 0.2.0a0`
 
-- [#13][] add notebook as starter
-- [#18][] add copying files and commands while starter is continuing
+- [#13] add notebook as starter
+- [#18] add copying files and commands while starter is continuing
 
 ## `@deathbeds/jupyterlab-starters 0.2.0a0`
 
-- [#13][] add notebook metadata authoring
-- [#17][] add Jupyter markdown to `title`, `description` and `ui:help` in schema forms
-- [#18][] all starters launch in right sidebar
-- [#21][] enable CodeMirror for JSON, Markdown, etc. editing
+- [#13] add notebook metadata authoring
+- [#17] add Jupyter markdown to `title`, `description` and `ui:help` in schema forms
+- [#18] all starters launch in right sidebar
+- [#21] enable CodeMirror for JSON, Markdown, etc. editing
 
 ---
 

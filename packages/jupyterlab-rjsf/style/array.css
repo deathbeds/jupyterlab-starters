@@ -30,6 +30,10 @@
 
 .jp-SchemaForm .array-item-toolbox {
   opacity: 0.5;
+  flex: 0;
+  padding-right: var(--jp-ui-font-size1);
+  margin-bottom: calc(var(--jp-ui-font-size1) / 2);
+  order: 1;
 }
 
 .jp-SchemaForm .array-item:hover > .array-item-toolbox {
@@ -41,6 +45,10 @@
   flex-direction: column;
 }
 
+.jp-SchemaForm .array-item-toolbox .btn {
+  margin-bottom: calc(var(--jp-ui-font-size1) / 2);
+}
+
 .jp-SchemaForm .array-item-toolbox .btn:hover:not([disabled]) {
   background-color: var(--jp-layout-color3);
 }
@@ -48,10 +56,6 @@
 .jp-SchemaForm .array-item-toolbox .btn.array-item-remove:hover {
   background-color: var(--jp-warn-color2);
   color: var(--jp-ui-inverse-font-color0);
-}
-
-.jp-SchemaForm .array-item-toolbox .btn {
-  margin-bottom: calc(var(--jp-ui-font-size1) / 2);
 }
 
 .jp-SchemaForm .array-item-toolbox .btn[disabled] {
@@ -63,6 +67,7 @@
   display: flex;
   position: relative;
 }
+
 .jp-SchemaForm .array-item:not(:last-child) {
   border-bottom: var(--jp-border-width) solid var(--jp-border-color0);
   margin-bottom: var(--jp-ui-font-size1);
@@ -72,11 +77,4 @@
 .jp-SchemaForm .array-item div:first-child {
   flex: 1;
   order: 2;
-}
-
-.jp-SchemaForm .array-item-toolbox {
-  flex: 0;
-  padding-right: var(--jp-ui-font-size1);
-  margin-bottom: calc(var(--jp-ui-font-size1) / 2);
-  order: 1;
 }

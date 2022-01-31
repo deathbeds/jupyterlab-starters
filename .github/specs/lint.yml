@@ -5,6 +5,7 @@ dependencies:
   - mypy
   - pylint
   - pytest
-  - robotframework-lint
+  - robotframework-robocop
   - robotframework-seleniumlibrary
+  - robotframework-tidy
   - ruamel_yaml

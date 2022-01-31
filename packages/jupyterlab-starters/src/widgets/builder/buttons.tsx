@@ -20,7 +20,7 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
     this.addClass(CSS.BUILDER_BUTTONS);
   }
 
-  protected render() {
+  protected render(): JSX.Element {
     const m = this.model;
     const { context } = m;
     let path = context.cwd;
@@ -45,7 +45,7 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
     );
   }
 
-  protected renderCancelButton() {
+  protected renderCancelButton(): JSX.Element {
     return (
       <button onClick={this.onDone} className={`${CSS.JP.styled} ${CSS.JP.reject}`}>
         <closeIcon.react tag="span" verticalAlign="middle" />
@@ -54,7 +54,7 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
     );
   }
 
-  protected renderStartButton() {
+  protected renderStartButton(): JSX.Element {
     const { status, startCount } = this.model;
 
     let icon = <stopIcon.react tag="span" verticalAlign="middle" />;
@@ -87,6 +87,6 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
     );
   }
 
-  onStart = () => this.model.onStart();
-  onDone = () => this.model.onDone();
+  onStart: () => void = () => this.model.onStart();
+  onDone: () => void = () => this.model.onDone();
 }

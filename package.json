@@ -1,35 +1,59 @@
 {
-  "devDependencies": {
-    "@adobe/jsonschema2md": "^5.0.5",
-    "@typescript-eslint/eslint-plugin": "^2.27.0",
-    "@typescript-eslint/parser": "^2.27.0",
-    "eslint-config-prettier": "^6.7.0",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-react": "^7.19.0",
-    "eslint": "^6.8.0",
-    "lerna": "^3.13.2",
-    "prettier": "^2.2.1",
-    "rimraf": "~3.0.0",
-    "typescript": "~4.2.3"
-  },
   "private": true,
   "scripts": {
     "bootstrap": "jlpm --ignore-optional --prefer-offline --frozen-lockfile && lerna bootstrap && jlpm lint && jlpm clean && jlpm build",
     "build": "lerna run build:pre && lerna run build && lerna run build:ext",
     "bundle": "lerna run --parallel bundle",
     "clean": "lerna run --parallel clean",
-    "lint:check": "jlpm --silent prettier:check && jlpm --silent eslint:check",
-    "lint": "jlpm --silent prettier:fix && jlpm --silent eslint:fix",
-    "prettier:check": "prettier --check '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",
-    "prettier:fix": "prettier  --list-different --write '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}'",
-    "test": "lerna run --stream --concurrency=1 test",
-    "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
+    "deduplicate": "jlpm yarn-deduplicate -s fewer --fail",
     "eslint:check": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
+    "lint": "jlpm --silent stylelint:fix && jlpm --silent prettier:fix && jlpm --silent eslint:fix",
+    "lint:check": "jlpm --silent prettier:check && jlpm --silent eslint:check && jlpm --silent stylelint:check",
+    "stylelint:check": "stylelint --cache \"{packages/*/style,docs/_static}/**/*.css\"",
+    "stylelint:fix": "jlpm stylelint:check --fix",
+    "test": "lerna run --stream --concurrency=1 test",
+    "prettier:base": "prettier \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}\"",
+    "prettier:check": "jlpm prettier:base --check",
+    "prettier:fix": "jlpm prettier:base --list-different --write",
     "watch": "lerna run --parallel watch"
   },
   "workspaces": {
     "packages": [
       "packages/*"
     ]
+  },
+  "resolutions": {
+    "glob-parent": "^5.1.2"
+  },
+  "devDependencies": {
+    "@adobe/jsonschema2md": "^6.1.4",
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.1",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.28.0",
+    "lerna": "^4.0.0",
+    "prettier": "^2.5.1",
+    "prettier-package-json": "^2.6.0",
+    "rimraf": "^3.0.2",
+    "stylelint": "^14.3.0",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-recommended": "^6.0.0",
+    "stylelint-config-standard": "~24.0.0",
+    "stylelint-prettier": "^2.0.0",
+    "typescript": "~4.5.5",
+    "yarn-deduplicate": "^3.1.0"
+  },
+  "stylelint": {
+    "extends": [
+      "stylelint-config-recommended",
+      "stylelint-config-standard",
+      "stylelint-prettier/recommended"
+    ],
+    "rules": {
+      "selector-class-pattern": null
+    }
   }
 }

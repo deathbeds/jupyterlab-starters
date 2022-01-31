@@ -83,22 +83,28 @@ def task_lint():
         name="rf:tidy",
         **U.run_in(
             "docs",
-            [[*C.PYM, "robot.tidy", "--inplace", *P.ALL_ROBOT]],
+            [[*C.PYM, "robotidy", *P.ALL_ROBOT]],
             file_dep=P.ALL_ROBOT,
         ),
     )
 
-    rflint = [
-        *C.PYM,
-        "rflint",
-        *sum([["--configure", rule] for rule in C.RFLINT_RULES], []),
-    ]
+    robocop = [*C.PYM, "robocop", *C.ROBOCOP_RULES]
 
     yield dict(
-        name="rf:rflint",
+        name="rf:robocop",
         task_dep=["lint:rf:tidy"],
-        **U.run_in("docs", [rflint + P.ALL_ROBOT], file_dep=P.ALL_ROBOT),
+        **U.run_in("docs", [robocop + P.ALL_ROBOT], file_dep=P.ALL_ROBOT),
     )
+
+    for pkg_json in P.ALL_PACKAGE_JSON:
+        yield dict(
+            name=f"prettier-package-json:{pkg_json.relative_to(P.ROOT)}",
+            **U.run_in(
+                "docs",
+                [[C.JLPM, "prettier-package-json", "--write", pkg_json]],
+                file_dep=[pkg_json],
+            ),
+        )
 
     prettier = [C.JLPM, "prettier"] + (
         ["--write", "--list-different"] if C.RUNNING_LOCALLY else ["--check"]
@@ -117,7 +123,7 @@ def task_lint():
         ),
     )
 
-    eslint = [C.JLPM, "eslint", "--ext", ".js,.jsx,.ts,.tsx"] + (
+    eslint = [C.JLPM, "eslint", "--cache", "--ext", ".js,.jsx,.ts,.tsx"] + (
         ["--fix"] if C.RUNNING_LOCALLY else []
     )
 
@@ -131,6 +137,23 @@ def task_lint():
                 P.YARN_INTEGRITY,
                 *[p for p in P.ALL_TS if not p.name.startswith("_")],
                 *P.ROOT.glob(".eslint*"),
+            ],
+        ),
+    )
+
+    stylelint = [C.JLPM, "stylelint", "--cache"] + (
+        ["--fix"] if C.RUNNING_LOCALLY else []
+    )
+
+    yield dict(
+        name="stylelint",
+        task_dep=["lint:prettier"],
+        **U.run_in(
+            "docs",
+            [[*stylelint, *P.ALL_CSS]],
+            file_dep=[
+                P.YARN_INTEGRITY,
+                *P.ALL_CSS,
             ],
         ),
     )
@@ -157,11 +180,16 @@ def task_jlpm():
 
     jlpm_args = ["--frozen-lockfile"] if C.CI else []
 
+    actions = [[C.JLPM, *jlpm_args]]
+
+    if not C.CI:
+        actions += [[C.JLPM, "deduplicate"]]
+
     yield dict(
         name="install",
         **U.run_in(
             "build",
-            [[C.JLPM, *jlpm_args]],
+            actions,
             file_dep=[P.YARNRC, *P.ALL_PACKAGE_JSON],
             targets=[P.YARN_INTEGRITY],
         ),
@@ -379,7 +407,7 @@ def task_lab():
     def lab():
         prefix, run_args = U.run_args("docs")
         proc = subprocess.Popen(
-            list(map(str, [*run_args, "jupyter", "lab", "--no-browser", "--debug"])),
+            list(map(str, [*run_args, "jupyter", "lab", *C.LAB_ARGS])),
             stdin=subprocess.PIPE,
         )
 
@@ -486,16 +514,14 @@ def task_test():
     task_dep = ["preflight"]
 
     if not (C.DOCS_IN_CI or C.TEST_IN_CI):
-        task_dep += ["lint:rf:rflint"]
+        task_dep += ["lint:rf:robocop"]
 
     yield dict(
         name="atest",
         task_dep=task_dep,
         file_dep=[*P.ALL_ROBOT, *P.NPM_TARBALLS.values(), P.WHEEL],
         actions=[(U.atest, [])],
-        targets=[
-            P.ATEST_OUT / f"{C.THIS_ATEST_STEM}-0.robot.xml",
-        ],
+        targets=[P.ATEST_OUT / "output.xml", P.ATEST_OUT / "log.html"],
     )
 
 
@@ -586,8 +612,8 @@ class C:
         platform.system()
     ]
     THIS_PY = "{}.{}".format(*sys.version_info)
-    PYTHONS = ["3.6", "3.9"]
-    DEFAULT_PY = "3.9"
+    PYTHONS = ["3.7", "3.10"]
+    DEFAULT_PY = "3.10"
     DEFAULT_SUBDIR = "linux-64"
     SKIP_LOCKS = bool(json.loads(os.environ.get("SKIP_LOCKS", "1")))
     CI = bool(json.loads(os.environ.get("CI", "0")))
@@ -596,15 +622,20 @@ class C:
     TEST_IN_CI = bool(json.loads(os.environ.get("TEST_IN_CI", "0")))
     DEMO_IN_BINDER = bool(json.loads(os.environ.get("DEMO_IN_BINDER", "0")))
     RUNNING_LOCALLY = not CI
-    RFLINT_RULES = [
-        "LineTooLong:200",
-        "TooFewKeywordSteps:0",
-        "TooManyTestSteps:30",
+    ROBOCOP_RULES = [
+        # "LineTooLong:200",
+        # "TooFewKeywordSteps:0",
+        # "TooManyTestSteps:30",
+        *("--configure", "empty-lines-between-sections:empty_lines:1"),
+        *("--configure", "too-many-calls-in-test-case:max_calls:18"),
+        *("--exclude", "if-can-be-used"),
     ]
     UTEST_ARGS = safe_load(os.environ.get("UTEST_ARGS", "[]"))
     ATEST_RETRIES = int(os.environ.get("ATEST_RETRIES", "1"))
     ATEST_ARGS = safe_load(os.environ.get("ATEST_ARGS", "[]"))
+    ATEST_PROCESSES = safe_load(os.environ.get("ATEST_PROCESSES", "4"))
     THIS_ATEST_STEM = f"{THIS_SUBDIR}-py{THIS_PY}"
+    LAB_ARGS = safe_load(os.environ.get("LAB_ARGS", '["--no-browser", "--debug"]'))
 
     if CI:
         PY = Path(
@@ -653,7 +684,7 @@ class P:
     SETUP_PY = ROOT / "setup.py"
 
     ALL_PY = [DODO, *PY_SRC, *PY_SCRIPTS, *PY_DOCS, *PY_ATEST, SETUP_PY]
-    ALL_ROBOT = list(ATEST.rglob("*.robot"))
+    ALL_ROBOT = [*ATEST.rglob("*.robot"), *ATEST.rglob("*.resource")]
 
     YARNRC = ROOT / ".yarnrc"
 
@@ -685,8 +716,8 @@ class P:
     YARN_INTEGRITY = NODE_MODULES / ".yarn-integrity"
     DIST = ROOT / "dist"
     # TODO: single-source version
-    PY_VERSION = "1.0.2"
-    JS_VERSION = "1.0.2"
+    PY_VERSION = "1.1.0"
+    JS_VERSION = "1.1.0"
     SDIST = DIST / f"jupyter_starters-{PY_VERSION}.tar.gz"
     WHEEL = DIST / f"jupyter_starters-{PY_VERSION}-py3-none-any.whl"
     NPM_TARBALLS = {
@@ -707,7 +738,7 @@ class P:
     DOCS_OUT_HTML = DOCS_OUT / "html"
     DOCS_INDEX = DOCS_OUT_HTML / "index.html"
     DOCS_BUILDINFO = DOCS_OUT_HTML / ".buildinfo"
-    DOCS_SCHEMA_INDEX = DOCS / "schema" / "index.rst"
+    DOCS_SCHEMA_INDEX = DOCS / "schema" / "index.md"
 
     # js stuff
     TSBUILDINFO = PACKAGES / "_meta/tsconfig.tsbuildinfo"
@@ -730,11 +761,8 @@ class P:
         [],
     )
     ALL_CSS = sum(
-        (
-            [*(p.parent / "style").rglob("*.ts"), *(p.parent / "style").rglob("*.css")]
-            for p in PACKAGES_JSON
-        ),
-        [],
+        [[*(p.parent / "style").rglob("*.css")] for p in PACKAGES_JSON],
+        [*DOCS.rglob("_static/**/*.css")],
     )
     ALL_YAML = [*SPECS.glob("*.yml"), *ROOT.glob("*.yml"), *GITHUB.rglob("*.yml")]
     README = ROOT / "README.md"
@@ -892,7 +920,7 @@ class U:
 
         if attempt:
             extra_args += ["--loglevel", "TRACE"]
-            previous = P.ATEST_OUT / f"{C.THIS_ATEST_STEM}-{attempt - 1}.robot.xml"
+            previous = P.ATEST_OUT / f"{C.THIS_ATEST_STEM}-{attempt - 1}/output.xml"
             if previous.exists():
                 extra_args += ["--rerunfailed", str(previous)]
 
@@ -903,33 +931,32 @@ class U:
             NAME=C.THIS_ATEST_STEM,
             OS=platform.system(),
             Py=C.THIS_PY,
+            ROOT=P.ROOT,
         )
 
         extra_args += sum(
             [["--variable", f"{key}:{value}"] for key, value in variables.items()], []
         )
 
+        pabot_args = [
+            *("--processes", C.ATEST_PROCESSES),
+            *("--artifacts", "png,log,txt,ipynb"),
+            "--artifactsinsubfolders",
+        ]
+
         args = [
-            "--name",
-            C.THIS_ATEST_STEM,
-            "--outputdir",
-            out_dir,
-            "--output",
-            P.ATEST_OUT / f"{stem}.robot.xml",
-            "--log",
-            P.ATEST_OUT / f"{stem}.log.html",
-            "--report",
-            P.ATEST_OUT / f"{stem}.report.html",
-            "--xunit",
-            P.ATEST_OUT / f"{stem}.xunit.xml",
-            "--randomize",
-            "all",
+            *("--name", C.THIS_ATEST_STEM),
+            *("--outputdir", out_dir),
+            *("--log", out_dir / "log.html"),
+            *("--report", out_dir / "report.html"),
+            *("--xunit", out_dir / "xunit.xml"),
+            *("--randomize", "all"),
             *extra_args,
             # the folder must always go last
             P.ATEST,
         ]
 
-        str_args = [*map(str, [*run_args, *C.PYM, "robot", *args])]
+        str_args = [*map(str, [*run_args, "pabot", *pabot_args, *args])]
         print(">>>", " ".join(str_args))
         proc = subprocess.Popen(str_args, cwd=P.ATEST)
 
@@ -947,19 +974,14 @@ class U:
             C.PY,
             "-m",
             "robot.rebot",
-            "--name",
-            "🤖",
             "--nostatusrc",
             "--merge",
-            "--output",
-            P.ATEST_OUT / "robot.xml",
-            "--log",
-            P.ATEST_OUT / "log.html",
-            "--report",
-            P.ATEST_OUT / "report.html",
-            "--xunit",
-            P.ATEST_OUT / "xunit.xml",
-        ] + sorted(P.ATEST_OUT.glob("*.robot.xml"))
+            *("--name", "🤖"),
+            *("--output", P.ATEST_OUT / "output.xml"),
+            *("--log", P.ATEST_OUT / "log.html"),
+            *("--report", P.ATEST_OUT / "report.html"),
+            *("--xunit", P.ATEST_OUT / "xunit.xml"),
+        ] + sorted(P.ATEST_OUT.glob("*/output.xml"))
 
         str_args = [*map(str, args)]
 

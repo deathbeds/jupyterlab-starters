@@ -1,8 +1,11 @@
 *** Settings ***
-Documentation     Simple
-Suite Setup       Setup Suite For Screenshots    simple
-Force Tags        example:simple
-Resource          Keywords.robot
+Documentation       Simple
+
+Resource            Keywords.resource
+
+Suite Setup         Setup Suite For Screenshots    simple
+
+Force Tags          example:simple
 
 *** Test Cases ***
 Simple Notebook
@@ -24,7 +27,7 @@ Simple Folder
 
 Folder Ignoring
     [Documentation]    Will it ignore paths?
-    Create File    ..${/}examples${/}whitepaper-multiple${/}node_modules${/}foo.txt
+    Create File    ${HOME}${/}examples${/}whitepaper-multiple${/}node_modules${/}foo.txt
     Click Element    ${CSS LAUNCH CARD FOLDER}
     Wait Until Created    ${HOME}${/}whitepaper-multiple
     Wait Until Page Contains Element    ${XP FILE TREE ITEM}/span[text() = '00 Introduction.ipynb']

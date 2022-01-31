@@ -1,9 +1,12 @@
 *** Settings ***
-Documentation     Tree URL
-Suite Setup       Setup Suite For Screenshots    tree-url
-Force Tags        example:tree-url
-Resource          Keywords.robot
-Library           String
+Documentation       Tree URL
+
+Resource            Keywords.resource
+Library             String
+
+Suite Setup         Setup Suite For Screenshots    tree-url
+
+Force Tags          example:tree-url
 
 *** Test Cases ***
 Starter Opens

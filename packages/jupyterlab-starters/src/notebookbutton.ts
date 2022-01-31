@@ -11,7 +11,8 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { CommandIDs } from './tokens';
 
 export class NotebookStarter
-  implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel> {
+  implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
+{
   private _commands: CommandRegistry;
 
   constructor(options: NotebookStarter.IOptions) {
