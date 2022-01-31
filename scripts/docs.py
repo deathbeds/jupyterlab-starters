@@ -49,18 +49,18 @@ RGH = "https://raw.githubusercontent.com"
 SCHEMA_STEM = f"{RGH}/deathbeds/jupyterlab-starters/master/src/jupyter_starters/schema/"
 
 MD_REPLACEMENTS = [
-    # avoid lexer warnings
-    [r"^```(txt|regexp)", "```"],
-    # fix header level
-    [r"^(#+) ", r"\1## "],
-    # defined in not useful
-    [r"^\s*- defined in: \[.*?\]\(.*?\)", ""],
-    [r"\| Defined (by|In)", ""],
-    [r"\[(Jupyter Starters JSON|v\d+.json)\]\(.*?\)", ""],
-    # $id not useful
-    [re.escape(SCHEMA_STEM), ""],
-    # regexpr not useful
-    [r"\[try pattern\]\(.*?\)", ""],
+    # # avoid lexer warnings
+    # [r"^```(txt|regexp)", "```"],
+    # # fix header level
+    # [r"^(#+) ", r"\1## "],
+    # # defined in not useful
+    # [r"^\s*- defined in: \[.*?\]\(.*?\)", ""],
+    # [r"\| Defined (by|In)", ""],
+    # [r"\[(Jupyter Starters JSON|v\d+.json)\]\(.*?\)", ""],
+    # # $id not useful
+    # [re.escape(SCHEMA_STEM), ""],
+    # # regexpr not useful
+    # [r"\[try pattern\]\(.*?\)", ""],
 ]
 
 HTML_REPLACEMENTS = [
@@ -130,7 +130,7 @@ def fix_schema_md():
 
         md_file.write_text(md_txt)
 
-    check_call([*prettier, *md_files])
+    # check_call([*prettier, *md_files])
 
 
 def fix_schema_html() -> int:
@@ -151,10 +151,11 @@ def fix_schema_html() -> int:
 def make_schema_index() -> int:
     """make an index for all the schema markdown"""
     md_files = sorted(SCHEMA_DOCS.glob("*.md"))
-    index = SCHEMA_DOCS / "index.rst"
+    index = SCHEMA_DOCS / "index.md"
 
     index_text = INDEX_TEMPLATE.render(paths=md_files)
     index.write_text(index_text)
+    print(index, "created")
     return 0
 
 

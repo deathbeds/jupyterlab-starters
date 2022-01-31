@@ -117,7 +117,7 @@ language = None
 exclude_patterns = [".ipynb_checkpoints", "**/.ipynb_checkpoints", "**/~.*"]
 
 # The name of the Pygments (syntax highlighting) style to use.
-# pygments_style = "monokai"
+pygments_style = "monokai"
 
 
 # -- Options for HTML output -------------------------------------------------

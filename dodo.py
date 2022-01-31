@@ -747,11 +747,8 @@ class P:
         [],
     )
     ALL_CSS = sum(
-        (
-            [*(p.parent / "style").rglob("*.ts"), *(p.parent / "style").rglob("*.css")]
-            for p in PACKAGES_JSON
-        ),
-        [],
+        [[*(p.parent / "style").rglob("*.css")] for p in PACKAGES_JSON],
+        [*DOCS.rglob("_static/**/*.css")],
     )
     ALL_YAML = [*SPECS.glob("*.yml"), *ROOT.glob("*.yml"), *GITHUB.rglob("*.yml")]
     README = ROOT / "README.md"

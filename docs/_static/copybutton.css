@@ -33,7 +33,7 @@ a.copybtn > img {
   position: relative;
 }
 
-.o-tooltip--left:after {
+.o-tooltip--left::after {
   opacity: 0;
   visibility: hidden;
   position: absolute;
@@ -52,7 +52,7 @@ a.copybtn > img {
     transform 0.2s cubic-bezier(0.64, 0.09, 0.08, 1);
 }
 
-.o-tooltip--left:hover:after {
+.o-tooltip--left:hover::after {
   display: block;
   opacity: 1;
   visibility: visible;

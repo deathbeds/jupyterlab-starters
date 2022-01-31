@@ -36,7 +36,7 @@
     "lint:check": "jlpm --silent prettier:check && jlpm --silent eslint:check && jlpm --silent stylelint:check",
     "lint": "jlpm --silent stylelint:fix && jlpm --silent prettier:fix && jlpm --silent eslint:fix",
     "stylelint:fix": "jlpm stylelint:check --fix",
-    "stylelint:check": "stylelint --cache \"packages/*/style/**/*.css\"",
+    "stylelint:check": "stylelint --cache \"{packages/*/style,docs/_static}/**/*.css\"",
     "prettier:base": "prettier \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}\"",
     "prettier:check": "jlpm prettier:base --check",
     "prettier:fix": "jlpm prettier:base --list-different --write",
