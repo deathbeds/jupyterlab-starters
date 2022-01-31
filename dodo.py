@@ -896,15 +896,17 @@ class U:
             }
             env_file.write_text(safe_dump(env, default_flow_style=False))
 
+        rel = env_file.relative_to(P.ROOT)
+        stem = lockfile.stem.rsplit(".", 1)[0]
+
         task = dict(
-            name=f"""{env_file.relative_to(P.ROOT)}:{lockfile.stem.rsplit(".", 1)[0]}""",
+            name=f"{rel}:{stem}",
             **U.run_in(
                 "docs",
                 actions=[[C.JLPM, "prettier", "--quiet", "--write", env_file]],
                 targets=[env_file],
                 file_dep=[lockfile],
             ),
-
         )
 
         task["actions"] = [_update, *task["actions"]]
