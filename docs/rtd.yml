@@ -21,5 +21,3 @@ dependencies:
   - sphinx-autodoc-typehints
   - sphinx-copybutton
   - ujson
-  - pip:
-    - jupyterlite ==0.1.0a20

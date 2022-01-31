@@ -36,13 +36,11 @@
   },
   "dependencies": {
     "@deathbeds/jupyterlab-rjsf": "~1.1.0",
-    "@jupyterlab/application": "3"
-  },
-  "peerDependencies": {
-    "@rjsf/core": "~2.4.0",
+    "@jupyterlab/application": "3",
     "@jupyterlab/launcher": "3",
     "@jupyterlab/notebook": "3",
-    "@jupyterlab/running": "3"
+    "@jupyterlab/running": "3",
+    "@rjsf/core": "~2.4.0"
   },
   "devDependencies": {
     "@types/codemirror": "^0.0.97",

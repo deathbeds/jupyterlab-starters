@@ -3,7 +3,7 @@
 ## `jupyter_starters 1.1.0` (unreleased)
 
 - minimum python is now 3.7
-- simplify cookiecutter integration
+- remove cookiecutter metadata parsing, as it no longer works consistently
 
 ## `@deathbeds/jupyterlab-starters 1.1.0` (unreleased)
 

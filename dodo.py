@@ -392,7 +392,7 @@ def task_lab():
     def lab():
         prefix, run_args = U.run_args("docs")
         proc = subprocess.Popen(
-            list(map(str, [*run_args, "jupyter", "lab", "--no-browser", "--debug"])),
+            list(map(str, [*run_args, "jupyter", "lab", *C.LAB_ARGS])),
             stdin=subprocess.PIPE,
         )
 
@@ -621,6 +621,7 @@ class C:
     ATEST_RETRIES = int(os.environ.get("ATEST_RETRIES", "1"))
     ATEST_ARGS = safe_load(os.environ.get("ATEST_ARGS", "[]"))
     THIS_ATEST_STEM = f"{THIS_SUBDIR}-py{THIS_PY}"
+    LAB_ARGS = safe_load(os.environ.get("LAB_ARGS", '["--no-browser", "--debug"]'))
 
     if CI:
         PY = Path(
@@ -723,7 +724,7 @@ class P:
     DOCS_OUT_HTML = DOCS_OUT / "html"
     DOCS_INDEX = DOCS_OUT_HTML / "index.html"
     DOCS_BUILDINFO = DOCS_OUT_HTML / ".buildinfo"
-    DOCS_SCHEMA_INDEX = DOCS / "schema" / "index.rst"
+    DOCS_SCHEMA_INDEX = DOCS / "schema" / "index.md"
 
     # js stuff
     TSBUILDINFO = PACKAGES / "_meta/tsconfig.tsbuildinfo"

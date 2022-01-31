@@ -25,17 +25,17 @@ SETUP = SPHINX_STAGE == "setup"
 FINISHED = SPHINX_STAGE == "build-finished"
 META = SPHINX_STAGE is None
 
-RST_TEMPLATE = jinja2.Template(
+INDEX_TEMPLATE = jinja2.Template(
     """
-All JSON Schema
-===============
+# All JSON Schema
 
-.. toctree::
-    :maxdepth: 1
+```{toctree}
+:maxdepth: 1
 
-    {% for path in paths %}{{ path.name.replace('.md', '') }}
-    {% endfor %}
-"""
+{% for path in paths %}{{ path.name.replace('.md', '') }}
+{% endfor %}
+```
+""".strip()
 )
 
 ROOT = Path(__file__).parent.parent
@@ -153,8 +153,8 @@ def make_schema_index() -> int:
     md_files = sorted(SCHEMA_DOCS.glob("*.md"))
     index = SCHEMA_DOCS / "index.rst"
 
-    rst = RST_TEMPLATE.render(paths=md_files)
-    index.write_text(rst)
+    index_text = INDEX_TEMPLATE.render(paths=md_files)
+    index.write_text(index_text)
     return 0
 
 
