@@ -2,18 +2,16 @@
   "name": "@deathbeds/metapackage-jupyterlab-starters",
   "version": "0.1.0",
   "description": "JupyterLab Starters - Meta Package",
+  "license": "BSD-3-Clause",
+  "author": "dead pixels collective",
   "homepage": "https://github.com/deathbeds/jupyterlab-starters",
   "bugs": {
     "url": "https://github.com/deathbeds/jupyterlab-starters"
   },
-  "license": "BSD-3-Clause",
-  "author": "dead pixels collective",
+  "main": "lib/index.js",
   "files": [
     "lib/*.{d.ts,js,js.map}"
   ],
-  "sideEffects": false,
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "directories": {
     "lib": "lib/"
   },
@@ -22,9 +20,11 @@
     "clean": "rimraf lib",
     "watch": "tsc -b --watch --preserveWatchOutput"
   },
+  "sideEffects": false,
+  "types": "lib/index.d.ts",
   "dependencies": {
-    "@deathbeds/jupyterlab-starters": "file:../jupyterlab-starters",
-    "@deathbeds/jupyterlab-rjsf": "file:../jupyterlab-rjsf"
+    "@deathbeds/jupyterlab-rjsf": "file:../jupyterlab-rjsf",
+    "@deathbeds/jupyterlab-starters": "file:../jupyterlab-starters"
   },
   "devDependencies": {
     "rimraf": "~3.0.2",

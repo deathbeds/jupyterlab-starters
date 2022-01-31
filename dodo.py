@@ -96,6 +96,16 @@ def task_lint():
         **U.run_in("docs", [robocop + P.ALL_ROBOT], file_dep=P.ALL_ROBOT),
     )
 
+    for pkg_json in P.ALL_PACKAGE_JSON:
+        yield dict(
+            name=f"prettier-package-json:{pkg_json.relative_to(P.ROOT)}",
+            **U.run_in(
+                "docs",
+                [[C.JLPM, "prettier-package-json", "--write", pkg_json]],
+                file_dep=[pkg_json],
+            ),
+        )
+
     prettier = [C.JLPM, "prettier"] + (
         ["--write", "--list-different"] if C.RUNNING_LOCALLY else ["--check"]
     )
@@ -170,11 +180,16 @@ def task_jlpm():
 
     jlpm_args = ["--frozen-lockfile"] if C.CI else []
 
+    actions = [[C.JLPM, *jlpm_args]]
+
+    if not C.CI:
+        actions += [[C.JLPM, "deduplicate"]]
+
     yield dict(
         name="install",
         **U.run_in(
             "build",
-            [[C.JLPM, *jlpm_args]],
+            actions,
             file_dep=[P.YARNRC, *P.ALL_PACKAGE_JSON],
             targets=[P.YARN_INTEGRITY],
         ),
