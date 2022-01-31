@@ -33,7 +33,7 @@ class StartersListApp(StartersBaseApp):
         **{
             "json": (
                 {"StartersListApp": {"json": True}},
-                "Do not pretty-print the XML",
+                "List starters as JSON instead of YAML",
             ),
         },
     )
