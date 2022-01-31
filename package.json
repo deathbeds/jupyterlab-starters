@@ -24,8 +24,7 @@
     ]
   },
   "resolutions": {
-    "marked": ">=4.0.10",
-    "glob-parent": ">=5.1.2"
+    "glob-parent": "^5.1.2"
   },
   "devDependencies": {
     "@adobe/jsonschema2md": "^6.1.4",

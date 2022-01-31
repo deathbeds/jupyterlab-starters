@@ -43,7 +43,6 @@ Initialize URL
 Initialize Paths
     [Documentation]    Setup paths
     ${home} =    Set Variable    ${OUTPUT DIR}${/}home
-    ${root} =    Normalize Path    ${OUTPUT DIR}${/}..${/}..${/}..
     Set Global Variable    ${HOME}    ${home}
     Create Directory    ${home}
     Update Examples    ${home}
@@ -67,8 +66,8 @@ Build App Args
 Update Examples
     [Documentation]    Add the examples and patch in non-functioning examples
     [Arguments]    ${home}
-    Copy Directory    ${OUTPUT DIR}${/}..${/}..${/}..${/}examples    ${home}${/}examples
-    Copy File    ${OUTPUT DIR}${/}..${/}..${/}..${/}${LAB CONF}    ${home}${/}${LAB CONF}
+    Copy Directory    ${ROOT}${/}examples    ${home}${/}examples
+    Copy File    ${ROOT}${/}${LAB CONF}    ${home}${/}${LAB CONF}
     ${atest conf txt} =    Get File    etc${/}${LAB CONF}
     ${atest conf} =    Evaluate    __import__("json").loads(r'''${atest conf txt}''')
     Merge To JSON File    ${home}${/}${LAB CONF}    ${atest conf}

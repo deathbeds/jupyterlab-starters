@@ -15,7 +15,7 @@ ROOT = pathlib.Path(__file__).parent.parent
 
 # TS stuff
 NPM_NS = "@deathbeds"
-MAIN_NAME = "{}/jupyterlab-starters".format(NPM_NS)
+MAIN_NAME = f"{NPM_NS}/jupyterlab-starters"
 
 # py stuff
 PY_NAME = "jupyter_starters"

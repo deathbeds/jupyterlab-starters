@@ -28,9 +28,9 @@ PACKAGES = {
         for path in ROOT.glob("packages/*/package.json")
     ]
 }
-MAIN_NAME = "{}/jupyterlab-starters".format(NPM_NS)
-META_NAME = "{}/metapackage-jupyterlab-starters".format(NPM_NS)
-RJSF_NAME = "{}/jupyterlab-rjsf".format(NPM_NS)
+MAIN_NAME = f"{NPM_NS}/jupyterlab-starters"
+META_NAME = f"{NPM_NS}/metapackage-jupyterlab-starters"
+RJSF_NAME = f"{NPM_NS}/jupyterlab-rjsf"
 
 MAIN_EXT_VERSION = PACKAGES[MAIN_NAME][1]["version"]
 RJSF_EXT_VERSION = PACKAGES[RJSF_NAME][1]["version"]
@@ -63,17 +63,13 @@ def test_ts_package_integrity(name, info, the_meta_package):
 
     assert (
         name in m_pkg["dependencies"]
-    ), "{} missing from metapackage/package.json".format(name)
+    ), f"{name} missing from metapackage/package.json"
 
-    assert (
-        "'{}'".format(name) in m_index
-    ), "{} missing from metapackage/src/index.ts".format(name)
+    assert f"'{name}'" in m_index, f"{name} missing from metapackage/src/index.ts"
 
     assert [
-        ref
-        for ref in m_tsconfig["references"]
-        if ref["path"] == "../{}".format(path.name)
-    ], "{} missing from metapackage/tsconfig.json".format(name)
+        ref for ref in m_tsconfig["references"] if ref["path"] == f"../{path.name}"
+    ], f"{name} missing from metapackage/tsconfig.json"
 
     schemas = list(path.glob("schema/*.json"))
 
@@ -93,7 +89,7 @@ def test_ts_package_integrity(name, info, the_meta_package):
 )
 def test_changelog_versions(pkg, version):
     """is the changelog up-to-date(ish)"""
-    assert "## `{} {}`".format(pkg, version) in CHANGELOG.read_text()
+    assert f"## `{pkg} {version}`" in CHANGELOG.read_text()
 
 
 def integrity():

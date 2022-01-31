@@ -521,9 +521,7 @@ def task_test():
         task_dep=task_dep,
         file_dep=[*P.ALL_ROBOT, *P.NPM_TARBALLS.values(), P.WHEEL],
         actions=[(U.atest, [])],
-        targets=[
-            P.ATEST_OUT / f"{C.THIS_ATEST_STEM}-0.robot.xml",
-        ],
+        targets=[P.ATEST_OUT / "output.xml", P.ATEST_OUT / "log.html"],
     )
 
 
@@ -922,7 +920,7 @@ class U:
 
         if attempt:
             extra_args += ["--loglevel", "TRACE"]
-            previous = P.ATEST_OUT / f"{C.THIS_ATEST_STEM}-{attempt - 1}.robot.xml"
+            previous = P.ATEST_OUT / f"{C.THIS_ATEST_STEM}-{attempt - 1}/output.xml"
             if previous.exists():
                 extra_args += ["--rerunfailed", str(previous)]
 
@@ -933,6 +931,7 @@ class U:
             NAME=C.THIS_ATEST_STEM,
             OS=platform.system(),
             Py=C.THIS_PY,
+            ROOT=P.ROOT,
         )
 
         extra_args += sum(
@@ -940,33 +939,24 @@ class U:
         )
 
         pabot_args = [
-            "--testlevelsplit",
-            f"--processes={C.ATEST_PROCESSES}",
+            *("--processes", C.ATEST_PROCESSES),
+            *("--artifacts", "png,log,txt,ipynb"),
             "--artifactsinsubfolders",
-            "--artifacts=png,log,txt,ipynb",
         ]
 
         args = [
-            "--name",
-            C.THIS_ATEST_STEM,
-            "--outputdir",
-            out_dir,
-            "--output",
-            P.ATEST_OUT / f"{stem}.robot.xml",
-            "--log",
-            P.ATEST_OUT / f"{stem}.log.html",
-            "--report",
-            P.ATEST_OUT / f"{stem}.report.html",
-            "--xunit",
-            P.ATEST_OUT / f"{stem}.xunit.xml",
-            "--randomize",
-            "all",
+            *("--name", C.THIS_ATEST_STEM),
+            *("--outputdir", out_dir),
+            *("--log", out_dir / "log.html"),
+            *("--report", out_dir / "report.html"),
+            *("--xunit", out_dir / "xunit.xml"),
+            *("--randomize", "all"),
             *extra_args,
             # the folder must always go last
             P.ATEST,
         ]
 
-        str_args = [*map(str, [*run_args, *C.PYM, "pabot", *pabot_args, *args])]
+        str_args = [*map(str, [*run_args, "pabot", *pabot_args, *args])]
         print(">>>", " ".join(str_args))
         proc = subprocess.Popen(str_args, cwd=P.ATEST)
 
@@ -984,19 +974,14 @@ class U:
             C.PY,
             "-m",
             "robot.rebot",
-            "--name",
-            "🤖",
             "--nostatusrc",
             "--merge",
-            "--output",
-            P.ATEST_OUT / "robot.xml",
-            "--log",
-            P.ATEST_OUT / "log.html",
-            "--report",
-            P.ATEST_OUT / "report.html",
-            "--xunit",
-            P.ATEST_OUT / "xunit.xml",
-        ] + sorted(P.ATEST_OUT.glob("*.robot.xml"))
+            *("--name", "🤖"),
+            *("--output", P.ATEST_OUT / "output.xml"),
+            *("--log", P.ATEST_OUT / "log.html"),
+            *("--report", P.ATEST_OUT / "report.html"),
+            *("--xunit", P.ATEST_OUT / "xunit.xml"),
+        ] + sorted(P.ATEST_OUT.glob("*/output.xml"))
 
         str_args = [*map(str, args)]
 

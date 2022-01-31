@@ -27,7 +27,7 @@ Simple Folder
 
 Folder Ignoring
     [Documentation]    Will it ignore paths?
-    Create File    ..${/}examples${/}whitepaper-multiple${/}node_modules${/}foo.txt
+    Create File    ${HOME}${/}examples${/}whitepaper-multiple${/}node_modules${/}foo.txt
     Click Element    ${CSS LAUNCH CARD FOLDER}
     Wait Until Created    ${HOME}${/}whitepaper-multiple
     Wait Until Page Contains Element    ${XP FILE TREE ITEM}/span[text() = '00 Introduction.ipynb']

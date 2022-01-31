@@ -5,9 +5,12 @@ _build
 .coverage
 .doit*
 .envs/
+.eslintcache
 .ipynb_checkpoints/
 .mypy_cache/
+.pabotsuitenames
 .pytest_cache/
+.stylelintcache
 .vscode/
 .yarn-packages/
 *.egg-info
@@ -25,5 +28,3 @@ node_modules/
 src/**/labextension/
 untitled*
 Untitled*
-.eslintcache
-.stylelintcache
