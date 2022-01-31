@@ -39,6 +39,7 @@ def task_lock():
 
     yield U.lock_to_env(P.LOCKS / f"docs-linux-64-{C.DEFAULT_PY}.conda.lock", P.RTD_ENV)
 
+
 def task_env():
     if C.CI or C.DEMO_IN_BINDER:
         return
@@ -882,17 +883,15 @@ class U:
             env = {
                 "name": "readthedocs",
                 "channels": ["conda-forge"],
-                "dependencies": lock_lines
+                "dependencies": lock_lines,
             }
-            env_file.write_text(
-                safe_dump(env, default_flow_style=False)
-            )
+            env_file.write_text(safe_dump(env, default_flow_style=False))
 
         yield dict(
             name=f"""{env_file.relative_to(P.ROOT)}:{lockfile.name.split(".")[0]}""",
             actions=[_update],
             targets=[env_file],
-            file_dep=[lockfile]
+            file_dep=[lockfile],
         )
 
     RE_TIMESTAMPS = [
