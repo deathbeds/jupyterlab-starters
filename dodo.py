@@ -895,12 +895,20 @@ class U:
             }
             env_file.write_text(safe_dump(env, default_flow_style=False))
 
-        yield dict(
-            name=f"""{env_file.relative_to(P.ROOT)}:{lockfile.name.split(".")[0]}""",
-            actions=[_update],
-            targets=[env_file],
-            file_dep=[lockfile],
+        task = dict(
+            name=f"""{env_file.relative_to(P.ROOT)}:{lockfile.stem.rsplit(".", 1)[0]}""",
+            **U.run_in(
+                "docs",
+                actions=[[C.JLPM, "prettier", "--quiet", "--write", env_file]],
+                targets=[env_file],
+                file_dep=[lockfile],
+            ),
+
         )
+
+        task["actions"] = [_update, *task["actions"]]
+
+        yield task
 
     RE_TIMESTAMPS = [
         r"\d{4}-\d{2}-\d{2} \d{2}:\d{2} -\d*",
