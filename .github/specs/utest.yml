@@ -1,5 +1,7 @@
 dependencies:
   - pytest
   - pytest-asyncio
+  - pytest-console-scripts
   - pytest-cov
   - pytest-html
+  - pytest-xdist

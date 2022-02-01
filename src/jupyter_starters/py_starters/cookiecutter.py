@@ -17,6 +17,15 @@ from ..types import Status
 if TYPE_CHECKING:
     from ..manager import StarterManager  # noqa
 
+try:
+    import cookiecutter.main
+
+    HAS_COOKIECUTTER = True
+    HAS_DIRECTORY = cookiecutter.__version__ >= "1.7.1"
+except ImportError:
+    HAS_COOKIECUTTER = False
+    HAS_DIRECTORY = False
+
 
 GH = "https://github.com"
 GITHUB_TOPIC = f"{GH}/topics/cookiecutter-template"
@@ -71,14 +80,27 @@ JUPYTER_COOKIECUTTERS = {
             "description": "A cookiecutter for a JupyterLite Kernel",
         },
     ],
+    **(
+        {}
+        if not HAS_DIRECTORY
+        else {
+            "Jupyter Server Proxy": [
+                {
+                    "repo": f"{GH}/jupyterhub/jupyter-server-proxy",
+                    "description": (
+                        "Configure a jupyter-server-proxy "
+                        "(use directory: `contrib/template`)"
+                    ),
+                }
+            ],
+        }
+    ),
 }
 
 
 def cookiecutter_starters(manager):
     """try to find some cookiecutters"""
-    try:
-        cookiecutter = __import__("cookiecutter")
-    except (ImportError, ValueError, AttributeError):
+    if not HAS_COOKIECUTTER:
         manager.log.debug(
             "🍪 install cookiecutter to enable the cookiecutter starter. yum!"
         )
@@ -113,6 +135,19 @@ def cookiecutter_starters(manager):
                         "type": "string",
                         "default": "HEAD",
                     },
+                    **{
+                        "directory": {
+                            "title": "Directory",
+                            "description": (
+                                "Relative path to a cookiecutter "
+                                "template in a repository."
+                            ),
+                            "type": "string",
+                            "default": "",
+                        }
+                        if HAS_DIRECTORY
+                        else {}
+                    },
                 },
             },
             "uiSchema": {"template": {"ui:autofocus": True}},
@@ -142,14 +177,13 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
     """run cookiecutter"""
     # pylint: disable=cyclic-import,broad-except,too-many-locals,unused-variable
     template = body["template"]
-    checkout = body.get("checkout") or None
-    manager.log.debug(f"🍪 body: {body}")
+    checkout = body.get("checkout")
 
-    cookiecutter = __import__("cookiecutter.main")
+    manager.log.debug(f"🍪 body: {body}")
 
     config_dict = cookiecutter.main.get_user_config()
 
-    repo_dir, cleanup = cookiecutter.main.determine_repo_dir(
+    repo_dir_kwargs = dict(
         template=template,
         abbreviations=config_dict["abbreviations"],
         clone_to_dir=config_dict["cookiecutters_dir"],
@@ -157,6 +191,12 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
         no_input=True,
         password=None,
     )
+
+    if HAS_DIRECTORY:
+        directory = body.get("directory")
+        repo_dir_kwargs.update(directory=directory)
+
+    repo_dir, cleanup = cookiecutter.main.determine_repo_dir(**repo_dir_kwargs)
 
     manager.log.debug(f"🍪 repo_dir: {repo_dir}")
 
@@ -240,7 +280,7 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
             }
 
 
-def cookiecutter_to_schema(cookiecutter):
+def cookiecutter_to_schema(cookiecutter_json):
     """convert a cookiecutter context to a JSON schema"""
     bools = {"y": True, "n": False}
     schema = {
@@ -252,7 +292,7 @@ def cookiecutter_to_schema(cookiecutter):
     ui_schema = {}
     schema["properties"] = properties = {}
 
-    for field, value in cookiecutter.items():
+    for field, value in cookiecutter_json.items():
         title = field.replace("_", " ").replace("-", " ").title()
         if isinstance(value, str):
             if value in bools:

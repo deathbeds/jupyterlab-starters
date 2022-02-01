@@ -1,5 +1,5 @@
 dependencies:
-  - cookiecutter
+  - cookiecutter >=1.7.1
   - jupyter_client >=6.1.0
   - python-fastjsonschema
   - python-graphviz

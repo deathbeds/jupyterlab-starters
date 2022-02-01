@@ -476,6 +476,8 @@ def task_test():
         "-vv",
         "--pyargs",
         "jupyter_starters",
+        "--script-launch-mode=subprocess",
+        "-n=auto",
         "--cov=jupyter_starters",
         "--cov-report=term-missing:skip-covered",
         f"--cov-report=html:{html_cov}",

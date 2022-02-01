@@ -1,4 +1,4 @@
 dependencies:
   - setuptools
-  - twine
+  - twine >=3.7.1
   - wheel
