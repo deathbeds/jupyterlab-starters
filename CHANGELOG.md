@@ -5,6 +5,7 @@
 - [#62] adds a CLI tool, `jupyter starters list` (with option `--json`)
 - [#68] remove cookiecutter metadata parsing, as it no longer works consistently
 - [#69] minimum python is now 3.7
+- [#71] support cookiecutter 1.7.1 `directory` argument, `jupyter-server-proxy` example
 
 ## `@deathbeds/jupyterlab-starters 1.1.0`
 
@@ -17,6 +18,7 @@
 [#66]: https://github.com/deathbeds/jupyterlab-starters/issues/66
 [#68]: https://github.com/deathbeds/jupyterlab-starters/issues/68
 [#69]: https://github.com/deathbeds/jupyterlab-starters/pulls/69
+[#71]: https://github.com/deathbeds/jupyterlab-starters/pulls/71
 
 ---
 
