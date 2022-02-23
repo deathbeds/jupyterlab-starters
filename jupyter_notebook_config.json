@@ -8,24 +8,28 @@
         "type": "notebook",
         "src": "./examples/Starter Notebook.ipynb",
         "label": "Starter Notebook",
-        "description": "A notebook that is also a starter"
+        "description": "A notebook that is also a starter",
+        "category": "Notebooks"
       },
       "multi-stage-notebook": {
         "type": "notebook",
         "src": "./examples/Multi-Stage Starter Notebook.ipynb",
         "label": "Multi-Stage Starter Notebook",
-        "description": "Build a directory one file at a time"
+        "description": "Build a directory one file at a time",
+        "category": "Notebooks"
       },
       "whitepaper-single": {
         "type": "copy",
         "label": "Whitepaper Notebook",
         "description": "A reusable notebook for proposing research",
+        "category": "Notebooks",
         "src": "examples/whitepaper-single.ipynb"
       },
       "whitepaper-multiple": {
         "type": "copy",
         "label": "Whitepaper Folder",
         "description": "Some reusable notebooks for proposing research",
+        "category": "Notebooks",
         "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><g class='jp-icon-contrast1' fill='#ccc'><circle cx='24' cy='24' r='24'/></g></svg>",
         "src": "examples/whitepaper-multiple"
       },
@@ -33,6 +37,7 @@
         "type": "copy",
         "label": "Named Whitepaper",
         "description": "A renamed whitepaper",
+        "category": "Notebooks",
         "src": "examples/whitepaper-single.ipynb",
         "dest": "{% now 'local' %} {{ dest }} Whitepaper.ipynb",
         "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g class='jp-icon-contrast3' fill='#ccc'><rect width='100' height='100'/></g></svg>",

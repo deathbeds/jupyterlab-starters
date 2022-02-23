@@ -146,6 +146,16 @@
           "description": "[SVG](https://developer.mozilla.org/en-US/docs/Web/SVG) string to use in Launcher cards and tab icons",
           "type": "string"
         },
+        "category": {
+          "title": "Category",
+          "description": "Category to place the starter card under in Launcher",
+          "type": "string"
+        },
+        "rank": {
+          "title": "Rank",
+          "description": "Rank of the launcher card within the category",
+          "type": "integer"
+        },
         "commands": {
           "title": "Commands",
           "description": "[JupyterLab commands](https://jupyterlab.readthedocs.io/en/stable/developer/extension_points.html#commands) to run after the Starter has completed",

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+
+## `jupyter_starters 1.1.0f1`
+
+- [] add category and rank for placement of the starters in the launcher.
+
 ## `jupyter_starters 1.1.0`
 
 - [#62] adds a CLI tool, `jupyter starters list` (with option `--json`)

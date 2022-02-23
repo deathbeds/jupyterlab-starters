@@ -70,6 +70,8 @@ launched from in the JupyterLab [Launcher][].
         "type": "copy",
         "label": "Whitepaper Notebook",
         "description": "A reusable notebook for proposing research",
+        "category": "Notebook starters",
+        "rank": 0,
         "src": "examples/whitepaper-single.ipynb"
       }
     }

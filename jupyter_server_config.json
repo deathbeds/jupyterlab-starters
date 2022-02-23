@@ -7,32 +7,40 @@
       "notebook-starter": {
         "type": "notebook",
         "src": "./examples/Starter Notebook.ipynb",
-        "label": "Starter Notebook",
-        "description": "A notebook that is also a starter"
+        "label": "ABC Starter Notebook",
+        "description": "A notebook that is also a starter",
+        "category": "Notebooks"
       },
       "multi-stage-notebook": {
         "type": "notebook",
         "src": "./examples/Multi-Stage Starter Notebook.ipynb",
-        "label": "Multi-Stage Starter Notebook",
-        "description": "Build a directory one file at a time"
+        "label": "ABC Multi-Stage Starter Notebook",
+        "description": "Build a directory one file at a time",
+        "category": "Notebooks"
       },
       "whitepaper-single": {
         "type": "copy",
-        "label": "Whitepaper Notebook",
+        "label": "ABC Whitepaper Notebook",
+        "rank": 1,
         "description": "A reusable notebook for proposing research",
-        "src": "examples/whitepaper-single.ipynb"
+        "src": "examples/whitepaper-single.ipynb",
+        "category": "Notebooks"
       },
       "whitepaper-multiple": {
         "type": "copy",
-        "label": "Whitepaper Folder",
+        "label": "ABC Whitepaper Folder",
         "description": "Some reusable notebooks for proposing research",
+        "category": "Notebooks",
+        "rank": 2,
         "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><g class='jp-icon-contrast1' fill='#ccc'><circle cx='24' cy='24' r='24'/></g></svg>",
         "src": "examples/whitepaper-multiple"
       },
       "whitepaper-named": {
         "type": "copy",
-        "label": "Named Whitepaper",
+        "label": "ABC Named Whitepaper",
         "description": "A renamed whitepaper",
+        "category": "Notebooks",
+        "rank": 3,
         "src": "examples/whitepaper-single.ipynb",
         "dest": "{% now 'local' %} {{ dest }} Whitepaper.ipynb",
         "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g class='jp-icon-contrast3' fill='#ccc'><rect width='100' height='100'/></g></svg>",
