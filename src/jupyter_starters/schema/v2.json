@@ -149,12 +149,14 @@
         "category": {
           "title": "Category",
           "description": "Category to place the starter card under in Launcher",
-          "type": "string"
+          "type": "string",
+          "default": "Starters"
         },
         "rank": {
           "title": "Rank",
-          "description": "Rank of the launcher card within the category",
-          "type": "integer"
+          "description": "Rank of the launcher card within its category, lowest value will appear first",
+          "type": "integer",
+          "default": 0
         },
         "commands": {
           "title": "Commands",
