@@ -250,7 +250,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           command: CommandIDs.start,
           args: { name, starter: starters[name] },
           category: starters[name].category || CATEGORY,
-          ...(starters[name].rank == null ? {} : {rank: starters[name].rank})
+          ...(starters[name].rank == null ? {} : { rank: starters[name].rank }),
         });
         cardsAdded.push(name);
       }
