@@ -22,7 +22,6 @@ import {
   NS,
   CommandIDs,
   CATEGORY,
-  RANK,
   IStartContext,
   IStarterManager,
   DEFAULT_ICON_CLASS,
@@ -251,7 +250,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           command: CommandIDs.start,
           args: { name, starter: starters[name] },
           category: starters[name].category || CATEGORY,
-          rank: starters[name].rank || RANK
+          ...(starters[name].rank == null ? {} : {rank: starters[name].rank})
         });
         cardsAdded.push(name);
       }

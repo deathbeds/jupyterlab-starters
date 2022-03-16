@@ -14,7 +14,6 @@ export const API = URLExt.join(PageConfig.getBaseUrl(), 'starters');
 export const DEFAULT_ICON_NAME = `${NS}:default`;
 export const DEFAULT_ICON_CLASS = `jp-StartersDefaultIcon`;
 export const CATEGORY = 'Starters';
-export const RANK = Infinity;
 
 export interface IStarterManager extends IRunningSessions.IManager {
   changed: ISignal<IStarterManager, void>;
