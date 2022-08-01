@@ -1,6 +1,6 @@
 """ manager, for starters
 """
-# pylint: disable=no-self-use,unsubscriptable-object,fixme
+# pylint: disable=unsubscriptable-object,fixme
 import base64
 import importlib
 from copy import deepcopy
