@@ -70,6 +70,14 @@ doit docs
 doit watch:docs
 ```
 
+## locking
+
+```
+mamba create -p .envs/_lock .github/locks/lock-linux-64-3.10.conda.lock
+source .envs/_lock/bin/activate
+doit lock
+```
+
 ## releasing
 
 - Download and unpack the artifacts from CI into `dist`

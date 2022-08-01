@@ -6,6 +6,8 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
+import textwrap
 import typing
 from datetime import datetime
 from hashlib import sha256
@@ -13,15 +15,12 @@ from pathlib import Path
 
 import doit.reporter
 import doit.tools
-from ruamel_yaml import safe_load
-from ruamel_yaml.main import safe_dump
+from ruamel.yaml import safe_load
+from ruamel.yaml.main import safe_dump
 
 
 def task_lock():
     """generate conda locks for all envs"""
-    if C.SKIP_LOCKS:
-        return
-
     yield U.lock("build", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["node", "lab", "lint"])
     yield U.lock(
         "binder", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["run", "lab", "node", "docs"]
@@ -30,6 +29,8 @@ def task_lock():
     for subdir in C.SUBDIRS:
         for py in C.PYTHONS:
             yield U.lock("atest", py, subdir, ["run", "lab", "utest"])
+
+        yield U.lock("lock", C.DEFAULT_PY, subdir)
         yield U.lock(
             "docs",
             C.DEFAULT_PY,
@@ -622,6 +623,8 @@ class C:
     PYTHONS = ["3.7", "3.10"]
     DEFAULT_PY = "3.10"
     EXPLICIT = "@EXPLICIT"
+    PIP_LOCK_LINE = "# pip "
+    UTF8 = dict(encoding="utf-8")
     DEFAULT_SUBDIR = "linux-64"
     SKIP_LOCKS = bool(json.loads(os.environ.get("SKIP_LOCKS", "1")))
     CI = bool(json.loads(os.environ.get("CI", "0")))
@@ -857,7 +860,16 @@ class U:
     @classmethod
     def lock(cls, env_name, py, subdir, extra_env_names=None, include_base=True):
         extra_env_names = extra_env_names or []
-        args = ["conda-lock", "--mamba", "--platform", subdir, "-c", "conda-forge"]
+        args = [
+            "conda-lock",
+            "--mamba",
+            "--platform",
+            subdir,
+            "-c",
+            "conda-forge",
+            "--kind",
+            "explicit",
+        ]
         stem = f"{env_name}-{subdir}-{py}"
         lockfile = P.LOCKS / f"{stem}.conda.lock"
 
@@ -877,24 +889,61 @@ class U:
             "--filename-template",
             env_name + "-{platform}-" + f"{py}.conda.lock",
         ]
+
         return dict(
             name=f"""{py}:{subdir}:{env_name}""",
             file_dep=specs,
             actions=[
                 (doit.tools.create_folder, [P.LOCKS]),
-                U.cmd(args, cwd=str(P.LOCKS)),
+                (U._lock_one, [lockfile, args, specs]),
             ],
             targets=[lockfile],
         )
 
+    def _lock_one(lockfile, args, specs):
+        new_header = U._lock_header(specs)
+        if lockfile.exists():
+            old_header = lockfile.read_text().split(C.EXPLICIT)[0]
+            if new_header.strip() == old_header.strip():
+                print(f"\t\t...  {lockfile.name} is up-to-date", flush=True)
+                return True
+
+        with tempfile.TemporaryDirectory() as td:
+            tdp = Path(td)
+            subprocess.check_call([*map(str, args)], cwd=td)
+            new_body = (tdp / lockfile.name).read_text(**C.UTF8).split(C.EXPLICIT)[1]
+
+        lockfile.write_text("\n".join([new_header, C.EXPLICIT, new_body.strip(), ""]))
+
+    def _lock_header(specs):
+        raw = json.dumps(
+            {spec.name: safe_load(spec.read_text(**C.UTF8)) for spec in specs},
+            indent=2,
+            sort_keys=True,
+        )
+        return textwrap.indent(raw, "# ")
+
     def lock_to_env(lockfile, env_file):
         def _update():
-            lock_text = lockfile.read_text(encoding="utf-8")
+            lock_text = lockfile.read_text(**C.UTF8)
             lock_lines = lock_text.split(C.EXPLICIT)[1].strip().splitlines()
+
+            pip_lines = [
+                line for line in lock_lines if line.startswith(C.PIP_LOCK_LINE)
+            ]
+            not_pip_lines = [
+                line for line in lock_lines if not line.startswith(C.PIP_LOCK_LINE)
+            ]
+
+            if pip_lines:
+                not_pip_lines += [
+                    {"pip": [line.split("@")[1].strip() for line in pip_lines]}
+                ]
+
             env = {
                 "name": "readthedocs",
-                "channels": ["conda-forge"],
-                "dependencies": lock_lines,
+                "channels": ["conda-forge", "nodefaults"],
+                "dependencies": not_pip_lines,
             }
             env_file.write_text(safe_dump(env, default_flow_style=False))
 
@@ -924,7 +973,7 @@ class U:
     def strip_timestamps(cls, root):
         paths = root.rglob("*.html") if root.is_dir() else [root]
         for path in paths:
-            text = path.read_text(encoding="utf-8")
+            text = path.read_text(**C.UTF8)
             for pattern in U.RE_TIMESTAMPS:
                 if not re.findall(pattern, text):
                     continue
@@ -1100,7 +1149,7 @@ os.environ.update(
     CONDARC=str(P.CONDARC),
     MAMBA_NO_BANNER="1",
     PYTHONUNBUFFERED="1",
-    PYTHONIOENCODING="utf-8",
+    PYTHONIOENCODING=C.UTF8["encoding"],
 )
 
 try:

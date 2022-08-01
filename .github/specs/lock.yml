@@ -3,5 +3,4 @@ channels:
   - nodefaults
 dependencies:
   - doit
-  - pip
-  - ruamel.yaml
+  - conda-lock
