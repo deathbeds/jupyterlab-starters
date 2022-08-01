@@ -561,8 +561,16 @@ def task_docs():
         ),
     )
 
+    lite_build_config = P.LITE / "jupyter_lite_config.json"
+
     yield dict(
-        name="lite",
+        name="lite:conf",
+        file_dep=[*P.NPM_TARBALLS.values()],
+        actions=[(U._sync_lite_conf, [lite_build_config])],
+    )
+
+    yield dict(
+        name="lite:build",
         **U.run_in(
             "docs",
             [
@@ -576,6 +584,7 @@ def task_docs():
                     "pre_archive:report:SHA256SUMS",
                 ],
             ],
+            file_dep=[lite_build_config],
             targets=[P.LITE_SHA256SUMS],
             cwd=P.LITE,
         ),
@@ -834,6 +843,7 @@ class P:
         *ALL_PACKAGE_JSON,
         *ROOT.glob("*.json"),
         *ATEST.rglob("*.json"),
+        *LITE.rglob("*.json"),
         *ALL_PY_SCHEMA,
     ]
     ALL_PRETTIER = [*ALL_TS, *ALL_JSON, *ALL_CSS, *ALL_YAML, *ALL_MD, *ALL_JS]
@@ -1035,6 +1045,18 @@ class U:
         task["actions"] = [_update, *task["actions"]]
 
         yield task
+
+    def _sync_lite_conf(lite_build_config):
+        conf_data = json.load(lite_build_config.open())
+        conf_data["LiteBuildConfig"]["federated_labextensions"] = [
+            f"../dist/{tgz.name}"
+            for tgz in P.NPM_TARBALLS.values()
+            if "starters" in tgz.name
+        ]
+        lite_build_config.write_text(
+            json.dumps(conf_data, indent=2, sort_keys=True), **C.UTF8
+        )
+        subprocess.check_call([C.JLPM, "prettier", "--write", lite_build_config])
 
     RE_TIMESTAMPS = [
         r"\d{4}-\d{2}-\d{2} \d{2}:\d{2} -\d*",
