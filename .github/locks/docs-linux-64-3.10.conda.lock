@@ -39,7 +39,7 @@
 #       "sphinx-copybutton",
 #       {
 #         "pip": [
-#           "jupyterlite"
+#           "jupyterlite==0.1.0b11"
 #         ]
 #       }
 #     ]

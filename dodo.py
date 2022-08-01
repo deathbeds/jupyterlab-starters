@@ -1,4 +1,5 @@
 """development automation for jupyter[lab]-starter"""
+import difflib
 import json
 import os
 import platform
@@ -177,12 +178,15 @@ def task_lint():
 
 def task_jlpm():
     if C.DOCS_IN_CI or C.TEST_IN_CI:
+        print("nothing to do in docs/test in ci")
         return
 
     if C.SKIP_JLPM_IF_CACHED and P.YARN_INTEGRITY.exists():
+        print("nothing to do because cached")
         return
 
-    jlpm_args = ["--frozen-lockfile"] if C.CI else []
+    jlpm_args = ["--registry", C.YARN_REGISTRY]
+    jlpm_args += ["--frozen-lockfile"] if C.CI else []
 
     actions = [[C.JLPM, *jlpm_args]]
 
@@ -650,6 +654,7 @@ class C:
     ATEST_PROCESSES = safe_load(os.environ.get("ATEST_PROCESSES", "4"))
     THIS_ATEST_STEM = f"{THIS_SUBDIR}-py{THIS_PY}"
     LAB_ARGS = safe_load(os.environ.get("LAB_ARGS", '["--no-browser", "--debug"]'))
+    YARN_REGISTRY = "https://registry.npmjs.org/"
 
     if CI:
         PY = Path(
@@ -905,10 +910,23 @@ class U:
     def _lock_one(lockfile, args, specs):
         new_header = U._lock_header(specs)
         if lockfile.exists():
-            old_header = lockfile.read_text().split(C.EXPLICIT)[0]
-            if new_header.strip() == old_header.strip():
+            old_header = lockfile.read_text().split(C.EXPLICIT)[0].strip()
+            if new_header == old_header:
                 print(f"\t\t...  {lockfile.name} is up-to-date", flush=True)
                 return True
+
+        print(
+            "\n".join(
+                difflib.unified_diff(
+                    old_header.splitlines(), new_header.splitlines(), "old", "new"
+                )
+            ),
+            flush=True,
+        )
+
+        if not shutil.which("conda-lock"):
+            print("conda-lock is not available")
+            return False
 
         with tempfile.TemporaryDirectory() as td:
             tdp = Path(td)
@@ -923,7 +941,7 @@ class U:
             indent=2,
             sort_keys=True,
         )
-        return textwrap.indent(raw, "# ")
+        return textwrap.indent(raw, "# ").strip()
 
     def lock_to_env(lockfile, env_file):
         def _update():
@@ -956,7 +974,7 @@ class U:
             name=f"{rel}:{stem}",
             **U.run_in(
                 "docs",
-                actions=[[C.JLPM, "prettier", "--quiet", "--write", env_file]],
+                actions=[[C.JLPM, "prettier", "--write", env_file]],
                 targets=[env_file],
                 file_dep=[lockfile],
             ),
