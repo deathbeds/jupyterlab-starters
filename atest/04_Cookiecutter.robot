@@ -8,6 +8,7 @@ Suite Setup         Setup Suite For Screenshots    cookiecutter
 
 Force Tags          example:cookiecutter
 
+
 *** Test Cases ***
 Happy Path
     [Documentation]    Can we use the cookiecutter?
@@ -29,6 +30,7 @@ Happy Path
     Wait Until Page Contains Element    id:My-Next-Little-Idea
     Save Notebook
     Capture Page Screenshot    03-cookiecutter-did-complete.png
+
 
 *** Keywords ***
 Wait For And Capture

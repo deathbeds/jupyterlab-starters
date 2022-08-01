@@ -7,6 +7,7 @@ Suite Setup         Setup Suite For Screenshots    simple
 
 Force Tags          example:simple
 
+
 *** Test Cases ***
 Simple Notebook
     [Documentation]    Can we start a single notebook?

@@ -1,6 +1,7 @@
 *** Settings ***
 Documentation       Variables for jupyterlab-starters
 
+
 *** Variables ***
 ${LAB CONF}                             jupyter_server_config.json
 ${LAB VERSION}                          ${EMPTY}

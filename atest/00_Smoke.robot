@@ -7,6 +7,7 @@ Suite Setup         Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots${/}
 
 Force Tags          smoke
 
+
 *** Test Cases ***
 Lab Version
     [Documentation]    JupyterLab Version

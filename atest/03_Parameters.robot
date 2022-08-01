@@ -8,8 +8,10 @@ Suite Setup         Setup Suite For Screenshots    parameters
 
 Force Tags          example:params
 
+
 *** Variables ***
 ${CSS TOPIC}    css:input[label="## Topic"]
+
 
 *** Test Cases ***
 Cancel
@@ -36,13 +38,14 @@ Parameter Notebook
     Save Notebook
     Capture Page Screenshot    12-notebook-did-save.png
 
+
 *** Keywords ***
 Really Input A Random String
     [Documentation]    Type and return a random string in an input
     [Arguments]    ${selector}
     ${text} =    Generate Random String
     Really Input Text    ${selector}    ${text}
-    [Return]    ${text}
+    RETURN    ${text}
 
 Launch The Parameterized Starter
     [Documentation]    Use the launcher to start the parameterized example

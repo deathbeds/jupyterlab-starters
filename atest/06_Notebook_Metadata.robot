@@ -10,10 +10,12 @@ Suite Setup         Setup Suite For Screenshots    notebook-meta
 
 Force Tags          example:notebook-meta
 
+
 *** Variables ***
 ${XP FILE TREE EXAMPLES}    ${XP FILE TREE ITEM}/span[text() = 'examples']
 ${XP FILE TREE NOTEBOOK}    ${XP FILE TREE ITEM}/span[text() = 'Starter Notebook.ipynb']
 ${SIMPLE SCHEMA}            {"required": ["name"], "properties": {"name": {"title": "Moniker", "type": "string"}}}
+
 
 *** Test Cases ***
 View Example Starter Notebook
@@ -51,6 +53,7 @@ No Empty Metadata
         Verify The Metadata Between Sidebars
         Reset Application State
     END
+
 
 *** Keywords ***
 Open The Example Starter Notebook
@@ -92,7 +95,7 @@ Change The Moniker Field
     ${name} =    Generate Random String
     Click Element    ${name css}
     Really Input Text    ${name css}    ${name}
-    [Return]    ${name}
+    RETURN    ${name}
 
 Verify The Metadata Between Sidebars
     [Documentation]    Check that just opening the Notebook Metadata doesn't change it
@@ -115,4 +118,4 @@ Get Canonical Starter Metadata
     [Documentation]    Get the metadata from Notebook Tools
     ${meta} =    Get Text    css:.jp-Collapse .jp-MetadataEditorTool:nth-child(2) .CodeMirror
     ${meta json} =    Evaluate    __import__("json").loads(r'''${meta}''')["jupyter_starters"]
-    [Return]    ${meta json}
+    RETURN    ${meta json}

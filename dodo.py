@@ -638,9 +638,11 @@ class C:
         # "LineTooLong:200",
         # "TooFewKeywordSteps:0",
         # "TooManyTestSteps:30",
-        *("--configure", "empty-lines-between-sections:empty_lines:1"),
+        *("--configure", "empty-lines-between-sections:empty_lines:2"),
         *("--configure", "too-many-calls-in-test-case:max_calls:18"),
+        *("--configure", "too-long-test-case:max_len:22"),
         *("--exclude", "if-can-be-used"),
+        *("--exclude", "if-can-be-merged"),
     ]
     UTEST_ARGS = safe_load(os.environ.get("UTEST_ARGS", "[]"))
     ATEST_RETRIES = int(os.environ.get("ATEST_RETRIES", "1"))

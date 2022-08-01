@@ -7,6 +7,7 @@ Suite Setup         Setup Suite For Screenshots    launcher
 
 Force Tags          launcher
 
+
 *** Test Cases ***
 Launcher
     [Documentation]    Does the launcher basically work?

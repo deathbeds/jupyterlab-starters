@@ -8,8 +8,10 @@ Suite Setup         Setup Suite For Screenshots    notebook-multi
 
 Force Tags          example:notebook-multi
 
+
 *** Variables ***
 ${MULTI TAB}    css:.p-DockPanel .p-TabBar-tab [data-icon\="starters:multi-stage-notebook"]
+
 
 *** Test Cases ***
 Happy Path
@@ -33,6 +35,7 @@ Happy Path
     Wait Until Page Does Not Contain Element    ${MULTI TAB}
     Capture Page Screenshot    05-notebook-multi-updated-done.png
 
+
 *** Keywords ***
 Change The Name Field
     [Documentation]    Set a random name on the name field
@@ -42,14 +45,14 @@ Change The Name Field
     ${name} =    Generate Random String
     Click Element    ${name css}
     Really Input Text    ${name css}    ${name}
-    [Return]    ${name}
+    RETURN    ${name}
 
 Wait For File Prompt
     [Documentation]    Accept that a file will be made
     [Arguments]    ${name}    ${number}
     ${file} =    Set Variable    file for ${name} ${number}.txt
     Wait Until Page Contains Element    xpath://code[text() = '${file}']    timeout=30s
-    [Return]    ${file}
+    RETURN    ${file}
 
 Wait For File Tab
     [Documentation]    Wait until a file is opened

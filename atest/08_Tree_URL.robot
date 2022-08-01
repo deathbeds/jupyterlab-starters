@@ -8,6 +8,7 @@ Suite Setup         Setup Suite For Screenshots    tree-url
 
 Force Tags          example:tree-url
 
+
 *** Test Cases ***
 Starter Opens
     [Documentation]    Does a URL-provided starter open?
