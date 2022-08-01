@@ -13,11 +13,11 @@
 #   "atest.yml": {
 #     "dependencies": [
 #       "firefox =102",
-#       "flake8",
 #       "geckodriver",
+#       "pyflakes",
 #       "robotframework >=5",
-#       "robotframework-seleniumlibrary",
-#       "robotframework-pabot"
+#       "robotframework-pabot",
+#       "robotframework-seleniumlibrary"
 #     ]
 #   },
 #   "build.yml": {
@@ -52,9 +52,9 @@
 #   "lint.yml": {
 #     "dependencies": [
 #       "black",
-#       "flake8",
 #       "isort",
 #       "mypy",
+#       "pyflakes",
 #       "pylint",
 #       "pytest",
 #       "robotframework-robocop",
@@ -75,7 +75,7 @@
 #   },
 #   "run.yml": {
 #     "dependencies": [
-#       "cookiecutter >=1.7.1",
+#       "cookiecutter >=2.1.1",
 #       "jupyter_client >=6.1.0",
 #       "python-fastjsonschema",
 #       "python-graphviz",
@@ -191,7 +191,7 @@ https://conda.anaconda.org/conda-forge/noarch/iniconfig-1.1.1-pyh9f0ad1d_0.tar.b
 https://conda.anaconda.org/conda-forge/noarch/ipython_genutils-0.2.0-py_1.tar.bz2#5071c982548b3a20caf70462f04f5287
 https://conda.anaconda.org/conda-forge/noarch/jeepney-0.8.0-pyhd8ed1ab_0.tar.bz2#9800ad1699b42612478755a2d26c722d
 https://conda.anaconda.org/conda-forge/noarch/json5-0.9.5-pyh9f0ad1d_0.tar.bz2#10759827a94e6b14996e81fb002c0bda
-https://conda.anaconda.org/conda-forge/noarch/mccabe-0.6.1-py_1.tar.bz2#a326cb400c1ccd91789f3e7d02124d61
+https://conda.anaconda.org/conda-forge/noarch/mccabe-0.7.0-pyhd8ed1ab_0.tar.bz2#34fc335fc50eef0b5ea708f2b5f54e0c
 https://conda.anaconda.org/conda-forge/noarch/mdurl-0.1.0-pyhd8ed1ab_0.tar.bz2#f8dab71fdc13b1bf29a01248b156d268
 https://conda.anaconda.org/conda-forge/noarch/nest-asyncio-1.5.5-pyhd8ed1ab_0.tar.bz2#dc36c992aec485c0efff619ed2e63957
 https://conda.anaconda.org/conda-forge/noarch/pandocfilters-1.5.0-pyhd8ed1ab_0.tar.bz2#457c2c8c08e54905d6954e79cb5b5db9
@@ -205,9 +205,8 @@ https://conda.anaconda.org/conda-forge/noarch/prometheus_client-0.14.1-pyhd8ed1a
 https://conda.anaconda.org/conda-forge/noarch/ptyprocess-0.7.0-pyhd3deb0d_0.tar.bz2#359eeb6536da0e687af562ed265ec263
 https://conda.anaconda.org/conda-forge/noarch/pure_eval-0.2.2-pyhd8ed1ab_0.tar.bz2#6784285c7e55cb7212efabc79e4c2883
 https://conda.anaconda.org/conda-forge/noarch/py-1.11.0-pyh6c4a22f_0.tar.bz2#b4613d7e7a493916d867842a6a148054
-https://conda.anaconda.org/conda-forge/noarch/pycodestyle-2.8.0-pyhd8ed1ab_0.tar.bz2#f2532eee272d45b1283ea4869d71f044
 https://conda.anaconda.org/conda-forge/noarch/pycparser-2.21-pyhd8ed1ab_0.tar.bz2#076becd9e05608f8dc72757d5f3a91ff
-https://conda.anaconda.org/conda-forge/noarch/pyflakes-2.4.0-pyhd8ed1ab_0.tar.bz2#1aa3ecd37d0694e2ea5fef48da75371e
+https://conda.anaconda.org/conda-forge/noarch/pyflakes-2.5.0-pyhd8ed1ab_0.tar.bz2#1b3bef4313288ae8d35b1dfba4cd84a3
 https://conda.anaconda.org/conda-forge/noarch/pyparsing-3.0.9-pyhd8ed1ab_0.tar.bz2#e8fbc1b54b25f4b08281467bc13b70cc
 https://conda.anaconda.org/conda-forge/noarch/python-fastjsonschema-2.16.1-pyhd8ed1ab_0.tar.bz2#66c2cdd40938dceeef4b02ba5d8b2692
 https://conda.anaconda.org/conda-forge/linux-64/python_abi-3.10-2_cp310.tar.bz2#9e7160cd0d865e98f6803f1fe15c8b61
@@ -299,7 +298,6 @@ https://conda.anaconda.org/conda-forge/linux-64/cmarkgfm-0.8.0-py310h5764c6d_1.t
 https://conda.anaconda.org/conda-forge/noarch/commonmark-0.9.1-py_0.tar.bz2#6aa0173c14befcd577ded130cf6f22f5
 https://conda.anaconda.org/conda-forge/linux-64/cryptography-37.0.4-py310h597c629_0.tar.bz2#f285746449d16d92884f4ce0cfe26679
 https://conda.anaconda.org/conda-forge/noarch/doit-0.36.0-pyhd8ed1ab_0.tar.bz2#fc5e53d070f1ee7bb38c2ece282dcb82
-https://conda.anaconda.org/conda-forge/noarch/flake8-4.0.1-pyhd8ed1ab_2.tar.bz2#a824bd55ce47e9c637427f730c651231
 https://conda.anaconda.org/conda-forge/linux-64/harfbuzz-5.1.0-hf9f4e7c_0.tar.bz2#7c1f73a8f7864a202b126d82e88ddffc
 https://conda.anaconda.org/conda-forge/noarch/importlib_metadata-4.11.4-hd8ed1ab_0.tar.bz2#9a1925fdb91c81437b8012e48ede6851
 https://conda.anaconda.org/conda-forge/noarch/isort-5.10.1-pyhd8ed1ab_0.tar.bz2#83df9ffefe1cc01d9e60405bf871bfdb

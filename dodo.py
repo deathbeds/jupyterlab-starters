@@ -45,11 +45,12 @@ def task_lock():
 def task_env():
     if C.CI or C.DEMO_IN_BINDER:
         return
+
     yield dict(
         name="dev",
         file_dep=[P.DEV_LOCKFILE],
         actions=[
-            ["mamba", "create", "--prefix", P.DEV_PREFIX, "--file", P.DEV_LOCKFILE]
+            ["mamba", "create", "--prefix", P.DEV_PREFIX, "--file", P.DEV_LOCKFILE],
         ],
         targets=[P.DEV_HISTORY],
     )
@@ -70,7 +71,7 @@ def task_lint():
     )
 
     for linter, file_dep_cmd in {
-        "flake8": [P.ALL_PY, [*C.PYM, "flake8"]],
+        "pyflakes": [P.ALL_PY, [*C.PYM, "pyflakes"]],
         "pylint": [P.PY_SRC, [*C.PYM, "pylint", "--reports", "n", "--score", "n"]],
         "mypy": [
             P.PY_SRC,
@@ -345,11 +346,20 @@ def task_dev():
     if C.DOCS_IN_CI or C.TEST_IN_CI:
         return
 
+    extra_pip_args = ["--ignore-installed", "--no-deps"]
+
+    pip_actions = [[*C.INSTALL, "-e", ".", *extra_pip_args]]
+
+    pip_specs = D.pip_specs()
+
+    if pip_specs:
+        pip_actions += [[*C.INSTALL, *pip_specs, *extra_pip_args]]
+
     yield dict(
         name="pip:install",
         **U.run_in(
             "utest",
-            [[*C.INSTALL, "-e", ".", "--ignore-installed", "--no-deps"]],
+            pip_actions,
             file_dep=[P.SETUP_CFG, P.SETUP_PY, P.EXT_PACKAGE_JSON],
         ),
     )
@@ -551,6 +561,26 @@ def task_docs():
         ),
     )
 
+    yield dict(
+        name="lite",
+        **U.run_in(
+            "docs",
+            [
+                ["jupyter", "lite", "build"],
+                [
+                    "jupyter",
+                    "lite",
+                    "doit",
+                    "--",
+                    "run",
+                    "pre_archive:report:SHA256SUMS",
+                ],
+            ],
+            targets=[P.LITE_SHA256SUMS],
+            cwd=P.LITE,
+        ),
+    )
+
     if C.DOCS_IN_CI:
         task_dep = ["prod:pip:check"]
     else:
@@ -563,11 +593,12 @@ def task_docs():
             "docs",
             [[*C.PYM, "scripts.docs", "--schema=0", "--check-links=0"]],
             file_dep=[
-                P.SCRIPTS / "docs.py",
-                *P.PY_SRC,
-                *P.PY_SCHEMA.rglob("*.json"),
-                P.DOCS_SCHEMA_INDEX,
                 *P.ALL_DOCS_DEPS,
+                *P.PY_SCHEMA.rglob("*.json"),
+                *P.PY_SRC,
+                P.DOCS_SCHEMA_INDEX,
+                P.LITE_SHA256SUMS,
+                P.SCRIPTS / "docs.py",
             ],
             targets=[P.DOCS_INDEX, P.DOCS_BUILDINFO],
         ),
@@ -693,6 +724,7 @@ class P:
     SCRIPTS = ROOT / "scripts"
     ATEST = ROOT / "atest"
     DOCS = ROOT / "docs"
+    LITE = ROOT / "lite"
 
     SRC = ROOT / "src"
     PY_SRC = sorted(SRC.rglob("*.py"))
@@ -718,7 +750,7 @@ class P:
     DOCS_STATIC = [
         p
         for p in (DOCS / "_static").rglob("*")
-        if not p.is_dir() and p.parent.name != "schema"
+        if not p.is_dir() and p.parent.name not in ("schema", "_")
     ]
     DOCS_CONF = DOCS / "conf.py"
     ALL_DOCS_DEPS = [*DOCS_NOTEBOOKS, DOCS_CONF, *DOCS_STATIC]
@@ -728,6 +760,7 @@ class P:
 
     # not checked in
     BUILD = ROOT / "build"
+    LITE_SHA256SUMS = BUILD / "docs-app/SHA256SUMS"
     ENVS = ROOT / ".envs"
     DEV_PREFIX = ENVS / "dev"
     DEV_LOCKFILE = LOCKS / f"docs-{C.THIS_SUBDIR}-{C.DEFAULT_PY}.conda.lock"
@@ -817,6 +850,14 @@ class P:
 
 class D:
     """data"""
+
+    def pip_specs():
+        env_spec = (P.RTD_ENV).read_text(**C.UTF8)
+        pip_deps = [
+            p for p in safe_load(env_spec)["dependencies"] if isinstance(p, dict)
+        ]
+        if pip_deps:
+            return pip_deps[0]["pip"]
 
 
 class U:
@@ -918,7 +959,10 @@ class U:
         print(
             "\n".join(
                 difflib.unified_diff(
-                    old_header.splitlines(), new_header.splitlines(), "old", "new"
+                    old_header.splitlines(),
+                    new_header.splitlines(),
+                    lockfile.name,
+                    "new",
                 )
             ),
             flush=True,
@@ -936,11 +980,19 @@ class U:
         lockfile.write_text("\n".join([new_header, C.EXPLICIT, new_body.strip(), ""]))
 
     def _lock_header(specs):
-        raw = json.dumps(
-            {spec.name: safe_load(spec.read_text(**C.UTF8)) for spec in specs},
-            indent=2,
-            sort_keys=True,
-        )
+        norm_specs = {}
+        for spec in specs:
+            spec_data = safe_load(spec.read_text(**C.UTF8))
+            spec_data["dependencies"] = [
+                dep.strip().lower() if isinstance(dep, str) else dep
+                for dep in sorted(
+                    spec_data["dependencies"],
+                    key=lambda a: a if isinstance(a, str) else "zzzzzzzzzzzz",
+                )
+            ]
+            norm_specs[spec.name] = spec_data
+
+        raw = json.dumps(norm_specs, indent=2, sort_keys=True)
         return textwrap.indent(raw, "# ").strip()
 
     def lock_to_env(lockfile, env_file):

@@ -1,7 +1,7 @@
 dependencies:
   - firefox =102
-  - flake8
   - geckodriver
+  - pyflakes
   - robotframework >=5
-  - robotframework-seleniumlibrary
   - robotframework-pabot
+  - robotframework-seleniumlibrary

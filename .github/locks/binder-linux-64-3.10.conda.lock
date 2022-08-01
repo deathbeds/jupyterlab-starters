@@ -52,7 +52,7 @@
 #   },
 #   "run.yml": {
 #     "dependencies": [
-#       "cookiecutter >=1.7.1",
+#       "cookiecutter >=2.1.1",
 #       "jupyter_client >=6.1.0",
 #       "python-fastjsonschema",
 #       "python-graphviz",

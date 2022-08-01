@@ -3,7 +3,7 @@ _*.d.ts
 _*.json
 _build
 .coverage
-.doit*
+*.doit*
 .envs/
 .eslintcache
 .ipynb_checkpoints/
@@ -28,3 +28,4 @@ node_modules/
 src/**/labextension/
 untitled*
 Untitled*
+docs/_static/_/

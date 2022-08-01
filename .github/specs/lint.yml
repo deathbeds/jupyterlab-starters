@@ -1,8 +1,8 @@
 dependencies:
   - black
-  - flake8
   - isort
   - mypy
+  - pyflakes
   - pylint
   - pytest
   - robotframework-robocop

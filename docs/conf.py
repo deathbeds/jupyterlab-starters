@@ -15,6 +15,7 @@ if os.environ.get("READTHEDOCS", False):
     check_call(["doit", "dist"], cwd=str(ROOT))
     check_call(["doit", "dev:pip:install"], cwd=str(ROOT))
     check_call(["doit", "docs:schema"], cwd=str(ROOT))
+    check_call(["doit", "docs:lite"], cwd=str(ROOT))
 
 
 def build_finished(_app, exception):
@@ -59,7 +60,6 @@ author = "Deathbeds"
 version = ""
 # The full version, including alpha/beta/rc tags
 release = ""
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -108,7 +108,7 @@ master_doc = "index"
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -135,7 +135,12 @@ html_theme = "pydata_sphinx_theme"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
+html_static_path = [
+    # docs stuff
+    "_static",
+    # as-built application, extensions, contents, and patched jupyter-lite.json
+    "../build/docs-app",
+]
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
