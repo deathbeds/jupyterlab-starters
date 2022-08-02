@@ -405,7 +405,7 @@ def task_prod():
         name="pip:install",
         **U.run_in(
             "utest",
-            [[*C.INSTALL, P.WHEEL]],
+            [[*C.INSTALL, P.WHEEL, *D.pip_specs()]],
             file_dep=[P.WHEEL],
         ),
     )
@@ -545,6 +545,41 @@ def task_test():
     )
 
 
+def task_lite():
+    yield dict(
+        name="config:build",
+        file_dep=[*P.NPM_TARBALLS.values()],
+        actions=[(U._sync_lite_conf, [P.LITE_BUILD_CONFIG])],
+        targets=[P.LITE_BUILD_CONFIG],
+    )
+
+    if C.DOCS_IN_CI:
+        task_dep = ["prod:pip:check"]
+    else:
+        task_dep = ["dev:pip:check"]
+
+    yield dict(
+        name="build",
+        **U.run_in(
+            "docs",
+            [
+                ["jupyter-lite", "build"],
+                [
+                    "jupyter-lite",
+                    "doit",
+                    "--",
+                    "run",
+                    "pre_archive:report:SHA256SUMS",
+                ],
+            ],
+            file_dep=[P.LITE_BUILD_CONFIG],
+            targets=[P.LITE_SHA256SUMS],
+            task_dep=task_dep,
+            cwd=P.LITE,
+        ),
+    )
+
+
 def task_docs():
     """build documentation"""
 
@@ -558,35 +593,6 @@ def task_docs():
             [[*C.PYM, "scripts.docs", "--only-schema=1"]],
             file_dep=[P.SCRIPTS / "docs.py", *P.PY_SCHEMA.rglob("*.json")],
             targets=[P.DOCS_SCHEMA_INDEX],
-        ),
-    )
-
-    lite_build_config = P.LITE / "jupyter_lite_config.json"
-
-    yield dict(
-        name="lite:conf",
-        file_dep=[*P.NPM_TARBALLS.values()],
-        actions=[(U._sync_lite_conf, [lite_build_config])],
-    )
-
-    yield dict(
-        name="lite:build",
-        **U.run_in(
-            "docs",
-            [
-                ["jupyter", "lite", "build"],
-                [
-                    "jupyter",
-                    "lite",
-                    "doit",
-                    "--",
-                    "run",
-                    "pre_archive:report:SHA256SUMS",
-                ],
-            ],
-            file_dep=[lite_build_config],
-            targets=[P.LITE_SHA256SUMS],
-            cwd=P.LITE,
         ),
     )
 
@@ -754,6 +760,8 @@ class P:
     EXT_PACKAGE = PACKAGES / "jupyterlab-starters"
     ALL_PACKAGE_JSON = [PACKAGE_JSON, *PACKAGES_JSON]
 
+    LITE_BUILD_CONFIG = LITE / "jupyter_lite_config.json"
+
     RTD_ENV = DOCS / "rtd.yml"
     DOCS_NOTEBOOKS = sorted(DOCS.rglob("*.ipynb"))
     DOCS_STATIC = [
@@ -843,7 +851,6 @@ class P:
         *ALL_PACKAGE_JSON,
         *ROOT.glob("*.json"),
         *ATEST.rglob("*.json"),
-        *LITE.rglob("*.json"),
         *ALL_PY_SCHEMA,
     ]
     ALL_PRETTIER = [*ALL_TS, *ALL_JSON, *ALL_CSS, *ALL_YAML, *ALL_MD, *ALL_JS]
@@ -868,6 +875,7 @@ class D:
         ]
         if pip_deps:
             return pip_deps[0]["pip"]
+        return []
 
 
 class U:
