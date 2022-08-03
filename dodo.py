@@ -916,9 +916,11 @@ class U:
         prefix, run_args = U.run_args(env)
         history = prefix / "conda-meta/history"
         file_dep = kwargs.pop("file_dep", [])
+        task_dep = kwargs.pop("task_dep", [])
         targets = kwargs.pop("targets", [])
         return dict(
             file_dep=[history, *file_dep],
+            task_dep=task_dep,
             actions=[U.cmd([*run_args, *action], **kwargs) for action in actions],
             targets=targets,
         )
