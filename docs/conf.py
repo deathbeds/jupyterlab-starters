@@ -15,7 +15,7 @@ if os.environ.get("READTHEDOCS", False):
     check_call(["doit", "dist"], cwd=str(ROOT))
     check_call(["doit", "dev:pip:install"], cwd=str(ROOT))
     check_call(["doit", "docs:schema"], cwd=str(ROOT))
-    check_call(["doit", "docs:lite"], cwd=str(ROOT))
+    check_call(["doit", "lite"], cwd=str(ROOT))
 
 
 def build_finished(_app, exception):

@@ -179,11 +179,11 @@ def task_lint():
 
 def task_jlpm():
     if C.DOCS_IN_CI or C.TEST_IN_CI:
-        print("nothing to do in docs/test in ci")
+        print("nothing to do with jlpm for docs/test in ci")
         return
 
     if C.SKIP_JLPM_IF_CACHED and P.YARN_INTEGRITY.exists():
-        print("nothing to do because cached")
+        print("nothing to do with jlpm because cached")
         return
 
     jlpm_args = ["--registry", C.YARN_REGISTRY]
@@ -398,7 +398,7 @@ def task_dev():
 
 
 def task_prod():
-    if not (C.DOCS_IN_CI or C.TEST_IN_CI):
+    if not C.DOCS_IN_CI or C.TEST_IN_CI:
         return
 
     yield dict(
@@ -553,7 +553,7 @@ def task_lite():
         targets=[P.LITE_BUILD_CONFIG],
     )
 
-    if C.DOCS_IN_CI:
+    if C.DOCS_IN_CI or C.TEST_IN_CI:
         task_dep = ["prod:pip:check"]
     else:
         task_dep = ["dev:pip:check"]
