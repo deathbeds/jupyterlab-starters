@@ -58,7 +58,7 @@ def task_env():
 
 def task_lint():
     """improve and ensure code quality"""
-    if C.DOCS_IN_CI or C.TEST_IN_CI or C.DEMO_IN_BINDER:
+    if C.DOCS_OR_TEST_IN_CI or C.DEMO_IN_BINDER:
         return
 
     yield dict(
@@ -178,7 +178,7 @@ def task_lint():
 
 
 def task_jlpm():
-    if C.DOCS_IN_CI or C.TEST_IN_CI:
+    if C.DOCS_OR_TEST_IN_CI:
         print("nothing to do with jlpm for docs/test in ci")
         return
 
@@ -207,7 +207,7 @@ def task_jlpm():
 
 def task_build():
     """build intermediate artifacts"""
-    if C.DOCS_IN_CI or C.TEST_IN_CI:
+    if C.DOCS_OR_TEST_IN_CI:
         return
 
     yield dict(
@@ -277,7 +277,7 @@ def task_build():
 
 def task_dist():
     """prepare release artifacts"""
-    if C.DOCS_IN_CI or C.TEST_IN_CI:
+    if C.DOCS_OR_TEST_IN_CI:
         return
 
     yield dict(
@@ -343,7 +343,7 @@ def task_dist():
 
 def task_dev():
     """prepare local development"""
-    if C.DOCS_IN_CI or C.TEST_IN_CI:
+    if C.DOCS_OR_TEST_IN_CI:
         return
 
     extra_pip_args = ["--ignore-installed", "--no-deps"]
@@ -398,7 +398,7 @@ def task_dev():
 
 
 def task_prod():
-    if not C.DOCS_IN_CI or C.TEST_IN_CI:
+    if not C.DOCS_OR_TEST_IN_CI:
         return
 
     yield dict(
@@ -448,7 +448,7 @@ def task_lab():
 
 def task_integrity():
     """ensure integrity of the repo"""
-    if C.DOCS_IN_CI or C.TEST_IN_CI:
+    if C.DOCS_OR_TEST_IN_CI:
         return
 
     yield dict(
@@ -463,7 +463,7 @@ def task_integrity():
 
 def task_preflight():
     """ensure various stages are ready for development"""
-    if C.DOCS_IN_CI or C.TEST_IN_CI:
+    if C.DOCS_OR_TEST_IN_CI:
         task_dep = ["prod:pip:check"]
     else:
         task_dep = ["dev:ext:lab", "dev:ext:server"]
@@ -505,7 +505,7 @@ def task_test():
         *C.UTEST_ARGS,
     ]
 
-    if C.DOCS_IN_CI or C.TEST_IN_CI:
+    if C.DOCS_OR_TEST_IN_CI:
         task_dep = ["prod:pip:check"]
     else:
         task_dep = ["dev:pip:check"]
@@ -533,7 +533,7 @@ def task_test():
 
     task_dep = ["preflight"]
 
-    if not (C.DOCS_IN_CI or C.TEST_IN_CI):
+    if not (C.DOCS_OR_TEST_IN_CI):
         task_dep += ["lint:rf:robocop"]
 
     yield dict(
@@ -553,7 +553,7 @@ def task_lite():
         targets=[P.LITE_BUILD_CONFIG],
     )
 
-    if C.DOCS_IN_CI or C.TEST_IN_CI:
+    if C.DOCS_OR_TEST_IN_CI:
         task_dep = ["prod:pip:check"]
     else:
         task_dep = ["dev:pip:check"]
@@ -682,6 +682,7 @@ class C:
     SKIP_JLPM_IF_CACHED = bool(json.loads(os.environ.get("SKIP_JLPM_IF_CACHED", "1")))
     DOCS_IN_CI = bool(json.loads(os.environ.get("DOCS_IN_CI", "0")))
     TEST_IN_CI = bool(json.loads(os.environ.get("TEST_IN_CI", "0")))
+    DOCS_OR_TEST_IN_CI = DOCS_IN_CI or TEST_IN_CI
     DEMO_IN_BINDER = bool(json.loads(os.environ.get("DEMO_IN_BINDER", "0")))
     RUNNING_LOCALLY = not CI
     ROBOCOP_RULES = [
