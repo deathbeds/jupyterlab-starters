@@ -812,7 +812,7 @@ class P:
     DOCS_SCHEMA_INDEX = DOCS / "schema" / "index.md"
 
     # js stuff
-    TSBUILDINFO = PACKAGES / "_meta/tsconfig.tsbuildinfo"
+    TSBUILDINFO = PACKAGES / "_meta/.src.tsbuildinfo"
     PY_SCHEMA = SRC / "jupyter_starters/schema"
     ALL_PY_SCHEMA = PY_SCHEMA.glob("*.json")
     JS_SRC_SCHEMA_D_TS = PACKAGES / "jupyterlab-starters/src/_schema.d.ts"

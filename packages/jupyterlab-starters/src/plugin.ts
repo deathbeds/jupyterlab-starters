@@ -16,19 +16,22 @@ import * as SCHEMA from './_schema';
 import { CSS } from './css';
 import { StarterManager } from './manager';
 import { NotebookStarter } from './notebookbutton';
+import { ServerStarterProvider } from './providers/server';
+import { ServerStarterRunner } from './runners/server';
 import {
-  NS,
   CommandIDs,
   CATEGORY,
   IStartContext,
   IStarterManager,
   DEFAULT_ICON_CLASS,
+  CORE_PLUGIN_ID,
+  PKG,
 } from './tokens';
 import { BodyBuilder } from './widgets/builder';
 import { NotebookMetadata } from './widgets/meta';
 
 const corePlugin: JupyterFrontEndPlugin<IStarterManager> = {
-  id: `${NS}:plugin`,
+  id: CORE_PLUGIN_ID,
   requires: [
     JupyterFrontEnd.IPaths,
     ILabShell,
@@ -39,6 +42,7 @@ const corePlugin: JupyterFrontEndPlugin<IStarterManager> = {
     IRunningSessionManagers,
   ],
   autoStart: true,
+  provides: IStarterManager,
   activate: (
     app: JupyterFrontEnd,
     paths: JupyterFrontEnd.IPaths,
@@ -253,6 +257,26 @@ const corePlugin: JupyterFrontEndPlugin<IStarterManager> = {
   },
 };
 
-const plugins = [corePlugin];
+const serverProviderPlugin: JupyterFrontEndPlugin<void> = {
+  id: `${PKG.name}:server-provider`,
+  requires: [IStarterManager],
+  autoStart: true,
+  activate: (app: JupyterFrontEnd, manager: IStarterManager) => {
+    const provider = new ServerStarterProvider();
+    manager.addProvider('server', provider);
+  },
+};
+
+const serverRunnerPlugin: JupyterFrontEndPlugin<void> = {
+  id: `${PKG.name}:server-runner`,
+  requires: [IStarterManager],
+  autoStart: true,
+  activate: (app: JupyterFrontEnd, manager: IStarterManager) => {
+    const runner = new ServerStarterRunner({ manager });
+    manager.addRunner('server', runner);
+  },
+};
+
+const plugins = [corePlugin, serverProviderPlugin, serverRunnerPlugin];
 
 export default plugins;

@@ -6,10 +6,14 @@ import { LabIcon } from '@jupyterlab/ui-components';
 import { JSONObject, Token } from '@lumino/coreutils';
 import { ISignal } from '@lumino/signaling';
 
+import * as _PKG from '../package.json';
+
 import * as SCHEMA from './_schema';
 
+export const PKG = _PKG;
+
 export const NS = 'starters';
-export const CORE_PLUGIN_ID = `${NS}:plugin`;
+export const CORE_PLUGIN_ID = `${PKG.name}:core`;
 export const API = URLExt.join(PageConfig.getBaseUrl(), 'starters');
 
 export const DEFAULT_ICON_NAME = `${NS}:default`;
