@@ -1,19 +1,21 @@
-import { JSONObject, PromiseDelegate, JSONExt } from '@lumino/coreutils';
-import { ISignal, Signal } from '@lumino/signaling';
 import { URLExt } from '@jupyterlab/coreutils';
-import { ServerConnection } from '@jupyterlab/services';
-import { LabIcon } from '@jupyterlab/ui-components';
 import { IRenderMimeRegistry, RenderedMarkdown } from '@jupyterlab/rendermime';
 import { IRunningSessions } from '@jupyterlab/running';
-import { IStarterManager, API, NS } from './tokens';
+import { ServerConnection } from '@jupyterlab/services';
+import { LabIcon } from '@jupyterlab/ui-components';
+import { JSONObject, PromiseDelegate, JSONExt } from '@lumino/coreutils';
+import { ISignal, Signal } from '@lumino/signaling';
 
 import * as SCHEMA from './_schema';
 import { Icons } from './icons';
+import { IStarterManager, API, NS, IStarterProvider, IStarterRunner } from './tokens';
 
 const { makeRequest, makeSettings } = ServerConnection;
 
 export class StarterManager implements IStarterManager {
   readonly name = 'Starter';
+  private _providers = new Map<string, IStarterProvider>();
+  private _runners = new Map<string, IStarterRunner>();
 
   private _changed: Signal<IStarterManager, void>;
   private _runningChanged: Signal<IStarterManager, void>;
@@ -28,6 +30,20 @@ export class StarterManager implements IStarterManager {
     this._rendermime = options.rendermime;
     this._changed = new Signal<IStarterManager, void>(this);
     this._runningChanged = new Signal<IStarterManager, void>(this);
+  }
+
+  addProvider(key: string, provider: IStarterProvider): void {
+    if (this._providers.has(key)) {
+      throw new Error(`starter provider ${key} already registered.`);
+    }
+    this._providers.set(key, provider);
+  }
+
+  addRunner(key: string, runner: IStarterRunner): void {
+    if (this._runners.has(key)) {
+      throw new Error(`starter runner ${key} already registered.`);
+    }
+    this._runners.set(key, runner);
   }
 
   shutdownAll(): void {

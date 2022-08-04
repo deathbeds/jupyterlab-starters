@@ -1,15 +1,12 @@
-import { JSONObject, JSONExt } from '@lumino/coreutils';
-import { CommandRegistry } from '@lumino/commands';
-import { Widget } from '@lumino/widgets';
+import { SchemaFormModel } from '@deathbeds/jupyterlab-rjsf';
 import { VDomModel } from '@jupyterlab/apputils';
-
 import { NotebookPanel } from '@jupyterlab/notebook';
+import { CommandRegistry } from '@lumino/commands';
+import { JSONObject, JSONExt } from '@lumino/coreutils';
+import { Widget } from '@lumino/widgets';
 
 import * as SCHEMA_DEFAULT from '../../_schema.json';
-
 import { IStarterManager } from '../../tokens';
-
-import { SchemaFormModel } from '@deathbeds/jupyterlab-rjsf';
 
 const RAW_SCHEMA = (SCHEMA_DEFAULT as any).default;
 const NOTEBOOK_META_KEY = 'jupyter_starters';

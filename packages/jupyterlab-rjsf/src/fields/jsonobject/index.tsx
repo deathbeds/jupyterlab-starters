@@ -1,17 +1,9 @@
-import * as React from 'react';
-
-/* order might matter on these imports */
-/* first core... */
-import { utils as rjsfUtils, Field } from '@rjsf/core';
-
-/* ...then lib imports */
-import _ObjectField from '@rjsf/core/lib/components/fields/ObjectField';
-
-import { UnControlled } from 'react-codemirror2';
-
-import * as CodeMirror from 'codemirror';
-
 import { JSONExt } from '@lumino/coreutils';
+import { utils as rjsfUtils, Field } from '@rjsf/core';
+import _ObjectField from '@rjsf/core/lib/components/fields/ObjectField';
+import * as CodeMirror from 'codemirror';
+import * as React from 'react';
+import { UnControlled } from 'react-codemirror2';
 
 /**
  * This is a pretty nasty way to deal with the ObjectField being very hard

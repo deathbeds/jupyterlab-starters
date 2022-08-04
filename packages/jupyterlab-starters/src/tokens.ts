@@ -1,28 +1,43 @@
-import { JSONObject } from '@lumino/coreutils';
-import { ISignal } from '@lumino/signaling';
-import { LabIcon } from '@jupyterlab/ui-components';
 import { PageConfig, URLExt } from '@jupyterlab/coreutils';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { RenderedMarkdown } from '@jupyterlab/rendermime/lib/widgets';
 import { IRunningSessions } from '@jupyterlab/running';
+import { LabIcon } from '@jupyterlab/ui-components';
+import { JSONObject, Token } from '@lumino/coreutils';
+import { ISignal } from '@lumino/signaling';
 
 import * as SCHEMA from './_schema';
 
 export const NS = 'starters';
+export const CORE_PLUGIN_ID = `${NS}:plugin`;
 export const API = URLExt.join(PageConfig.getBaseUrl(), 'starters');
 
 export const DEFAULT_ICON_NAME = `${NS}:default`;
 export const DEFAULT_ICON_CLASS = `jp-StartersDefaultIcon`;
 export const CATEGORY = 'Starters';
 
-export interface IStarterManager extends IRunningSessions.IManager {
-  changed: ISignal<IStarterManager, void>;
+/** The token for the main extension, which can be used by other extensions */
+export const IStarterManager = new Token<IStarterManager>(CORE_PLUGIN_ID);
+
+/** An interface for the starter manager. */
+export interface IStarterManager extends IStarterProvider, IStarterRunner {
+  markdown: RenderedMarkdown;
+  icon(name: string, starter: SCHEMA.Starter): LabIcon.ILabIcon;
+  addProvider(key: string, provider: IStarterProvider): void;
+  addRunner(key: string, runner: IStarterRunner): void;
+}
+
+/** An interface for a source of starters. */
+export interface IStarterProvider {
   starters: SCHEMA.NamedStarters;
   starter(name: string): SCHEMA.Starter;
-  markdown: RenderedMarkdown;
   fetch(): Promise<void>;
   ready: Promise<void>;
-  icon(name: string, starter: SCHEMA.Starter): LabIcon.ILabIcon;
+}
+
+/** An interface for starter runners. */
+export interface IStarterRunner extends IRunningSessions.IManager {
+  changed: ISignal<any, void>;
   start(
     name: string,
     starter: SCHEMA.Starter,

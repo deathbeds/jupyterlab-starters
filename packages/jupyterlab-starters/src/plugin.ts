@@ -1,23 +1,21 @@
-import { URLExt } from '@jupyterlab/coreutils';
 import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin,
   ILabShell,
   IRouter,
 } from '@jupyterlab/application';
-
-import { PageConfig } from '@jupyterlab/coreutils';
-import { IRunningSessionManagers } from '@jupyterlab/running';
-
+import { URLExt, PageConfig } from '@jupyterlab/coreutils';
 import { ILauncher } from '@jupyterlab/launcher';
-import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
-
 import { NotebookPanel, INotebookTracker } from '@jupyterlab/notebook';
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
+import { IRunningSessionManagers } from '@jupyterlab/running';
 
 import '../style/index.css';
 
+import * as SCHEMA from './_schema';
+import { CSS } from './css';
 import { StarterManager } from './manager';
-
+import { NotebookStarter } from './notebookbutton';
 import {
   NS,
   CommandIDs,
@@ -26,14 +24,10 @@ import {
   IStarterManager,
   DEFAULT_ICON_CLASS,
 } from './tokens';
-import { NotebookStarter } from './notebookbutton';
-import * as SCHEMA from './_schema';
-import { CSS } from './css';
-
-import { NotebookMetadata } from './widgets/meta';
 import { BodyBuilder } from './widgets/builder';
+import { NotebookMetadata } from './widgets/meta';
 
-const plugin: JupyterFrontEndPlugin<void> = {
+const corePlugin: JupyterFrontEndPlugin<IStarterManager> = {
   id: `${NS}:plugin`,
   requires: [
     JupyterFrontEnd.IPaths,
@@ -54,7 +48,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     rendermime: IRenderMimeRegistry,
     router: IRouter,
     running: IRunningSessionManagers
-  ) => {
+  ): IStarterManager => {
     const { commands } = app;
     const manager: IStarterManager = new StarterManager({ rendermime });
 
@@ -185,8 +179,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
         const url = URLExt.join(PageConfig.getOption('treeUrl'), cwd);
 
-        console.log('navigating to', url);
-
         router.navigate(url);
 
         void commands.execute(CommandIDs.start, {
@@ -256,7 +248,11 @@ const plugin: JupyterFrontEndPlugin<void> = {
     });
 
     manager.fetch().catch(console.warn);
+
+    return manager;
   },
 };
 
-export default plugin;
+const plugins = [corePlugin];
+
+export default plugins;

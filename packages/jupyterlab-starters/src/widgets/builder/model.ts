@@ -1,12 +1,11 @@
+import { SchemaFormModel } from '@deathbeds/jupyterlab-rjsf';
+import { VDomModel } from '@jupyterlab/apputils';
+import type { LabIcon } from '@jupyterlab/ui-components';
 import { JSONObject } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
 import { Widget } from '@lumino/widgets';
-import { VDomModel } from '@jupyterlab/apputils';
-import type { LabIcon } from '@jupyterlab/ui-components';
 
 import { IStarterManager, IStartContext } from '../../tokens';
-
-import { SchemaFormModel } from '@deathbeds/jupyterlab-rjsf';
 
 export class BuilderModel extends VDomModel {
   private _context: IStartContext;
