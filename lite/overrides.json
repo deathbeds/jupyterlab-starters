@@ -1,0 +1,5 @@
+{
+  "@jupyterlab/apputils-extension:palette": {
+    "modal": false
+  }
+}

@@ -30,6 +30,7 @@
 #   "docs.yml": {
 #     "dependencies": [
 #       "docutils <0.17",
+#       "jupyterlab-webrtc-docprovider",
 #       "myst-nb",
 #       "pkginfo",
 #       "pydata-sphinx-theme",
@@ -38,6 +39,7 @@
 #       "sphinx-autobuild",
 #       "sphinx-autodoc-typehints",
 #       "sphinx-copybutton",
+#       "sphinxext-rediraffe",
 #       {
 #         "pip": [
 #           "jupyterlite==0.1.0b11"
@@ -170,6 +172,7 @@ https://conda.anaconda.org/conda-forge/noarch/imagesize-1.4.1-pyhd8ed1ab_0.tar.b
 https://conda.anaconda.org/conda-forge/noarch/iniconfig-1.1.1-pyh9f0ad1d_0.tar.bz2#39161f81cc5e5ca45b8226fbb06c6905
 https://conda.anaconda.org/conda-forge/noarch/ipython_genutils-0.2.0-py_1.tar.bz2#5071c982548b3a20caf70462f04f5287
 https://conda.anaconda.org/conda-forge/noarch/json5-0.9.5-pyh9f0ad1d_0.tar.bz2#10759827a94e6b14996e81fb002c0bda
+https://conda.anaconda.org/conda-forge/noarch/jupyterlab-webrtc-docprovider-0.1.1-pyhd8ed1ab_0.tar.bz2#df681674fa6b47876964cae0c0030640
 https://conda.anaconda.org/conda-forge/osx-64/libwebp-1.2.3-hf64df63_1.tar.bz2#6709a2e06240f9112b7185cc2c1dfa7e
 https://conda.anaconda.org/conda-forge/noarch/mccabe-0.7.0-pyhd8ed1ab_0.tar.bz2#34fc335fc50eef0b5ea708f2b5f54e0c
 https://conda.anaconda.org/conda-forge/noarch/mdurl-0.1.0-pyhd8ed1ab_0.tar.bz2#f8dab71fdc13b1bf29a01248b156d268
@@ -288,7 +291,7 @@ https://conda.anaconda.org/conda-forge/noarch/jupyter_client-7.3.4-pyhd8ed1ab_0.
 https://conda.anaconda.org/conda-forge/noarch/livereload-2.6.3-pyh9f0ad1d_0.tar.bz2#b7190e3ec3eff52839434bf4698e2d62
 https://conda.anaconda.org/conda-forge/noarch/mdit-py-plugins-0.3.0-pyhd8ed1ab_0.tar.bz2#adf9129f76ca651869acf2219fac2050
 https://conda.anaconda.org/conda-forge/osx-64/mypy-0.971-py310h6c45266_0.tar.bz2#93eb726b9544674aa6191d59fcb38aed
-https://conda.anaconda.org/conda-forge/noarch/pip-22.2.1-pyhd8ed1ab_0.tar.bz2#0cbcd1fa7291fe72dc8f848907510498
+https://conda.anaconda.org/conda-forge/noarch/pip-22.2.2-pyhd8ed1ab_0.tar.bz2#0b43abe4d3ee93e82742d37def53a836
 https://conda.anaconda.org/conda-forge/noarch/pygments-2.12.0-pyhd8ed1ab_0.tar.bz2#cb27e2ded147e5bcc7eafc1c6d343cb3
 https://conda.anaconda.org/conda-forge/osx-64/pytest-7.1.2-py310h2ec42d9_0.tar.bz2#213fafaad4bdda317efc58119135876b
 https://conda.anaconda.org/conda-forge/noarch/robotframework-pabot-2.6.0-pyhd8ed1ab_0.tar.bz2#fb45fe3d87f6ee827b2e2918f82feabb
@@ -347,6 +350,7 @@ https://conda.anaconda.org/conda-forge/noarch/sphinx-autobuild-2021.3.14-pyhd8ed
 https://conda.anaconda.org/conda-forge/noarch/sphinx-autodoc-typehints-1.19.1-pyhd8ed1ab_0.tar.bz2#7586d1ff1327969889808d5104aab25b
 https://conda.anaconda.org/conda-forge/noarch/sphinx-copybutton-0.5.0-pyhd8ed1ab_0.tar.bz2#4c969cdd5191306c269490f7ff236d9c
 https://conda.anaconda.org/conda-forge/noarch/sphinx-togglebutton-0.3.1-pyhd8ed1ab_0.tar.bz2#71418887aa6599ea2935f4958e5e1d15
+https://conda.anaconda.org/conda-forge/noarch/sphinxext-rediraffe-0.2.7-pyhd8ed1ab_0.tar.bz2#e54a2fc775c162a72243797569abd9de
 https://conda.anaconda.org/conda-forge/noarch/twine-4.0.1-pyhd8ed1ab_1.tar.bz2#2f670a529fdbcb8c3259c36cda5a6248
 https://conda.anaconda.org/conda-forge/noarch/myst-nb-0.16.0-pyhd8ed1ab_0.tar.bz2#9096fbf2dde565dc426bb3bdce19d79e
 https://conda.anaconda.org/conda-forge/noarch/nbclassic-0.4.3-pyhd8ed1ab_0.tar.bz2#492bb9160d01bbbfcc99d5ff6b401d4e

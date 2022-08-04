@@ -83,7 +83,14 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx_copybutton",
     "myst_nb",
+    "sphinxext.rediraffe",
 ]
+
+rediraffe_redirects = {
+    "demo/index": "_static/lab/index",
+    "demo/retro/index": "_static/retro/tree/index",
+    "demo/repl/index": "_static/repl/index",
+}
 
 autosectionlabel_prefix_document = True
 myst_heading_anchors = 3

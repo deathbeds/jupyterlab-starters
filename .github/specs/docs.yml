@@ -1,5 +1,6 @@
 dependencies:
   - docutils <0.17
+  - jupyterlab-webrtc-docprovider
   - myst-nb
   - pkginfo
   - pydata-sphinx-theme
@@ -8,5 +9,6 @@ dependencies:
   - sphinx-autobuild
   - sphinx-autodoc-typehints
   - sphinx-copybutton
+  - sphinxext-rediraffe
   - pip:
       - jupyterlite==0.1.0b11

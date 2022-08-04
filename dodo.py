@@ -573,7 +573,7 @@ def task_lite():
                     "pre_archive:report:SHA256SUMS",
                 ],
             ],
-            file_dep=[P.LITE_BUILD_CONFIG],
+            file_dep=[*P.ALL_LITE_CONFIG],
             targets=[P.LITE_SHA256SUMS],
             cwd=P.LITE,
         ),
@@ -762,6 +762,7 @@ class P:
     ALL_PACKAGE_JSON = [PACKAGE_JSON, *PACKAGES_JSON]
 
     LITE_BUILD_CONFIG = LITE / "jupyter_lite_config.json"
+    ALL_LITE_CONFIG = LITE.glob("*.json")
 
     RTD_ENV = DOCS / "rtd.yml"
     DOCS_NOTEBOOKS = sorted(DOCS.rglob("*.ipynb"))
