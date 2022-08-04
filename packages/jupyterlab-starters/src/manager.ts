@@ -1,16 +1,12 @@
-import { URLExt } from '@jupyterlab/coreutils';
 import { IRenderMimeRegistry, RenderedMarkdown } from '@jupyterlab/rendermime';
 import { IRunningSessions } from '@jupyterlab/running';
-import { ServerConnection } from '@jupyterlab/services';
 import { LabIcon } from '@jupyterlab/ui-components';
-import { JSONObject, PromiseDelegate, JSONExt } from '@lumino/coreutils';
+import { JSONObject } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
 
 import * as SCHEMA from './_schema';
 import { Icons } from './icons';
-import { IStarterManager, API, NS, IStarterProvider, IStarterRunner } from './tokens';
-
-const { makeRequest, makeSettings } = ServerConnection;
+import { IStarterManager, NS, IStarterProvider, IStarterRunner } from './tokens';
 
 export class StarterManager implements IStarterManager {
   readonly name = 'Starter';
@@ -19,54 +15,13 @@ export class StarterManager implements IStarterManager {
 
   private _changed: Signal<IStarterManager, void>;
   private _runningChanged: Signal<IStarterManager, void>;
-  private _starters: SCHEMA.NamedStarters = {};
-  private _serverSettings = makeSettings();
   private _rendermime: IRenderMimeRegistry;
   private _markdown: RenderedMarkdown;
-  private _ready = new PromiseDelegate<void>();
-  private _running: string[];
 
   constructor(options: IStarterManager.IOptions) {
     this._rendermime = options.rendermime;
     this._changed = new Signal<IStarterManager, void>(this);
     this._runningChanged = new Signal<IStarterManager, void>(this);
-  }
-
-  addProvider(key: string, provider: IStarterProvider): void {
-    if (this._providers.has(key)) {
-      throw new Error(`starter provider ${key} already registered.`);
-    }
-    this._providers.set(key, provider);
-  }
-
-  addRunner(key: string, runner: IStarterRunner): void {
-    if (this._runners.has(key)) {
-      throw new Error(`starter runner ${key} already registered.`);
-    }
-    this._runners.set(key, runner);
-  }
-
-  shutdownAll(): void {
-    this.fetch()
-      .then(() => this.running().map((runner) => runner.shutdown()))
-      .catch(console.warn);
-  }
-
-  running(): IRunningSessions.IRunningItem[] {
-    return (this._running || []).map((name) => {
-      const starter = this.starters[name];
-      const icon = this.icon(name, starter) as LabIcon;
-      return {
-        label: () => starter.label,
-        open: () => void 0,
-        shutdown: async () => this.stop(name).catch(console.warn),
-        icon: () => icon,
-      } as IRunningSessions.IRunningItem;
-    });
-  }
-
-  refreshRunning(): void {
-    this.fetch().catch(console.warn);
   }
 
   get runningChanged(): ISignal<IStarterManager, void> {
@@ -83,7 +38,13 @@ export class StarterManager implements IStarterManager {
   }
 
   get ready(): Promise<void> {
-    return this._ready.promise;
+    let promises: Promise<void>[] = [];
+
+    for (const thing of [...this._runners.values(), ...this._providers.values()]) {
+      promises.push(thing.ready);
+    }
+
+    return Promise.all(promises).then(() => void 0);
   }
 
   get changed(): ISignal<IStarterManager, void> {
@@ -91,11 +52,57 @@ export class StarterManager implements IStarterManager {
   }
 
   get starters(): SCHEMA.NamedStarters {
-    return { ...this._starters };
+    const starters: Record<string, SCHEMA.Starter> = {};
+    for (const provider of this._providers.values()) {
+      for (const [starterKey, starter] of Object.entries(provider.starters)) {
+        starters[starterKey] = starter;
+      }
+    }
+    return starters;
+  }
+
+  addProvider(key: string, provider: IStarterProvider): void {
+    if (this._providers.has(key)) {
+      throw new Error(`starter provider ${key} already registered.`);
+    }
+    this._providers.set(key, provider);
+    provider.changed.connect(() => this._changed.emit());
+    provider.fetch().catch(console.warn);
+  }
+
+  addRunner(key: string, runner: IStarterRunner): void {
+    if (this._runners.has(key)) {
+      throw new Error(`starter runner ${key} already registered.`);
+    }
+    this._runners.set(key, runner);
+    runner.runningChanged.connect(() => this._runningChanged.emit());
+    runner.fetch().catch(console.warn);
+  }
+
+  shutdownAll(): void {
+    for (const runner of this._runners.values()) {
+      runner.shutdownAll();
+    }
+  }
+
+  running(): IRunningSessions.IRunningItem[] {
+    const running: IRunningSessions.IRunningItem[] = [];
+
+    for (const runner of this._runners.values()) {
+      running.push(...runner.running());
+    }
+
+    return running;
+  }
+
+  refreshRunning(): void {
+    for (const runner of this._runners.values()) {
+      runner.refreshRunning();
+    }
   }
 
   starter(name: string): SCHEMA.Starter {
-    return this._starters[name];
+    return this.starters[name];
   }
 
   icon(name: string, starter: SCHEMA.Starter): LabIcon.ILabIcon {
@@ -103,16 +110,13 @@ export class StarterManager implements IStarterManager {
   }
 
   async fetch(): Promise<void> {
-    const response = await makeRequest(API, {}, this._serverSettings);
-    const content = (await response.json()) as SCHEMA.AResponseForAnStartersRequest;
-    this._starters = content.starters;
-    this._changed.emit(void 0);
-    this._ready.resolve(void 0);
-
-    if (content.running != null && !JSONExt.deepEqual(this._running, content.running)) {
-      this._running = content.running;
-      this._runningChanged.emit(void 0);
+    for (const thing of [...this._runners.values(), ...this._providers.values()]) {
+      await thing.fetch();
     }
+  }
+
+  canStart(name: string, _starter: SCHEMA.Starter): boolean {
+    return true;
   }
 
   async start(
@@ -120,25 +124,21 @@ export class StarterManager implements IStarterManager {
     _starter: SCHEMA.Starter,
     contentsPath: string,
     body?: JSONObject
-  ): Promise<SCHEMA.AResponseForStartRequest> {
-    const init = { method: 'POST' } as RequestInit;
-    if (body) {
-      init.body = JSON.stringify(body);
+  ): Promise<SCHEMA.AResponseForStartRequest | undefined> {
+    for (const runner of this._runners.values()) {
+      if (runner.canStart(name, _starter)) {
+        let response = await runner.start(name, _starter, contentsPath, body);
+        if (response) {
+          return response;
+        }
+      }
     }
-    const url = URLExt.join(API, name, contentsPath);
-    const response = await makeRequest(`${url}/`, init, this._serverSettings);
-    const result = (await response.json()) as SCHEMA.AResponseForStartRequest;
-    return result;
   }
 
   async stop(name: string): Promise<void> {
-    const init: RequestInit = { method: 'DELETE' };
-    const url = URLExt.join(API, name);
-    const response = await makeRequest(`${url}/`, init, this._serverSettings);
-    if (response.status !== 202) {
-      console.warn(response);
+    for (const runner of this._runners.values()) {
+      await runner.stop(name);
     }
-    await this.fetch();
   }
 }
 

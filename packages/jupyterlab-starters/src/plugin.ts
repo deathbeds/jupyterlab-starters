@@ -110,7 +110,9 @@ const corePlugin: JupyterFrontEndPlugin<IStarterManager> = {
           return await manager.start(name, starter, cwd, body);
         } else {
           const response = await manager.start(name, starter, cwd, body);
-          await runCommands(response);
+          if (response) {
+            await runCommands(response);
+          }
         }
       },
       label: (args: any) => args.starter.label,

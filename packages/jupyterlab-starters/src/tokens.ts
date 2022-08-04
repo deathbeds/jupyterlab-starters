@@ -37,17 +37,22 @@ export interface IStarterProvider {
   starter(name: string): SCHEMA.Starter;
   fetch(): Promise<void>;
   ready: Promise<void>;
+  changed: ISignal<any, void>;
 }
 
 /** An interface for starter runners. */
 export interface IStarterRunner extends IRunningSessions.IManager {
-  changed: ISignal<any, void>;
+  ready: Promise<void>;
+  runningChanged: ISignal<any, void>;
+  fetch(): Promise<void>;
+  canStart(name: string, starter: SCHEMA.Starter): boolean;
+  stop(name: string): Promise<void>;
   start(
     name: string,
     starter: SCHEMA.Starter,
     path: string,
     body?: JSONObject
-  ): Promise<SCHEMA.AResponseForStartRequest>;
+  ): Promise<SCHEMA.AResponseForStartRequest | undefined>;
 }
 
 export namespace IStarterManager {

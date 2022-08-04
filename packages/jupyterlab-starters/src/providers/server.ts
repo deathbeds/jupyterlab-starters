@@ -1,6 +1,6 @@
 import { ServerConnection } from '@jupyterlab/services';
 import { PromiseDelegate } from '@lumino/coreutils';
-import { Signal } from '@lumino/signaling';
+import { ISignal, Signal } from '@lumino/signaling';
 
 import * as SCHEMA from '../_schema';
 import { IStarterProvider, API } from '../tokens';
@@ -19,6 +19,14 @@ export class ServerStarterProvider implements IStarterProvider {
     this._changed = new Signal<IStarterProvider, void>(this);
   }
 
+  get ready(): Promise<void> {
+    return this._ready.promise;
+  }
+
+  get changed(): ISignal<IStarterProvider, void> {
+    return this._changed;
+  }
+
   async fetch(): Promise<void> {
     const response = await makeRequest(API, {}, this._serverSettings);
     const content = (await response.json()) as SCHEMA.AResponseForAnStartersRequest;
@@ -33,9 +41,5 @@ export class ServerStarterProvider implements IStarterProvider {
 
   starter(name: string): SCHEMA.Starter {
     return this._starters[name];
-  }
-
-  get ready(): Promise<void> {
-    return this._ready.promise;
   }
 }

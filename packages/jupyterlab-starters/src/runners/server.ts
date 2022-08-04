@@ -16,7 +16,6 @@ export class ServerStarterRunner implements IStarterRunner {
   private _serverSettings = makeSettings();
   private _running: string[];
   private _ready = new PromiseDelegate<void>();
-  private _changed: Signal<IStarterRunner, void>;
   private _runningChanged: Signal<IStarterRunner, void>;
 
   constructor(options: ServerStarterRunner.IOptions) {
@@ -24,14 +23,17 @@ export class ServerStarterRunner implements IStarterRunner {
     this._runningChanged = new Signal<IStarterRunner, void>(this);
   }
 
-  get changed(): ISignal<IStarterRunner, void> {
-    return this._changed;
+  get runningChanged(): ISignal<IStarterRunner, void> {
+    return this._runningChanged;
+  }
+
+  get ready(): Promise<void> {
+    return this._ready.promise;
   }
 
   async fetch(): Promise<void> {
     const response = await makeRequest(API, {}, this._serverSettings);
     const content = (await response.json()) as SCHEMA.AResponseForAnStartersRequest;
-    this._changed.emit(void 0);
     this._ready.resolve(void 0);
 
     if (content.running != null && !JSONExt.deepEqual(this._running, content.running)) {
@@ -40,12 +42,16 @@ export class ServerStarterRunner implements IStarterRunner {
     }
   }
 
+  canStart(name: string, _starter: SCHEMA.Starter): boolean {
+    return true;
+  }
+
   async start(
     name: string,
     _starter: SCHEMA.Starter,
     contentsPath: string,
     body?: JSONObject
-  ): Promise<SCHEMA.AResponseForStartRequest> {
+  ): Promise<SCHEMA.AResponseForStartRequest | undefined> {
     const init = { method: 'POST' } as RequestInit;
     if (body) {
       init.body = JSON.stringify(body);
@@ -81,10 +87,6 @@ export class ServerStarterRunner implements IStarterRunner {
 
   refreshRunning(): void {
     this.fetch().catch(console.warn);
-  }
-
-  get runningChanged(): ISignal<IStarterRunner, void> {
-    return this._runningChanged;
   }
 
   shutdownAll(): void {
