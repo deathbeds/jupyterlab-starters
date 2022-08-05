@@ -3,6 +3,7 @@
 # pylint: disable=unsubscriptable-object,fixme
 import base64
 import importlib
+import json
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
@@ -10,6 +11,7 @@ from typing import List, Text
 from urllib.parse import unquote
 
 import jinja2
+import nbformat
 import traitlets as T
 from jupyter_core.paths import jupyter_config_path
 from jupyter_server import _tz as tz
@@ -311,6 +313,14 @@ class StarterManager(LoggingConfigurable):
                 format=None,
                 mimetype=None,
             )
+        elif type_ == "notebook":
+            content = self._template_notebook(starter_model["content"], body)
+            model.update(
+                content=content,
+                size=0,
+                format="json",
+                mimetype="application/x-ipynb+json",
+            )
         else:
             content_tmpl = self.jinja_env.from_string(starter_model["content"])
             content = content_tmpl.render(**body)
@@ -326,6 +336,28 @@ class StarterManager(LoggingConfigurable):
         if is_dir:
             for child in starter_model.get("content", []):
                 await self.save_content(dest, child, body)
+
+    def _template_notebook(self, content, body):
+        """build a template notebook by manipulation"""
+        json_text = json.dumps(content, indent=2, sort_keys=True)
+        content_tmpl = self.jinja_env.from_string(json_text)
+        content_notebook = json.loads(content_tmpl.render(**body))
+        ipynb = nbformat.v4.new_notebook(metadata=content_notebook.get("metadata", {}))
+        cells = []
+        for a_cell in content_notebook.get("cells", []):
+            cell_type = a_cell.get("cell_type", "code")
+            source = a_cell.pop("source", "")
+            if cell_type == "code":
+                cell = nbformat.v4.new_code_cell(source, **a_cell)
+            elif cell_type == "markdown":
+                cell = nbformat.v4.new_markdown_cell(source, **a_cell)
+            elif cell_type == "raw":
+                cell = nbformat.v4.new_raw_cell(source, **a_cell)
+            cells += [cell]
+        ipynb["cells"] = cells
+
+        nb_json = nbformat.v4.nbjson.writes(ipynb)
+        return json.loads(nb_json)
 
     async def save_contents_model(self, model, dest):
         """use the contents manager to write a model"""
