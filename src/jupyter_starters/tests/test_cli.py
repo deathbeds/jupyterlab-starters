@@ -3,7 +3,7 @@
 
 from .._version import __version__
 from ..json_ import loads
-from ..schema.v2 import STARTERS
+from ..schema.v3 import STARTERS
 
 try:
     from ruamel.yaml import safe_load

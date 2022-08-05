@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://raw.githubusercontent.com/deathbeds/jupyterlab-starters/master/src/jupyter_starters/schema/v2.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/deathbeds/jupyterlab-starters/master/src/jupyter_starters/schema/v3.json",
   "title": "Jupyter Starters JSON",
   "description": "A collection of JSON types for configuring and operating Starters",
   "type": "object",
@@ -37,7 +37,7 @@
           "title": "API Version",
           "description": "The version of the Jupyter Starters API",
           "type": "string",
-          "enum": ["2"]
+          "enum": ["3"]
         }
       }
     },
@@ -110,6 +110,10 @@
         {
           "title": "A Copy Starter",
           "$ref": "#/definitions/starter-copy"
+        },
+        {
+          "title": "A Contents Starter",
+          "$ref": "#/definitions/starter-content"
         },
         {
           "title": "A Copy Starter With a Custom Destination",
@@ -215,6 +219,23 @@
         }
       }
     },
+    "starter-content": {
+      "title": "Contents Starter",
+      "description": "A starter that contains templated Jupyter content",
+      "type": "object",
+      "allOf": [
+        {
+          "title": "Starter Metadata",
+          "description": "Common starter fields",
+          "$ref": "#/definitions/starter-meta"
+        },
+        {
+          "title": "A Starter Contents Folder",
+          "description": "Fields that fully describe a single file or tree of Jupyter content",
+          "$ref": "#/definitions/starter-with-content"
+        }
+      ]
+    },
     "starter-copy-with-dest": {
       "title": "Copy with Destination Starter",
       "type": "object",
@@ -301,6 +322,114 @@
           "title": "Starter Python Source",
           "description": "name of a python module installed in the `notebook` environment to prepent to `src`",
           "type": "string"
+        }
+      }
+    },
+    "starter-with-content": {
+      "title": "A root of Jupyter contents",
+      "required": ["content"],
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/starter-content-any"
+        }
+      }
+    },
+    "starter-content-any": {
+      "type": "object",
+      "allOf": [
+        {
+          "type": "object",
+          "require": ["name"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "A filename that may contain jinja/nunjucks template strings populated with the body"
+            }
+          }
+        },
+        {
+          "oneOf": [
+            {
+              "#ref": "#/definitions/starter-content-folder"
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/starter-content-file-common"
+                },
+                {
+                  "oneOf": [
+                    {
+                      "$ref": "#/definitions/starter-content-file-text"
+                    },
+                    {
+                      "$ref": "#/definitions/starter-content-file-json"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "starter-content-folder": {
+      "title": "Jupyter Contents Folder",
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["folder"]
+        },
+        "content": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/starter-content-any"
+          }
+        }
+      }
+    },
+    "starter-content-file-common": {
+      "title": "Jupyter Contents File",
+      "type": "object",
+      "required": ["type", "content", "mimetype", "format"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["file"]
+        },
+        "mimetype": {
+          "type": "string"
+        }
+      }
+    },
+    "starter-content-file-text": {
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["text", "base64"]
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "starter-content-file-json": {
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["json"]
+        },
+        "content": {
+          "oneOf": [
+            {
+              "type": "array"
+            },
+            {
+              "type": "object"
+            }
+          ]
         }
       }
     }

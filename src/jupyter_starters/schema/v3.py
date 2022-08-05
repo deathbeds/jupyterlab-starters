@@ -4,7 +4,7 @@ from pathlib import Path
 
 from ..json_ import json_validator, loads
 
-VERSION = "2"
+VERSION = "3"
 
 HERE = Path(__file__).parent
 

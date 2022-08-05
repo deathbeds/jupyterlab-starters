@@ -1,6 +1,6 @@
 {
   "name": "@deathbeds/jupyterlab-starters",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Parameterized files and folders for JupyterLab",
   "license": "BSD-3-Clause",
   "author": "dead pixels collective",
@@ -17,10 +17,10 @@
     "{lib,style,src}/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf,css,ts,tsx}"
   ],
   "scripts": {
-    "build:copyschema": "python -c \"from pathlib import Path as P; s = P('../../src/jupyter_starters/schema/v2.json').read_text(); P('lib').mkdir(exist_ok=True); P('lib/_schema.json').write_text(s); P('src/_schema.json').write_text(s)\"",
+    "build:copyschema": "python -c \"from pathlib import Path as P; s = P('../../src/jupyter_starters/schema/v3.json').read_text(); P('lib').mkdir(exist_ok=True); P('lib/_schema.json').write_text(s); P('src/_schema.json').write_text(s)\"",
     "build:ext": "jupyter labextension build .",
     "build:ext:dev": "jupyter labextension build --development True .",
-    "build:json2ts": "json2ts ../../src/jupyter_starters/schema/v2.json --unreachableDefinitions | prettier --stdin-filepath _schema.d.ts > src/_schema.d.ts",
+    "build:json2ts": "json2ts ../../src/jupyter_starters/schema/v3.json --unreachableDefinitions | prettier --stdin-filepath _schema.d.ts > src/_schema.d.ts",
     "build:pre": "jlpm build:json2ts && jlpm build:copyschema",
     "bundle": "npm pack .",
     "clean": "rimraf lib ../../src/jupyter_starters/labextension",

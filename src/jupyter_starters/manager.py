@@ -19,7 +19,7 @@ from traitlets.config import LoggingConfigurable
 
 from .py_starters.cookiecutter import cookiecutter_starters
 from .py_starters.notebook import notebook_starter, response_from_notebook, stop_kernel
-from .schema.v2 import STARTERS
+from .schema.v3 import STARTERS
 from .trait_types import Schema
 from .types import Status
 

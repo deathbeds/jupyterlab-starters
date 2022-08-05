@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## `jupyter_starters 2.0.0`
+
+## `@deathbeds/jupyterlab-starters 2.0.0`
+
+## `@deathbeds/jupyterlab-rjsf 2.0.0`
+
+--
+
 ## `jupyter_starters 1.1.0`
 
 - [#62] adds a CLI tool, `jupyter starters list` (with option `--json`)
