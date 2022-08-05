@@ -65,6 +65,7 @@
     },
     "extension": "lib/plugin.js",
     "outputDir": "../../src/jupyter_starters/labextension",
+    "schemaDir": "schema",
     "sharedPackages": {
       "@deathbeds/jupyterlab-rjsf": {
         "bundled": true

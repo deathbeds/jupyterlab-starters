@@ -14,6 +14,7 @@ export const PKG = _PKG;
 
 export const NS = 'starters';
 export const CORE_PLUGIN_ID = `${PKG.name}:core`;
+export const SETTINGS_PLUGIN_ID = `${PKG.name}:settings-provider`;
 export const API = URLExt.join(PageConfig.getBaseUrl(), 'starters');
 
 export const DEFAULT_ICON_NAME = `${NS}:default`;

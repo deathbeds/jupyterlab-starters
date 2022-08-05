@@ -9,6 +9,7 @@ import { ILauncher } from '@jupyterlab/launcher';
 import { NotebookPanel, INotebookTracker } from '@jupyterlab/notebook';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { IRunningSessionManagers } from '@jupyterlab/running';
+import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
 import '../style/index.css';
 
@@ -17,6 +18,7 @@ import { CSS } from './css';
 import { StarterManager } from './manager';
 import { NotebookStarter } from './notebookbutton';
 import { ServerStarterProvider } from './providers/server';
+import { SettingsProvider } from './providers/settings';
 import { ServerStarterRunner } from './runners/server';
 import {
   CommandIDs,
@@ -25,6 +27,7 @@ import {
   IStarterManager,
   DEFAULT_ICON_CLASS,
   CORE_PLUGIN_ID,
+  SETTINGS_PLUGIN_ID,
   PKG,
 } from './tokens';
 import { BodyBuilder } from './widgets/builder';
@@ -279,6 +282,31 @@ const serverRunnerPlugin: JupyterFrontEndPlugin<void> = {
   },
 };
 
-const plugins = [corePlugin, serverProviderPlugin, serverRunnerPlugin];
+const settingsProviderPlugin: JupyterFrontEndPlugin<void> = {
+  id: SETTINGS_PLUGIN_ID,
+  requires: [IStarterManager, ISettingRegistry],
+  autoStart: true,
+  activate: (
+    app: JupyterFrontEnd,
+    manager: IStarterManager,
+    settingRegistry: ISettingRegistry
+  ) => {
+    const provider = new SettingsProvider({
+      settingsGetter: async () => {
+        const bundle = settingRegistry.load(SETTINGS_PLUGIN_ID);
+        return (await bundle).composite;
+      },
+    });
+    console.log('loading', provider);
+    manager.addProvider('settings', provider);
+  },
+};
+
+const plugins = [
+  corePlugin,
+  serverProviderPlugin,
+  serverRunnerPlugin,
+  settingsProviderPlugin,
+];
 
 export default plugins;

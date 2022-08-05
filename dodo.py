@@ -766,6 +766,7 @@ class P:
     PACKAGES_JSON = sorted(PACKAGES.glob("*/package.json"))
     EXT_PACKAGE = PACKAGES / "jupyterlab-starters"
     ALL_PACKAGE_JSON = [PACKAGE_JSON, *PACKAGES_JSON]
+    ALL_PLUGIN_SCHEMA = [*PACKAGES.glob("*/schema/*.json")]
 
     LITE_BUILD_CONFIG = LITE / "jupyter_lite_config.json"
     ALL_LITE_CONFIG = LITE.glob("*.json")
@@ -857,6 +858,7 @@ class P:
     ALL_JS = [ROOT / ".eslintrc.js"]
     ALL_JSON = [
         *ALL_PACKAGE_JSON,
+        *ALL_PLUGIN_SCHEMA,
         *ROOT.glob("*.json"),
         *ATEST.rglob("*.json"),
         *ALL_PY_SCHEMA,

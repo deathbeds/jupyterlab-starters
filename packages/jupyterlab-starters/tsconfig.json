@@ -5,5 +5,5 @@
     "tsBuildInfoFile": ".root.tsbuildinfo"
   },
   "extends": "../../tsconfigbase",
-  "files": ["package.json"]
+  "files": ["package.json", "schema/settings-provider.json"]
 }
