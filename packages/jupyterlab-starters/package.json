@@ -29,19 +29,16 @@
   },
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@deathbeds/jupyterlab-rjsf": "~1.1.0",
+    "@deathbeds/jupyterlab-rjsf": "~2.0.0",
     "@jupyterlab/application": "3",
     "@jupyterlab/launcher": "3",
     "@jupyterlab/notebook": "3",
     "@jupyterlab/running": "3",
-    "@rjsf/core": "~3.2.1"
+    "@rjsf/core": "~3.2.1",
+    "nunjucks": "^3.2.3"
   },
   "devDependencies": {
-    "@deathbeds/jupyterlab-rjsf": "~1.1.0",
     "@jupyterlab/builder": "^3.2.1",
-    "@jupyterlab/launcher": "3",
-    "@jupyterlab/notebook": "3",
-    "@jupyterlab/running": "3",
     "@types/codemirror": "^0.0.97",
     "@types/react": "^17.0.0",
     "json-schema-to-typescript": "^8.0.0",
