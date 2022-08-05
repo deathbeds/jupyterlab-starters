@@ -48,7 +48,7 @@ def the_meta_package():
     return (
         meta_path,
         meta,
-        json.loads((meta_path / "tsconfig.json").read_text()),
+        json.loads((meta_path / "src/tsconfig.json").read_text()),
         (meta_path / "src" / "index.ts").read_text(),
     )
 
@@ -68,7 +68,9 @@ def test_ts_package_integrity(name, info, the_meta_package):
     assert f"'{name}'" in m_index, f"{name} missing from metapackage/src/index.ts"
 
     assert [
-        ref for ref in m_tsconfig["references"] if ref["path"] == f"../{path.name}"
+        ref
+        for ref in m_tsconfig["references"]
+        if ref["path"] == f"../../{path.name}/src"
     ], f"{name} missing from metapackage/tsconfig.json"
 
     schemas = list(path.glob("schema/*.json"))

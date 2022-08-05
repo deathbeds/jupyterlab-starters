@@ -456,7 +456,13 @@ def task_integrity():
         **U.run_in(
             "utest",
             [[*C.PYM, "scripts.integrity"]],
-            file_dep=[P.README, P.CHANGELOG, P.SCRIPTS / "integrity.py"],
+            file_dep=[
+                P.README,
+                P.CHANGELOG,
+                *P.ALL_TSCONFIG,
+                *P.ALL_PACKAGE_JSON,
+                P.SCRIPTS / "integrity.py",
+            ],
         ),
     )
 
