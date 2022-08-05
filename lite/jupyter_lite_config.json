@@ -1,6 +1,6 @@
 {
   "LiteBuildConfig": {
-    "federated_labextensions": ["../dist/deathbeds-jupyterlab-starters-1.1.0.tgz"],
+    "federated_labextensions": ["../dist/deathbeds-jupyterlab-starters-2.0.0.tgz"],
     "output_dir": "../build/docs-app/"
   }
 }

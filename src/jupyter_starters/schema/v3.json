@@ -350,7 +350,7 @@
         {
           "oneOf": [
             {
-              "#ref": "#/definitions/starter-content-folder"
+              "#ref": "#/definitions/starter-content-directory"
             },
             {
               "allOf": [
@@ -373,14 +373,14 @@
         }
       ]
     },
-    "starter-content-folder": {
-      "title": "Jupyter Contents Folder",
+    "starter-content-directory": {
+      "title": "Jupyter Contents Directory",
       "type": "object",
       "required": ["type"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["folder"]
+          "enum": ["directory"]
         },
         "content": {
           "type": "array",

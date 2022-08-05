@@ -4,6 +4,7 @@
 import base64
 import importlib
 from copy import deepcopy
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Text
 from urllib.parse import unquote
@@ -149,6 +150,9 @@ class StarterManager(LoggingConfigurable):
         if starter_type == "notebook":
             return await self.start_notebook(name, starter, path, body)
 
+        if starter_type == "content":
+            return await self.start_content(name, starter, path, body)
+
         raise NotImplementedError(starter["type"])
 
     async def stop(self, name):
@@ -218,13 +222,26 @@ class StarterManager(LoggingConfigurable):
         else:
             dest = ujoin(path, root.name)
 
-        await self.save_one(root, dest)
+        await self.save_one_file(root, dest)
 
         for child in iter_not_ignored(root, starter.get("ignore")):
-            await self.save_one(
+            await self.save_one_file(
                 child,
                 unquote(ujoin(dest, child.as_uri().replace(root_uri, ""))),
             )
+
+        return {
+            "body": body,
+            "name": name,
+            "path": dest,
+            "starter": starter,
+            "status": Status.DONE,
+        }
+
+    async def start_content(self, name, starter, path, body):
+        """start a content starter"""
+
+        dest = await self.save_content(path, starter["content"], body)
 
         return {
             "body": body,
@@ -247,10 +264,8 @@ class StarterManager(LoggingConfigurable):
         """stop running the notebook kernel"""
         return await stop_kernel(name, self)
 
-    async def save_one(self, src, dest):
-        """use the contents manager to write a single file/folder"""
-        # pylint: disable=broad-except
-
+    async def save_one_file(self, src, dest):
+        """generate and save a content model for a single file/directory"""
         stat = src.stat()
         is_dir = src.is_dir()
 
@@ -268,6 +283,54 @@ class StarterManager(LoggingConfigurable):
             size=stat.st_size,
         )
 
+        await self.save_contents_model(model, dest)
+
+    async def save_content(self, path, starter_model, body):
+        """save a content model (and its children)"""
+        body = body or {}
+        name_tmpl = self.jinja_env.from_string(starter_model["name"])
+        name = name_tmpl.render(**body)
+        dest = ujoin(path, name)
+
+        type_ = starter_model.get("type", "file")
+
+        is_dir = type_ == "directory"
+
+        model = dict(
+            name=name,
+            path=dest,
+            type=type_,
+            last_modified=datetime.now(timezone.utc),
+            created=datetime.now(timezone.utc),
+        )
+
+        if is_dir:
+            model.update(
+                content=None,
+                size=0,
+                format=None,
+                mimetype=None,
+            )
+        else:
+            content_tmpl = self.jinja_env.from_string(starter_model["content"])
+            content = content_tmpl.render(**body)
+            model.update(
+                content=content,
+                size=len(content),
+                format=starter_model.get("format") or "text",
+                mimetype=starter_model.get("mimetype") or "text/plain",
+            )
+
+        await self.save_contents_model(model, dest)
+
+        if is_dir:
+            for child in starter_model.get("content", []):
+                await self.save_content(dest, child, body)
+
+    async def save_contents_model(self, model, dest):
+        """use the contents manager to write a model"""
+        # pylint: disable=broad-except
+
         allow_hidden = None
 
         if hasattr(self.contents_manager, "allow_hidden"):
@@ -276,8 +339,6 @@ class StarterManager(LoggingConfigurable):
 
         try:
             await ensure_async(self.contents_manager.save(model, dest))
-        except Exception as err:
-            self.log.error(f"Couldn't save {dest}: {err}")
         finally:
             if allow_hidden is not None:
                 self.contents_manager.allow_hidden = allow_hidden
