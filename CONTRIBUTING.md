@@ -13,11 +13,11 @@ time-permitting.
 > _There are probably other ways, but I haven't tried them_
 
 - Be on Linux/OSX
-- Get [Miniforge or Mambaforge](https://github.com/conda-forge/miniforge/releases)
+- Get [Mambaforge](https://github.com/conda-forge/miniforge/releases)
 - Get [doit](https://pydoit.org)
 
 ```bash
-conda install doit
+mamba install doit
 ```
 
 ```bash
@@ -41,7 +41,7 @@ doit lint
 ## testing
 
 ```bash
-doit atest
+doit test
 ```
 
 > _You may want to run against a "clean" lab, e.g. `doit`_
