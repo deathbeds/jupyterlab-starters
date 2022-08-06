@@ -230,6 +230,7 @@ def task_build():
         **U.run_in(
             "build",
             [
+                [C.JLPM, "lerna", "bootstrap"],
                 U.patch_plugin_schema,
                 [C.JLPM, "lerna", "run", "--stream", "build:pre"],
                 [
@@ -239,6 +240,7 @@ def task_build():
                     P.JS_SRC_SCHEMA,
                     P.JS_LIB_SCHEMA,
                     P.JS_SRC_SCHEMA_D_TS,
+                    P.EXT_SETTINGS_SCHEMA,
                 ],
             ],
             file_dep=[
@@ -247,7 +249,12 @@ def task_build():
                 *P.ALL_PACKAGE_JSON,
                 P.YARN_LOCK,
             ],
-            targets=[P.JS_SRC_SCHEMA, P.JS_LIB_SCHEMA, P.JS_SRC_SCHEMA_D_TS],
+            targets=[
+                P.JS_SRC_SCHEMA,
+                P.JS_LIB_SCHEMA,
+                P.JS_SRC_SCHEMA_D_TS,
+                P.EXT_SETTINGS_SCHEMA,
+            ],
         ),
     )
 
@@ -716,6 +723,7 @@ class C:
     EXPLICIT = "@EXPLICIT"
     PIP_LOCK_LINE = "# pip "
     UTF8 = dict(encoding="utf-8")
+    JSON_FMT = dict(indent=2, sort_keys=True)
     DEFAULT_SUBDIR = "linux-64"
     SKIP_LOCKS = bool(json.loads(os.environ.get("SKIP_LOCKS", "1")))
     CI = bool(json.loads(os.environ.get("CI", "0")))
@@ -1072,7 +1080,7 @@ class U:
             ]
             norm_specs[spec.name] = spec_data
 
-        raw = json.dumps(norm_specs, indent=2, sort_keys=True)
+        raw = json.dumps(norm_specs, **C.JSON_FMT)
         return textwrap.indent(raw, "# ").strip()
 
     def lock_to_env(lockfile, env_file):
@@ -1123,9 +1131,7 @@ class U:
             for tgz in P.NPM_TARBALLS.values()
             if "starters" in tgz.name
         ]
-        lite_build_config.write_text(
-            json.dumps(conf_data, indent=2, sort_keys=True), **C.UTF8
-        )
+        lite_build_config.write_text(json.dumps(conf_data, **C.JSON_FMT), **C.UTF8)
 
     RE_TIMESTAMPS = [
         r"\d{4}-\d{2}-\d{2} \d{2}:\d{2} -\d*",
@@ -1258,17 +1264,12 @@ class U:
         plugin_schema["definitions"] = py_schema["definitions"]
 
         P.EXT_SETTINGS_SCHEMA.write_text(
-            json.dumps(plugin_schema, indent=2, sort_keys=True), **C.UTF8
+            json.dumps(plugin_schema, **C.JSON_FMT), **C.UTF8
         )
 
     def normalize_json(path):
         path.write_text(
-            json.dumps(
-                json.loads(path.read_text(**C.UTF8)),
-                indent=2,
-                sort_keys=True,
-            )
-            + "\n",
+            json.dumps(json.loads(path.read_text(**C.UTF8)), **C.JSON_FMT) + "\n",
             **C.UTF8,
         )
 
