@@ -411,12 +411,12 @@ def task_dev():
         name="ext:lab:overrides",
         task_dep=["dev:pip:check"],
         file_dep=[P.BINDER_OVERRIDES],
-        targets=[P.DEV_PREFIX_OVERRIDES],
+        targets=[P.PREFIX_OVERRIDES],
         actions=[
-            (doit.tools.create_folder, [P.DEV_PREFIX_OVERRIDES.parent]),
+            (doit.tools.create_folder, [P.PREFIX_OVERRIDES.parent]),
             lambda: [
-                P.DEV_PREFIX_OVERRIDES.exists() and P.DEV_PREFIX_OVERRIDES.unlink(),
-                shutil.copy2(P.BINDER_OVERRIDES, P.DEV_PREFIX_OVERRIDES),
+                P.PREFIX_OVERRIDES.exists() and P.PREFIX_OVERRIDES.unlink(),
+                shutil.copy2(P.BINDER_OVERRIDES, P.PREFIX_OVERRIDES),
                 None,
             ][-1],
         ],
@@ -580,9 +580,15 @@ def task_test():
 def task_lite():
     yield dict(
         name="config:build",
-        file_dep=[*P.NPM_TARBALLS.values()],
-        actions=[(U._sync_lite_conf, [P.LITE_BUILD_CONFIG])],
-        targets=[P.LITE_BUILD_CONFIG],
+        **U.run_in(
+            "docs",
+            [
+                (U._sync_lite_conf, [P.LITE_BUILD_CONFIG]),
+                [C.JLPM, "prettier", "--write", P.LITE_BUILD_CONFIG],
+            ],
+            file_dep=[*P.NPM_TARBALLS.values()],
+            targets=[P.LITE_BUILD_CONFIG],
+        ),
     )
 
     if C.DOCS_OR_TEST_IN_CI:
@@ -907,8 +913,10 @@ class P:
 
     # binder
     BINDER_OVERRIDES = BINDER / "overrides.json"
-    DEV_PREFIX_SETTINGS = DEV_PREFIX / "share/jupyter/lab/settings"
-    DEV_PREFIX_OVERRIDES = DEV_PREFIX_SETTINGS / BINDER_OVERRIDES.name
+    PREFIX_SETTINGS = (
+        DEV_PREFIX if C.RUNNING_LOCALLY else Path(sys.prefix)
+    ) / "share/jupyter/lab/settings"
+    PREFIX_OVERRIDES = PREFIX_SETTINGS / BINDER_OVERRIDES.name
 
 
 class D:
@@ -1115,7 +1123,6 @@ class U:
         lite_build_config.write_text(
             json.dumps(conf_data, indent=2, sort_keys=True), **C.UTF8
         )
-        subprocess.check_call([C.JLPM, "prettier", "--write", lite_build_config])
 
     RE_TIMESTAMPS = [
         r"\d{4}-\d{2}-\d{2} \d{2}:\d{2} -\d*",
