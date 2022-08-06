@@ -111,7 +111,7 @@ def task_lint():
             **U.run_in(
                 "docs",
                 [[C.JLPM, "prettier-package-json", "--write", pkg_json]],
-                file_dep=[pkg_json],
+                file_dep=[pkg_json, P.YARN_INTEGRITY],
             ),
         )
     prettier = [C.JLPM, "prettier"] + (
@@ -127,7 +127,7 @@ def task_lint():
                 **U.run_in(
                     "docs",
                     [(U.normalize_json, [json_path]), [*prettier, json_path]],
-                    file_dep=[json_path],
+                    file_dep=[json_path, P.YARN_INTEGRITY],
                 ),
             )
 
@@ -596,7 +596,7 @@ def task_lite():
                 (U._sync_lite_conf, [P.LITE_BUILD_CONFIG]),
                 [C.JLPM, "prettier", "--write", P.LITE_BUILD_CONFIG],
             ],
-            file_dep=[*P.NPM_TARBALLS.values()],
+            file_dep=[*P.NPM_TARBALLS.values(), P.YARN_INTEGRITY],
             targets=[P.LITE_BUILD_CONFIG],
         ),
     )
@@ -1116,7 +1116,7 @@ class U:
                 "docs",
                 actions=[[C.JLPM, "prettier", "--write", env_file]],
                 targets=[env_file],
-                file_dep=[lockfile],
+                file_dep=[lockfile, P.YARN_INTEGRITY],
             ),
         )
 
