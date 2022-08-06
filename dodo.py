@@ -22,6 +22,9 @@ from ruamel.yaml.main import safe_dump
 
 def task_lock():
     """generate conda locks for all envs"""
+    if C.CI or C.DEMO_IN_BINDER or C.RTD:
+        return
+
     yield U.lock("build", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["node", "lab", "lint"])
     yield U.lock(
         "binder", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["run", "lab", "node", "docs"]
