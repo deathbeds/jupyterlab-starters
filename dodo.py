@@ -720,7 +720,7 @@ class C:
     SKIP_LOCKS = bool(json.loads(os.environ.get("SKIP_LOCKS", "1")))
     CI = bool(json.loads(os.environ.get("CI", "0")))
     RTD = os.environ.get("READTHEDOCS") == "True"
-    SKIP_JLPM_IF_CACHED = bool(json.loads(os.environ.get("SKIP_JLPM_IF_CACHED", "1")))
+    SKIP_JLPM_IF_CACHED = bool(json.loads(os.environ.get("SKIP_JLPM_IF_CACHED", "0")))
     DOCS_IN_CI = bool(json.loads(os.environ.get("DOCS_IN_CI", "0")))
     TEST_IN_CI = bool(json.loads(os.environ.get("TEST_IN_CI", "0")))
     DOCS_OR_TEST_IN_CI = DOCS_IN_CI or TEST_IN_CI

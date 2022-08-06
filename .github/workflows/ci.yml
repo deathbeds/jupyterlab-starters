@@ -31,6 +31,7 @@ jobs:
         os: [ubuntu]
     env:
       LOCKFILE: .github/locks/build-linux-64-3.10.conda.lock
+      SKIP_JLPM_IF_CACHED: '0'
     steps:
       - name: git checkout
         uses: actions/checkout@v2
