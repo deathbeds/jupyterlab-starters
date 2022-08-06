@@ -23,6 +23,6 @@ class Schema(traitlets.Any):
         """applies a validator"""
         try:
             self._validator(value)
-        except JsonSchemaException as err:
+        except JsonSchemaException as err:  # pragma: no cover
             raise traitlets.TraitError(f"""schema errors: {err}""")
         return value

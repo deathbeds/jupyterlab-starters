@@ -1,11 +1,12 @@
 """tests of content starter behavior"""
 # pylint: disable=redefined-outer-name
-import json
 from pathlib import Path
 
 import pytest
 
 from jupyter_starters.types import Status
+
+from .. import json_
 
 BAR = "BÄR"
 FOO = "FOÖ"
@@ -13,7 +14,7 @@ FOO = "FOÖ"
 
 def _is_bar_notebook(nb_bytes):
     """does the generated notebook roughly match expectation?"""
-    ipynb = json.loads(nb_bytes.decode("utf-8"))
+    ipynb = json_.loads(nb_bytes.decode("utf-8"))
     code, markdown, raw = ipynb["cells"]
 
     assert ipynb["metadata"]["foo"] == BAR

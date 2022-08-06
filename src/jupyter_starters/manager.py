@@ -3,7 +3,6 @@
 # pylint: disable=unsubscriptable-object,fixme
 import base64
 import importlib
-import json
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
@@ -20,6 +19,7 @@ from jupyter_server.utils import ensure_async
 from jupyter_server.utils import url_path_join as ujoin
 from traitlets.config import LoggingConfigurable
 
+from . import json_
 from .py_starters.cookiecutter import cookiecutter_starters
 from .py_starters.notebook import notebook_starter, response_from_notebook, stop_kernel
 from .schema.v3 import STARTERS
@@ -339,9 +339,9 @@ class StarterManager(LoggingConfigurable):
 
     def _template_notebook(self, content, body):
         """build a template notebook by manipulation"""
-        json_text = json.dumps(content, indent=2, sort_keys=True)
+        json_text = json_.dumps(content, indent=2, sort_keys=True)
         content_tmpl = self.jinja_env.from_string(json_text)
-        content_notebook = json.loads(content_tmpl.render(**body))
+        content_notebook = json_.loads(content_tmpl.render(**body))
         ipynb = nbformat.v4.new_notebook(metadata=content_notebook.get("metadata", {}))
         cells = []
         for a_cell in content_notebook.get("cells", []):
@@ -357,7 +357,7 @@ class StarterManager(LoggingConfigurable):
         ipynb["cells"] = cells
 
         nb_json = nbformat.v4.nbjson.writes(ipynb)
-        return json.loads(nb_json)
+        return json_.loads(nb_json)
 
     async def save_contents_model(self, model, dest):
         """use the contents manager to write a model"""
