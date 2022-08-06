@@ -1,5 +1,6 @@
 dependencies:
   - docutils <0.17
+  - jupyterlab-myst
   - jupyterlab-webrtc-docprovider
   - myst-nb
   - pkginfo
