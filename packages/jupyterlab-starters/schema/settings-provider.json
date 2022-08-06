@@ -156,7 +156,8 @@
         {
           "oneOf": [
             {
-              "#ref": "#/definitions/starter-content-directory"
+              "#ref": "#/definitions/starter-content-directory",
+              "title": "Content Folder"
             },
             {
               "allOf": [
@@ -166,14 +167,17 @@
                 {
                   "oneOf": [
                     {
-                      "$ref": "#/definitions/starter-content-file-text"
+                      "$ref": "#/definitions/starter-content-file-text",
+                      "title": "Text File"
                     },
                     {
-                      "$ref": "#/definitions/starter-content-file-json"
+                      "$ref": "#/definitions/starter-content-file-json",
+                      "title": "JSON File"
                     }
                   ]
                 }
-              ]
+              ],
+              "title": "Content File"
             }
           ]
         }
@@ -216,9 +220,11 @@
         "content": {
           "oneOf": [
             {
+              "title": "An Array",
               "type": "array"
             },
             {
+              "title": "An Object",
               "type": "object"
             }
           ]
@@ -227,7 +233,8 @@
           "enum": ["json"],
           "type": "string"
         }
-      }
+      },
+      "title": "A JSON File"
     },
     "starter-content-file-text": {
       "properties": {
@@ -238,7 +245,8 @@
           "enum": ["text", "base64"],
           "type": "string"
         }
-      }
+      },
+      "title": "A Text File"
     },
     "starter-copy": {
       "allOf": [
@@ -286,6 +294,12 @@
     "starter-meta": {
       "description": "common metadata for Starters",
       "properties": {
+        "category": {
+          "default": "Starters",
+          "description": "category to place the starter card under in Launcher",
+          "title": "Category",
+          "type": "string"
+        },
         "commands": {
           "description": "[JupyterLab commands](https://jupyterlab.readthedocs.io/en/stable/developer/extension_points.html#commands) to run after the Starter has completed",
           "items": {
@@ -316,6 +330,12 @@
           "description": "human-readable, plain-text description used in UI labels and tab titles",
           "title": "Label",
           "type": "string"
+        },
+        "rank": {
+          "default": 0,
+          "description": "rank of the launcher card within its category, lowest value will appear first",
+          "title": "Rank",
+          "type": "integer"
         },
         "schema": {
           "description": "[Draft 7 JSON Schema](https://json-schema.org/understanding-json-schema) that generates a form like this one, which must validate the user's data. Description fields may include markdown",
@@ -427,7 +447,10 @@
     "starters": {
       "additionalProperties": {
         "$ref": "#/definitions/starter-content"
-      }
+      },
+      "default": {},
+      "description": "specifications of starters supported by the in-browser runner",
+      "type": "object"
     }
   },
   "title": "Starters",

@@ -51,7 +51,7 @@ export class ServerStarterRunner implements IStarterRunner {
     _starter: SCHEMA.Starter,
     contentsPath: string,
     body?: JSONObject
-  ): Promise<SCHEMA.AResponseForStartRequest | undefined> {
+  ): Promise<SCHEMA.AResponseForStartRequest> {
     const init = { method: 'POST' } as RequestInit;
     if (body) {
       init.body = JSON.stringify(body);

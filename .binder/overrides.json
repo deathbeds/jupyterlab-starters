@@ -1,0 +1,50 @@
+{
+  "@deathbeds/jupyterlab-starters:settings-provider": {
+    "starters": {
+      "todo": {
+        "category": "Productivity",
+        "content": {
+          "content": "# {{ title }}\\n{% for item in items %}\\n- [{% if item.done %}x{% endif %}] {{ item.text }}{% endfor %}",
+          "name": "TODO.md"
+        },
+        "description": "A todo list",
+        "label": "TODO List",
+        "rank": 100,
+        "schema": {
+          "properties": {
+            "items": {
+              "items": {
+                "properties": {
+                  "description": {
+                    "type": "string"
+                  },
+                  "done": {
+                    "type": "boolean"
+                  }
+                },
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "title": {
+              "default": "Things to Do",
+              "type": "string"
+            }
+          },
+          "title": "A TODO List",
+          "type": "object"
+        },
+        "type": "content",
+        "uiSchema": {
+          "ui:order": ["title", "items"]
+        }
+      }
+    }
+  },
+  "@jupyterlab/apputils-extension:palette": {
+    "modal": false
+  },
+  "@jupyterlab/extensionmanager-extension:plugin": {
+    "enabled": false
+  }
+}

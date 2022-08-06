@@ -1,5 +1,4 @@
 {
-  "jupyter-lite-schema-version": 0,
   "jupyter-config-data": {
     "appName": "JupyterLite Starters",
     "collaborative": true,
@@ -7,5 +6,6 @@
       "@deathbeds/jupyterlab-starters:server-provider",
       "@deathbeds/jupyterlab-starters:server-runner"
     ]
-  }
+  },
+  "jupyter-lite-schema-version": 0
 }

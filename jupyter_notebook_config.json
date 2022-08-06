@@ -1,67 +1,8 @@
 {
-  "StarterManager": {
-    "extra_jinja_env_extensions": {
-      "jinja2_time.TimeExtension": true
-    },
-    "extra_starters": {
-      "notebook-starter": {
-        "type": "notebook",
-        "src": "./examples/Starter Notebook.ipynb",
-        "label": "Starter Notebook",
-        "description": "A notebook that is also a starter"
-      },
-      "multi-stage-notebook": {
-        "type": "notebook",
-        "src": "./examples/Multi-Stage Starter Notebook.ipynb",
-        "label": "Multi-Stage Starter Notebook",
-        "description": "Build a directory one file at a time"
-      },
-      "whitepaper-single": {
-        "type": "copy",
-        "label": "Whitepaper Notebook",
-        "description": "A reusable notebook for proposing research",
-        "src": "examples/whitepaper-single.ipynb"
-      },
-      "whitepaper-multiple": {
-        "type": "copy",
-        "label": "Whitepaper Folder",
-        "description": "Some reusable notebooks for proposing research",
-        "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><g class='jp-icon-contrast1' fill='#ccc'><circle cx='24' cy='24' r='24'/></g></svg>",
-        "src": "examples/whitepaper-multiple"
-      },
-      "whitepaper-named": {
-        "type": "copy",
-        "label": "Named Whitepaper",
-        "description": "A renamed whitepaper",
-        "src": "examples/whitepaper-single.ipynb",
-        "dest": "{% now 'local' %} {{ dest }} Whitepaper.ipynb",
-        "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g class='jp-icon-contrast3' fill='#ccc'><rect width='100' height='100'/></g></svg>",
-        "uiSchema": {
-          "dest": {
-            "ui:help": "keep it short and simple: it will go in $1$ file named: `<topic> Whitepaper.ipynb`",
-            "ui:autofocus": true
-          }
-        },
-        "schema": {
-          "title": "# A Named whitepaper",
-          "description": "> A whitepaper that already has a name, based on the [Heilmeier Catechism](https://www.darpa.mil/work-with-us/heilmeier-catechism).",
-          "type": "object",
-          "required": ["dest"],
-          "properties": {
-            "dest": {
-              "title": "## Topic",
-              "description": "the _topic_ of the whitepaper",
-              "type": "string",
-              "default": "Unimagined"
-            }
-          }
-        }
-      }
-    }
-  },
   "ServerProxy": {
     "servers": {
       "docs": {
+        "absolute_url": false,
         "command": [
           "python3",
           "-m",
@@ -72,14 +13,73 @@
           "--port",
           "{port}"
         ],
-        "timeout": 300,
-        "new_browser_tab": false,
-        "absolute_url": false,
         "launcher_entry": {
-          "icon_path": "/home/jovyan/packages/jupyterlab-starters/style/icons/starter.svg",
           "enabled": true,
+          "icon_path": "/home/jovyan/packages/jupyterlab-starters/style/icons/starter.svg",
           "title": "Starters Documentation"
+        },
+        "new_browser_tab": false,
+        "timeout": 300
+      }
+    }
+  },
+  "StarterManager": {
+    "extra_jinja_env_extensions": {
+      "jinja2_time.TimeExtension": true
+    },
+    "extra_starters": {
+      "multi-stage-notebook": {
+        "description": "Build a directory one file at a time",
+        "label": "Multi-Stage Starter Notebook",
+        "src": "./examples/Multi-Stage Starter Notebook.ipynb",
+        "type": "notebook"
+      },
+      "notebook-starter": {
+        "description": "A notebook that is also a starter",
+        "label": "Starter Notebook",
+        "src": "./examples/Starter Notebook.ipynb",
+        "type": "notebook"
+      },
+      "whitepaper-multiple": {
+        "description": "Some reusable notebooks for proposing research",
+        "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><g class='jp-icon-contrast1' fill='#ccc'><circle cx='24' cy='24' r='24'/></g></svg>",
+        "label": "Whitepaper Folder",
+        "src": "examples/whitepaper-multiple",
+        "type": "copy"
+      },
+      "whitepaper-named": {
+        "description": "A renamed whitepaper",
+        "dest": "{% now 'local' %} {{ dest }} Whitepaper.ipynb",
+        "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g class='jp-icon-contrast3' fill='#ccc'><rect width='100' height='100'/></g></svg>",
+        "label": "Named Whitepaper",
+        "schema": {
+          "description": "> A whitepaper that already has a name, based on the [Heilmeier Catechism](https://www.darpa.mil/work-with-us/heilmeier-catechism).",
+          "properties": {
+            "dest": {
+              "default": "Unimagined",
+              "description": "the _topic_ of the whitepaper",
+              "title": "## Topic",
+              "type": "string"
+            }
+          },
+          "required": ["dest"],
+          "title": "# A Named whitepaper",
+          "type": "object"
+        },
+        "src": "examples/whitepaper-single.ipynb",
+        "type": "copy",
+        "uiSchema": {
+          "dest": {
+            "ui:autofocus": true,
+            "ui:help": "keep it short and simple: it will go in $1$ file named: `<topic> Whitepaper.ipynb`"
+          }
         }
+      },
+      "whitepaper-single": {
+        "description": "A reusable notebook for proposing research",
+        "label": "Whitepaper Notebook",
+        "src": "examples/whitepaper-single.ipynb",
+        "type": "copy"
       }
     }
   }

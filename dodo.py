@@ -111,10 +111,22 @@ def task_lint():
                 file_dep=[pkg_json],
             ),
         )
-
     prettier = [C.JLPM, "prettier"] + (
         ["--write", "--list-different"] if C.RUNNING_LOCALLY else ["--check"]
     )
+
+    if C.RUNNING_LOCALLY:
+        for json_path in P.ALL_JSON:
+            if json_path in P.ALL_PACKAGE_JSON:
+                continue
+            yield dict(
+                name=f"json:{json_path.relative_to(P.ROOT)}",
+                **U.run_in(
+                    "docs",
+                    [(U.normalize_json, [json_path]), [*prettier, json_path]],
+                    file_dep=[json_path],
+                ),
+            )
 
     yield dict(
         name="prettier",
@@ -261,11 +273,12 @@ def task_build():
         **U.run_in(
             "build",
             [
-                [*P.HACKED_LABEXTENSION, "build", P.EXT_PACKAGE],
+                ["jupyter", "labextension", "build", P.EXT_PACKAGE],
             ],
             file_dep=[
                 *P.ALL_CSS,
                 *P.ALL_PACKAGE_JSON,
+                *P.ALL_PLUGIN_SCHEMA,
                 P.JS_LIB_SCHEMA,
                 P.TSBUILDINFO,
                 P.YARN_INTEGRITY,
@@ -389,12 +402,24 @@ def task_dev():
         task_dep=["dev:pip:check"],
         **U.run_in(
             "utest",
-            [[*P.HACKED_LABEXTENSION, "develop", ".", "--overwrite"]],
-            file_dep=[
-                P.SETUP_CFG,
-                P.SETUP_PY,
-            ],
+            [["jupyter", "labextension", "develop", ".", "--overwrite"]],
+            file_dep=[P.SETUP_CFG, P.SETUP_PY, *P.ALL_PLUGIN_SCHEMA],
         ),
+    )
+
+    yield dict(
+        name="ext:lab:overrides",
+        task_dep=["dev:pip:check"],
+        file_dep=[P.BINDER_OVERRIDES],
+        targets=[P.DEV_PREFIX_OVERRIDES],
+        actions=[
+            (doit.tools.create_folder, [P.DEV_PREFIX_OVERRIDES.parent]),
+            lambda: [
+                P.DEV_PREFIX_OVERRIDES.exists() and P.DEV_PREFIX_OVERRIDES.unlink(),
+                shutil.copy2(P.BINDER_OVERRIDES, P.DEV_PREFIX_OVERRIDES),
+                None,
+            ][-1],
+        ],
     )
 
 
@@ -748,6 +773,7 @@ class P:
     ATEST = ROOT / "atest"
     DOCS = ROOT / "docs"
     LITE = ROOT / "lite"
+    BINDER = ROOT / ".binder"
 
     SRC = ROOT / "src"
     PY_SRC = sorted(SRC.rglob("*.py"))
@@ -862,6 +888,8 @@ class P:
     ALL_JS = [ROOT / ".eslintrc.js"]
     ALL_JSON = [
         *ALL_PACKAGE_JSON,
+        *LITE.glob("*.json"),
+        *BINDER.glob("*.json"),
         *ROOT.glob("*.json"),
         *ATEST.rglob("*.json"),
         *ALL_PY_SCHEMA,
@@ -874,9 +902,13 @@ class P:
         if "checkpoints" not in str(p)
     ]
 
-    HACKED_LABEXTENSION = [C.PY, SCRIPTS / "hacked-labextension.py"]
     DEMO_SERVER_CFG = ROOT / "jupyter_server_config.json"
     DEMO_NOTEBOOK_CFG = ROOT / "jupyter_notebook_config.json"
+
+    # binder
+    BINDER_OVERRIDES = BINDER / "overrides.json"
+    DEV_PREFIX_SETTINGS = DEV_PREFIX / "share/jupyter/lab/settings"
+    DEV_PREFIX_OVERRIDES = DEV_PREFIX_SETTINGS / BINDER_OVERRIDES.name
 
 
 class D:
@@ -1217,6 +1249,17 @@ class U:
 
         P.EXT_SETTINGS_SCHEMA.write_text(
             json.dumps(plugin_schema, indent=2, sort_keys=True), **C.UTF8
+        )
+
+    def normalize_json(path):
+        path.write_text(
+            json.dumps(
+                json.loads(path.read_text(**C.UTF8)),
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            **C.UTF8,
         )
 
 
