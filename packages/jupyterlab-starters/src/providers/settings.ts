@@ -1,9 +1,8 @@
-import { PromiseDelegate , ReadonlyPartialJSONObject } from '@lumino/coreutils';
+import { PromiseDelegate, ReadonlyPartialJSONObject } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
 
 import * as SCHEMA from '../_schema';
 import { IStarterProvider } from '../tokens';
-
 
 export class SettingsProvider implements IStarterProvider {
   private _starters: SCHEMA.NamedStarters = {};

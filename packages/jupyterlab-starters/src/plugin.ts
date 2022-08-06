@@ -293,8 +293,9 @@ const settingsProviderPlugin: JupyterFrontEndPlugin<void> = {
   ) => {
     const provider = new SettingsProvider({
       settingsGetter: async () => {
-        const bundle = settingRegistry.load(SETTINGS_PLUGIN_ID);
-        return (await bundle).composite;
+        const { composite } = await settingRegistry.load(SETTINGS_PLUGIN_ID);
+        console.warn(composite);
+        return composite;
       },
     });
     console.log('loading', provider);

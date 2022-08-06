@@ -215,6 +215,7 @@ def task_build():
         **U.run_in(
             "build",
             [
+                U.patch_plugin_schema,
                 [C.JLPM, "lerna", "run", "--stream", "build:pre"],
                 [
                     C.JLPM,
@@ -765,8 +766,10 @@ class P:
     PACKAGES = ROOT / "packages"
     PACKAGES_JSON = sorted(PACKAGES.glob("*/package.json"))
     EXT_PACKAGE = PACKAGES / "jupyterlab-starters"
+    EXT_SCHEMA = EXT_PACKAGE / "schema"
+    EXT_SETTINGS_SCHEMA = EXT_SCHEMA / "settings-provider.json"
     ALL_PACKAGE_JSON = [PACKAGE_JSON, *PACKAGES_JSON]
-    ALL_PLUGIN_SCHEMA = [*PACKAGES.glob("*/schema/*.json")]
+    ALL_PLUGIN_SCHEMA = [EXT_SETTINGS_SCHEMA]
 
     LITE_BUILD_CONFIG = LITE / "jupyter_lite_config.json"
     ALL_LITE_CONFIG = LITE.glob("*.json")
@@ -822,6 +825,7 @@ class P:
     # js stuff
     TSBUILDINFO = PACKAGES / "_meta/.src.tsbuildinfo"
     PY_SCHEMA = SRC / "jupyter_starters/schema"
+    PY_SCHEMA_V3 = PY_SCHEMA / "v3.json"
     ALL_PY_SCHEMA = PY_SCHEMA.glob("*.json")
     JS_SRC_SCHEMA_D_TS = PACKAGES / "jupyterlab-starters/src/_schema.d.ts"
     JS_SRC_SCHEMA = PACKAGES / "jupyterlab-starters/src/_schema.json"
@@ -858,10 +862,10 @@ class P:
     ALL_JS = [ROOT / ".eslintrc.js"]
     ALL_JSON = [
         *ALL_PACKAGE_JSON,
-        *ALL_PLUGIN_SCHEMA,
         *ROOT.glob("*.json"),
         *ATEST.rglob("*.json"),
         *ALL_PY_SCHEMA,
+        *ALL_PLUGIN_SCHEMA,
     ]
     ALL_PRETTIER = [*ALL_TS, *ALL_JSON, *ALL_CSS, *ALL_YAML, *ALL_MD, *ALL_JS]
     ALL_IPYNB = [
@@ -929,7 +933,12 @@ class U:
         targets = kwargs.pop("targets", [])
         return dict(
             file_dep=[history, *file_dep],
-            actions=[U.cmd([*run_args, *action], **kwargs) for action in actions],
+            actions=[
+                action
+                if callable(action) or callable(action[0])
+                else U.cmd([*run_args, *action], **kwargs)
+                for action in actions
+            ],
             targets=targets,
         )
 
@@ -1199,6 +1208,16 @@ class U:
         except KeyboardInterrupt:
             proc.kill()
             return 1
+
+    def patch_plugin_schema():
+        plugin_schema = json.load(P.EXT_SETTINGS_SCHEMA.open())
+        py_schema = json.load(P.PY_SCHEMA_V3.open())
+
+        plugin_schema["definitions"] = py_schema["definitions"]
+
+        P.EXT_SETTINGS_SCHEMA.write_text(
+            json.dumps(plugin_schema, indent=2, sort_keys=True), **C.UTF8
+        )
 
 
 class R(doit.reporter.ConsoleReporter):
