@@ -126,7 +126,10 @@ def task_lint():
                 name=f"json:{json_path.relative_to(P.ROOT)}",
                 **U.run_in(
                     "docs",
-                    [(U.normalize_json, [json_path]), [*prettier, json_path]],
+                    [
+                        (U.normalize_json, [json_path]),
+                        ["prettier", "--write", json_path],
+                    ],
                     file_dep=[json_path, P.YARN_INTEGRITY],
                 ),
             )
@@ -423,7 +426,9 @@ def task_dev():
             file_dep=[P.BINDER_OVERRIDES],
             task_dep=["dev:pip:check"],
             targets=[dest],
-            actions=[(U.patch_overrides, [P.BINDER_OVERRIDES, dest])],
+            actions=[
+                (U.patch_overrides, [P.BINDER_OVERRIDES, dest]),
+            ],
         )
 
 
@@ -1268,9 +1273,15 @@ class U:
         if not dest.parent.exists():
             dest.parent.mkdir(parents=True)
 
-        data = {} if not dest.exists() else json.load(dest.open())
-        data.update(json.load(src.open()))
-        dest.write_text(json.dumps(data, indent=2, sort_keys=True))
+        old_data = {} if not dest.exists() else json.load(dest.open())
+        new_data = dict(**old_data)
+        new_data.update(json.load(src.open()))
+
+        new_data_text = json.dumps(new_data, indent=2, sort_keys=True)
+        old_data_text = json.dumps(old_data, indent=2, sort_keys=True)
+
+        if new_data_text != old_data_text:
+            dest.write_text(new_data_text)
 
     def normalize_json(path):
         path.write_text(
