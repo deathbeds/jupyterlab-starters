@@ -16,8 +16,8 @@
 #       "nodefaults"
 #     ],
 #     "dependencies": [
-#       "doit",
-#       "conda-lock"
+#       "conda-lock",
+#       "doit"
 #     ]
 #   },
 #   "py3.10.yml": {
@@ -59,14 +59,14 @@ https://conda.anaconda.org/conda-forge/noarch/pycparser-2.21-pyhd8ed1ab_0.tar.bz
 https://conda.anaconda.org/conda-forge/noarch/pylev-1.4.0-pyhd8ed1ab_0.tar.bz2#edf8651c4379d9d1495ad6229622d150
 https://conda.anaconda.org/conda-forge/noarch/pyparsing-3.0.9-pyhd8ed1ab_0.tar.bz2#e8fbc1b54b25f4b08281467bc13b70cc
 https://conda.anaconda.org/conda-forge/win-64/python_abi-3.10-2_cp310.tar.bz2#aaa900b98edb2e67106b461ff365ba57
-https://conda.anaconda.org/conda-forge/noarch/shellingham-1.4.0-pyh44b312d_0.tar.bz2#437655338696f9d0dfdb0a024e66b255
+https://conda.anaconda.org/conda-forge/noarch/shellingham-1.5.0-pyhd8ed1ab_0.tar.bz2#65bacdee3cac51e49f45d530bbd5e90f
 https://conda.anaconda.org/conda-forge/noarch/six-1.16.0-pyh6c4a22f_0.tar.bz2#e5f25f8dbc060e9a8d912e432202afc2
 https://conda.anaconda.org/conda-forge/noarch/toml-0.10.2-pyhd8ed1ab_0.tar.bz2#f832c45a477c78bebd107098db465095
 https://conda.anaconda.org/conda-forge/noarch/typing-3.10.0.0-pyhd8ed1ab_0.tar.bz2#e6573ac68718f17b9d4f5c8eda3190f2
 https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.3.0-pyha770c72_0.tar.bz2#a9d85960bc62d53cc4ea0d1d27f73c98
 https://conda.anaconda.org/conda-forge/noarch/webencodings-0.5.1-py_1.tar.bz2#3563be4c5611a44210d9ba0c16113136
 https://conda.anaconda.org/conda-forge/noarch/wheel-0.37.1-pyhd8ed1ab_0.tar.bz2#1ca02aaf78d9c70d9a81a3bed5752022
-https://conda.anaconda.org/conda-forge/noarch/zipp-3.8.0-pyhd8ed1ab_0.tar.bz2#050b94cf4a8c760656e51d2d44e4632c
+https://conda.anaconda.org/conda-forge/noarch/zipp-3.8.1-pyhd8ed1ab_0.tar.bz2#a3508a0c850745b875de88aea4c40cc5
 https://conda.anaconda.org/conda-forge/win-64/certifi-2022.6.15-py310h5588dad_0.tar.bz2#0d68bfe987b9e8414847e6eef95e6370
 https://conda.anaconda.org/conda-forge/win-64/cffi-1.15.1-py310hcbf9ad4_0.tar.bz2#291e525e56b35d2ae277b592e08141a8
 https://conda.anaconda.org/conda-forge/win-64/click-8.1.3-py310h5588dad_0.tar.bz2#9d68311ef7daffb1f41e5ab2ac327515
@@ -81,10 +81,10 @@ https://conda.anaconda.org/conda-forge/win-64/poetry-core-1.0.8-py310h5588dad_1.
 https://conda.anaconda.org/conda-forge/win-64/pywin32-ctypes-0.2.0-py310h5588dad_1005.tar.bz2#38ecc6adfcd4e0390c4ed4fbaafcfa6f
 https://conda.anaconda.org/conda-forge/win-64/pyyaml-6.0-py310he2412df_4.tar.bz2#e1386e64a5e6d3ef30860a233ce8b371
 https://conda.anaconda.org/conda-forge/win-64/ruamel.yaml.clib-0.2.6-py310he2412df_1.tar.bz2#17510ff9f4e3269aa73ad97eafc35ea1
-https://conda.anaconda.org/conda-forge/win-64/setuptools-63.3.0-py310h5588dad_0.tar.bz2#b56dd349105cc9e83c8d975722e01e09
+https://conda.anaconda.org/conda-forge/win-64/setuptools-63.4.2-py310h5588dad_0.tar.bz2#5493f55609c6646a0617b7c7ef646b24
 https://conda.anaconda.org/conda-forge/noarch/tomlkit-0.11.1-pyha770c72_0.tar.bz2#3347f5e2f9c13d792ae71bcefa8a5603
 https://conda.anaconda.org/conda-forge/noarch/typing-extensions-4.3.0-hd8ed1ab_0.tar.bz2#f3e98e944832fb271a0dbda7b7771dc6
-https://conda.anaconda.org/conda-forge/win-64/virtualenv-20.16.2-py310h5588dad_0.tar.bz2#1ed420f435c3cbded5889cb3e967b263
+https://conda.anaconda.org/conda-forge/win-64/virtualenv-20.16.3-py310h5588dad_0.tar.bz2#88234d1fdfa6897e05e298c51591b96b
 https://conda.anaconda.org/conda-forge/win-64/win_inet_pton-1.1.0-py310h5588dad_4.tar.bz2#674aa7b17ab884a99afeec3547a03bb8
 https://conda.anaconda.org/conda-forge/win-64/brotlipy-0.7.0-py310he2412df_1004.tar.bz2#6967391ab90fb96d3e75bf423012fa79
 https://conda.anaconda.org/conda-forge/noarch/cleo-0.8.1-pyhd8ed1ab_2.tar.bz2#4c82b11a3d06031bd58e7d869f53d965
@@ -93,7 +93,7 @@ https://conda.anaconda.org/conda-forge/win-64/cryptography-37.0.4-py310ha857299_
 https://conda.anaconda.org/conda-forge/noarch/doit-0.36.0-pyhd8ed1ab_0.tar.bz2#fc5e53d070f1ee7bb38c2ece282dcb82
 https://conda.anaconda.org/conda-forge/noarch/jinja2-3.1.2-pyhd8ed1ab_1.tar.bz2#c8490ed5c70966d232fdd389d0dbed37
 https://conda.anaconda.org/conda-forge/win-64/keyring-23.7.0-py310h5588dad_0.tar.bz2#c62bf1f054e815fdf4532048134d32bd
-https://conda.anaconda.org/conda-forge/noarch/pip-22.2.1-pyhd8ed1ab_0.tar.bz2#0cbcd1fa7291fe72dc8f848907510498
+https://conda.anaconda.org/conda-forge/noarch/pip-22.2.2-pyhd8ed1ab_0.tar.bz2#0b43abe4d3ee93e82742d37def53a836
 https://conda.anaconda.org/conda-forge/win-64/pydantic-1.9.1-py310he2412df_0.tar.bz2#843be2573c07581d9049b738ec49abb8
 https://conda.anaconda.org/conda-forge/win-64/pysocks-1.7.1-py310h5588dad_5.tar.bz2#8b84a5de3ffa12a5aaeea385140bba27
 https://conda.anaconda.org/conda-forge/win-64/ruamel.yaml-0.17.21-py310he2412df_1.tar.bz2#92ddbe00480db13cb0161f65eba846db

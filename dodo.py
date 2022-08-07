@@ -27,7 +27,7 @@ def task_lock():
 
     yield U.lock("build", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["node", "lab", "lint"])
     yield U.lock(
-        "binder", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["run", "lab", "node", "docs"]
+        "binder", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["run", "build", "lab", "node", "docs"]
     )
 
     for subdir in C.SUBDIRS:
