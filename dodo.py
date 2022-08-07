@@ -419,8 +419,9 @@ def task_dev():
 
     for dest in [P.PREFIX_OVERRIDES, P.LITE_OVERRIDES]:
         yield dict(
-            name=f"ext:lab:overrides:{dest.relative_to(P.ROOT)}",
+            name=f"ext:lab:overrides:{dest.parent.name}",
             file_dep=[P.BINDER_OVERRIDES],
+            task_dep=["dev:pip:check"],
             targets=[dest],
             actions=[(U.patch_overrides, [P.BINDER_OVERRIDES, dest])],
         )
