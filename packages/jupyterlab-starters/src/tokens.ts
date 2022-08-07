@@ -25,6 +25,8 @@ export const SERVER_NAME = 'server';
 export const BROWSER_NAME = 'browser';
 export const SETTINGS_NAME = 'settings';
 
+export const STARTER_PATTERN = new RegExp(`[\?&]starter=(.+?)(/.*)`);
+
 /** The token for the main extension, which can be used by other extensions */
 export const IStarterManager = new Token<IStarterManager>(CORE_PLUGIN_ID);
 

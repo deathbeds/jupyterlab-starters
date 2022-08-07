@@ -27,7 +27,10 @@ def task_lock():
 
     yield U.lock("build", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["node", "lab", "lint"])
     yield U.lock(
-        "binder", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["run", "build", "lab", "node", "docs"]
+        "binder",
+        C.DEFAULT_PY,
+        C.DEFAULT_SUBDIR,
+        ["run", "build", "lab", "node", "docs"],
     )
 
     for subdir in C.SUBDIRS:
@@ -128,7 +131,7 @@ def task_lint():
                     "docs",
                     [
                         (U.normalize_json, [json_path]),
-                        ["prettier", "--write", json_path],
+                        [C.JLPM, "prettier", "--write", json_path],
                     ],
                     file_dep=[json_path, P.YARN_INTEGRITY],
                 ),
@@ -589,19 +592,6 @@ def task_test():
 
 
 def task_lite():
-    yield dict(
-        name="config:build",
-        **U.run_in(
-            "docs",
-            [
-                (U._sync_lite_conf, [P.LITE_BUILD_CONFIG]),
-                [C.JLPM, "prettier", "--write", P.LITE_BUILD_CONFIG],
-            ],
-            file_dep=[*P.NPM_TARBALLS.values(), P.YARN_INTEGRITY],
-            targets=[P.LITE_BUILD_CONFIG],
-        ),
-    )
-
     if C.DOCS_OR_TEST_IN_CI:
         task_dep = ["prod:pip:check"]
     else:
@@ -1125,15 +1115,6 @@ class U:
         task["actions"] = [_update, *task["actions"]]
 
         yield task
-
-    def _sync_lite_conf(lite_build_config):
-        conf_data = json.load(lite_build_config.open())
-        conf_data["LiteBuildConfig"]["federated_labextensions"] = [
-            f"../dist/{tgz.name}"
-            for tgz in P.NPM_TARBALLS.values()
-            if "starters" in tgz.name
-        ]
-        lite_build_config.write_text(json.dumps(conf_data, **C.JSON_FMT), **C.UTF8)
 
     RE_TIMESTAMPS = [
         r"\d{4}-\d{2}-\d{2} \d{2}:\d{2} -\d*",

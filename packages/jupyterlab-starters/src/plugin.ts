@@ -32,6 +32,7 @@ import {
   PKG,
   SETTINGS_NAME,
   SERVER_NAME,
+  STARTER_PATTERN,
 } from './tokens';
 import { BodyBuilder } from './widgets/builder';
 import { NotebookMetadata } from './widgets/meta';
@@ -44,7 +45,6 @@ const corePlugin: JupyterFrontEndPlugin<IStarterManager> = {
     ILauncher,
     INotebookTracker,
     IRenderMimeRegistry,
-    IRouter,
     IRunningSessionManagers,
   ],
   autoStart: true,
@@ -56,7 +56,6 @@ const corePlugin: JupyterFrontEndPlugin<IStarterManager> = {
     launcher: ILauncher,
     notebooks: INotebookTracker,
     rendermime: IRenderMimeRegistry,
-    router: IRouter,
     running: IRunningSessionManagers
   ): IStarterManager => {
     const { commands } = app;
@@ -169,75 +168,6 @@ const corePlugin: JupyterFrontEndPlugin<IStarterManager> = {
       iconClass: DEFAULT_ICON_CLASS,
     });
 
-    const starterPattern = new RegExp(`[\?&]starter=(.+?)(/.*)`);
-
-    commands.addCommand(CommandIDs.routerStart, {
-      execute: async (args) => {
-        console.log('routing', args);
-        const loc = args as IRouter.ILocation;
-        const starterMatch = loc.request.match(starterPattern);
-        if (starterMatch == null) {
-          return;
-        }
-        const [name, cwd] = starterMatch.slice(1);
-
-        await manager.ready;
-
-        const starter = manager.starters[name];
-
-        if (starter == null) {
-          return;
-        }
-
-        const url = URLExt.join(PageConfig.getOption('treeUrl'), cwd);
-
-        router.navigate(url);
-
-        void commands.execute(CommandIDs.start, {
-          name,
-          cwd,
-          starter,
-        });
-
-        if (starter.schema) {
-          let notHiddenCount = 0;
-          let retries = 20;
-          const contentId = `id-jp-starters-${name}`;
-
-          const expandInterval = setInterval(() => {
-            if (retries-- <= 0) {
-              clearInterval(expandInterval);
-            }
-            const hidden = document.querySelector(`#jp-right-stack.${CSS.P.hidden}`);
-            if (hidden) {
-              shell.expandRight();
-              shell.activateById(contentId);
-              return;
-            }
-            const sidebar = document.querySelector(
-              `.${CSS.BUILDER}:not(.${CSS.P.hidden})`
-            );
-            if (sidebar) {
-              notHiddenCount++;
-              shell.expandRight();
-              shell.activateById(contentId);
-              if (notHiddenCount > 3) {
-                clearInterval(expandInterval);
-              }
-            }
-          }, 500);
-        }
-
-        return router.stop;
-      },
-    });
-
-    router.register({
-      command: CommandIDs.routerStart,
-      pattern: starterPattern,
-      rank: 29,
-    });
-
     const notebookbutton = new NotebookStarter({ commands });
 
     app.docRegistry.addWidgetExtension('Notebook', notebookbutton);
@@ -316,12 +246,94 @@ const browserRunnerPlugin: JupyterFrontEndPlugin<void> = {
   },
 };
 
+const routerPlugin: JupyterFrontEndPlugin<void> = {
+  id: `${PKG.name}:router`,
+  requires: [ILabShell, IRouter, IStarterManager],
+  autoStart: true,
+  activate: (
+    app: JupyterFrontEnd,
+    shell: ILabShell,
+    router: IRouter,
+    manager: IStarterManager
+  ) => {
+    const starterPattern = STARTER_PATTERN;
+    const { commands } = app;
+
+    commands.addCommand(CommandIDs.routerStart, {
+      execute: async (args) => {
+        console.log('routing starter', args);
+        const loc = args as IRouter.ILocation;
+        const starterMatch = loc.request.match(starterPattern);
+        if (starterMatch == null) {
+          return;
+        }
+        const [name, cwd] = starterMatch.slice(1);
+
+        await manager.ready;
+
+        const starter = manager.starters[name];
+
+        if (starter == null) {
+          return;
+        }
+
+        const url = URLExt.join(PageConfig.getOption('treeUrl'), cwd);
+
+        router.navigate(url);
+
+        void commands.execute(CommandIDs.start, {
+          name,
+          cwd,
+          starter,
+        });
+
+        if (starter.schema) {
+          let notHiddenCount = 0;
+          let retries = 20;
+          const contentId = `id-jp-starters-${name}`;
+
+          const expandInterval = setInterval(() => {
+            if (retries-- <= 0) {
+              clearInterval(expandInterval);
+            }
+            if (shell.rightCollapsed) {
+              shell.expandRight();
+              shell.activateById(contentId);
+              return;
+            }
+            const sidebar = document.querySelector(
+              `.${CSS.BUILDER}:not(.${CSS.P.hidden})`
+            );
+            if (sidebar) {
+              notHiddenCount++;
+              shell.expandRight();
+              shell.activateById(contentId);
+              if (notHiddenCount > 3) {
+                clearInterval(expandInterval);
+              }
+            }
+          }, 500);
+        }
+
+        return router.stop;
+      },
+    });
+
+    router.register({
+      command: CommandIDs.routerStart,
+      pattern: starterPattern,
+      rank: 29,
+    });
+  },
+};
+
 const plugins = [
   corePlugin,
   serverProviderPlugin,
   serverRunnerPlugin,
   settingsProviderPlugin,
   browserRunnerPlugin,
+  routerPlugin,
 ];
 
 export default plugins;

@@ -87,6 +87,9 @@ export class BrowserStarterRunner extends BaseStarterRunner implements IStarterR
       type: contentType,
     };
 
+    let notebook: JSONObject;
+    let fileContent: string;
+
     switch (model.type) {
       case 'directory':
         model = {
@@ -94,7 +97,7 @@ export class BrowserStarterRunner extends BaseStarterRunner implements IStarterR
         };
         break;
       case 'notebook':
-        const notebook = await this.templateNotebook(content.content, body);
+        notebook = await this.templateNotebook(content.content, body);
         model = {
           ...model,
           content: notebook,
@@ -103,17 +106,15 @@ export class BrowserStarterRunner extends BaseStarterRunner implements IStarterR
         };
         break;
       default:
-        const file = new nunjucks.Template(content.content).render(body);
+        fileContent = new nunjucks.Template(content.content).render(body);
         model = {
           ...model,
-          content: file,
+          content: fileContent,
           format: content.format || 'text',
           mimetype: content.mimetype || 'text/plain',
         };
         break;
     }
-
-    console.warn('MODEL', model);
 
     await this._contents.save(dest, model);
 
