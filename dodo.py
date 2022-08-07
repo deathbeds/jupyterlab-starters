@@ -927,7 +927,7 @@ class P:
     # binder
     BINDER_OVERRIDES = BINDER / "overrides.json"
     PREFIX_SETTINGS = (
-        DEV_PREFIX if C.RUNNING_LOCALLY else Path(sys.prefix)
+        Path(sys.prefix) if C.CI or C.DEMO_IN_BINDER else DEV_PREFIX
     ) / "share/jupyter/lab/settings"
     PREFIX_OVERRIDES = PREFIX_SETTINGS / BINDER_OVERRIDES.name
 
