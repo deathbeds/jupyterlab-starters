@@ -19,6 +19,7 @@ import { StarterManager } from './manager';
 import { NotebookStarter } from './notebookbutton';
 import { ServerStarterProvider } from './providers/server';
 import { SettingsProvider } from './providers/settings';
+import { BrowserStarterRunner } from './runners/browser';
 import { ServerStarterRunner } from './runners/server';
 import {
   CommandIDs,
@@ -29,6 +30,8 @@ import {
   CORE_PLUGIN_ID,
   SETTINGS_PLUGIN_ID,
   PKG,
+  SETTINGS_NAME,
+  SERVER_NAME,
 } from './tokens';
 import { BodyBuilder } from './widgets/builder';
 import { NotebookMetadata } from './widgets/meta';
@@ -269,7 +272,7 @@ const serverProviderPlugin: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   activate: (app: JupyterFrontEnd, manager: IStarterManager) => {
     const provider = new ServerStarterProvider();
-    manager.addProvider('server', provider);
+    manager.addProvider(SERVER_NAME, provider);
   },
 };
 
@@ -279,7 +282,7 @@ const serverRunnerPlugin: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   activate: (app: JupyterFrontEnd, manager: IStarterManager) => {
     const runner = new ServerStarterRunner({ manager });
-    manager.addRunner('server', runner);
+    manager.addRunner(SERVER_NAME, runner);
   },
 };
 
@@ -295,12 +298,21 @@ const settingsProviderPlugin: JupyterFrontEndPlugin<void> = {
     const provider = new SettingsProvider({
       settingsGetter: async () => {
         const { composite } = await settingRegistry.load(SETTINGS_PLUGIN_ID);
-        console.warn(composite);
         return composite;
       },
     });
-    console.log('loading', provider);
-    manager.addProvider('settings', provider);
+    manager.addProvider(SETTINGS_NAME, provider);
+  },
+};
+
+const browserRunnerPlugin: JupyterFrontEndPlugin<void> = {
+  id: `${PKG.name}:browser-runner`,
+  requires: [IStarterManager],
+  autoStart: true,
+  activate: (app: JupyterFrontEnd, manager: IStarterManager) => {
+    const { contents } = app.serviceManager;
+    const runner = new BrowserStarterRunner({ manager, contents });
+    manager.addRunner('browser', runner);
   },
 };
 
@@ -309,6 +321,7 @@ const plugins = [
   serverProviderPlugin,
   serverRunnerPlugin,
   settingsProviderPlugin,
+  browserRunnerPlugin,
 ];
 
 export default plugins;

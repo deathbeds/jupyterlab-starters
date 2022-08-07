@@ -417,20 +417,13 @@ def task_dev():
         ),
     )
 
-    yield dict(
-        name="ext:lab:overrides",
-        task_dep=["dev:pip:check"],
-        file_dep=[P.BINDER_OVERRIDES],
-        targets=[P.PREFIX_OVERRIDES],
-        actions=[
-            (doit.tools.create_folder, [P.PREFIX_OVERRIDES.parent]),
-            lambda: [
-                P.PREFIX_OVERRIDES.exists() and P.PREFIX_OVERRIDES.unlink(),
-                shutil.copy2(P.BINDER_OVERRIDES, P.PREFIX_OVERRIDES),
-                None,
-            ][-1],
-        ],
-    )
+    for dest in [P.PREFIX_OVERRIDES, P.LITE_OVERRIDES]:
+        yield dict(
+            name=f"ext:lab:overrides:{dest.relative_to(P.ROOT)}",
+            file_dep=[P.BINDER_OVERRIDES],
+            targets=[dest],
+            actions=[(U.patch_overrides, [P.BINDER_OVERRIDES, dest])],
+        )
 
 
 def task_prod():
@@ -505,10 +498,12 @@ def task_integrity():
 
 def task_preflight():
     """ensure various stages are ready for development"""
+    file_dep = [P.SCRIPTS / "preflight.py"]
     if C.DOCS_OR_TEST_IN_CI:
         task_dep = ["prod:pip:check"]
     else:
         task_dep = ["dev:ext:lab", "dev:ext:server"]
+        file_dep += [P.PREFIX_OVERRIDES]
 
     yield dict(
         name="all",
@@ -516,7 +511,7 @@ def task_preflight():
         **U.run_in(
             "utest",
             [[*C.PYM, "scripts.preflight"]],
-            file_dep=[P.SCRIPTS / "preflight.py"],
+            file_dep=file_dep,
         ),
     )
 
@@ -815,6 +810,7 @@ class P:
     ALL_PLUGIN_SCHEMA = [EXT_SETTINGS_SCHEMA]
 
     LITE_BUILD_CONFIG = LITE / "jupyter_lite_config.json"
+    LITE_OVERRIDES = LITE / "overrides.json"
     ALL_LITE_CONFIG = LITE.glob("*.json")
 
     RTD_ENV = DOCS / "rtd.yml"
@@ -1266,6 +1262,14 @@ class U:
         P.EXT_SETTINGS_SCHEMA.write_text(
             json.dumps(plugin_schema, **C.JSON_FMT), **C.UTF8
         )
+
+    def patch_overrides(src: Path, dest: Path):
+        if not dest.parent.exists():
+            dest.parent.mkdir(parents=True)
+
+        data = {} if not dest.exists() else json.load(dest.open())
+        data.update(json.load(src.open()))
+        dest.write_text(json.dumps(data, indent=2, sort_keys=True))
 
     def normalize_json(path):
         path.write_text(

@@ -21,6 +21,10 @@ export const DEFAULT_ICON_NAME = `${NS}:default`;
 export const DEFAULT_ICON_CLASS = `jp-StartersDefaultIcon`;
 export const CATEGORY = 'Starters';
 
+export const SERVER_NAME = 'server';
+export const BROWSER_NAME = 'browser';
+export const SETTINGS_NAME = 'settings';
+
 /** The token for the main extension, which can be used by other extensions */
 export const IStarterManager = new Token<IStarterManager>(CORE_PLUGIN_ID);
 
@@ -30,6 +34,10 @@ export interface IStarterManager extends IStarterProvider, IStarterRunner {
   icon(name: string, starter: SCHEMA.Starter): LabIcon.ILabIcon;
   addProvider(key: string, provider: IStarterProvider): void;
   addRunner(key: string, runner: IStarterRunner): void;
+  providerNames: string[];
+  runnerNames: string[];
+  getRunner(key: string): IStarterRunner | null;
+  getProvider(key: string): IStarterProvider | null;
 }
 
 /** An interface for a source of starters. */

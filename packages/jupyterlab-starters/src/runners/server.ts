@@ -2,34 +2,20 @@ import { URLExt } from '@jupyterlab/coreutils';
 import { IRunningSessions } from '@jupyterlab/running';
 import { ServerConnection } from '@jupyterlab/services';
 import { LabIcon } from '@jupyterlab/ui-components';
-import { JSONObject, PromiseDelegate, JSONExt } from '@lumino/coreutils';
-import { ISignal, Signal } from '@lumino/signaling';
+import { JSONObject, JSONExt } from '@lumino/coreutils';
 
 import * as SCHEMA from '../_schema';
-import { IStarterRunner, API, IStarterManager } from '../tokens';
+import { IStarterRunner, API, IStarterManager, SERVER_NAME } from '../tokens';
+
+import { BaseStarterRunner } from './_base';
 
 const { makeRequest, makeSettings } = ServerConnection;
 
-export class ServerStarterRunner implements IStarterRunner {
+/** A starter runner that executes on the server. */
+export class ServerStarterRunner extends BaseStarterRunner implements IStarterRunner {
   readonly name = 'Server Starters';
-  private _manager: IStarterManager;
   private _serverSettings = makeSettings();
   private _running: string[];
-  private _ready = new PromiseDelegate<void>();
-  private _runningChanged: Signal<IStarterRunner, void>;
-
-  constructor(options: ServerStarterRunner.IOptions) {
-    this._manager = options.manager;
-    this._runningChanged = new Signal<IStarterRunner, void>(this);
-  }
-
-  get runningChanged(): ISignal<IStarterRunner, void> {
-    return this._runningChanged;
-  }
-
-  get ready(): Promise<void> {
-    return this._ready.promise;
-  }
 
   async fetch(): Promise<void> {
     const response = await makeRequest(API, {}, this._serverSettings);
@@ -40,10 +26,6 @@ export class ServerStarterRunner implements IStarterRunner {
       this._running = content.running;
       this._runningChanged.emit(void 0);
     }
-  }
-
-  canStart(name: string, _starter: SCHEMA.Starter): boolean {
-    return true;
   }
 
   async start(
@@ -67,7 +49,7 @@ export class ServerStarterRunner implements IStarterRunner {
     const url = URLExt.join(API, name);
     const response = await makeRequest(`${url}/`, init, this._serverSettings);
     if (response.status !== 202) {
-      console.warn(response);
+      console.warn('Failed to stop', response);
     }
     await this.fetch();
   }
@@ -85,14 +67,21 @@ export class ServerStarterRunner implements IStarterRunner {
     });
   }
 
-  refreshRunning(): void {
-    this.fetch().catch(console.warn);
-  }
-
   shutdownAll(): void {
     this.fetch()
       .then(() => this.running().map((runner) => runner.shutdown()))
       .catch(console.warn);
+  }
+
+  canStart(name: string, _starter: SCHEMA.Starter): boolean {
+    const provider = this._manager.getProvider(SERVER_NAME);
+    if (!provider) {
+      return false;
+    }
+    if (provider.starters[name]) {
+      return true;
+    }
+    return false;
   }
 }
 

@@ -79,6 +79,22 @@ export class StarterManager implements IStarterManager {
     runner.fetch().catch(console.warn);
   }
 
+  getRunner(key: string): IStarterRunner | null {
+    return this._runners.get(key) || null;
+  }
+
+  getProvider(key: string): IStarterProvider | null {
+    return this._providers.get(key) || null;
+  }
+
+  get providerNames(): string[] {
+    return [...this._providers.keys()];
+  }
+
+  get runnerNames(): string[] {
+    return [...this._runners.keys()];
+  }
+
   shutdownAll(): void {
     for (const runner of this._runners.values()) {
       runner.shutdownAll();

@@ -4,7 +4,7 @@
       "todo": {
         "category": "Productivity",
         "content": {
-          "content": "# {{ title }}\\n{% for item in items %}\\n- [{% if item.done %}x{% endif %}] {{ item.text }}{% endfor %}",
+          "content": "# {{ title }}\n{% for item in items %}\n- [{% if item.done %}x{% endif %}] {{ item.text }}{% endfor %}",
           "name": "TODO.md"
         },
         "description": "A todo list",
