@@ -1,6 +1,37 @@
 {
   "@deathbeds/jupyterlab-starters:settings-provider": {
     "starters": {
+      "hello-notebook": {
+        "category": "Notebook",
+        "content": {
+          "content": {
+            "cells": [
+              {
+                "cell_type": "markdown",
+                "source": "# Hello {{ world }}!"
+              }
+            ]
+          },
+          "name": "hello-{{ world | lower }}.ipynb",
+          "type": "notebook"
+        },
+        "description": "A Hello World notebook.",
+        "label": "Hello Notebook",
+        "rank": 42,
+        "schema": {
+          "description": "An example of a _Hello World_ notebook.",
+          "properties": {
+            "world": {
+              "default": "Jupyter",
+              "description": "The world to greet.",
+              "type": "string"
+            }
+          },
+          "title": "Hello Notebook",
+          "type": "object"
+        },
+        "type": "content"
+      },
       "todo": {
         "category": "Productivity",
         "content": {
@@ -9,7 +40,6 @@
         },
         "description": "A todo list",
         "label": "TODO List",
-        "rank": 100,
         "schema": {
           "properties": {
             "items": {

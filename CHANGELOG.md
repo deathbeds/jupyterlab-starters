@@ -2,11 +2,22 @@
 
 ## `jupyter_starters 2.0.0`
 
+- [#86] adds new `content` starter for JSON-only definitions with Jinja templates
+- [#86] updates schema to `v3`
+
 ## `@deathbeds/jupyterlab-starters 2.0.0`
+
+- [#86] refactors starter providers, runners, and the router into separate plugins
+- [#86] adds a settings-backed provider of `content`, compatible with [JupyterLite]
+- [#78] adds `category` and `rank` to all starter metadata, for customizing launcher
 
 ## `@deathbeds/jupyterlab-rjsf 2.0.0`
 
---
+[jupyterlite]: https://jupyterlite.readthedocs.io
+[#86]: https://github.com/deathbeds/jupyterlab-starters/pulls/86
+[#78]: https://github.com/deathbeds/jupyterlab-starters/pulls/78
+
+---
 
 ## `jupyter_starters 1.1.0`
 

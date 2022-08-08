@@ -1,4 +1,5 @@
 import { URLExt } from '@jupyterlab/coreutils';
+import * as nbformat from '@jupyterlab/nbformat';
 import { ContentsManager, Contents } from '@jupyterlab/services';
 import { JSONObject } from '@lumino/coreutils';
 import type * as Nunjucks from 'nunjucks';
@@ -95,7 +96,7 @@ export class BrowserStarterRunner extends BaseStarterRunner implements IStarterR
         };
         break;
       case 'notebook':
-        notebook = await this.templateNotebook(content.content, body);
+        notebook = await this.templateNotebook(content.content, body, nunjucks);
         model = {
           ...model,
           content: notebook,
@@ -125,8 +126,40 @@ export class BrowserStarterRunner extends BaseStarterRunner implements IStarterR
     return dest;
   }
 
-  async templateNotebook(content: JSONObject, body: JSONObject): Promise<JSONObject> {
-    return {};
+  protected async templateNotebook(
+    content: JSONObject,
+    body: JSONObject,
+    nunjucks: typeof Nunjucks
+  ): Promise<JSONObject> {
+    let contentJson: nbformat.INotebookContent = JSON.parse(
+      new nunjucks.Template(JSON.stringify(content)).render(body)
+    );
+
+    const notebookContent: nbformat.INotebookContent = {
+      nbformat: contentJson.nbformat || nbformat.MAJOR_VERSION,
+      nbformat_minor: contentJson.nbformat_minor || nbformat.MINOR_VERSION,
+      metadata: contentJson.metadata || {},
+      cells: (contentJson.cells || []).map(this.patchCell, this),
+    };
+
+    return notebookContent as JSONObject;
+  }
+
+  protected patchCell(rawCell: nbformat.ICell): nbformat.ICell {
+    let cell: Partial<nbformat.ICell> = {
+      ...rawCell,
+      cell_type: rawCell.cell_type || 'code',
+      source: rawCell.source || '',
+      metadata: rawCell.metadata || {},
+    };
+    switch (cell.cell_type) {
+      case 'code':
+        cell = {
+          ...cell,
+        };
+    }
+
+    return cell as nbformat.ICell;
   }
 }
 
