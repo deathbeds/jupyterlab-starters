@@ -33,6 +33,8 @@ import {
   SETTINGS_NAME,
   SERVER_NAME,
   STARTER_PATTERN,
+  STARTER_SEARCH_PARAM,
+  EMOJI,
 } from './tokens';
 import { BodyBuilder } from './widgets/builder';
 import { NotebookMetadata } from './widgets/meta';
@@ -108,7 +110,7 @@ const corePlugin: JupyterFrontEndPlugin<IStarterManager> = {
                 content.model.status = 'ready';
                 break;
               default:
-                console.error(`Unknown status ${response.status}`, response);
+                console.error(EMOJI, `Unknown status ${response.status}`, response);
             }
           });
         } else if (starter.schema && body) {
@@ -261,23 +263,43 @@ const routerPlugin: JupyterFrontEndPlugin<void> = {
 
     commands.addCommand(CommandIDs.routerStart, {
       execute: async (args) => {
-        console.log('routing starter', args);
         const loc = args as IRouter.ILocation;
-        const starterMatch = loc.request.match(starterPattern);
-        if (starterMatch == null) {
+        const parsedUrl = new URL(`http://127.0.0.1/${loc.request}`);
+
+        const starterPath = parsedUrl.searchParams.get(STARTER_SEARCH_PARAM);
+
+        if (starterPath == null) {
           return;
         }
-        const [name, cwd] = starterMatch.slice(1);
 
-        await manager.ready;
+        const parts = starterPath.split('/', 2);
+
+        let cwd = '';
+        const name = parts[0];
+
+        if (parts.length == 2) {
+          cwd = parts[1];
+        }
+
+        await manager.fetch();
 
         const starter = manager.starters[name];
 
         if (starter == null) {
+          console.warn(
+            EMOJI,
+            'Starter',
+            name,
+            'not one of',
+            Object.keys(manager.starters),
+            '., not starting.'
+          );
           return;
         }
 
-        const url = URLExt.join(PageConfig.getOption('treeUrl'), cwd);
+        const url = URLExt.join(PageConfig.getOption('appUrl'), '/tree/', cwd);
+
+        console.info(EMOJI, 'Starting', name, 'in', url);
 
         router.navigate(url);
 

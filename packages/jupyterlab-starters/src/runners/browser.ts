@@ -55,20 +55,18 @@ export class BrowserStarterRunner extends BaseStarterRunner implements IStarterR
     path: string,
     body?: JSONObject | undefined
   ): Promise<SCHEMA.AResponseForStartRequest> {
-    const responsePartial = {
-      body: body || {},
-      starter,
-      name,
-      path,
-    };
-
     const nunjucks = await import('nunjucks');
 
-    await this.handleOneContent(path, starter.content, body || {}, nunjucks);
+    body = body || {};
+
+    path = await this.handleOneContent(path, starter.content, body, nunjucks);
 
     return {
-      ...responsePartial,
       status: 'done',
+      path,
+      body,
+      starter,
+      name,
     };
   }
 
@@ -77,7 +75,7 @@ export class BrowserStarterRunner extends BaseStarterRunner implements IStarterR
     content: SCHEMA.StarterContentAny,
     body: JSONObject,
     nunjucks: typeof Nunjucks
-  ): Promise<void> {
+  ): Promise<string> {
     const name = new nunjucks.Template(`${content.name}`).render(body);
     const dest = URLExt.join(path, name);
     const contentType = content.type || 'file';
@@ -123,6 +121,8 @@ export class BrowserStarterRunner extends BaseStarterRunner implements IStarterR
         await this.handleOneContent(dest, child, body, nunjucks);
       }
     }
+
+    return dest;
   }
 
   async templateNotebook(content: JSONObject, body: JSONObject): Promise<JSONObject> {

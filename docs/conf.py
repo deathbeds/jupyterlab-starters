@@ -12,10 +12,10 @@ ROOT = HERE.parent
 
 
 if os.environ.get("READTHEDOCS", False):
-    call(["doit", "dist"], cwd=str(ROOT))
-    call(["doit", "dist"], cwd=str(ROOT))
+    call(["doit", "-n8", "dist"], cwd=str(ROOT))
+    call(["doit", "-n8", "dist"], cwd=str(ROOT))
     check_call(["doit", "dist"], cwd=str(ROOT))
-    check_call(["doit", "dev:pip:install"], cwd=str(ROOT))
+    check_call(["doit", "dev"], cwd=str(ROOT))
     check_call(["doit", "docs:schema"], cwd=str(ROOT))
     check_call(["doit", "lite"], cwd=str(ROOT))
 

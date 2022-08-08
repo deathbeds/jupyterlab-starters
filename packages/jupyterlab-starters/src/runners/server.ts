@@ -5,7 +5,7 @@ import { LabIcon } from '@jupyterlab/ui-components';
 import { JSONObject, JSONExt } from '@lumino/coreutils';
 
 import * as SCHEMA from '../_schema';
-import { IStarterRunner, API, IStarterManager, SERVER_NAME } from '../tokens';
+import { IStarterRunner, API, IStarterManager, SERVER_NAME, EMOJI } from '../tokens';
 
 import { BaseStarterRunner } from './_base';
 
@@ -49,7 +49,7 @@ export class ServerStarterRunner extends BaseStarterRunner implements IStarterRu
     const url = URLExt.join(API, name);
     const response = await makeRequest(`${url}/`, init, this._serverSettings);
     if (response.status !== 202) {
-      console.warn('Failed to stop', response);
+      console.warn(EMOJI, 'Failed to stop', response);
     }
     await this.fetch();
   }
