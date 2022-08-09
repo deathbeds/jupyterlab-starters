@@ -292,7 +292,7 @@ def task_build():
                 ["jupyter", "labextension", "build", P.EXT_PACKAGE],
             ],
             file_dep=[
-                *P.ALL_CSS,
+                *P.ALL_SRC_CSS,
                 *P.ALL_PACKAGE_JSON,
                 *P.ALL_PLUGIN_SCHEMA,
                 P.JS_LIB_SCHEMA,
@@ -878,10 +878,13 @@ class P:
         ),
         [],
     )
-    ALL_CSS = sum(
-        [[*(p.parent / "style").rglob("*.css")] for p in PACKAGES_JSON],
-        [*DOCS.rglob("_static/**/*.css")],
+    ALL_SRC_CSS = sum(
+        [[*(p.parent / "style").rglob("*.css")] for p in PACKAGES_JSON], []
     )
+    ALL_CSS = [
+        *ALL_SRC_CSS,
+        *DOCS.rglob("_static/**/*.css"),
+    ]
     ALL_YAML = [
         *SPECS.glob("*.yml"),
         *ROOT.glob("*.yml"),

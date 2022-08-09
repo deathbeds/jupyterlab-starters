@@ -1,4 +1,4 @@
-:root {
+html[data-theme='dark'] {
   --deathbeds-rgb: 211, 116, 179;
   --border-width: 1px;
   --border-radius: 5px;
@@ -78,15 +78,6 @@ a:active {
   }
 }
 
-footer .container,
-.toctree-wrapper.compound > ul {
-  display: flex;
-  flex-flow: row wrap;
-  margin-left: 0;
-  padding-left: 0;
-  justify-content: space-between;
-}
-
 .bd-sidebar {
   border: 0;
 }
@@ -117,7 +108,6 @@ footer .container,
   padding: 0;
 }
 
-.toctree-wrapper.compound > ul > .toctree-l1,
 footer .container > .footer-item,
 #prev-link,
 #next-link,
@@ -223,4 +213,14 @@ hr {
 
 .tooltip .arrow::before {
   border-color: var(--jps-brand-color0);
+}
+
+details.toggle-details summary {
+  float: right;
+  border-width: 0;
+}
+
+html[data-theme='dark'] details.toggle-details summary {
+  background-color: var(--jps-card-background);
+  border-color: var(--pst-color-active-navigation);
 }
