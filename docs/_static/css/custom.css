@@ -150,6 +150,7 @@ footer .container > .footer-item:hover,
 
 #bd-toc-nav:empty {
   opacity: 0;
+  display: none;
 }
 
 .toctree-wrapper.compound > ul > .toctree-l1 > a {
@@ -179,7 +180,6 @@ div.cell div.cell_input {
 }
 
 .demo-sidebar .btn-primary {
-  background-color: var(--jps-brand-color0);
   font-size: 150%;
   opacity: 0.5;
   transition: all 0.2s;
@@ -201,6 +201,14 @@ div.cell div.cell_input {
 
 #try-it-now .warning em:empty {
   display: none;
+}
+
+.demo-sidebar details label {
+  position: unset;
+  display: block;
+  width: unset;
+  top: unset;
+  margin: 0;
 }
 
 hr {
