@@ -232,3 +232,8 @@ html[data-theme='dark'] details.toggle-details summary {
   background-color: var(--jps-card-background);
   border-color: var(--pst-color-active-navigation);
 }
+
+
+.section p {
+  max-width: 50em;
+}
