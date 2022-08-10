@@ -292,6 +292,10 @@ class StarterManager(LoggingConfigurable):
         body = body or {}
         name_tmpl = self.jinja_env.from_string(starter_model["name"])
         name = name_tmpl.render(**body)
+
+        if not name:
+            return
+
         dest = ujoin(path, name)
 
         type_ = starter_model.get("type", "file")

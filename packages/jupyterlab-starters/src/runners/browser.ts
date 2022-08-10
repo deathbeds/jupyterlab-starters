@@ -77,7 +77,10 @@ export class BrowserStarterRunner extends BaseStarterRunner implements IStarterR
     body: JSONObject,
     nunjucks: typeof Nunjucks
   ): Promise<string> {
-    const name = new nunjucks.Template(`${content.name}`).render(body);
+    const name = new nunjucks.Template(`${content.name}`).render(body).trim();
+    if (!name) {
+      return '';
+    }
     const dest = URLExt.join(path, name);
     const contentType = content.type || 'file';
 
