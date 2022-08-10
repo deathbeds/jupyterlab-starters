@@ -12,8 +12,9 @@ BAR = "BÄR"
 FOO = "FOÖ"
 
 
-def _is_bar_notebook(nb_bytes):
+def _is_bar_notebook(nb_path: Path):
     """does the generated notebook roughly match expectation?"""
+    nb_bytes = nb_path.read_bytes()
     ipynb = json_.loads(nb_bytes.decode("utf-8"))
     code, markdown, raw = ipynb["cells"]
 
@@ -36,7 +37,7 @@ CONTENT = {
     "text": [
         {"name": "{{ bar }}.txt", "content": "{{ bar }}{{ bar }}"},
         f"{BAR}.txt",
-        lambda observed: observed == f"{BAR}{BAR}".encode("utf-8"),
+        lambda observed: observed.read_bytes() == f"{BAR}{BAR}".encode("utf-8"),
     ],
     "notebook": [
         {
@@ -76,7 +77,7 @@ async def test_content_file(a_content_starter, a_content_file, starter_manager, 
     response = await starter_manager.start(name, "", {"foo": FOO, "bar": BAR})
     assert response["status"] == Status.DONE, response
     barf = Path(starter_manager.parent.notebook_dir) / path
-    assert content_is(barf.read_bytes())
+    assert content_is(barf)
     assert not caplog.record_tuples
 
 
@@ -102,7 +103,41 @@ async def test_content_folder(
     response = await starter_manager.start(name, "", {"foo": FOO, "bar": BAR})
     assert response["status"] == Status.DONE, response
     barf = Path(starter_manager.parent.notebook_dir) / f"{FOO} {FOO}" / child_path
-    assert child_content_is(barf.read_bytes())
+    assert child_content_is(barf)
+    assert not caplog.record_tuples
+
+
+@pytest.mark.asyncio
+async def test_content_folder_empty(
+    a_content_starter, a_content_file, starter_manager, caplog
+):
+    """does a contents starter with an empty folder do nothing?"""
+    name = "tmp-content-folder"
+    child_template, _child_path, _child_content_is = a_content_file
+
+    starter_manager.extra_starters = {
+        name: {
+            **a_content_starter,
+            "content": {
+                "type": "directory",
+                "name": "{{ foo }} {{ foo }}",
+                "content": [
+                    {
+                        "type": "directory",
+                        "name": "{{ not_a_variable }}",
+                        "content": [child_template],
+                    },
+                ],
+            },
+        }
+    }
+
+    response = await starter_manager.start(name, "", {"foo": FOO, "bar": BAR})
+    assert response["status"] == Status.DONE, response
+    parent = Path(starter_manager.parent.notebook_dir) / f"{FOO} {FOO}"
+    assert parent.exists()
+    children = sorted(parent.rglob("*"))
+    assert not children, "unexpected child content"
     assert not caplog.record_tuples
 
 

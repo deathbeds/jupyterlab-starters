@@ -10,6 +10,7 @@ from typing import List, Text
 from urllib.parse import unquote
 
 import jinja2
+import jinja2.sandbox
 import nbformat
 import traitlets as T
 from jupyter_core.paths import jupyter_config_path
@@ -41,6 +42,9 @@ DEFAULT_IGNORE_PATTERNS = [
     "Untitled.*",
 ]
 
+#: the importable name of a class
+DEFAULT_ENV_CLS = "jinja2.sandbox.SandboxedEnvironment"
+
 
 class StarterManager(LoggingConfigurable):
     """handlers starting starters"""
@@ -51,6 +55,7 @@ class StarterManager(LoggingConfigurable):
     config_dict = T.Dict()
     kernel_dirs = T.Dict({})
 
+    jinja_env_cls = T.Unicode(DEFAULT_ENV_CLS).tag(config=True)
     extra_starters = Schema(default_value={}, validator=STARTERS).tag(config=True)
     extra_jinja_env_extensions = T.Dict({}).tag(config=True)
 
@@ -79,7 +84,16 @@ class StarterManager(LoggingConfigurable):
 
     @T.default("jinja_env")
     def _default_env(self):
-        return jinja2.Environment(
+        # pylint: disable=broad-except
+        try:
+            env_class = T.import_item(self.jinja_env_cls)
+        except Exception as err:
+            self.log.warning(
+                f"Using {DEFAULT_ENV_CLS}, couldn't import {self.jinja_env_cls}: {err}"
+            )
+            env_class = T.import_item(DEFAULT_ENV_CLS)
+
+        return env_class(
             extensions=[
                 ext for ext, enabled in self.jinja_env_extensions.items() if enabled
             ]
@@ -291,7 +305,7 @@ class StarterManager(LoggingConfigurable):
         """save a content model (and its children)"""
         body = body or {}
         name_tmpl = self.jinja_env.from_string(starter_model["name"])
-        name = name_tmpl.render(**body)
+        name = name_tmpl.render(**body).strip()
 
         if not name:
             return
