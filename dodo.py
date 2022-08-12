@@ -585,7 +585,7 @@ def task_test():
     yield dict(
         name="atest",
         task_dep=task_dep,
-        file_dep=[*P.ALL_ROBOT, *P.NPM_TARBALLS.values(), P.WHEEL],
+        file_dep=[*P.ALL_ROBOT, *P.NPM_TARBALLS.values(), P.WHEEL, P.LITE_SHA256SUMS],
         actions=[(U.atest, [])],
         targets=[P.ATEST_OUT / "output.xml", P.ATEST_OUT / "log.html"],
     )
