@@ -4,7 +4,7 @@ Documentation       Cookiecutter
 Resource            ../Keywords.resource
 Library             String
 
-Suite Setup         Setup Suite For Screenshots    cookiecutter
+Suite Setup         Setup Suite For Screenshots    lab${/}cookiecutter
 
 Force Tags          example:cookiecutter
 

@@ -4,7 +4,7 @@ Documentation       Parameters
 Resource            ../Keywords.resource
 Library             String
 
-Suite Setup         Setup Suite For Screenshots    parameters
+Suite Setup         Setup Suite For Screenshots    lab${/}parameters
 
 Force Tags          example:params
 

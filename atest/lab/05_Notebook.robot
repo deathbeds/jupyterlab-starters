@@ -4,7 +4,7 @@ Documentation       Notebook
 Resource            ../Keywords.resource
 Library             String
 
-Suite Setup         Setup Suite For Screenshots    notebook
+Suite Setup         Setup Suite For Screenshots    lab${/}notebook
 
 Force Tags          example:notebook
 

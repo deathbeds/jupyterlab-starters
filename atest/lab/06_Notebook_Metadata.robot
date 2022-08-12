@@ -6,7 +6,7 @@ Library             String
 Library             Collections
 Resource            ../CodeMirror.resource
 
-Suite Setup         Setup Suite For Screenshots    notebook-meta
+Suite Setup         Setup Suite For Screenshots    lab${/}notebook-meta
 
 Force Tags          example:notebook-meta
 

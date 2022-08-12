@@ -4,7 +4,7 @@ Documentation       Multi-Stage Notebook
 Resource            ../Keywords.resource
 Library             String
 
-Suite Setup         Setup Suite For Screenshots    notebook-multi
+Suite Setup         Setup Suite For Screenshots    lab${/}notebook-multi
 
 Force Tags          example:notebook-multi
 
