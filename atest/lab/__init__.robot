@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation       All the tests
 
-Resource            Keywords.resource
+Resource            ../Keywords.resource
 
 Suite Setup         Setup Server And Browser
 Suite Teardown      Tear Down Everything

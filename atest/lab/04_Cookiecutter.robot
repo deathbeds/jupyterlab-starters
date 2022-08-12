@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation       Cookiecutter
 
-Resource            Keywords.resource
+Resource            ../Keywords.resource
 Library             String
 
 Suite Setup         Setup Suite For Screenshots    cookiecutter

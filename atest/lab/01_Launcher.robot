@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation       Launcher
 
-Resource            Keywords.resource
+Resource            ../Keywords.resource
 
 Suite Setup         Setup Suite For Screenshots    launcher
 

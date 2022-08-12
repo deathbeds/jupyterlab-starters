@@ -1,10 +1,10 @@
 *** Settings ***
 Documentation       Notebook Meta
 
-Resource            Keywords.resource
+Resource            ../Keywords.resource
 Library             String
 Library             Collections
-Resource            CodeMirror.resource
+Resource            ../CodeMirror.resource
 
 Suite Setup         Setup Suite For Screenshots    notebook-meta
 

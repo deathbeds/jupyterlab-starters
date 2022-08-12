@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation       Simple
 
-Resource            Keywords.resource
+Resource            ../Keywords.resource
 
 Suite Setup         Setup Suite For Screenshots    simple
 
