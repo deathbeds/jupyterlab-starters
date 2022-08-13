@@ -1,0 +1,16 @@
+{
+  "extends": "../../../tsconfigbase",
+  "compilerOptions": {
+    "outDir": "../lib",
+    "rootDir": ".",
+    "tsBuildInfoFile": "../.src.tsbuildinfo"
+  },
+  "include": ["./**/*"],
+  "files": ["./_schema.json"],
+  "references": [
+    { "path": "../" },
+    {
+      "path": "../../jupyterlab-rjsf"
+    }
+  ]
+}

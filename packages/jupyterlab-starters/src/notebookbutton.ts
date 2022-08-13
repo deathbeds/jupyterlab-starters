@@ -1,12 +1,8 @@
-import { IDisposable, DisposableDelegate } from '@lumino/disposable';
-
-import { CommandRegistry } from '@lumino/commands';
-
 import { CommandToolbarButton } from '@jupyterlab/apputils';
-
-import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
-
 import { DocumentRegistry } from '@jupyterlab/docregistry';
+import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
+import { CommandRegistry } from '@lumino/commands';
+import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 
 import { CommandIDs } from './tokens';
 

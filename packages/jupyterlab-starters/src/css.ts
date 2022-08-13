@@ -1,5 +1,5 @@
-import DEFAULT_ICON_SVG from '!!raw-loader!../style/icons/starter.svg';
 import COOKIECUTTER_SVG from '!!raw-loader!../style/icons/cookiecutter.svg';
+import DEFAULT_ICON_SVG from '!!raw-loader!../style/icons/starter.svg';
 
 export const CSS = {
   P: {

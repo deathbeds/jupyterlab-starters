@@ -9,7 +9,7 @@ try:
 
     loads = ujson.loads
     dumps = ujson.dumps
-except ImportError:
+except ImportError:  # pragma: no cover
     import json
 
     loads = json.loads

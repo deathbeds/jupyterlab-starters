@@ -1,12 +1,13 @@
 *** Settings ***
 Documentation       Cookiecutter
 
-Resource            Keywords.resource
+Resource            ../Keywords.resource
 Library             String
 
-Suite Setup         Setup Suite For Screenshots    cookiecutter
+Suite Setup         Setup Suite For Screenshots    lab${/}cookiecutter
 
 Force Tags          example:cookiecutter
+
 
 *** Test Cases ***
 Happy Path
@@ -29,6 +30,7 @@ Happy Path
     Wait Until Page Contains Element    id:My-Next-Little-Idea
     Save Notebook
     Capture Page Screenshot    03-cookiecutter-did-complete.png
+
 
 *** Keywords ***
 Wait For And Capture

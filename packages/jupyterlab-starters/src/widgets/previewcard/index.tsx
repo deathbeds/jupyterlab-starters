@@ -1,5 +1,6 @@
-import * as React from 'react';
 import { VDomRenderer } from '@jupyterlab/apputils';
+import * as React from 'react';
+
 import { CSS } from '../../css';
 
 import { PreviewCardModel } from './model';

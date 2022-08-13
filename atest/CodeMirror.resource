@@ -1,6 +1,7 @@
 *** Settings ***
 Documentation       Common behaviors for CodeMirror instances
 
+
 *** Keywords ***
 Set CodeMirror Value
     [Documentation]    Set the value in the CodeMirror attached to the element

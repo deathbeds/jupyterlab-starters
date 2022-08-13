@@ -1,22 +1,22 @@
 {
   "ServerApp": {
-    "tornado_settings": {
-      "page_config_data": {
-        "buildCheck": false,
-        "buildAvailable": false
-      }
-    },
     "jpserver_extensions": {
       "jupyter_starters": true
+    },
+    "tornado_settings": {
+      "page_config_data": {
+        "buildAvailable": false,
+        "buildCheck": false
+      }
     }
   },
   "StarterManager": {
     "extra_starters": {
       "noop": {
-        "src": "examples/No-Op Notebook.ipynb",
-        "type": "notebook",
+        "description": "noop",
         "label": "noop",
-        "description": "noop"
+        "src": "examples/No-Op Notebook.ipynb",
+        "type": "notebook"
       }
     }
   }

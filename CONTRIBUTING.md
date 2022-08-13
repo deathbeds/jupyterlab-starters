@@ -13,11 +13,11 @@ time-permitting.
 > _There are probably other ways, but I haven't tried them_
 
 - Be on Linux/OSX
-- Get [Miniforge or Mambaforge](https://github.com/conda-forge/miniforge/releases)
+- Get [Mambaforge](https://github.com/conda-forge/miniforge/releases)
 - Get [doit](https://pydoit.org)
 
 ```bash
-conda install doit
+mamba install doit
 ```
 
 ```bash
@@ -41,7 +41,7 @@ doit lint
 ## testing
 
 ```bash
-doit atest
+doit test
 ```
 
 > _You may want to run against a "clean" lab, e.g. `doit`_
@@ -68,6 +68,14 @@ doit docs
 
 ```bash
 doit watch:docs
+```
+
+## locking
+
+```
+mamba create -p .envs/_lock .github/locks/lock-linux-64-3.10.conda.lock
+source .envs/_lock/bin/activate
+doit lock
 ```
 
 ## releasing

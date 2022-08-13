@@ -1,8 +1,6 @@
-import * as React from 'react';
-
-import { UnControlled } from 'react-codemirror2';
-
 import type CodeMirror from 'codemirror';
+import * as React from 'react';
+import { UnControlled } from 'react-codemirror2';
 
 export function CodeMirrorField(props: Record<string, any>): JSX.Element {
   const { options } = props;

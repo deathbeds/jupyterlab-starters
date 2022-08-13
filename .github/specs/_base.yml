@@ -4,4 +4,4 @@ channels:
 dependencies:
   - doit
   - pip
-  - ruamel_yaml
+  - ruamel.yaml

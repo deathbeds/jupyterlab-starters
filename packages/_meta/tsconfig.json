@@ -1,16 +1,9 @@
 {
-  "extends": "../../tsconfigbase",
   "compilerOptions": {
-    "outDir": "lib",
-    "rootDir": "src"
+    "outDir": ".",
+    "rootDir": ".",
+    "tsBuildInfoFile": ".root.tsbuildinfo"
   },
-  "include": ["src/**/*"],
-  "references": [
-    {
-      "path": "../jupyterlab-starters"
-    },
-    {
-      "path": "../jupyterlab-rjsf"
-    }
-  ]
+  "extends": "../../tsconfigbase",
+  "files": ["package.json"]
 }

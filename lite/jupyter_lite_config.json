@@ -1,0 +1,6 @@
+{
+  "LiteBuildConfig": {
+    "apps": ["lab"],
+    "output_dir": "../build/docs-app/"
+  }
+}

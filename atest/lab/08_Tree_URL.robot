@@ -1,12 +1,13 @@
 *** Settings ***
 Documentation       Tree URL
 
-Resource            Keywords.resource
+Resource            ../Keywords.resource
 Library             String
 
-Suite Setup         Setup Suite For Screenshots    tree-url
+Suite Setup         Setup Suite For Screenshots    lab${/}tree-url
 
 Force Tags          example:tree-url
+
 
 *** Test Cases ***
 Starter Opens

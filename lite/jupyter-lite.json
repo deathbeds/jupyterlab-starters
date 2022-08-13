@@ -1,0 +1,11 @@
+{
+  "jupyter-config-data": {
+    "appName": "JupyterLite Starters",
+    "collaborative": true,
+    "disabledExtensions": [
+      "@deathbeds/jupyterlab-starters:server-provider",
+      "@deathbeds/jupyterlab-starters:server-runner"
+    ]
+  },
+  "jupyter-lite-schema-version": 0
+}

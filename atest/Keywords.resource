@@ -9,6 +9,7 @@ Library             traitlets.config.manager    WITH NAME    TCM
 Library             ./ports.py
 Resource            Variables.resource
 
+
 *** Keywords ***
 Setup Server And Browser
     [Documentation]    Start JupyterLab and open in a browser
@@ -61,7 +62,7 @@ Build App Args
     ...    ${app args} --LabApp.user_settings_dir='${SETTINGS DIR.replace('\\', '\\\\')}'
     ${app args} =    Set Variable
     ...    ${app args} --LabApp.workspaces_dir\='${WORKSPACES DIR.replace('\\', '\\\\')}'
-    [Return]    ${app args}
+    RETURN    ${app args}
 
 Update Examples
     [Documentation]    Add the examples and patch in non-functioning examples
@@ -139,12 +140,8 @@ Ensure All Kernels Are Shut Down
     [Documentation]    Kill all the kernels
     Enter Command Name    Shut Down All Kernels
     ${els} =    Get WebElements    ${CMD PALETTE ITEM ACTIVE}
-    IF    ${els.__len__()}
-        Click Element    ${CMD PALETTE ITEM ACTIVE}
-    END
-    IF    ${els.__len__()}
-        Click Element    css:.jp-mod-accept.jp-mod-warn
-    END
+    IF    ${els.__len__()}    Click Element    ${CMD PALETTE ITEM ACTIVE}
+    IF    ${els.__len__()}    Click Element    css:.jp-mod-accept.jp-mod-warn
 
 Open Command Palette
     [Documentation]    Open the command palette
@@ -177,7 +174,7 @@ Which
     [Documentation]    Find a shell command
     [Arguments]    ${cmd}
     ${path} =    Evaluate    __import__("shutil").which("${cmd}")
-    [Return]    ${path}
+    RETURN    ${path}
 
 Advance Starter Form
     [Documentation]    Clicks the accept in a starter form
@@ -217,9 +214,7 @@ Save Notebook
 Accept Default Dialog Option
     [Documentation]    Accept a dialog, if it exists
     ${el} =    Get WebElements    ${CSS DIALOG OK}
-    IF    ${el.__len__()}
-        Click Element    ${CSS DIALOG OK}
-    END
+    IF    ${el.__len__()}    Click Element    ${CSS DIALOG OK}
 
 Merge To JSON File
     [Documentation]    Merge a dictionary into a JSON file
@@ -228,4 +223,29 @@ Merge To JSON File
     ${json} =    Evaluate    __import__("json").loads(r'''${file}''')
     TCM.Recursive Update    ${json}    ${obj}
     Evaluate    __import__("pathlib").Path(r'''${path}''').write_text(__import__("json").dumps(${json}))
-    [Return]    ${json}
+    RETURN    ${json}
+
+Open Context Menu For File
+    [Documentation]    Open a the context menu for a file
+    [Arguments]    ${file}
+    Ensure File Browser Is Open
+    Click Element    css:button[data-command="filebrowser:refresh"]
+    ${selector} =    Set Variable    xpath://span[@class\='jp-DirListing-itemText']/span[text() = '${file}']
+    Wait Until Page Contains Element    ${selector}
+    Open Context Menu    ${selector}
+
+Open In
+    [Documentation]    Open a file with a custom editor
+    [Arguments]    ${file}    ${editor}
+    Open Context Menu For File    ${file}
+    Mouse Over    ${XP MENU OPEN WITH}
+    Wait Until Page Contains Element    ${editor}
+    Mouse Over    ${editor}
+    Click Element    ${editor}
+
+Ensure File Browser Is Open
+    [Documentation]    Ensure the sidebar file browser is open
+    ${sel} =    Set Variable
+    ...    css:.lm-TabBar-tab[data-id="filebrowser"]:not(.lm-mod-current)
+    ${els} =    Get WebElements    ${sel}
+    IF    ${els.__len__()}    Click Element    ${sel}

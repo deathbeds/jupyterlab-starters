@@ -1,9 +1,8 @@
-import * as rjsf from '@rjsf/core';
-
-import { ISignal, Signal } from '@lumino/signaling';
-import { JSONObject, JSONValue } from '@lumino/coreutils';
 import { VDomModel } from '@jupyterlab/apputils';
 import { RenderedMarkdown } from '@jupyterlab/rendermime';
+import { JSONObject, JSONValue } from '@lumino/coreutils';
+import { ISignal, Signal } from '@lumino/signaling';
+import * as rjsf from '@rjsf/core';
 
 export class SchemaFormModel<T extends JSONValue> extends VDomModel {
   constructor(

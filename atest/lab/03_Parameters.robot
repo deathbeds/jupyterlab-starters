@@ -1,15 +1,17 @@
 *** Settings ***
 Documentation       Parameters
 
-Resource            Keywords.resource
+Resource            ../Keywords.resource
 Library             String
 
-Suite Setup         Setup Suite For Screenshots    parameters
+Suite Setup         Setup Suite For Screenshots    lab${/}parameters
 
 Force Tags          example:params
 
+
 *** Variables ***
 ${CSS TOPIC}    css:input[label="## Topic"]
+
 
 *** Test Cases ***
 Cancel
@@ -36,13 +38,14 @@ Parameter Notebook
     Save Notebook
     Capture Page Screenshot    12-notebook-did-save.png
 
+
 *** Keywords ***
 Really Input A Random String
     [Documentation]    Type and return a random string in an input
     [Arguments]    ${selector}
     ${text} =    Generate Random String
     Really Input Text    ${selector}    ${text}
-    [Return]    ${text}
+    RETURN    ${text}
 
 Launch The Parameterized Starter
     [Documentation]    Use the launcher to start the parameterized example
@@ -56,5 +59,3 @@ Starter Form Should Contain Markdown Elements
     Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.field-description em
     Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.field-description blockquote a
     Wait Until Page Contains Element    ${CSS BODYBUILDER} .jp-RenderedMarkdown.help-block code
-    Wait Until Keyword Succeeds    3x    1s    Wait Until Page Contains Element
-    ...    ${CSS BODYBUILDER} .jp-RenderedMarkdown.help-block .MathJax

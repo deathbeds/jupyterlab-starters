@@ -1,0 +1,457 @@
+{
+  "$id": "https://raw.githubusercontent.com/deathbeds/jupyterlab-starters/master/src/jupyter_starters/schema/v3.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "anyOf": [
+    {
+      "$ref": "#/definitions/all-starters",
+      "title": "A response for an starters request"
+    },
+    {
+      "$ref": "#/definitions/start-response",
+      "title": "A response for start request"
+    }
+  ],
+  "definitions": {
+    "all-starters": {
+      "properties": {
+        "running": {
+          "description": "Starters currently using a process/resource",
+          "items": {
+            "type": "string"
+          },
+          "title": "Running Starters",
+          "type": "array"
+        },
+        "starters": {
+          "$ref": "#/definitions/starters",
+          "description": "Starters keyed by their API/URL names",
+          "title": "Named Starters"
+        },
+        "version": {
+          "description": "The version of the Jupyter Starters API",
+          "enum": ["3"],
+          "title": "API Version",
+          "type": "string"
+        }
+      },
+      "required": ["starters", "version"],
+      "title": "All Starters Server Response",
+      "type": "object"
+    },
+    "command": {
+      "properties": {
+        "args": {
+          "description": "optional values provided to the command when executed",
+          "title": "Arguments",
+          "type": "object"
+        },
+        "id": {
+          "description": "canonical name for the command",
+          "title": "Command ID",
+          "type": "string"
+        }
+      },
+      "required": ["id"],
+      "title": "JupyterLab Command",
+      "type": "object"
+    },
+    "start-response": {
+      "properties": {
+        "body": {
+          "description": "user data populated by the client",
+          "title": "Body",
+          "type": "object"
+        },
+        "copy": {
+          "description": "copy files after starter is run (irrespective of status) if `true`",
+          "title": "Force Copy",
+          "type": "boolean"
+        },
+        "errors": {
+          "description": "a listing of system and user errors created during a starter",
+          "items": {
+            "title": "Error Text",
+            "type": "string"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "name": {
+          "description": "the canonical name of the starter",
+          "title": "Name",
+          "type": "string"
+        },
+        "path": {
+          "description": "the API path (`/` delimited) to which files will be written",
+          "title": "API Path",
+          "type": "string"
+        },
+        "starter": {
+          "$ref": "#/definitions/starter",
+          "description": "the current definition of the starter: may change during multi-step starters",
+          "title": "Starter"
+        },
+        "status": {
+          "description": "the current state of the Starter",
+          "enum": ["error", "continuing", "done"],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": ["name", "path", "starter", "body", "status"],
+      "title": "Start Response",
+      "type": "object"
+    },
+    "starter": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/starter-copy",
+          "title": "A Copy Starter"
+        },
+        {
+          "$ref": "#/definitions/starter-content",
+          "title": "A Contents Starter"
+        },
+        {
+          "$ref": "#/definitions/starter-copy-with-dest",
+          "title": "A Copy Starter With a Custom Destination"
+        },
+        {
+          "$ref": "#/definitions/starter-python",
+          "title": "A Python Starter"
+        },
+        {
+          "$ref": "#/definitions/starter-notebook",
+          "title": "A Notebook Starter"
+        }
+      ],
+      "properties": {
+        "type": {
+          "title": "Starter Type",
+          "type": "string"
+        }
+      },
+      "required": ["type"],
+      "title": "Starter",
+      "type": "object"
+    },
+    "starter-content": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/starter-meta",
+          "description": "Common starter fields",
+          "title": "Starter Metadata"
+        },
+        {
+          "$ref": "#/definitions/starter-with-content",
+          "description": "Fields that fully describe a single file or tree of Jupyter content",
+          "title": "A Starter Contents Folder"
+        }
+      ],
+      "description": "A starter that contains templated Jupyter content",
+      "title": "Contents Starter",
+      "type": "object"
+    },
+    "starter-content-any": {
+      "allOf": [
+        {
+          "properties": {
+            "name": {
+              "description": "A filename that may contain jinja/nunjucks template strings populated with the body",
+              "type": "string"
+            }
+          },
+          "require": ["name"],
+          "type": "object"
+        },
+        {
+          "oneOf": [
+            {
+              "#ref": "#/definitions/starter-content-directory",
+              "title": "Content Folder"
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/starter-content-file-common"
+                },
+                {
+                  "oneOf": [
+                    {
+                      "$ref": "#/definitions/starter-content-file-text",
+                      "title": "Text File"
+                    },
+                    {
+                      "$ref": "#/definitions/starter-content-file-json",
+                      "title": "JSON File"
+                    }
+                  ]
+                }
+              ],
+              "title": "Content File"
+            }
+          ]
+        }
+      ],
+      "type": "object"
+    },
+    "starter-content-directory": {
+      "properties": {
+        "content": {
+          "items": {
+            "$ref": "#/definitions/starter-content-any"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": ["directory"],
+          "type": "string"
+        }
+      },
+      "required": ["type"],
+      "title": "Jupyter Contents Directory",
+      "type": "object"
+    },
+    "starter-content-file-common": {
+      "properties": {
+        "mimetype": {
+          "type": "string"
+        },
+        "type": {
+          "enum": ["file"],
+          "type": "string"
+        }
+      },
+      "required": ["type", "content", "mimetype", "format"],
+      "title": "Jupyter Contents File",
+      "type": "object"
+    },
+    "starter-content-file-json": {
+      "properties": {
+        "content": {
+          "oneOf": [
+            {
+              "title": "An Array",
+              "type": "array"
+            },
+            {
+              "title": "An Object",
+              "type": "object"
+            }
+          ]
+        },
+        "format": {
+          "enum": ["json"],
+          "type": "string"
+        }
+      },
+      "title": "A JSON File"
+    },
+    "starter-content-file-text": {
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "format": {
+          "enum": ["text", "base64"],
+          "type": "string"
+        }
+      },
+      "title": "A Text File"
+    },
+    "starter-copy": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/starter-meta",
+          "description": "Common starter fields",
+          "title": "Starter Metadata"
+        },
+        {
+          "$ref": "#/definitions/starter-with-src",
+          "description": "Where to find the contents to copy",
+          "title": "Source of Contents"
+        }
+      ],
+      "properties": {
+        "type": {
+          "description": "Signifies a copy type",
+          "enum": ["copy"],
+          "title": "Copy Type",
+          "type": "string"
+        }
+      },
+      "title": "Copy Starter",
+      "type": "object"
+    },
+    "starter-copy-with-dest": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/starter-copy",
+          "description": "All the properties from a Copy Starter",
+          "title": "Copy Starter properties"
+        }
+      ],
+      "properties": {
+        "dest": {
+          "description": "The file or folder to copy to: Jinja templates will be applied with `body` as the context",
+          "title": "Copy Destination",
+          "type": "string"
+        }
+      },
+      "required": ["dest", "schema"],
+      "title": "Copy with Destination Starter",
+      "type": "object"
+    },
+    "starter-meta": {
+      "description": "common metadata for Starters",
+      "properties": {
+        "category": {
+          "default": "Starters",
+          "description": "category to place the starter card under in Launcher",
+          "title": "Category",
+          "type": "string"
+        },
+        "commands": {
+          "description": "[JupyterLab commands](https://jupyterlab.readthedocs.io/en/stable/developer/extension_points.html#commands) to run after the Starter has completed",
+          "items": {
+            "$ref": "#/definitions/command"
+          },
+          "title": "Commands",
+          "type": "array"
+        },
+        "description": {
+          "description": "short, plain-text description of the intent of the Starter",
+          "title": "Description",
+          "type": "string"
+        },
+        "icon": {
+          "description": "[SVG](https://developer.mozilla.org/en-US/docs/Web/SVG) string to use in Launcher cards and tab icons",
+          "title": "Icon",
+          "type": "string"
+        },
+        "ignore": {
+          "description": "[glob-style patterns](https://docs.python.org/3/library/pathlib.html#pathlib.PurePath.match) for folders and files exclude from copying, with * for wildcards",
+          "items": {
+            "type": "string"
+          },
+          "title": "Ignore Files",
+          "type": "array"
+        },
+        "label": {
+          "description": "human-readable, plain-text description used in UI labels and tab titles",
+          "title": "Label",
+          "type": "string"
+        },
+        "rank": {
+          "default": 0,
+          "description": "rank of the launcher card within its category, lowest value will appear first",
+          "title": "Rank",
+          "type": "integer"
+        },
+        "schema": {
+          "description": "[Draft 7 JSON Schema](https://json-schema.org/understanding-json-schema) that generates a form like this one, which must validate the user's data. Description fields may include markdown",
+          "title": "JSON Schema",
+          "type": "object"
+        },
+        "uiSchema": {
+          "description": "[react-jsonschema-form `uiSchema`](https://react-jsonschema-form.readthedocs.io/en/latest/form-customization/#the-uischema-object) for customizing the selection of widgets",
+          "title": "UI Schema",
+          "type": "object"
+        }
+      },
+      "required": ["label", "description"],
+      "title": "Starter Metadata",
+      "type": "object"
+    },
+    "starter-notebook": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/starter-meta",
+          "description": "Common starter fields",
+          "title": "Starter Metadata"
+        },
+        {
+          "$ref": "#/definitions/starter-with-src",
+          "description": "Where to find the notebook",
+          "title": "Source of Notebook"
+        }
+      ],
+      "description": "Uses a notebook as both the configuration object (in `#/metadata/jupyter-starters`) and execution",
+      "properties": {
+        "type": {
+          "description": "Signifies a notebook starter",
+          "enum": ["notebook"],
+          "title": "Notebook Type",
+          "type": "string"
+        }
+      },
+      "required": ["src"],
+      "title": "Notebook Starter",
+      "type": "object"
+    },
+    "starter-python": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/starter-meta",
+          "description": "Common starter fields",
+          "title": "Starter Metadata"
+        }
+      ],
+      "description": "Invokes an importable python function (multiple times)",
+      "properties": {
+        "callable": {
+          "description": "a python function that accepts the `body`",
+          "pattern": "[a-zA-Z_\\d\\.]",
+          "title": "Python Callable",
+          "type": "string"
+        },
+        "type": {
+          "description": "Signifies a python starter",
+          "enum": ["python"],
+          "title": "Python Type",
+          "type": "string"
+        }
+      },
+      "required": ["callable", "schema"],
+      "title": "Python Starter",
+      "type": "object"
+    },
+    "starter-with-content": {
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/starter-content-any"
+        }
+      },
+      "required": ["content"],
+      "title": "A root of Jupyter contents"
+    },
+    "starter-with-src": {
+      "properties": {
+        "py_src": {
+          "description": "name of a python module installed in the `notebook` environment to prepent to `src`",
+          "title": "Starter Python Source",
+          "type": "string"
+        },
+        "src": {
+          "description": "path to the starter. may be absolute or relative to the `notebook` launch directory (or `py_src`)",
+          "title": "Starter Source",
+          "type": "string"
+        }
+      },
+      "required": ["src"],
+      "title": "Starter with Files",
+      "type": "object"
+    },
+    "starters": {
+      "additionalProperties": {
+        "$ref": "#/definitions/starter"
+      },
+      "description": "a named set of Starters",
+      "title": "Starters",
+      "type": "object"
+    }
+  },
+  "description": "A collection of JSON types for configuring and operating Starters",
+  "title": "Jupyter Starters JSON",
+  "type": "object"
+}

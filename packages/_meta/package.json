@@ -16,9 +16,9 @@
     "lib": "lib/"
   },
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc --build src",
     "clean": "rimraf lib",
-    "watch": "tsc -b --watch --preserveWatchOutput"
+    "watch": "jlpm build --watch --preserveWatchOutput"
   },
   "sideEffects": false,
   "types": "lib/index.d.ts",

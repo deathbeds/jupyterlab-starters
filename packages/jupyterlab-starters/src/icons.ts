@@ -1,7 +1,6 @@
 import { LabIcon } from '@jupyterlab/ui-components';
 
 import { CSS } from './css';
-
 import { DEFAULT_ICON_NAME, NS } from './tokens';
 
 export namespace Icons {

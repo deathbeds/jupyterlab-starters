@@ -98,7 +98,7 @@ JUPYTER_COOKIECUTTERS = {
 }
 
 
-def cookiecutter_starters(manager):
+def cookiecutter_starters(manager: "StarterManager"):
     """try to find some cookiecutters"""
     if not HAS_COOKIECUTTER:
         manager.log.debug(

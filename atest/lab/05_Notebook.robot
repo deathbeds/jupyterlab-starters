@@ -1,12 +1,13 @@
 *** Settings ***
 Documentation       Notebook
 
-Resource            Keywords.resource
+Resource            ../Keywords.resource
 Library             String
 
-Suite Setup         Setup Suite For Screenshots    notebook
+Suite Setup         Setup Suite For Screenshots    lab${/}notebook
 
 Force Tags          example:notebook
+
 
 *** Test Cases ***
 Happy Path
@@ -38,6 +39,7 @@ No-op
     Page Should Not Contain Element    ${CSS DIALOG}
     Capture Page Screenshot    04-noop-after.png
 
+
 *** Keywords ***
 Change The Name Field
     [Documentation]    Set a random name on the name field
@@ -48,7 +50,7 @@ Change The Name Field
     ${name} =    Generate Random String
     Click Element    ${name css}
     Really Input Text    ${name css}    ${name}
-    [Return]    ${name}
+    RETURN    ${name}
 
 Change The Quest Field
     [Documentation]    Set a random value on the quest field
@@ -57,7 +59,7 @@ Change The Quest Field
     ${quest} =    Generate Random String
     Click Element    ${quest css}
     Really Input Text    ${quest css}    ${quest}
-    [Return]    ${quest}
+    RETURN    ${quest}
 
 Change The Answer Field
     [Documentation]    Set the answer field

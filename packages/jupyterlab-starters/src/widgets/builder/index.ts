@@ -1,14 +1,12 @@
+import { SchemaForm, ALL_CUSTOM_UI } from '@deathbeds/jupyterlab-rjsf';
 import { JSONObject } from '@lumino/coreutils';
 import { Widget, BoxLayout } from '@lumino/widgets';
 
-import { IStartContext } from '../../tokens';
 import { CSS } from '../../css';
+import { IStartContext } from '../../tokens';
 
-import { SchemaForm } from '@deathbeds/jupyterlab-rjsf';
-
-import { BuilderModel } from './model';
 import { BuilderButtons } from './buttons';
-import { ALL_CUSTOM_UI } from '@deathbeds/jupyterlab-rjsf';
+import { BuilderModel } from './model';
 
 export class BodyBuilder extends Widget {
   private _form: SchemaForm<JSONObject>;

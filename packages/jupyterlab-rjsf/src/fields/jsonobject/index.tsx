@@ -1,17 +1,9 @@
-import * as React from 'react';
-
-/* order might matter on these imports */
-/* first core... */
-import { utils as rjsfUtils, Field } from '@rjsf/core';
-
-/* ...then lib imports */
-import _ObjectField from '@rjsf/core/lib/components/fields/ObjectField';
-
-import { UnControlled } from 'react-codemirror2';
-
-import * as CodeMirror from 'codemirror';
-
 import { JSONExt } from '@lumino/coreutils';
+import { utils as rjsfUtils, Field } from '@rjsf/core';
+import _ObjectField from '@rjsf/core/lib/components/fields/ObjectField';
+import * as CodeMirror from 'codemirror';
+import * as React from 'react';
+import { UnControlled } from 'react-codemirror2';
 
 /**
  * This is a pretty nasty way to deal with the ObjectField being very hard
@@ -65,21 +57,6 @@ export function makeJSONObjectField(ObjectField: typeof _ObjectField): Field {
         <>
           <legend>{title}</legend>
           <p className="field-description">{description}</p>
-          <div className="jp-SchemaForm-JSONObject-buttons">
-            <button
-              id={`${idSchema.$id}_revert`}
-              className="jp-JSONEditor-revertButton"
-              title="Revert to Previous Notebook Metadata"
-              onClick={this.onReset}
-            ></button>
-            <button
-              id={`${idSchema.$id}_commit`}
-              disabled={!canSave}
-              className="jp-JSONEditor-commitButton"
-              title="Commit to Notebook Metadata"
-              onClick={this.onSave}
-            ></button>
-          </div>
           <div id={idSchema.$id}>
             <UnControlled
               editorDidMount={(editor) => (this._editor = editor)}
@@ -87,6 +64,25 @@ export function makeJSONObjectField(ObjectField: typeof _ObjectField): Field {
               options={options}
               onChange={this.onChange}
             />
+          </div>
+          <div className="jp-SchemaForm-JSONObject-buttons">
+            <button
+              id={`${idSchema.$id}_revert`}
+              className="jp-JSONEditor-revertButton"
+              title="Revert to Previous Notebook Metadata"
+              onClick={this.onReset}
+            >
+              Revert
+            </button>
+            <button
+              id={`${idSchema.$id}_commit`}
+              disabled={!canSave}
+              className="jp-JSONEditor-commitButton"
+              title="Commit to Notebook Metadata"
+              onClick={this.onSave}
+            >
+              Commit
+            </button>
           </div>
         </>
       );

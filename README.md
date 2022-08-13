@@ -27,42 +27,35 @@ A starter is a...
 
 ## Installing
 
-> You'll need `jupyterlab >=3,<4`, `python >=3.7`, and `nodejs >=12`
-
 ```bash
-pip install --pre jupyter_starters
-```
-
-Check your installation:
-
-```bash
-jupyter serverextension list
-jupyter labextension list
-```
-
-If you don't see `jupyterlab_starters` run:
-
-```bash
-jupyter serverextension enable --sys-prefix jupyterlab_starters
+pip install jupyter-starters jupyterlab=3
+# or
+mamba install -c conda-forge jupyter-starters jupyterlab=3
+# or
+conda install -c conda-forge jupyter-starters jupyterlab=3
 ```
 
 ## Configuring
 
-Like the Jupyter Notebook server, JupyterHub and other Jupyter interactive computing
-tools, `jupyter-starters` can be configured via [Python or JSON files][notebook-config]
-in _well-known locations_. You can find out where to put them on your system with:
+Like the _Jupyter Server_, _JupyterHub_ and other Jupyter interactive computing tools,
+`jupyter-starters` can be configured via [Python or JSON files][server-config] in
+_well-known locations_. You can find out where to put them on your system with:
 
 ```bash
 jupyter --paths
 ```
 
-They will be merged from bottom to top, and the directory where you launch your
-`notebook` server wins, making it easy to check in to version control.
+They will be merged from bottom to top, and the directory where you launch `jupyter lab`
+wins, making it easy to check in to version control.
 
 The very simplest starter, `copy`, will copy a file or folder to the location it is
 launched from in the JupyterLab [Launcher][].
 
-```json
+```{hint}
+
+> an example `jupyter_server_config.json`
+
+~~~json
 {
   "StarterManager": {
     "extra_starters": {
@@ -75,9 +68,8 @@ launched from in the JupyterLab [Launcher][].
     }
   }
 }
+~~~
 ```
-
-> more docs TBD: for now, see examples in the [demo configuration][conf].
 
 ## Alternatives
 
@@ -104,7 +96,8 @@ Don't like what you see here? Try these other approaches:
   https://jupyterlab.readthedocs.io/en/stable/user/files.html#creating-files-and-activities
 [license-badge]: https://img.shields.io/github/license/deathbeds/jupyterlab-starters
 [license]: https://github.com/deathbeds/jupyterlab-starters/tree/master/LICENSE
-[notebook-config]: https://jupyter-notebook.readthedocs.io/en/stable/config.html
+[server-config]:
+  https://jupyter-server.readthedocs.io/en/stable/operators/configuring-extensions.html
 [npm-badge]: https://img.shields.io/npm/v/@deathbeds/jupyterlab-starters
 [npm]: https://www.npmjs.com/package/@deathbeds/jupyterlab-starters
 [pypi-badge]: https://img.shields.io/pypi/v/jupyter-starters

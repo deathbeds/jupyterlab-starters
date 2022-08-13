@@ -5,16 +5,19 @@
 import os
 import pathlib
 import sys
-from subprocess import check_call
+from subprocess import call, check_call
 
 HERE = pathlib.Path(__file__).parent
 ROOT = HERE.parent
 
 
 if os.environ.get("READTHEDOCS", False):
+    call(["doit", "-n8", "dist"], cwd=str(ROOT))
+    call(["doit", "-n8", "dist"], cwd=str(ROOT))
     check_call(["doit", "dist"], cwd=str(ROOT))
-    check_call(["doit", "dev:pip:install"], cwd=str(ROOT))
+    check_call(["doit", "dev"], cwd=str(ROOT))
     check_call(["doit", "docs:schema"], cwd=str(ROOT))
+    check_call(["doit", "lite"], cwd=str(ROOT))
 
 
 def build_finished(_app, exception):
@@ -60,7 +63,6 @@ version = ""
 # The full version, including alpha/beta/rc tags
 release = ""
 
-
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -83,7 +85,12 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx_copybutton",
     "myst_nb",
+    "sphinxext.rediraffe",
 ]
+
+rediraffe_redirects = {
+    "demo/index": "_static/lab/index",
+}
 
 autosectionlabel_prefix_document = True
 myst_heading_anchors = 3
@@ -108,7 +115,7 @@ master_doc = "index"
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -135,7 +142,12 @@ html_theme = "pydata_sphinx_theme"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
+html_static_path = [
+    # docs stuff
+    "_static",
+    # as-built application, extensions, contents, and patched jupyter-lite.json
+    "../build/docs-app",
+]
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -145,7 +157,14 @@ html_static_path = ["_static"]
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-# html_sidebars = {}
+html_sidebars = {
+    "**": [
+        "search-field.html",
+        "demo.html",
+        "sidebar-nav-bs.html",
+        "sidebar-ethical-ads.html",
+    ]
+}
 
 
 # -- Options for HTMLHelp output ---------------------------------------------

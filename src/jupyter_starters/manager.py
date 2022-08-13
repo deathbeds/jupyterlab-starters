@@ -1,14 +1,17 @@
 """ manager, for starters
 """
-# pylint: disable=no-self-use,unsubscriptable-object,fixme
+# pylint: disable=unsubscriptable-object,fixme
 import base64
 import importlib
 from copy import deepcopy
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Text
 from urllib.parse import unquote
 
 import jinja2
+import jinja2.sandbox
+import nbformat
 import traitlets as T
 from jupyter_core.paths import jupyter_config_path
 from jupyter_server import _tz as tz
@@ -17,9 +20,10 @@ from jupyter_server.utils import ensure_async
 from jupyter_server.utils import url_path_join as ujoin
 from traitlets.config import LoggingConfigurable
 
+from . import json_
 from .py_starters.cookiecutter import cookiecutter_starters
 from .py_starters.notebook import notebook_starter, response_from_notebook, stop_kernel
-from .schema.v2 import STARTERS
+from .schema.v3 import STARTERS
 from .trait_types import Schema
 from .types import Status
 
@@ -38,6 +42,9 @@ DEFAULT_IGNORE_PATTERNS = [
     "Untitled.*",
 ]
 
+#: the importable name of a class
+DEFAULT_ENV_CLS = "jinja2.sandbox.SandboxedEnvironment"
+
 
 class StarterManager(LoggingConfigurable):
     """handlers starting starters"""
@@ -48,6 +55,7 @@ class StarterManager(LoggingConfigurable):
     config_dict = T.Dict()
     kernel_dirs = T.Dict({})
 
+    jinja_env_cls = T.Unicode(DEFAULT_ENV_CLS).tag(config=True)
     extra_starters = Schema(default_value={}, validator=STARTERS).tag(config=True)
     extra_jinja_env_extensions = T.Dict({}).tag(config=True)
 
@@ -76,7 +84,16 @@ class StarterManager(LoggingConfigurable):
 
     @T.default("jinja_env")
     def _default_env(self):
-        return jinja2.Environment(
+        # pylint: disable=broad-except
+        try:
+            env_class = T.import_item(self.jinja_env_cls)
+        except Exception as err:
+            self.log.warning(
+                f"Using {DEFAULT_ENV_CLS}, couldn't import {self.jinja_env_cls}: {err}"
+            )
+            env_class = T.import_item(DEFAULT_ENV_CLS)
+
+        return env_class(
             extensions=[
                 ext for ext, enabled in self.jinja_env_extensions.items() if enabled
             ]
@@ -149,6 +166,9 @@ class StarterManager(LoggingConfigurable):
         if starter_type == "notebook":
             return await self.start_notebook(name, starter, path, body)
 
+        if starter_type == "content":
+            return await self.start_content(name, starter, path, body)
+
         raise NotImplementedError(starter["type"])
 
     async def stop(self, name):
@@ -218,13 +238,26 @@ class StarterManager(LoggingConfigurable):
         else:
             dest = ujoin(path, root.name)
 
-        await self.save_one(root, dest)
+        await self.save_one_file(root, dest)
 
         for child in iter_not_ignored(root, starter.get("ignore")):
-            await self.save_one(
+            await self.save_one_file(
                 child,
                 unquote(ujoin(dest, child.as_uri().replace(root_uri, ""))),
             )
+
+        return {
+            "body": body,
+            "name": name,
+            "path": dest,
+            "starter": starter,
+            "status": Status.DONE,
+        }
+
+    async def start_content(self, name, starter, path, body):
+        """start a content starter"""
+
+        dest = await self.save_content(path, starter["content"], body)
 
         return {
             "body": body,
@@ -247,10 +280,8 @@ class StarterManager(LoggingConfigurable):
         """stop running the notebook kernel"""
         return await stop_kernel(name, self)
 
-    async def save_one(self, src, dest):
-        """use the contents manager to write a single file/folder"""
-        # pylint: disable=broad-except
-
+    async def save_one_file(self, src, dest):
+        """generate and save a content model for a single file/directory"""
         stat = src.stat()
         is_dir = src.is_dir()
 
@@ -268,6 +299,88 @@ class StarterManager(LoggingConfigurable):
             size=stat.st_size,
         )
 
+        await self.save_contents_model(model, dest)
+
+    async def save_content(self, path, starter_model, body):
+        """save a content model (and its children)"""
+        body = body or {}
+        name_tmpl = self.jinja_env.from_string(starter_model["name"])
+        name = name_tmpl.render(**body).strip()
+
+        if not name:
+            return
+
+        dest = ujoin(path, name)
+
+        type_ = starter_model.get("type", "file")
+
+        is_dir = type_ == "directory"
+
+        model = dict(
+            name=name,
+            path=dest,
+            type=type_,
+            last_modified=datetime.now(timezone.utc),
+            created=datetime.now(timezone.utc),
+        )
+
+        if is_dir:
+            model.update(
+                content=None,
+                size=0,
+                format=None,
+                mimetype=None,
+            )
+        elif type_ == "notebook":
+            content = self._template_notebook(starter_model["content"], body)
+            model.update(
+                content=content,
+                size=0,
+                format="json",
+                mimetype="application/x-ipynb+json",
+            )
+        else:
+            content_tmpl = self.jinja_env.from_string(starter_model["content"])
+            content = content_tmpl.render(**body)
+            model.update(
+                content=content,
+                size=len(content),
+                format=starter_model.get("format") or "text",
+                mimetype=starter_model.get("mimetype") or "text/plain",
+            )
+
+        await self.save_contents_model(model, dest)
+
+        if is_dir:
+            for child in starter_model.get("content", []):
+                await self.save_content(dest, child, body)
+
+    def _template_notebook(self, content, body):
+        """build a template notebook by manipulation"""
+        json_text = json_.dumps(content, indent=2, sort_keys=True)
+        content_tmpl = self.jinja_env.from_string(json_text)
+        content_notebook = json_.loads(content_tmpl.render(**body))
+        ipynb = nbformat.v4.new_notebook(metadata=content_notebook.get("metadata", {}))
+        cells = []
+        for a_cell in content_notebook.get("cells", []):
+            cell_type = a_cell.get("cell_type", "code")
+            source = a_cell.pop("source", "")
+            if cell_type == "code":
+                cell = nbformat.v4.new_code_cell(source, **a_cell)
+            elif cell_type == "markdown":
+                cell = nbformat.v4.new_markdown_cell(source, **a_cell)
+            elif cell_type == "raw":
+                cell = nbformat.v4.new_raw_cell(source, **a_cell)
+            cells += [cell]
+        ipynb["cells"] = cells
+
+        nb_json = nbformat.v4.nbjson.writes(ipynb)
+        return json_.loads(nb_json)
+
+    async def save_contents_model(self, model, dest):
+        """use the contents manager to write a model"""
+        # pylint: disable=broad-except
+
         allow_hidden = None
 
         if hasattr(self.contents_manager, "allow_hidden"):
@@ -276,8 +389,6 @@ class StarterManager(LoggingConfigurable):
 
         try:
             await ensure_async(self.contents_manager.save(model, dest))
-        except Exception as err:
-            self.log.error(f"Couldn't save {dest}: {err}")
         finally:
             if allow_hidden is not None:
                 self.contents_manager.allow_hidden = allow_hidden

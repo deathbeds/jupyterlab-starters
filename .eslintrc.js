@@ -8,6 +8,9 @@ module.exports = {
   root: true,
   extends: [
     'eslint:recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier/@typescript-eslint',
@@ -20,7 +23,7 @@ module.exports = {
   parserOptions: {
     project: 'tsconfig.eslint.json',
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'import'],
   rules: {
     '@typescript-eslint/no-floating-promises': ['error', { ignoreVoid: true }],
     '@typescript-eslint/no-unused-vars': ['warn', { args: 'none' }],
@@ -34,6 +37,30 @@ module.exports = {
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/triple-slash-reference': 'warn',
     '@typescript-eslint/no-inferrable-types': 'off',
+    'import/export': 'off', // we do class/interface + NS pun exports _all over_
+    'import/no-unresolved': 'off',
+    'import/order': [
+      'warn',
+      {
+        groups: [
+          'builtin',
+          'external',
+          'parent',
+          'sibling',
+          'index',
+          'object',
+          'unknown',
+        ],
+        pathGroups: [
+          { pattern: 'react/**', group: 'builtin', order: 'after' },
+          { pattern: 'codemirror/**', group: 'external', order: 'before' },
+          { pattern: '@lumino/**', group: 'external', order: 'before' },
+          { pattern: '@jupyterlab/**', group: 'external', order: 'after' },
+        ],
+        'newlines-between': 'always',
+        alphabetize: { order: 'asc' },
+      },
+    ],
     'no-inner-declarations': 'off',
     'no-prototype-builtins': 'off',
     'no-control-regex': 'warn',

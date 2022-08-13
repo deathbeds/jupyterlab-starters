@@ -13,7 +13,7 @@ from .manager import StarterManager
 class StartersBaseApp(JupyterApp):
     """A base class for CLI apps."""
 
-    version = __version__
+    version = T.Unicode(__version__)
 
     @property
     def description(self):  # pragma: no cover
@@ -65,9 +65,12 @@ class StartersListApp(StartersBaseApp):
 class StartersApp(StartersBaseApp):
     """jupyter-starters utilities"""
 
-    name = "starters"
-    subcommands = dict(
-        list=(StartersListApp, f"{StartersListApp.__doc__}".splitlines()[0]),
+    name = "starters"  # type: ignore
+
+    subcommands = T.Dict(
+        dict(
+            list=(StartersListApp, f"{StartersListApp.__doc__}".splitlines()[0]),
+        )
     )
 
 

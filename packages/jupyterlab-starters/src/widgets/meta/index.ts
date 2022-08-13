@@ -1,15 +1,15 @@
-import { JSONObject } from '@lumino/coreutils';
-import { Widget, BoxLayout } from '@lumino/widgets';
-
-import { CSS } from '../../css';
-import { SchemaForm } from '@deathbeds/jupyterlab-rjsf';
-import { PreviewCard } from '../previewcard';
 import {
+  SchemaForm,
   ALL_CUSTOM_UI,
   AS_JSONOBJECT,
   AS_TEXTAREA,
   AS_XML,
 } from '@deathbeds/jupyterlab-rjsf';
+import { JSONObject } from '@lumino/coreutils';
+import { Widget, BoxLayout } from '@lumino/widgets';
+
+import { CSS } from '../../css';
+import { PreviewCard } from '../previewcard';
 
 import { NotebookMetadataModel } from './model';
 

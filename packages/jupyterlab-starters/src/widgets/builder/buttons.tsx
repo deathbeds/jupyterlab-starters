@@ -1,5 +1,4 @@
-import * as React from 'react';
-
+import { VDomRenderer } from '@jupyterlab/apputils';
 import {
   folderIcon,
   runIcon,
@@ -7,8 +6,7 @@ import {
   stopIcon,
   closeIcon,
 } from '@jupyterlab/ui-components';
-
-import { VDomRenderer } from '@jupyterlab/apputils';
+import * as React from 'react';
 
 import { CSS } from '../../css';
 

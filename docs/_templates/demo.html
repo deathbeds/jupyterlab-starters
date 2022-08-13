@@ -1,0 +1,48 @@
+<div class="demo-sidebar">
+  <a
+    href="{{ pathto('demo/index') }}?starter=todo"
+    class="btn btn-primary"
+    target="_blank"
+    title="Try Jupyter Starters in your browser. Right now."
+    id="demo-room-button"
+  >
+    <i class="fas fa-list" id="demo-starter-icon"></i>
+    Try <strong>Jupyter Starters</strong> Now <span id="demo-room-label"></span> <span id="demo-app-label"></span>
+  </a>
+
+  <details>
+    <summary><i class="fa-solid fa-circle-play"></i> Start with...</summary>
+    <label for="demo-todo">
+      <input id="demo-todo" name="demo-starter" type="radio" checked value="todo" data-icon="fas fa-list"/>
+      ... a simple file
+    </label>
+    <label for="demo-notebook">
+      <input id="demo-notebook" name="demo-starter" type="radio" value="hello-notebook" data-icon="fas fa-book"/>
+      ... a notebook
+    </label>
+  </details>
+
+  <em>Powered by <a href="https://jupyterlite.rtfd.io" target="_blank">JupyterLite</a></em>
+
+  <script>$(function() {
+    const icon = $("#demo-starter-icon");
+    const labUrl = `${window.origin}/{{ pathto('demo/index') }}`;
+    function updateUrl() {
+      let url = new URL(labUrl);
+
+      const starter = $("[name='demo-starter']:checked");
+      const starterName = starter.attr("value").trim();
+      const starterIcon = starter.attr("data-icon").trim();
+      if(starterName) {
+        url.searchParams.set("starter", starterName);
+        icon.attr("class", starterIcon);
+      }
+      $("#demo-room-button").attr(
+        "href",
+        url.toString().replace(window.origin, '')
+      );
+    }
+    $('[data-toggle="tooltip"]').tooltip();
+    $("[name='demo-starter']").on('input', updateUrl);
+  });</script>
+</div>

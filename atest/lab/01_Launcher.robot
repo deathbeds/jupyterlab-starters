@@ -1,11 +1,12 @@
 *** Settings ***
 Documentation       Launcher
 
-Resource            Keywords.resource
+Resource            ../Keywords.resource
 
-Suite Setup         Setup Suite For Screenshots    launcher
+Suite Setup         Setup Suite For Screenshots    lab${/}launcher
 
 Force Tags          launcher
+
 
 *** Test Cases ***
 Launcher

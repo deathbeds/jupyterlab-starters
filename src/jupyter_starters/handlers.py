@@ -7,7 +7,7 @@ from jupyter_server.base.handlers import JupyterHandler
 from jupyter_server.utils import url_path_join as ujoin
 
 from .json_ import JsonSchemaException, loads
-from .schema.v2 import ALL_STARTERS, VERSION
+from .schema.v3 import ALL_STARTERS, VERSION
 from .types import NS
 
 if TYPE_CHECKING:
