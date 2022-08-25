@@ -16,7 +16,7 @@ import {
   PKG,
   STARTER_BODY_PARAM,
   STARTER_NAME_PARAM,
-  STARTER_NOUI_PARAM,
+  STARTER_FORM_PARAM,
   STARTER_PATTERN,
 } from '../tokens';
 
@@ -85,14 +85,14 @@ export const routerPlugin: JupyterFrontEndPlugin<void> = {
           body = mergeWith(starter.schema.default, body || {});
         }
 
-        let noUI = false;
-        let rawNoUI = parsedUrl.searchParams.get(STARTER_NOUI_PARAM);
+        let form = true;
+        let rawForm = parsedUrl.searchParams.get(STARTER_FORM_PARAM);
 
-        if (rawNoUI != null) {
+        if (rawForm != null) {
           try {
-            noUI = !!JSON.parse(rawNoUI);
+            form = !!JSON.parse(rawForm);
           } catch (err) {
-            console.warn(EMOJI, `Couldn't parse UI: ${err}`);
+            console.warn(EMOJI, `Couldn't parse form: ${err}`);
           }
         }
 
@@ -102,7 +102,7 @@ export const routerPlugin: JupyterFrontEndPlugin<void> = {
           name,
           'in',
           url,
-          noUI ? 'without UI' : 'with UI',
+          form ? 'with form' : 'without form',
           body
         );
 
@@ -112,7 +112,8 @@ export const routerPlugin: JupyterFrontEndPlugin<void> = {
           name,
           cwd,
           starter,
-          noUI,
+          form,
+          doCommands: true,
           ...(body ? { body } : {}),
         };
 
