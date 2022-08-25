@@ -36,7 +36,7 @@
     "@jupyterlab/running": "3",
     "@rjsf/core": "~3.2.1",
     "nunjucks": "^3.2.3",
-    "object-in-queryparams": "^1.0.2"
+    "query-string": "^7.1.1"
   },
   "devDependencies": {
     "@jupyterlab/builder": "^3.2.1",
