@@ -86,6 +86,7 @@ export class BrowserStarterRunner extends BaseStarterRunner implements IStarterR
 
     let model: Partial<Contents.IModel> = {
       name,
+      path: dest,
       type: contentType,
     };
 

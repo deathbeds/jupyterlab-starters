@@ -52,7 +52,11 @@ export const corePlugin: JupyterFrontEndPlugin<IStarterManager> = {
     commands.addCommand(CommandIDs.start, {
       execute: async (args: any) => {
         const context = args as any as IStartContext;
-        const { starter, name, cwd, body } = context;
+        const { starter, name, cwd, noUI, noCommands } = context;
+        let { body } = context;
+
+        delete context.noUI;
+        delete context.noCommands;
 
         const runCommands = async (response: SCHEMA.AResponseForStartRequest) => {
           const starterCommands = response?.starter?.commands;
@@ -67,17 +71,17 @@ export const corePlugin: JupyterFrontEndPlugin<IStarterManager> = {
           }
         };
 
-        if (starter.schema && !body) {
+        if (starter.schema && noUI != null && !noUI) {
           const content = new BodyBuilder({ manager, context, name });
           content.id = `id-jp-starters-${name}`;
           app.shell.add(content, 'right');
           shell.expandRight();
           shell.activateById(content.id);
           content.model.start.connect(async (builder, context) => {
-            const response = (await commands.execute(
-              CommandIDs.start,
-              context as any
-            )) as SCHEMA.AResponseForStartRequest;
+            const response = (await commands.execute(CommandIDs.start, {
+              ...context,
+              noCommands: true,
+            } as any)) as SCHEMA.AResponseForStartRequest;
             switch (response.status) {
               case 'done':
                 content.dispose();
@@ -89,6 +93,7 @@ export const corePlugin: JupyterFrontEndPlugin<IStarterManager> = {
                   name: response.name,
                   body: response.body,
                   cwd: response.path,
+                  noCommands: true,
                 };
                 await runCommands(response);
                 content.model.status = 'ready';
@@ -97,13 +102,12 @@ export const corePlugin: JupyterFrontEndPlugin<IStarterManager> = {
                 console.error(EMOJI, `Unknown status ${response.status}`, response);
             }
           });
-        } else if (starter.schema && body) {
-          return await manager.start(name, starter, cwd, body);
         } else {
           const response = await manager.start(name, starter, cwd, body);
-          if (response) {
+          if (response && !noCommands) {
             await runCommands(response);
           }
+          return response;
         }
       },
       label: (args: any) => args.starter.label,
