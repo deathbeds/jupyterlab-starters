@@ -297,6 +297,7 @@
     "@jupyterlab/running" "3"
     "@rjsf/core" "~3.2.1"
     nunjucks "^3.2.3"
+    object-in-queryparams "^1.0.2"
 
 "@discoveryjs/json-ext@^0.5.0":
   version "0.5.7"
@@ -8379,6 +8380,11 @@ object-copy@^0.1.0:
     copy-descriptor "^0.1.0"
     define-property "^0.2.5"
     kind-of "^3.0.3"
+
+object-in-queryparams@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/object-in-queryparams/-/object-in-queryparams-1.0.2.tgz#8ae5192fb4d123b1561f9df8d971355e32049d0f"
+  integrity sha512-Xpx4MHKYb4vCSAXP0D+xEww9RyU9MILwO6fTQQDkCKDOLzQ3OuvPgEV2+WC7HKvS33lMn1v2eNJ0YvsYFJhT+A==
 
 object-inspect@^1.12.0, object-inspect@^1.9.0:
   version "1.12.2"
