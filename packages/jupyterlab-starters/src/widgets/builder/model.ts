@@ -13,6 +13,7 @@ export class BuilderModel extends VDomModel {
   private _form: SchemaFormModel<JSONObject>;
   private _name: string;
   private _status: BuilderModel.TStatus = 'starting';
+  private _showShare: boolean = false;
 
   private _start: Signal<BuilderModel, IStartContext>;
   private _manager: IStarterManager;
@@ -108,6 +109,20 @@ export class BuilderModel extends VDomModel {
 
   onDone(): void {
     this._done && this._done();
+  }
+
+  get showShare(): boolean {
+    return this._showShare;
+  }
+
+  set showShare(showShare: boolean) {
+    this._showShare = showShare;
+    this.stateChanged.emit(void 0);
+  }
+
+  onShare(): void {
+    this.showShare = !this.showShare;
+    this.stateChanged.emit(void 0);
   }
 
   get icon(): LabIcon.ILabIcon {

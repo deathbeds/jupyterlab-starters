@@ -7,11 +7,13 @@ import { IStartContext } from '../../tokens';
 
 import { BuilderButtons } from './buttons';
 import { BuilderModel } from './model';
+import { ShareForm } from './share';
 
 export class BodyBuilder extends Widget {
   private _form: SchemaForm<JSONObject>;
   private _context: IStartContext;
   private _buttons: BuilderButtons;
+  private _share: ShareForm;
 
   model: BuilderModel;
 
@@ -21,6 +23,7 @@ export class BodyBuilder extends Widget {
     this.model.done = () => this.dispose();
     this.layout = new BoxLayout();
     this._context = options.context;
+    this._share = new ShareForm(new ShareForm.Model(this.model));
     const { label } = this._context.starter;
     this.id = Private.nextId();
     this.addClass(CSS.BUILDER);
@@ -47,6 +50,7 @@ export class BodyBuilder extends Widget {
     this._buttons = this.makeButtons();
     this.boxLayout.addWidget(this._form);
     this.boxLayout.addWidget(this._buttons);
+    this.boxLayout.addWidget(this._share);
   }
 
   get boxLayout(): BoxLayout {

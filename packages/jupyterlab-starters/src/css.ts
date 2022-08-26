@@ -16,6 +16,7 @@ export const CSS = {
       close: 'jp-CloseIcon',
     },
   },
+  SHARE_FORM: 'jp-Starters-ShareForm',
   BUILDER: 'jp-Starters-BodyBuilder',
   BUILDER_BUTTONS: 'jp-Starters-BodyBuilder-buttons',
   META: 'jp-Starters-NotebookMetadata',

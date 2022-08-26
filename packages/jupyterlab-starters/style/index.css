@@ -1,8 +1,6 @@
-:root {
-  --jp-starters-btns-height: calc(4 * var(--jp-ui-font-size3));
-  --jp-starters-btn-height: calc(3 * var(--jp-ui-font-size3));
-  --jp-starters-btn-icon-size: calc(2 * var(--jp-ui-font-size3));
-}
+@import url('./variables.css');
+@import url('./share.css');
+@import url('./preview.css');
 
 .jp-StartersDefaultIcon {
   background-image: url('./icons/starter.svg');
@@ -101,6 +99,11 @@
   align-items: center;
   justify-content: center;
   flex: 1;
+  cursor: pointer;
+}
+
+.jp-Starters-BodyBuilder-buttons button > label {
+  cursor: pointer;
 }
 
 .jp-Starters-BodyBuilder-buttons button:first-child {
@@ -123,22 +126,6 @@
 .jp-Starters-BodyBuilder-buttons button.jp-mod-warn [fill]:not([fill='none']),
 .jp-Starters-BodyBuilder-buttons button.jp-mod-accept [fill]:not([fill='none']) {
   fill: white;
-}
-
-.jp-Starters-Preview {
-  display: flex;
-  flex: 0;
-  flex-direction: column;
-  align-items: center;
-  border-top: solid 1px var(--jp-border-color0);
-  max-height: calc(
-    var(--jp-private-launcher-card-size) + 2 * var(--jp-notebook-padding)
-  );
-}
-
-.jp-Starters-Preview img {
-  width: var(--jp-private-launcher-large-icon-size);
-  height: var(--jp-private-launcher-large-icon-size);
 }
 
 .jp-Starters-FormPanel .jp-SchemaForm > .form-group {

@@ -5,6 +5,7 @@ import {
   circleIcon,
   stopIcon,
   closeIcon,
+  linkIcon,
 } from '@jupyterlab/ui-components';
 import * as React from 'react';
 
@@ -36,10 +37,24 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
           <strong title={context.starter.description}>{context.starter.label}</strong>
         </footer>
         <section>
+          {this.renderShareButton()}
           {this.renderCancelButton()}
           {this.renderStartButton()}
         </section>
       </>
+    );
+  }
+
+  protected renderShareButton(): JSX.Element {
+    return (
+      <button
+        onClick={this.onShare}
+        className={`${CSS.JP.styled}`}
+        title="Copy shareable URL fragment."
+      >
+        <linkIcon.react tag="span" verticalAlign="middle" />
+        <label> SHARE</label>
+      </button>
     );
   }
 
@@ -87,4 +102,5 @@ export class BuilderButtons extends VDomRenderer<BuilderModel> {
 
   onStart: () => void = () => this.model.onStart();
   onDone: () => void = () => this.model.onDone();
+  onShare: () => void = () => this.model.onShare();
 }
