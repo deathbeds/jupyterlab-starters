@@ -42,10 +42,9 @@ Ensure JupyterLite Process
     RETURN    ${proc}
 
 Open JupyterLite
-    [Documentation]    Open the browser to JupyterLite
-    Set Environment Variable    MOZ_HEADLESS    ${HEADLESS}
-    ${service args} =    Create List    --log    debug
-    Go To    ${LITE URL}
+    [Documentation]    Open the browser to JupyterLite with an optional URL fragment
+    [Arguments]    ${url}=${EMPTY}
+    Go To    ${LITE URL}${url}
     Wait For Splash
 
 Stop JupyterLite Server
@@ -60,7 +59,7 @@ Start Lite Test
 Clean Up Lite Test
     [Documentation]    Clean up
     ...    TODO: how might we clear the application cache?
-    Close All Browsers
+    Log    Nothing to see here
 
 Start Lite Suite
     [Documentation]    Ensure lite assets are available

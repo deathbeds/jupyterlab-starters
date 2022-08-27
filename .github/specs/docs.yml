@@ -12,4 +12,4 @@ dependencies:
   - sphinx-copybutton
   - sphinxext-rediraffe
   - pip:
-      - jupyterlite==0.1.0b11
+      - jupyterlite==0.1.0b12
