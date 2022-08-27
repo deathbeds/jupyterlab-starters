@@ -2,6 +2,7 @@
   max-width: 40em;
   padding: 0.5em;
   flex: 0;
+  max-height: calc(2 * var(--jp-starters-btns-height));
 }
 
 .jp-Starters-ShareForm-input {

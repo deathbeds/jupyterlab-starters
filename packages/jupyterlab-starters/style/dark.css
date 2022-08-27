@@ -1,0 +1,3 @@
+[data-jp-theme-light="false"] .jp-Starters-FormPanel button.jp-mod-styled:not(.jp-mod-accept):not(.jp-mod-reject) {
+    color: var(--jp-layout-color0);
+  }

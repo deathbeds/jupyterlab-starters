@@ -1,6 +1,7 @@
 @import url('./variables.css');
 @import url('./share.css');
 @import url('./preview.css');
+@import url('./dark.css');
 
 .jp-StartersDefaultIcon {
   background-image: url('./icons/starter.svg');

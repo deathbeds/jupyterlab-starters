@@ -24,7 +24,7 @@ Run TODO With Form
 
 Run TODO With URL
     [Documentation]    Does the TODO example work with a URL?
-    ${prefix} =    Set Variable    url
+    ${prefix} =    Set Variable    url-
     Open JupyterLite    ?starter=todo
     ${title} =    Fill TODO Starter Title    ${prefix}
     ${task} =    Add TODO Starter Item    ${prefix}
@@ -33,11 +33,22 @@ Run TODO With URL
 
 Run TODO With URL Body
     [Documentation]    Does the TODO example work with a URL containing a body?
-    ${prefix} =    Set Variable    url-body
+    ${prefix} =    Set Variable    url-body-
     ${title} =    Generate Random String
-    Open JupyterLite    ?starter=todo&starter-body=\{"title":"${title}"\}
+    ${body} =    Set Variable    \{"title":"${title}"}
+    Open JupyterLite    ?starter=todo&starter-body=${body}
     ${task} =    Add TODO Starter Item    ${prefix}
     Click Element    ${CSS BODYBUILDER ACCEPT}
+    TODO Starter File Contains    ${prefix}    ${title}    ${task}
+
+Run TODO Without Form
+    [Documentation]    Does the TODO example work with a URL containing a body?
+    ${prefix} =    Set Variable    url-no-form-
+    ${title} =    Generate Random String
+    ${task} =    Generate Random String
+    ${body} =    Set Variable
+    ...    \{"title":"${title}","items":[\{"description": "${task}"}]}
+    Open JupyterLite    ?starter=todo&starter-form=0&starter-body=${body}
     TODO Starter File Contains    ${prefix}    ${title}    ${task}
 
 
@@ -48,6 +59,7 @@ Add TODO Starter Item
     IF    not "${task}"
         ${task} =    Generate Random String
     END
+    Wait Until Page Contains Element    ${CSS TODO BTN ADD}
     Click Element    ${CSS TODO BTN ADD}
     Wait Until Page Contains Element    ${CSS TODO TEXT DESCRIPTION}
     Really Input Text    ${CSS TODO TEXT DESCRIPTION}    ${task}
@@ -73,5 +85,5 @@ TODO Starter File Contains
     Open In    TODO.md    ${XP MENU MARKDOWN}
     Capture Page Screenshot    ${prefix}03-preview.png
     FOR    ${text}    IN    @{texts}
-        CodeMirror Value Contains    {CSS FILE EDITOR} .CodeMirror    ${text}
+        CodeMirror Value Contains    ${CSS FILE EDITOR} .CodeMirror    ${text}
     END
