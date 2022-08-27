@@ -10,19 +10,22 @@
 #jp-left-stack > .p-Widget.jp-Starters-FormPanel,
 #jp-right-stack > .p-Widget.jp-Starters-FormPanel,
 .jp-Starters-FormPanel {
-  background-color: var(--jp-layout-color0);
+  background-color: var(--jp-layout-color2);
   color: var(--jp-ui-font-color1);
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-width: 300px !important;
-  width: 300px;
+  min-width: 350px !important;
+  width: 350px;
+}
+
+.jp-Starters-FormPanel .jp-Starters-BodyBuilder-FormWrapper {
+  overflow-y: scroll;
 }
 
 .jp-Starters-FormPanel .jp-SchemaForm {
-  overflow-y: auto;
   flex: 1;
-  max-height: 100%;
+  background-color: var(--jp-layout-color0);
   padding: var(--jp-notebook-padding);
 }
 
@@ -49,7 +52,6 @@
   height: var(--jp-starters-btns-height);
   display: flex;
   flex-direction: column;
-  background-color: var(--jp-layout-color2);
   border-top: solid 1px var(--jp-border-color0);
   border-bottom: solid 1px var(--jp-border-color0);
   padding: var(--jp-notebook-padding);

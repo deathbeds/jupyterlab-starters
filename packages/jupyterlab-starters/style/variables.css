@@ -1,5 +1,6 @@
 :root {
-  --jp-starters-btns-height: calc(4 * var(--jp-ui-font-size3));
+  --jp-starters-btns-height: calc(5 * var(--jp-ui-font-size3));
+  --jp-starters-share-height: calc(7 * var(--jp-ui-font-size3));
   --jp-starters-btn-height: calc(3 * var(--jp-ui-font-size3));
   --jp-starters-btn-icon-size: calc(2 * var(--jp-ui-font-size3));
 }

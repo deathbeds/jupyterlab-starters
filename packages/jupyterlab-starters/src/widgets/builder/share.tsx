@@ -48,7 +48,7 @@ export class ShareForm extends VDomRenderer<ShareForm.Model> {
         <div className={`${CSS.SHARE_FORM}-input`}>
           <input value={url} disabled />
           <button
-            className={`${CSS.JP.styled}`}
+            className={`${CSS.JP.styled} ${CSS.JP.accept}`}
             onClick={this.onClick}
             title="Copy to clipboard"
           >

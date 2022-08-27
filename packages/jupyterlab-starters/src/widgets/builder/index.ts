@@ -46,11 +46,13 @@ export class BodyBuilder extends Widget {
       },
       { markdown: this.model.manager.markdown }
     );
+    this._form.addClass(`${CSS.BUILDER}-FormWrapper`);
 
     this._buttons = this.makeButtons();
     this.boxLayout.addWidget(this._form);
     this.boxLayout.addWidget(this._buttons);
     this.boxLayout.addWidget(this._share);
+    this.boxLayout.spacing = 0;
   }
 
   get boxLayout(): BoxLayout {
