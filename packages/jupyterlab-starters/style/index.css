@@ -1,8 +1,7 @@
-:root {
-  --jp-starters-btns-height: calc(4 * var(--jp-ui-font-size3));
-  --jp-starters-btn-height: calc(3 * var(--jp-ui-font-size3));
-  --jp-starters-btn-icon-size: calc(2 * var(--jp-ui-font-size3));
-}
+@import url('./variables.css');
+@import url('./share.css');
+@import url('./preview.css');
+@import url('./dark.css');
 
 .jp-StartersDefaultIcon {
   background-image: url('./icons/starter.svg');
@@ -11,19 +10,22 @@
 #jp-left-stack > .p-Widget.jp-Starters-FormPanel,
 #jp-right-stack > .p-Widget.jp-Starters-FormPanel,
 .jp-Starters-FormPanel {
-  background-color: var(--jp-layout-color0);
+  background-color: var(--jp-layout-color2);
   color: var(--jp-ui-font-color1);
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-width: 300px !important;
-  width: 300px;
+  min-width: 350px !important;
+  width: 350px;
+}
+
+.jp-Starters-FormPanel .jp-Starters-BodyBuilder-FormWrapper {
+  overflow-y: scroll;
 }
 
 .jp-Starters-FormPanel .jp-SchemaForm {
-  overflow-y: auto;
   flex: 1;
-  max-height: 100%;
+  background-color: var(--jp-layout-color0);
   padding: var(--jp-notebook-padding);
 }
 
@@ -50,7 +52,6 @@
   height: var(--jp-starters-btns-height);
   display: flex;
   flex-direction: column;
-  background-color: var(--jp-layout-color2);
   border-top: solid 1px var(--jp-border-color0);
   border-bottom: solid 1px var(--jp-border-color0);
   padding: var(--jp-notebook-padding);
@@ -101,6 +102,11 @@
   align-items: center;
   justify-content: center;
   flex: 1;
+  cursor: pointer;
+}
+
+.jp-Starters-BodyBuilder-buttons button > label {
+  cursor: pointer;
 }
 
 .jp-Starters-BodyBuilder-buttons button:first-child {
@@ -123,22 +129,6 @@
 .jp-Starters-BodyBuilder-buttons button.jp-mod-warn [fill]:not([fill='none']),
 .jp-Starters-BodyBuilder-buttons button.jp-mod-accept [fill]:not([fill='none']) {
   fill: white;
-}
-
-.jp-Starters-Preview {
-  display: flex;
-  flex: 0;
-  flex-direction: column;
-  align-items: center;
-  border-top: solid 1px var(--jp-border-color0);
-  max-height: calc(
-    var(--jp-private-launcher-card-size) + 2 * var(--jp-notebook-padding)
-  );
-}
-
-.jp-Starters-Preview img {
-  width: var(--jp-private-launcher-large-icon-size);
-  height: var(--jp-private-launcher-large-icon-size);
 }
 
 .jp-Starters-FormPanel .jp-SchemaForm > .form-group {

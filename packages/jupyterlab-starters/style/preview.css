@@ -1,0 +1,15 @@
+.jp-Starters-Preview {
+  display: flex;
+  flex: 0;
+  flex-direction: column;
+  align-items: center;
+  border-top: solid 1px var(--jp-border-color0);
+  max-height: calc(
+    var(--jp-private-launcher-card-size) + 2 * var(--jp-notebook-padding)
+  );
+}
+
+.jp-Starters-Preview img {
+  width: var(--jp-private-launcher-large-icon-size);
+  height: var(--jp-private-launcher-large-icon-size);
+}

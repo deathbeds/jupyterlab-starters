@@ -35,17 +35,21 @@
       "todo": {
         "category": "Productivity",
         "content": {
-          "content": "# {{ title }}\n{% for item in items %}\n- [{% if item.done %}x{% endif %}] {{ item.description }}{% endfor %}",
+          "content": "# {{ title }}\n{% for item in items %}\n- [{% if item.done %}x{% else %} {% endif %}] {{ item.description }}{% endfor %}",
           "name": "TODO.md"
         },
         "description": "A todo list",
         "label": "TODO List",
         "schema": {
+          "default": {
+            "title": "Things To Do"
+          },
           "properties": {
             "items": {
               "items": {
                 "properties": {
                   "description": {
+                    "default": "a thing",
                     "type": "string"
                   },
                   "done": {
@@ -57,7 +61,6 @@
               "type": "array"
             },
             "title": {
-              "default": "Things to Do",
               "type": "string"
             }
           },

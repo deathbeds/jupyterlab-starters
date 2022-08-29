@@ -33,4 +33,11 @@ Call CodeMirror Method
     ...    that matches a ``css`` selector with the given ``js`` code.
     [Arguments]    ${css}    ${js}
     Wait Until Page Contains Element    css:${css}
-    Execute JavaScript    document.querySelector(`${css}`).CodeMirror.${js}
+    ${res} =    Execute JavaScript    return document.querySelector(`${css}`).CodeMirror.${js}
+    RETURN    ${res}
+
+CodeMirror Value Contains
+    [Documentation]    Handle the common case of checking for text in a CodeMirror
+    [Arguments]    ${css}    ${text}
+    ${value} =    Call CodeMirror Method    ${css}    getValue()
+    Should Contain    ${value}    ${text}

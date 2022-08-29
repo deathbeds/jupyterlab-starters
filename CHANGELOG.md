@@ -8,14 +8,17 @@
 ## `@deathbeds/jupyterlab-starters 2.0.0`
 
 - [#86] refactors starter providers, runners, and the router into separate plugins
-- [#86] adds a settings-backed provider of `content`, compatible with [JupyterLite]
+- [#86] adds a settings-backed provider for `content` starters, compatible with
+  [JupyterLite]
 - [#78] adds `category` and `rank` to all starter metadata, for customizing launcher
+- [#90] adds `starter-body` and `starter-form` URL parameters
 
 ## `@deathbeds/jupyterlab-rjsf 2.0.0`
 
 [jupyterlite]: https://jupyterlite.readthedocs.io
-[#86]: https://github.com/deathbeds/jupyterlab-starters/pulls/86
 [#78]: https://github.com/deathbeds/jupyterlab-starters/pulls/78
+[#86]: https://github.com/deathbeds/jupyterlab-starters/pulls/86
+[#90]: https://github.com/deathbeds/jupyterlab-starters/pulls/90
 
 ---
 

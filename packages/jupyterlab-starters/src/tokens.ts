@@ -26,7 +26,9 @@ export const BROWSER_NAME = 'browser';
 export const SETTINGS_NAME = 'settings';
 
 export const STARTER_PATTERN = new RegExp(`[\?&]starter=`);
-export const STARTER_SEARCH_PARAM = 'starter';
+export const STARTER_NAME_PARAM = 'starter';
+export const STARTER_BODY_PARAM = 'starter-body';
+export const STARTER_FORM_PARAM = 'starter-form';
 export const EMOJI = '🦋';
 
 /** The token for the main extension, which can be used by other extensions */
@@ -85,4 +87,6 @@ export interface IStartContext {
   name: string;
   cwd: string;
   body: JSONObject;
+  form?: boolean;
+  doCommands?: boolean;
 }

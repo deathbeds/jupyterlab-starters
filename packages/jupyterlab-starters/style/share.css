@@ -1,0 +1,36 @@
+.jp-Starters-ShareForm {
+  max-width: 40em;
+  padding: 0.5em;
+  flex: 0;
+  max-height: var(--jp-starters-share-height);
+  border-bottom: solid 1px var(--jp-border-color0);
+}
+
+.jp-Starters-ShareForm-input {
+  display: flex;
+  flex-direction: row;
+  margin-top: 0.5em;
+}
+
+.jp-Starters-ShareForm-input input {
+  flex: 1;
+}
+
+.jp-Starters-ShareForm-input button {
+  flex: 1;
+  max-width: 6em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: copy;
+  height: unset;
+}
+
+.jp-Starters-ShareForm-input button > span {
+  margin-top: 0.5em;
+}
+
+.jp-Starters-ShareForm-input button > * {
+  flex: 1;
+  cursor: copy;
+}

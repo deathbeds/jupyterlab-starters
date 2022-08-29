@@ -126,8 +126,15 @@ export class StarterManager implements IStarterManager {
   }
 
   async fetch(): Promise<void> {
-    for (const thing of [...this._runners.values(), ...this._providers.values()]) {
-      await thing.fetch();
+    for (const [key, thing] of [
+      ...this._runners.entries(),
+      ...this._providers.entries(),
+    ]) {
+      try {
+        await thing.fetch();
+      } catch (err) {
+        console.warn(`Error fetching ${key}`, err);
+      }
     }
   }
 

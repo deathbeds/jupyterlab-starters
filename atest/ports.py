@@ -39,7 +39,7 @@ def wait_for_url_status(
 
     if not response or response.status != status_code:
         raise RuntimeError(
-            f"{url} did return {status_code} within {interval_sec * attempts}s"
+            f"{url} did NOT return {status_code} within {interval_sec * attempts}s"
         )
 
     return True
