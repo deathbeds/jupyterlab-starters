@@ -14,9 +14,9 @@ env:
   PIP_DISABLE_PIP_VERSION_CHECK: '1'
   # our stuff
   SKIP_JLPM_IF_CACHED: '1'
-  CACHE_EPOCH: '3'
+  CACHE_EPOCH: '4'
   ATEST_RETRIES: '3'
-  DIST_NAME: jupyter-starters dist ${{ github.run_number }}
+  DIST_NAME: jupyter-starters-${{ github.run_number }}-dist
 
 defaults:
   run:
@@ -35,15 +35,6 @@ jobs:
     steps:
       - name: git checkout
         uses: actions/checkout@v3
-
-      - name: cache (conda)
-        uses: actions/cache@v3
-        with:
-          path: ~/conda_pkgs_dir
-          key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-${{ hashFiles(env.LOCKFILE) }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-
 
       - name: cache (node_modules)
         uses: actions/cache@v3
@@ -65,6 +56,10 @@ jobs:
       - name: lint (again)
         run: doit integrity lint
 
+      - name: Rename uncached conda packages
+        shell: bash
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
+
   build:
     runs-on: ${{ matrix.os }}-latest
     strategy:
@@ -76,15 +71,6 @@ jobs:
     steps:
       - name: git checkout
         uses: actions/checkout@v3
-
-      - name: cache (conda)
-        uses: actions/cache@v3
-        with:
-          path: ~/conda_pkgs_dir
-          key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-${{ hashFiles(env.LOCKFILE) }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-
 
       - name: cache (node_modules)
         uses: actions/cache@v3
@@ -112,6 +98,10 @@ jobs:
           name: ${{ env.DIST_NAME }}
           path: ./dist
 
+      - name: Rename uncached conda packages
+        shell: bash
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
+
   docs:
     needs: [build]
     runs-on: ubuntu-latest
@@ -121,15 +111,6 @@ jobs:
     steps:
       - name: git checkout
         uses: actions/checkout@v3
-
-      - name: cache (conda)
-        uses: actions/cache@v3
-        with:
-          path: ~/conda_pkgs_dir
-          key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-${{ hashFiles(env.LOCKFILE) }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-
 
       - name: cache (node_modules)
         uses: actions/cache@v3
@@ -172,9 +153,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: |
-            jupyter-starters docs ${{ github.run_number }}
+            jupyter-starters-${{ github.run_number }}-docs
           path: |
             build/docs/html
+
+      - name: Rename uncached conda packages
+        shell: bash
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
 
   test:
     needs: [build]
@@ -201,15 +186,6 @@ jobs:
       - name: git checkout
         uses: actions/checkout@v3
 
-      - name: cache (conda)
-        uses: actions/cache@v3
-        with:
-          path: ~/conda_pkgs_dir
-          key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-test-${{ hashFiles(env.LOCKFILE) }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-test-
-
       - name: base env (conda)
         uses: conda-incubator/setup-miniconda@v2
         with:
@@ -220,7 +196,7 @@ jobs:
       - name: download (dists)
         uses: actions/download-artifact@v3
         with:
-          name: jupyter-starters dist ${{ github.run_number }}
+          name: jupyter-starters-dist-${{ github.run_number }}
           path: ./dist
 
       - name: docs/test (unix)
@@ -249,3 +225,7 @@ jobs:
             build/atest
             build/coverage
             build/utest
+
+      - name: Rename uncached conda packages
+        shell: bash
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
