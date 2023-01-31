@@ -6,7 +6,12 @@ on:
       - master
   pull_request:
     branches:
-      - master
+      - '*'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   PYTHONIOENCODING: utf-8
