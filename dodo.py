@@ -709,8 +709,8 @@ class C:
         platform.system()
     ]
     THIS_PY = "{}.{}".format(*sys.version_info)
-    PYTHONS = ["3.7", "3.10"]
-    DEFAULT_PY = "3.10"
+    PYTHONS = ["3.8", "3.10"]
+    DEFAULT_PY = PYTHONS[-1]
     EXPLICIT = "@EXPLICIT"
     PIP_LOCK_LINE = "# pip "
     UTF8 = dict(encoding="utf-8")

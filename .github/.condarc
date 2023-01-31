@@ -12,4 +12,3 @@ repodata_fns:
 show_channel_urls: True
 show_sources: True
 unsatisfiable_hints_check_depth: 2
-use_only_tar_bz2: True
