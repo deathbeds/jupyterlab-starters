@@ -1,5 +1,4 @@
 __pycache__/
-_*.d.ts
 _*.json
 _build
 .coverage
