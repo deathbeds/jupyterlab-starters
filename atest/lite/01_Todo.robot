@@ -8,7 +8,7 @@ Library             String
 
 Suite Setup         Setup Suite For Screenshots    lite${/}todo
 
-Force Tags          example:todo
+Test Tags           example:todo
 
 
 *** Test Cases ***

@@ -5,7 +5,7 @@ Resource            ../Keywords.resource
 
 Suite Setup         Set Screenshot Directory    ${OUTPUT DIR}${/}screenshots${/}smoke
 
-Force Tags          smoke
+Test Tags           smoke
 
 
 *** Test Cases ***

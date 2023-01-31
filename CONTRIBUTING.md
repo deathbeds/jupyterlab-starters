@@ -73,7 +73,7 @@ doit watch:docs
 ## locking
 
 ```
-mamba create -p .envs/_lock .github/locks/lock-linux-64-3.10.conda.lock
+mamba create -p .envs/_lock --file .github/locks/lock-linux-64-3.11.conda.lock
 source .envs/_lock/bin/activate
 doit lock
 ```

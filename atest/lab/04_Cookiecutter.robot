@@ -6,7 +6,7 @@ Library             String
 
 Suite Setup         Setup Suite For Screenshots    lab${/}cookiecutter
 
-Force Tags          example:cookiecutter
+Test Tags           example:cookiecutter
 
 
 *** Test Cases ***

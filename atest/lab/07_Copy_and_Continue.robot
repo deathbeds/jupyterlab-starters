@@ -6,7 +6,7 @@ Library             String
 
 Suite Setup         Setup Suite For Screenshots    lab${/}notebook-multi
 
-Force Tags          example:notebook-multi
+Test Tags           example:notebook-multi
 
 
 *** Variables ***

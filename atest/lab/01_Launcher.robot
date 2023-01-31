@@ -5,7 +5,7 @@ Resource            ../Keywords.resource
 
 Suite Setup         Setup Suite For Screenshots    lab${/}launcher
 
-Force Tags          launcher
+Test Tags           launcher
 
 
 *** Test Cases ***

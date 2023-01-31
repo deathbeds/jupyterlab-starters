@@ -7,4 +7,4 @@ Suite Setup         Setup Server And Browser
 Suite Teardown      Tear Down Everything
 Test Setup          Reset Application State
 
-Force Tags          os:${os.lower()}    py:${py}    ospy:${os.lower()}${py}
+Test Tags           os:${os.lower()}    py:${py}    ospy:${os.lower()}${py}

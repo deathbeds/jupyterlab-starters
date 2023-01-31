@@ -10,4 +10,4 @@ Suite Teardown      Clean Up Lite Suite
 Test Setup          Start Lite Test
 Test Teardown       Clean Up Lite Test
 
-Force Tags          app:lite
+Test Tags           app:lite

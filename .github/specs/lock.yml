@@ -2,5 +2,7 @@ channels:
   - conda-forge
   - nodefaults
 dependencies:
+  - conda !=22.11.1
+  - conda-lock >=1.4,<1.5.0
   - doit
-  - conda-lock
+  - mamba >=1.1.0

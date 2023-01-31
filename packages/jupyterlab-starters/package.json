@@ -78,6 +78,9 @@
       },
       "@rjsf/validator-ajv8": {
         "bundled": true
+      },
+      "nunjucks": {
+        "bundled": true
       }
     }
   }

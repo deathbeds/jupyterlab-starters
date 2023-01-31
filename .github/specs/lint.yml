@@ -2,10 +2,13 @@ dependencies:
   - black
   - isort
   - mypy
+  - pydocstyle
   - pyflakes
   - pylint
   - pytest
+  - docformatter
   - robotframework-robocop
   - robotframework-seleniumlibrary
   - robotframework-tidy
   - ruamel.yaml
+  - ssort

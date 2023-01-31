@@ -709,7 +709,7 @@ class C:
         platform.system()
     ]
     THIS_PY = "{}.{}".format(*sys.version_info)
-    PYTHONS = ["3.8", "3.10"]
+    PYTHONS = ["3.8", "3.11"]
     DEFAULT_PY = PYTHONS[-1]
     EXPLICIT = "@EXPLICIT"
     PIP_LOCK_LINE = "# pip "
@@ -1039,17 +1039,17 @@ class U:
                 print(f"\t\t...  {lockfile.name} is up-to-date", flush=True)
                 return True
 
-        print(
-            "\n".join(
-                difflib.unified_diff(
-                    old_header.splitlines(),
-                    new_header.splitlines(),
-                    lockfile.name,
-                    "new",
-                )
-            ),
-            flush=True,
-        )
+            print(
+                "\n".join(
+                    difflib.unified_diff(
+                        old_header.splitlines(),
+                        new_header.splitlines(),
+                        lockfile.name,
+                        "new",
+                    )
+                ),
+                flush=True,
+            )
 
         if not shutil.which("conda-lock"):
             print("conda-lock is not available")

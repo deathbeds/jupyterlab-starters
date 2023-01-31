@@ -6,7 +6,7 @@ Library             String
 
 Suite Setup         Setup Suite For Screenshots    lab${/}parameters
 
-Force Tags          example:params
+Test Tags           example:params
 
 
 *** Variables ***

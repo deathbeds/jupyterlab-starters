@@ -6,7 +6,7 @@ Library             String
 
 Suite Setup         Setup Suite For Screenshots    lab${/}notebook
 
-Force Tags          example:notebook
+Test Tags           example:notebook
 
 
 *** Test Cases ***
