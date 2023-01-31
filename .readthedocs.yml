@@ -6,9 +6,9 @@ build:
     python: mambaforge-4.10
   jobs:
     pre_build:
-      - doit -n8 dist ||
       - doit dist
-      - doit setup
+      - doit dev
+      - doit docs:schema
       - doit lite
 
 sphinx:
