@@ -895,7 +895,7 @@ class P:
     EXAMPLES = ROOT / "examples"
     CHANGELOG = ROOT / "CHANGELOG.md"
     LICENSE = ROOT / "LICENSE"
-    PRETTIER_CFG = [ROOT / ".prettierrc", ROOT / ".prettierignore"]
+    PRETTIER_CFG = [ROOT / ".prettierignore"]
     ALL_MD = [*ROOT.glob("*.md"), *GITHUB.rglob("*.md"), *PACKAGES.glob("*/README.md")]
     ALL_JS = [ROOT / ".eslintrc.js"]
     ALL_JSON = [
@@ -1279,7 +1279,7 @@ class R(doit.reporter.ConsoleReporter):
 
     TIMEFMT = "%H:%M:%S"
     SKIP = " " * len(TIMEFMT)
-    _timings = {}  # type: typing.Dict[str, datetime]
+    _timings: typing.Dict[str, datetime] = {}
     ISTOP = "🛑"
     ISTART = "🐛"
     ISKIP = "⏩"

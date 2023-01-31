@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 class BaseHandler(JupyterHandler):
     """common base handlers"""
 
-    manager = None  # type: StarterManager
+    manager: "StarterManager"
 
     def initialize(self, manager) -> None:
         """capture the manager"""

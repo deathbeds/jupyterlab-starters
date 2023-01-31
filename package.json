@@ -10,12 +10,12 @@
     "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
     "lint": "jlpm --silent stylelint:fix && jlpm --silent prettier:fix && jlpm --silent eslint:fix",
     "lint:check": "jlpm --silent prettier:check && jlpm --silent eslint:check && jlpm --silent stylelint:check",
-    "stylelint:check": "stylelint --cache \"{packages/*/style,docs/_static}/**/*.css\"",
-    "stylelint:fix": "jlpm stylelint:check --fix",
-    "test": "lerna run --stream --concurrency=1 test",
     "prettier:base": "prettier \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}\"",
     "prettier:check": "jlpm prettier:base --check",
     "prettier:fix": "jlpm prettier:base --list-different --write",
+    "stylelint:check": "stylelint --cache \"{packages/*/style,docs/_static}/**/*.css\"",
+    "stylelint:fix": "jlpm stylelint:check --fix",
+    "test": "lerna run --stream --concurrency=1 test",
     "watch": "lerna run --parallel watch"
   },
   "workspaces": {
@@ -47,6 +47,12 @@
     "stylelint-prettier": "^2.0.0",
     "typescript": "~4.9.5",
     "yarn-deduplicate": "^6.0.1"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 88,
+    "proseWrap": "always",
+    "jsonRecursiveSort": true
   },
   "stylelint": {
     "extends": [
