@@ -16,7 +16,7 @@
     "stylelint:check": "stylelint --cache \"{packages/*/style,docs/_static}/**/*.css\"",
     "stylelint:fix": "jlpm stylelint:check --fix",
     "test": "lerna run --stream --concurrency=1 test",
-    "watch": "lerna run --parallel watch"
+    "watch": "lerna run --parallel --stream watch"
   },
   "workspaces": {
     "packages": [
