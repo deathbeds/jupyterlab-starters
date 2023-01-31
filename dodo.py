@@ -210,7 +210,7 @@ def task_jlpm():
     jlpm_args = ["--registry", C.YARN_REGISTRY]
     jlpm_args += ["--frozen-lockfile"] if C.CI else []
 
-    actions = [[C.JLPM, *jlpm_args]]
+    actions = [[C.JLPM, *jlpm_args], [*C.LERNA, "bootstrap"]]
 
     if not C.CI:
         actions += [[C.JLPM, "deduplicate"]]
@@ -236,9 +236,9 @@ def task_build():
         **U.run_in(
             "build",
             [
-                [C.JLPM, "lerna", "bootstrap"],
+                [*C.LERNA, "bootstrap"],
                 U.patch_plugin_schema,
-                [C.JLPM, "lerna", "run", "--stream", "build:pre"],
+                [*C.LERNA, "run", "--stream", "build:pre"],
                 [
                     C.JLPM,
                     "prettier",
@@ -268,9 +268,7 @@ def task_build():
         name="lerna:lib",
         **U.run_in(
             "build",
-            [
-                [C.JLPM, "lerna", "run", "--stream", "build"],
-            ],
+            [[*C.LERNA, "run", "--stream", "build"]],
             file_dep=[
                 *P.ALL_PACKAGE_JSON,
                 *P.ALL_TS,
@@ -781,6 +779,7 @@ class C:
         JLPM = "jlpm"
     PYM = [PY, "-m"]
     PIP = [*PYM, "pip"]
+    LERNA = [JLPM, "lerna"]
     INSTALL = [*PIP, "install"]
     FREEZE = [*PIP, "freeze"]
     CHECK = [*PIP, "check"]
