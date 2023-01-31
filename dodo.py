@@ -531,18 +531,20 @@ def task_test():
         return
 
     html_utest = P.HTML_UTEST / f"{C.THIS_SUBDIR}-py{C.THIS_PY}.html"
-    html_cov = P.HTML_COV / f"{C.THIS_SUBDIR}-py{C.THIS_PY}"
+    cov_data = P.COVERAGE / f"{C.THIS_SUBDIR}-py{C.THIS_PY}.pytest.coverage"
     utest_args = [
+        "coverage",
+        "run",
+        f"--data-file={cov_data}",
+        "--branch",
+        "--context=pytest",
+        "--source=jupyter_starters",
+        "-m",
         "pytest",
         "-vv",
         "--pyargs",
         "jupyter_starters",
         "--script-launch-mode=subprocess",
-        "-n=auto",
-        "--cov=jupyter_starters",
-        "--cov-report=term-missing:skip-covered",
-        f"--cov-report=html:{html_cov}",
-        "--no-cov-on-fail",
         "-p",
         "no:warnings",
         "--html",
@@ -562,8 +564,8 @@ def task_test():
         uptodate=[doit.tools.config_changed({"args": str(utest_args)})],
         **U.run_in(
             "utest",
-            [utest_args],
-            targets=[P.COVERAGE, html_utest, html_cov / "index.html"],
+            [(U.clean_some, [cov_data]), utest_args],
+            targets=[html_utest, cov_data],
             file_dep=[*P.PY_SRC, P.SETUP_CFG, *P.PY_SCHEMA.glob("*.json")],
         ),
     )
@@ -572,7 +574,6 @@ def task_test():
         (doit.tools.create_folder, [P.BUILD / "utest"]),
         (U.strip_timestamps, [P.HTML_UTEST]),
         *utask["actions"],
-        (U.strip_timestamps, [P.HTML_COV]),
     ]
 
     yield utask
@@ -598,8 +599,18 @@ def task_lite():
         task_dep = ["dev:pip:check"]
 
     yield dict(
+        name="install",
+        **U.run_in(
+            "docs",
+            [
+                [*C.PIP, "install", "--no-deps", *C.LITE_SPEC],
+            ],
+        ),
+    )
+
+    yield dict(
         name="build",
-        task_dep=task_dep,
+        task_dep=[*task_dep, "lite:install"],
         **U.run_in(
             "docs",
             [
@@ -766,6 +777,7 @@ class C:
     INSTALL = [*PIP, "install"]
     FREEZE = [*PIP, "freeze"]
     CHECK = [*PIP, "check"]
+    LITE_SPEC = ["jupyterlite==0.1.0b18"]
 
 
 class P:
@@ -849,7 +861,7 @@ class P:
     SHA256SUMS = DIST / "SHA256SUMS"
     HTML_UTEST = BUILD / "utest"
     HTML_COV = BUILD / "coverage"
-    COVERAGE = ROOT / ".coverage"
+    COVERAGE = BUILD / "coverage"
     ATEST_OUT = BUILD / "atest"
     DOCS_OUT = BUILD / "docs"
     DOCS_OUT_HTML = DOCS_OUT / "html"
@@ -941,14 +953,12 @@ class D:
 class U:
     """utilities"""
 
-    @classmethod
-    def cmd(cls, *args, **kwargs):
+    def cmd(*args, **kwargs):
         if "shell" not in kwargs:
             kwargs["shell"] = False
         return doit.tools.CmdAction(*args, **kwargs)
 
-    @classmethod
-    def run_args(cls, env=None):
+    def run_args(env=None):
         conda_prefix = Path(os.environ.get("CONDA_PREFIX", sys.prefix))
 
         if C.RUNNING_LOCALLY:
@@ -971,8 +981,7 @@ class U:
             ]
         return prefix, run_args
 
-    @classmethod
-    def run_in(cls, env, actions, **kwargs):
+    def run_in(env, actions, **kwargs):
         prefix, run_args = U.run_args(env)
         history = prefix / "conda-meta/history"
         file_dep = kwargs.pop("file_dep", [])
@@ -988,8 +997,7 @@ class U:
             targets=targets,
         )
 
-    @classmethod
-    def lock(cls, env_name, py, subdir, extra_env_names=None, include_base=True):
+    def lock(env_name, py, subdir, extra_env_names=None, include_base=True):
         extra_env_names = extra_env_names or []
         args = [
             "conda-lock",
@@ -1124,8 +1132,7 @@ class U:
         r"\d+-[^\-]{3}-\d{4} at \d{2}:\d{2}:\d{2}",
     ]
 
-    @classmethod
-    def strip_timestamps(cls, root):
+    def strip_timestamps(root):
         paths = root.rglob("*.html") if root.is_dir() else [root]
         for path in paths:
             text = path.read_text(**C.UTF8)
@@ -1141,8 +1148,7 @@ class U:
                     )
                 )
 
-    @classmethod
-    def atest(cls):
+    def atest():
         return_code = 1
         for attempt in range(C.ATEST_RETRIES + 1):
             return_code = U.atest_attempt(attempt)
@@ -1151,8 +1157,7 @@ class U:
         U.rebot()
         return return_code == 0
 
-    @classmethod
-    def atest_attempt(cls, attempt):
+    def atest_attempt(attempt):
         prefix, run_args = U.run_args("atest")
         extra_args = []
         stem = f"{C.THIS_ATEST_STEM}-{attempt}"
@@ -1214,8 +1219,7 @@ class U:
             proc.kill()
             return 1
 
-    @classmethod
-    def rebot(cls):
+    def rebot():
         prefix, run_args = U.run_args("atest")
         args = [
             *run_args,
@@ -1272,6 +1276,13 @@ class U:
             json.dumps(json.loads(path.read_text(**C.UTF8)), **C.JSON_FMT) + "\n",
             **C.UTF8,
         )
+
+    def clean_some(*paths):
+        for path in paths:
+            if path.is_dir():
+                shutil.rmtree(path)
+            elif path.exists():
+                path.unlink()
 
 
 class R(doit.reporter.ConsoleReporter):
