@@ -36,9 +36,9 @@ class StartersListApp(StartersBaseApp):
                 "List starters as JSON instead of YAML",
             ),
         },
-    )
+    )  # type: ignore
 
-    aliases = dict(**base_aliases)
+    aliases = dict(**base_aliases)  # type: ignore
 
     def start(self):
         """List the installed starters."""
