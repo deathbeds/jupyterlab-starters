@@ -25,9 +25,5 @@
   "dependencies": {
     "@deathbeds/jupyterlab-rjsf": "file:../jupyterlab-rjsf",
     "@deathbeds/jupyterlab-starters": "file:../jupyterlab-starters"
-  },
-  "devDependencies": {
-    "rimraf": "~3.0.2",
-    "typescript": "~4.9.5"
   }
 }
