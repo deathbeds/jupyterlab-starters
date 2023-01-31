@@ -6,6 +6,7 @@ dependencies:
   - pkginfo
   - pydata-sphinx-theme
   - pytest-check-links
+  - python-graphviz
   - sphinx
   - sphinx-autobuild
   - sphinx-autodoc-typehints
