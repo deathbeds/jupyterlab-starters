@@ -1,6 +1,7 @@
 import { JSONExt } from '@lumino/coreutils';
-import { utils as rjsfUtils, Field } from '@rjsf/core';
+import { getDefaultRegistry } from '@rjsf/core';
 import _ObjectField from '@rjsf/core/lib/components/fields/ObjectField';
+import { Field, retrieveSchema } from '@rjsf/utils';
 import * as CodeMirror from 'codemirror';
 import * as React from 'react';
 import { UnControlled } from 'react-codemirror2';
@@ -25,14 +26,10 @@ export function makeJSONObjectField(ObjectField: typeof _ObjectField): Field {
         formData,
         idSchema,
         name,
-        registry = rjsfUtils.getDefaultRegistry(),
+        registry = getDefaultRegistry(),
       } = this.props;
       const { definitions } = registry;
-      const schema = (rjsfUtils as any).retrieveSchema(
-        this.props.schema,
-        definitions,
-        formData
-      );
+      const schema = retrieveSchema(this.props.schema, definitions, formData);
 
       let title;
       if (this.state.wasPropertyKeyModified) {

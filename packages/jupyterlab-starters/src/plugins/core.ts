@@ -176,7 +176,7 @@ export const corePlugin: JupyterFrontEndPlugin<IStarterManager> = {
         }
         launcher.add({
           command: CommandIDs.start,
-          args: { name, starter: starters[name] },
+          args: { name, starter: starters[name]},
           category: starters[name].category || CATEGORY,
           ...(starters[name].rank == null ? {} : { rank: starters[name].rank }),
         });

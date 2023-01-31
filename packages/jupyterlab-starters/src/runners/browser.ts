@@ -60,7 +60,12 @@ export class BrowserStarterRunner extends BaseStarterRunner implements IStarterR
 
     body = body || {};
 
-    path = await this.handleOneContent(path, starter.content, body, nunjucks);
+    path = await this.handleOneContent(
+      path,
+      starter.content,
+      body,
+      nunjucks
+    );
 
     return {
       status: 'done',

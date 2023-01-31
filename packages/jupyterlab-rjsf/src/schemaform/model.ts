@@ -2,12 +2,13 @@ import { VDomModel } from '@jupyterlab/apputils';
 import { RenderedMarkdown } from '@jupyterlab/rendermime';
 import { JSONObject, JSONValue } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
-import * as rjsf from '@rjsf/core';
+import { FormProps } from '@rjsf/core';
+import { UiSchema, RJSFValidationError } from '@rjsf/utils';
 
 export class SchemaFormModel<T extends JSONValue> extends VDomModel {
   constructor(
     schema: JSONObject,
-    props?: Partial<rjsf.FormProps<T>>,
+    props?: Partial<FormProps<T>>,
     options?: SchemaFormModel.IOptions
   ) {
     super();
@@ -28,7 +29,7 @@ export class SchemaFormModel<T extends JSONValue> extends VDomModel {
   /**
    * Get the validation errors for the current form, as defined by the schema
    */
-  get errors(): rjsf.AjvError[] {
+  get errors(): RJSFValidationError[] {
     return this._errors;
   }
 
@@ -37,7 +38,7 @@ export class SchemaFormModel<T extends JSONValue> extends VDomModel {
    *
    * This should be considered read-only (to be written by the form onChange)
    */
-  set errors(errors: rjsf.AjvError[]) {
+  set errors(errors: RJSFValidationError[]) {
     this._errors = errors;
     this.stateChanged.emit(void 0);
   }
@@ -72,26 +73,26 @@ export class SchemaFormModel<T extends JSONValue> extends VDomModel {
     this.stateChanged.emit(void 0);
   }
 
-  set uiSchema(uiSchema: rjsf.UiSchema | undefined) {
+  set uiSchema(uiSchema: UiSchema | undefined) {
     this._props.uiSchema = uiSchema;
     this.stateChanged.emit(void 0);
   }
 
-  get uiSchema(): rjsf.UiSchema | undefined {
+  get uiSchema(): UiSchema | undefined {
     return this._props.uiSchema;
   }
 
   /**
    * Get the props for the form
    */
-  get props(): Partial<rjsf.FormProps<T>> {
+  get props(): Partial<FormProps<T>> {
     return this._props;
   }
 
   /**
    * Set the props for the form
    */
-  set props(props: Partial<rjsf.FormProps<T>>) {
+  set props(props: Partial<FormProps<T>>) {
     this._props = props;
     this.stateChanged.emit(void 0);
   }
@@ -129,9 +130,9 @@ export class SchemaFormModel<T extends JSONValue> extends VDomModel {
   }
 
   private _formData: T;
-  private _errors: rjsf.AjvError[] = [];
+  private _errors: RJSFValidationError[] = [];
   private _schema: JSONObject;
-  private _props: Partial<rjsf.FormProps<T>>;
+  private _props: Partial<FormProps<T>>;
   private _errorsObserved = false;
   private _rendered = new Signal<SchemaFormModel<T>, void>(this);
   private _markdown: RenderedMarkdown | null;
