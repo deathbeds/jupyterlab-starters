@@ -92,10 +92,12 @@ jobs:
           use-mamba: true
 
       - name: build
-        run: doit -n8 dist || doit list --all --status
+        run: |
+          set -eux
+          doit -n8 dist || doit list --all --status
 
       - name: build (again)
-        run: doit dist
+        run: set -eux doit dist
 
       - name: publish (dists)
         uses: actions/upload-artifact@v3

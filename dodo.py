@@ -199,21 +199,20 @@ def task_lint():
 
 
 def task_jlpm():
+    jlpm_args = ["--registry", C.YARN_REGISTRY]
+    jlpm_args += ["--frozen-lockfile"] if C.CI else []
+
+    actions = [[*C.LERNA, "bootstrap"]]
+
+    if not C.CI:
+        actions += [[C.JLPM, "deduplicate"]]
+
     if C.DOCS_OR_TEST_IN_CI:
         print("nothing to do with jlpm for docs/test in ci")
         return
 
-    if C.SKIP_JLPM_IF_CACHED and P.YARN_INTEGRITY.exists():
-        print("nothing to do with jlpm because cached")
-        return
-
-    jlpm_args = ["--registry", C.YARN_REGISTRY]
-    jlpm_args += ["--frozen-lockfile"] if C.CI else []
-
-    actions = [[C.JLPM, *jlpm_args], [*C.LERNA, "bootstrap"]]
-
-    if not C.CI:
-        actions += [[C.JLPM, "deduplicate"]]
+    if not (C.SKIP_JLPM_IF_CACHED and P.YARN_INTEGRITY.exists()):
+        actions = [[C.JLPM, *jlpm_args], *actions]
 
     yield dict(
         name="install",
