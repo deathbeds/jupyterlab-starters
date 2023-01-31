@@ -6,6 +6,7 @@ build:
     python: mambaforge-4.10
   jobs:
     pre_build:
+      - doit list --all --status
       - |
         doit dist || doit dist
       - doit dev
