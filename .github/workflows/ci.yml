@@ -201,7 +201,7 @@ jobs:
       - name: download (dists)
         uses: actions/download-artifact@v3
         with:
-          name: jupyter-starters-dist-${{ github.run_number }}
+          name: ${{ env.DIST_NAME }}
           path: ./dist
 
       - name: docs/test (unix)
@@ -225,7 +225,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: |
-            jupyter-starters reports ${{ matrix.os }} ${{ matrix.py }} ${{ github.run_number }}
+            jupyter-starters-${{ github.run_number }}-reports-${{ matrix.os }}-${{ matrix.py }}
           path: |
             build/atest
             build/coverage
