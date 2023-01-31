@@ -46,7 +46,6 @@
     "@types/lodash.mergewith": "^4.6.7",
     "@types/nunjucks": "^3.2.1",
     "@types/react": "^17.0.0",
-    "json-schema-to-typescript": "^8.0.0",
     "react": "^17.0.1"
   },
   "keywords": [
