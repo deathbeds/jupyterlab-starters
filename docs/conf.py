@@ -5,19 +5,10 @@
 import os
 import pathlib
 import sys
-from subprocess import call, check_call
+from subprocess import check_call
 
 HERE = pathlib.Path(__file__).parent
 ROOT = HERE.parent
-
-
-if os.environ.get("READTHEDOCS", False):
-    call(["doit", "-n8", "dist"], cwd=str(ROOT))
-    call(["doit", "-n8", "dist"], cwd=str(ROOT))
-    check_call(["doit", "dist"], cwd=str(ROOT))
-    check_call(["doit", "dev"], cwd=str(ROOT))
-    check_call(["doit", "docs:schema"], cwd=str(ROOT))
-    check_call(["doit", "lite"], cwd=str(ROOT))
 
 
 def build_finished(_app, exception):

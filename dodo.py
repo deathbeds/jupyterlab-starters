@@ -397,7 +397,14 @@ def task_dev():
     yield dict(
         name="pip:check",
         task_dep=["dev:pip:install"],
-        **U.run_in("utest", [C.FREEZE, C.CHECK], file_dep=[P.SETUP_CFG, P.SETUP_PY]),
+        **U.run_in(
+            "utest",
+            [
+                C.FREEZE,
+                *([] if C.RTD else [C.CHECK]),
+            ],
+            file_dep=[P.SETUP_CFG, P.SETUP_PY],
+        ),
     )
 
     yield dict(
