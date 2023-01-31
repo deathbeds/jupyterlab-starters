@@ -24,7 +24,10 @@
     ]
   },
   "resolutions": {
-    "glob-parent": "^5.1.2"
+    "glob-parent": "^5.1.2",
+    "@rjsf/core": "^5.0.1",
+    "@rjsf/utils": "^5.0.1",
+    "@rjsf/validator-ajv8": "^5.0.1"
   },
   "devDependencies": {
     "@adobe/jsonschema2md": "^6.1.4",
