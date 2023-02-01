@@ -6,7 +6,7 @@ export MAMBA_NO_BANNER=1
 
 mamba create --yes \
     --prefix "${NB_PYTHON_PREFIX}" \
-    --file ".github/locks/binder-linux-64-3.10.conda.lock"
+    --file ".github/locks/binder-linux-64-3.11.conda.lock"
 
 # do a proper activation
 source activate "${NB_PYTHON_PREFIX}"

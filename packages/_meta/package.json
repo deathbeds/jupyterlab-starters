@@ -16,18 +16,14 @@
     "lib": "lib/"
   },
   "scripts": {
-    "build": "tsc --build src",
+    "build": "tsc --build src || tsc --build src",
     "clean": "rimraf lib",
-    "watch": "jlpm build --watch --preserveWatchOutput"
+    "watch": "tsc --build src --watch --preserveWatchOutput"
   },
   "sideEffects": false,
   "types": "lib/index.d.ts",
   "dependencies": {
     "@deathbeds/jupyterlab-rjsf": "file:../jupyterlab-rjsf",
     "@deathbeds/jupyterlab-starters": "file:../jupyterlab-starters"
-  },
-  "devDependencies": {
-    "rimraf": "~3.0.2",
-    "typescript": "~4.5.5"
   }
 }

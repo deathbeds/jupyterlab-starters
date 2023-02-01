@@ -5,7 +5,7 @@ Library             OperatingSystem
 Library             Process
 Library             String
 Library             SeleniumLibrary
-Library             traitlets.config.manager    WITH NAME    TCM
+Library             traitlets.config.manager    AS    TCM
 Library             ./ports.py
 Resource            Variables.resource
 

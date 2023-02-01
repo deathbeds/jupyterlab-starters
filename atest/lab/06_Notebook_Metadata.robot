@@ -8,7 +8,7 @@ Resource            ../CodeMirror.resource
 
 Suite Setup         Setup Suite For Screenshots    lab${/}notebook-meta
 
-Force Tags          example:notebook-meta
+Test Tags           example:notebook-meta
 
 
 *** Variables ***

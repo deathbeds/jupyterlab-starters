@@ -1,4 +1,4 @@
-"""tests of content starter behavior"""
+"""Tests of content starter behavior."""
 # pylint: disable=redefined-outer-name
 from pathlib import Path
 
@@ -143,7 +143,7 @@ async def test_content_folder_empty(
 
 @pytest.fixture
 def a_content_starter():
-    """a fragmaent of a content starter without content"""
+    """A fragmaent of a content starter without content."""
     return {
         "type": "content",
         "description": "test",

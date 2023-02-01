@@ -1,2 +1,2 @@
 dependencies:
-  - nodejs >=14,!=15.*,<17
+  - nodejs >=16,!=17.*,<19

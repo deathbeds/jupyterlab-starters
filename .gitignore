@@ -1,9 +1,7 @@
 __pycache__/
-_*.d.ts
 _*.json
 _build
 .coverage
-*.doit*
 .envs/
 .eslintcache
 .ipynb_checkpoints/
@@ -13,6 +11,7 @@ _build
 .stylelintcache
 .vscode/
 .yarn-packages/
+*.doit*
 *.egg-info
 *.log
 *.tgz
@@ -20,12 +19,13 @@ _build
 atest/output/
 build/
 dist/
+docs/_static/_/
 docs/_static/schema
 docs/schema
 envs/
 lib/
 node_modules/
 src/**/labextension/
+src/jupyter_starters/_d/share/
 untitled*
 Untitled*
-docs/_static/_/

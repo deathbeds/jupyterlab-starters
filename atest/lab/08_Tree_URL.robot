@@ -6,7 +6,7 @@ Library             String
 
 Suite Setup         Setup Suite For Screenshots    lab${/}tree-url
 
-Force Tags          example:tree-url
+Test Tags           example:tree-url
 
 
 *** Test Cases ***

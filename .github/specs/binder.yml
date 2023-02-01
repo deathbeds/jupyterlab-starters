@@ -2,4 +2,3 @@ dependencies:
   - jupyter-server-proxy
   - jupyter-videochat
   - jupyterhub-singleuser
-  - nbgitpuller

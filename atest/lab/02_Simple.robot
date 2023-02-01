@@ -5,7 +5,7 @@ Resource            ../Keywords.resource
 
 Suite Setup         Setup Suite For Screenshots    lab${/}simple
 
-Force Tags          example:simple
+Test Tags           example:simple
 
 
 *** Test Cases ***

@@ -1,5 +1,4 @@
-""" check preflight consistency
-"""
+"""Check preflight consistency."""
 import pathlib
 
 # pylint: disable=redefined-outer-name,unused-variable
@@ -39,7 +38,7 @@ def test_extension_cli(kind, expect):
 
 
 def preflight():
-    """run the tests"""
+    """Run the tests."""
     with tempfile.TemporaryDirectory() as tmpd:
         ini = pathlib.Path(tmpd) / "pytest.ini"
         ini.write_text((ROOT / "scripts" / "fake_pytest.ini").read_text())

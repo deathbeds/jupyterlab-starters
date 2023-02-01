@@ -1,7 +1,9 @@
 import { VDomRenderer } from '@jupyterlab/apputils';
 import { renderMarkdown } from '@jupyterlab/rendermime/lib/renderers';
 import { JSONObject, JSONValue } from '@lumino/coreutils';
-import * as rjsf from '@rjsf/core';
+import { FormProps, IChangeEvent } from '@rjsf/core';
+import { RJSFValidationError } from '@rjsf/utils';
+import validatorAjv8 from '@rjsf/validator-ajv8';
 import React from 'react';
 
 import { Form } from '../form';
@@ -33,6 +35,11 @@ const SCHEMA_FORM_ID_PREFIX = 'id-jp-schemaform';
 const SCHEMA_FORM_CLASS = 'jp-SchemaForm';
 
 /**
+ * The class all JSON Schema form wrapper widgets will share
+ */
+const SCHEMA_FORM_WIDGET_CLASS = 'jp-SchemaForm-Widget';
+
+/**
  *
  */
 const MARKDOWN_CANARY = 'jp-SchemaForm-markdown';
@@ -48,10 +55,11 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
    */
   constructor(
     schema: JSONObject,
-    props: Partial<rjsf.FormProps<T>> = {},
+    props: Partial<FormProps<T>> = {},
     options?: SchemaFormModel.IOptions
   ) {
     super(new SchemaFormModel<T>(schema, props, options));
+    this.addClass(SCHEMA_FORM_WIDGET_CLASS);
     this._idPrefix = `${SCHEMA_FORM_ID_PREFIX}-${Private.nextId()}`;
     if (this.model.markdown) {
       this.model.rendered.connect(this._renderMarkdown);
@@ -73,21 +81,23 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
     const finalProps = {
       // props from model
       ...props,
+      // ensure a validator
+      validator: props.validator || validatorAjv8,
       // assure a default prefix
       idPrefix: this._idPrefix,
       schema,
       formData,
       // overload classname
       className,
-      validate: (formData: T, errors: rjsf.AjvError[]) => {
+      validate: (formData: T, errors: RJSFValidationError[]) => {
         return errors;
       },
       // overload onChange
-      onChange: (evt: rjsf.IChangeEvent<T>, err?: rjsf.ErrorSchema) => {
-        this.onChange(evt, err);
+      onChange: (evt: IChangeEvent<T>) => {
+        this.onChange(evt);
 
         if (props.onChange) {
-          props.onChange(evt, err);
+          props.onChange(evt);
         }
       },
     };
@@ -100,7 +110,7 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
   /**
    * Handle the change of a form by the user and update the model
    */
-  onChange(evt: rjsf.IChangeEvent<T>, _err?: rjsf.ErrorSchema): void {
+  onChange(evt: IChangeEvent<T>): void {
     const { formData, errors } = evt;
     if (formData != null) {
       this.model.errors = errors;
@@ -188,7 +198,7 @@ export class SchemaForm<T extends JSONValue = JSONValue> extends VDomRenderer<
 export namespace SchemaForm {
   export interface IValue<T extends JSONValue> {
     formData: T;
-    errors: rjsf.AjvError[];
+    errors: RJSFValidationError[];
   }
 }
 

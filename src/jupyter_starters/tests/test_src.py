@@ -1,5 +1,4 @@
-""" test the sanity of the src/py_src behavior
-"""
+"""Test the sanity of the src/py_src behavior."""
 # pylint: disable=too-many-arguments
 from pathlib import Path
 
@@ -16,7 +15,7 @@ import pytest
     ],
 )
 def test_bad_src(starter_manager, name, starter):
-    """these are bad sources"""
+    """These are bad sources."""
     src = starter_manager.resolve_src(starter)
     assert src is None, f"{name} should have been None"
 
@@ -33,7 +32,7 @@ def test_bad_src(starter_manager, name, starter):
 def test_good_src(
     name, starter, py_path, monkeypatch, example_project, starter_manager
 ):
-    """these are good sources"""
+    """These are good sources."""
     if py_path:
         monkeypatch.syspath_prepend(example_project)
     else:

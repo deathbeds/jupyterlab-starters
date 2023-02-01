@@ -1,4 +1,4 @@
-"""Tests of CLI features"""
+"""Tests of CLI features."""
 
 
 from .._version import __version__

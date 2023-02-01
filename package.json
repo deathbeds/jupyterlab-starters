@@ -10,13 +10,13 @@
     "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
     "lint": "jlpm --silent stylelint:fix && jlpm --silent prettier:fix && jlpm --silent eslint:fix",
     "lint:check": "jlpm --silent prettier:check && jlpm --silent eslint:check && jlpm --silent stylelint:check",
-    "stylelint:check": "stylelint --cache \"{packages/*/style,docs/_static}/**/*.css\"",
-    "stylelint:fix": "jlpm stylelint:check --fix",
-    "test": "lerna run --stream --concurrency=1 test",
     "prettier:base": "prettier \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md,.yml}\"",
     "prettier:check": "jlpm prettier:base --check",
     "prettier:fix": "jlpm prettier:base --list-different --write",
-    "watch": "lerna run --parallel watch"
+    "stylelint:check": "stylelint --cache \"{packages/*/style,docs/_static}/**/*.css\"",
+    "stylelint:fix": "jlpm stylelint:check --fix",
+    "test": "lerna run --stream --concurrency=1 test",
+    "watch": "lerna run --parallel --stream watch"
   },
   "workspaces": {
     "packages": [
@@ -24,28 +24,43 @@
     ]
   },
   "resolutions": {
-    "glob-parent": "^5.1.2"
+    "glob-parent": "^5.1.2",
+    "@rjsf/core": "^5.0.1",
+    "@rjsf/utils": "^5.0.1",
+    "@rjsf/validator-ajv8": "^5.0.1",
+    "prettier": "^2.8.3",
+    "loader-utils": "^2.0.0"
   },
   "devDependencies": {
-    "@adobe/jsonschema2md": "^6.1.4",
-    "@typescript-eslint/eslint-plugin": "^4.8.1",
-    "@typescript-eslint/parser": "^4.8.1",
-    "eslint": "^7.14.0",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.28.0",
-    "lerna": "^5.3.0",
-    "prettier": "^2.7.1",
-    "prettier-package-json": "^2.6.4",
-    "rimraf": "^3.0.2",
+    "@adobe/jsonschema2md": "^7.1.5",
+    "@ephesoft/webpack.istanbul.loader": "^2.2.0",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@typescript-eslint/parser": "^5.50.0",
+    "eslint": "^8.33.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "json-schema-to-typescript": "^8.0.0",
+    "lerna": "^6.4.1",
+    "prettier": "^2.8.3",
+    "prettier-package-json": "^2.8.0",
+    "prettier-plugin-sort-json": "^1.0.0",
+    "rimraf": "^4.1.2",
+    "source-map-loader": "^4.0.1",
     "stylelint": "^14.3.0",
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-recommended": "^6.0.0",
     "stylelint-config-standard": "~24.0.0",
     "stylelint-prettier": "^2.0.0",
-    "typescript": "~4.5.5",
-    "yarn-deduplicate": "^3.1.0"
+    "typescript": "~4.9.5",
+    "yarn-deduplicate": "^6.0.1"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 88,
+    "proseWrap": "always",
+    "jsonRecursiveSort": true
   },
   "stylelint": {
     "extends": [

@@ -1,6 +1,6 @@
-import { ThemeProps, utils } from '@rjsf/core';
+import { ThemeProps, getDefaultRegistry } from '@rjsf/core';
 
-const { fields, widgets } = utils.getDefaultRegistry();
+const { fields, widgets } = getDefaultRegistry();
 
 const Theme: ThemeProps = {
   fields: { ...fields },

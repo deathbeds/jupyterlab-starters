@@ -4,12 +4,18 @@ build:
   os: ubuntu-20.04
   tools:
     python: mambaforge-4.10
+  jobs:
+    pre_build:
+      - doit list --all --status
+      - |
+        doit dist || doit dist
+      - doit dev
+      - doit docs:schema
+      - doit lite
 
 sphinx:
   builder: html
   configuration: docs/conf.py
-  # TODO: restore
-  # fail_on_warning: true
 
 conda:
   environment: docs/rtd.yml

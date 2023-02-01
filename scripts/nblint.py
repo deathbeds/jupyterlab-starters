@@ -1,18 +1,15 @@
-"""linter and formatter of notebooks"""
+"""Linter and formatter of notebooks."""
 import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 import black
-import isort
 import nbformat
 from isort.api import sort_code_string
 
 HERE = Path(__file__).parent
 ROOT = HERE.parent
-
-SETUP_CFG = ROOT / "setup.cfg"
 
 NODE = Path(
     shutil.which("node") or shutil.which("node.exe") or shutil.which("node.cmd")
@@ -22,16 +19,14 @@ PRETTIER = [NODE, NODE_MODULES / ".bin/prettier"]
 
 NB_METADATA_KEYS = ["kernelspec", "language_info", "jupyter_starters"]
 
-ISORT_CONFIG = isort.settings.Config(settings_path=SETUP_CFG)
-
 
 def blacken(source):
-    """apply black to a source string"""
+    """Apply black to a source string."""
     return black.format_str(source, mode=black.FileMode(line_length=88))
 
 
 def nblint_one(nb_node):
-    """format/lint one notebook"""
+    """Format/lint one notebook."""
     changes = 0
     has_empty = 0
     nb_metadata_keys = list(nb_node.metadata.keys())
@@ -70,7 +65,7 @@ def nblint_one(nb_node):
                 continue
             if source.startswith("%"):
                 continue
-            new = sort_code_string(source, config=ISORT_CONFIG)
+            new = sort_code_string(source)
             new = blacken(new).rstrip()
             if new != source:
                 cell["source"] = new.splitlines(True)
@@ -86,7 +81,7 @@ def nblint_one(nb_node):
 
 
 def nblint(nb_paths):
-    """lint a number of notebook paths"""
+    """Lint a number of notebook paths."""
     len_paths = len(nb_paths)
 
     for i, nb_path in enumerate(nb_paths):

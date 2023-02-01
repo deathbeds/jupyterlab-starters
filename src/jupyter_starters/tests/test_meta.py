@@ -1,4 +1,4 @@
-"""is metadata reported properly"""
+"""Is metadata reported properly."""
 # pylint: disable=protected-access
 import jupyter_starters
 

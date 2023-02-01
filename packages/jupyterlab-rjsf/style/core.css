@@ -1,9 +1,8 @@
 .jp-SchemaForm {
-  overflow-y: auto;
   color: var(--jp-ui-font-color1);
 }
 
-.jp-SchemaForm .rjsf {
+.jp-SchemaForm > .form-group {
   display: flex;
   flex-direction: column;
 }
@@ -42,10 +41,8 @@
   padding-top: 0;
 }
 
-.jp-SchemaForm .form-group {
+.jp-SchemaForm .form-group .form-group {
   margin-bottom: var(--jp-ui-font-size1);
-  width: 100%;
-  position: relative;
 }
 
 .jp-SchemaForm .form-group:last-child {

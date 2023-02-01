@@ -1,6 +1,5 @@
-""" some third-party preferred alternatives to stdlib/status quo for parsing
-    and validating JSON
-"""
+"""Some third-party preferred alternatives to stdlib/status quo for parsing and
+validating JSON."""
 # pylint: disable=invalid-name,c-extension-no-member
 from typing import Any, Callable, Dict, Text
 
@@ -12,8 +11,8 @@ try:
 except ImportError:  # pragma: no cover
     import json
 
-    loads = json.loads
-    dumps = json.dumps
+    loads = json.loads  # type: ignore
+    dumps = json.dumps  # type: ignore
 
 try:
     import fastjsonschema.compile as json_validator
@@ -24,7 +23,7 @@ except ImportError:
     from jsonschema.validators import validator_for
 
     def json_validator(schema: Dict[Text, Any]) -> Callable[[Dict[Text, Any]], Any]:
-        """implements that fastjsonschema.compile API with jsonschema"""
+        """Implements that fastjsonschema.compile API with jsonschema."""
         validator_cls = validator_for(schema)
 
         def _validate(instance: Dict[Text, Any]) -> Any:

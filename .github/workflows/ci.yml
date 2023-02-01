@@ -6,7 +6,12 @@ on:
       - master
   pull_request:
     branches:
-      - master
+      - '*'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   PYTHONIOENCODING: utf-8
@@ -14,9 +19,9 @@ env:
   PIP_DISABLE_PIP_VERSION_CHECK: '1'
   # our stuff
   SKIP_JLPM_IF_CACHED: '1'
-  CACHE_EPOCH: '3'
-  ATEST_RETRIES: '3'
-  DIST_NAME: jupyter-starters dist ${{ github.run_number }}
+  CACHE_EPOCH: '4'
+  ATEST_RETRIES: '4'
+  DIST_NAME: jupyter-starters-${{ github.run_number }}-dist
 
 defaults:
   run:
@@ -30,41 +35,35 @@ jobs:
       matrix:
         os: [ubuntu]
     env:
-      LOCKFILE: .github/locks/build-linux-64-3.10.conda.lock
+      LOCKFILE: .github/locks/build-linux-64-3.11.conda.lock
       SKIP_JLPM_IF_CACHED: '0'
     steps:
       - name: git checkout
-        uses: actions/checkout@v2
-
-      - name: cache (conda)
-        uses: actions/cache@v2
-        with:
-          path: ~/conda_pkgs_dir
-          key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-${{ hashFiles(env.LOCKFILE) }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-
+        uses: actions/checkout@v3
 
       - name: cache (node_modules)
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: |
             ${{ env.CACHE_EPOCH }}-node_modules-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc') }}
 
       - name: base env (conda)
-        uses: conda-incubator/setup-miniconda@master
+        uses: conda-incubator/setup-miniconda@v2
         with:
           environment-file: ${{ env.LOCKFILE }}
           miniforge-variant: Mambaforge
           use-mamba: true
-          use-only-tar-bz2: true
 
       - name: lint
         run: doit -n8 integrity lint || doit list --all --status
 
       - name: lint (again)
         run: doit integrity lint
+
+      - name: Rename uncached conda packages
+        shell: bash
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
 
   build:
     runs-on: ${{ matrix.os }}-latest
@@ -73,83 +72,69 @@ jobs:
       matrix:
         os: [ubuntu]
     env:
-      LOCKFILE: .github/locks/build-linux-64-3.10.conda.lock
+      LOCKFILE: .github/locks/build-linux-64-3.11.conda.lock
     steps:
       - name: git checkout
-        uses: actions/checkout@v2
-
-      - name: cache (conda)
-        uses: actions/cache@v2
-        with:
-          path: ~/conda_pkgs_dir
-          key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-${{ hashFiles(env.LOCKFILE) }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-build-
+        uses: actions/checkout@v3
 
       - name: cache (node_modules)
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: |
             ${{ env.CACHE_EPOCH }}-node_modules-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc') }}
 
       - name: base env (conda)
-        uses: conda-incubator/setup-miniconda@master
+        uses: conda-incubator/setup-miniconda@v2
         with:
           environment-file: ${{ env.LOCKFILE }}
           miniforge-variant: Mambaforge
           use-mamba: true
-          use-only-tar-bz2: true
 
       - name: build
-        run: doit -n8 dist || doit list --all --status
+        run: |
+          set -eux
+          doit -n8 dist || doit list --all --status
 
       - name: build (again)
-        run: doit dist
+        run: set -eux doit dist
 
       - name: publish (dists)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.DIST_NAME }}
           path: ./dist
+
+      - name: Rename uncached conda packages
+        shell: bash
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
 
   docs:
     needs: [build]
     runs-on: ubuntu-latest
     env:
       DOCS_IN_CI: 1
-      LOCKFILE: .github/locks/docs-linux-64-3.10.conda.lock
+      LOCKFILE: .github/locks/docs-linux-64-3.11.conda.lock
     steps:
       - name: git checkout
-        uses: actions/checkout@v2
-
-      - name: cache (conda)
-        uses: actions/cache@v2
-        with:
-          path: ~/conda_pkgs_dir
-          key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-${{ hashFiles(env.LOCKFILE) }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-docs-
+        uses: actions/checkout@v3
 
       - name: cache (node_modules)
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: |
             ${{ env.CACHE_EPOCH }}-node_modules-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc') }}
 
       - name: base env (conda)
-        uses: conda-incubator/setup-miniconda@master
+        uses: conda-incubator/setup-miniconda@v2
         with:
           environment-file: ${{ env.LOCKFILE }}
           miniforge-variant: Mambaforge
           use-mamba: true
-          use-only-tar-bz2: true
 
       - name: download (dists)
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: ${{ env.DIST_NAME }}
           path: ./dist
@@ -162,22 +147,26 @@ jobs:
 
       - name: publish (reports)
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: |
-            jupyter-starters reports linux-64 3.9 ${{ github.run_number }}
+            jupyter-starters reports linux-64 3.11 ${{ github.run_number }}
           path: |
             build/atest
             build/coverage
             build/utest
 
       - name: publish (docs)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: |
-            jupyter-starters docs ${{ github.run_number }}
+            jupyter-starters-${{ github.run_number }}-docs
           path: |
             build/docs/html
+
+      - name: Rename uncached conda packages
+        shell: bash
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
 
   test:
     needs: [build]
@@ -189,7 +178,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        py: ['3.7', '3.10']
+        py: ['3.8', '3.11']
         include:
           - os: ubuntu
             subdir: linux-64
@@ -199,32 +188,22 @@ jobs:
             subdir: win-64
         exclude:
           - os: ubuntu
-            py: '3.10'
+            py: '3.11'
     steps:
       - name: git checkout
-        uses: actions/checkout@v2
-
-      - name: cache (conda)
-        uses: actions/cache@v2
-        with:
-          path: ~/conda_pkgs_dir
-          key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-test-${{ hashFiles(env.LOCKFILE) }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-conda-test-
+        uses: actions/checkout@v3
 
       - name: base env (conda)
-        uses: conda-incubator/setup-miniconda@master
+        uses: conda-incubator/setup-miniconda@v2
         with:
           environment-file: ${{ env.LOCKFILE }}
           miniforge-variant: Mambaforge
           use-mamba: true
-          use-only-tar-bz2: true
 
       - name: download (dists)
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
-          name: jupyter-starters dist ${{ github.run_number }}
+          name: ${{ env.DIST_NAME }}
           path: ./dist
 
       - name: docs/test (unix)
@@ -245,11 +224,15 @@ jobs:
 
       - name: publish (reports)
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: |
-            jupyter-starters reports ${{ matrix.os }} ${{ matrix.py }} ${{ github.run_number }}
+            jupyter-starters-${{ github.run_number }}-reports-${{ matrix.os }}-${{ matrix.py }}
           path: |
             build/atest
             build/coverage
             build/utest
+
+      - name: Rename uncached conda packages
+        shell: bash
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"

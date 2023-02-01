@@ -2,7 +2,8 @@
  * An unfortunately very convoluted way to expose some custom react components
  * in the face of federated modules
  */
-import { FormProps, utils, Field, Widget } from '@rjsf/core';
+import { FormProps, getDefaultRegistry } from '@rjsf/core';
+import { Widget, Field } from '@rjsf/utils';
 import React from 'react';
 
 export type TComponentFactory = (props: Record<string, any>) => JSX.Element;
@@ -51,7 +52,7 @@ export const MarkdownField = async (): Promise<Widget> =>
   (await import('./markdown')).MarkdownField;
 export const XMLField = async (): Promise<Widget> => (await import('./xml')).XMLField;
 export const JSONObjectField = async (): Promise<Field> => {
-  const reg = utils.getDefaultRegistry();
+  const reg = getDefaultRegistry();
   return (await import('./jsonobject')).makeJSONObjectField(
     reg.fields['ObjectField'] as any
   );

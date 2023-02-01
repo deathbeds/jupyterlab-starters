@@ -1,5 +1,4 @@
-""" a starter that runs cookiecutter
-"""
+"""A starter that runs cookiecutter."""
 # pylint: disable=cyclic-import,duplicate-code,broad-except
 
 import re
@@ -98,8 +97,26 @@ JUPYTER_COOKIECUTTERS = {
 }
 
 
+def cookiecutter_pantry():
+    """Try to load the pantry from the cookiecutter metadata."""
+    grouped = {**JUPYTER_COOKIECUTTERS}
+
+    return [
+        {
+            "title": name,
+            "enum": [t["repo"] for t in templates],
+            "enumNames": [
+                f"""{"/".join(t["repo"].split("/")[-2:])}: {t["description"]}"""
+                for t in templates
+            ],
+            "default": sorted(templates, key=lambda t: t["repo"])[0]["repo"],
+        }
+        for name, templates in grouped.items()
+    ]
+
+
 def cookiecutter_starters(manager: "StarterManager"):
-    """try to find some cookiecutters"""
+    """Try to find some cookiecutters."""
     if not HAS_COOKIECUTTER:
         manager.log.debug(
             "🍪 install cookiecutter to enable the cookiecutter starter. yum!"
@@ -155,26 +172,58 @@ def cookiecutter_starters(manager: "StarterManager"):
     }
 
 
-def cookiecutter_pantry():
-    """try to load the pantry from the cookiecutter metadata"""
-    grouped = {**JUPYTER_COOKIECUTTERS}
+def cookiecutter_to_schema(cookiecutter_json):
+    """Convert a cookiecutter context to a JSON schema."""
+    bools = {"y": True, "n": False}
+    schema = {
+        "title": "Cookiecutter",
+        "description": "Values to use in template variables",
+        "type": "object",
+        "properties": {},
+    }
+    ui_schema = {}
+    schema["properties"] = properties = {}
 
-    return [
-        {
-            "title": name,
-            "enum": [t["repo"] for t in templates],
-            "enumNames": [
-                f"""{"/".join(t["repo"].split("/")[-2:])}: {t["description"]}"""
-                for t in templates
-            ],
-            "default": sorted(templates, key=lambda t: t["repo"])[0]["repo"],
-        }
-        for name, templates in grouped.items()
-    ]
+    for field, value in cookiecutter_json.items():
+        title = field.replace("_", " ").replace("-", " ").title()
+        if isinstance(value, str):
+            if value in bools:
+                properties[field] = {
+                    "type": "string",
+                    "default": value,
+                    "title": title,
+                    "enum": [*bools.keys()],
+                    "enumNames": ["yes", "no"],
+                }
+                ui_schema[field] = {"ui:widget": "radio"}
+                continue
+
+            value_no_tmpl = re.sub(r"{[%{].*?[%}]}", "", value)
+
+            properties[field] = {
+                "type": "string",
+                "description": f"default: {value}",
+                "default": value_no_tmpl,
+                "title": title,
+                "minLength": 1,
+            }
+            continue
+
+        if isinstance(value, dict):
+            enum = list(value.keys())
+            properties[field] = {"enum": enum, "default": enum[0], "title": title}
+            continue
+
+        if isinstance(value, list):
+            properties[field] = {"enum": value, "default": value[0], "title": title}
+            continue
+
+    schema["required"] = sorted(list(schema["properties"].keys()))
+    return schema, ui_schema
 
 
 async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
-    """run cookiecutter"""
+    """Run cookiecutter."""
     # pylint: disable=cyclic-import,broad-except,too-many-locals,unused-variable
     template = body["template"]
     checkout = body.get("checkout")
@@ -278,53 +327,3 @@ async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
                 "status": Status.CONTINUING,
                 "errors": [str(err)],
             }
-
-
-def cookiecutter_to_schema(cookiecutter_json):
-    """convert a cookiecutter context to a JSON schema"""
-    bools = {"y": True, "n": False}
-    schema = {
-        "title": "Cookiecutter",
-        "description": "Values to use in template variables",
-        "type": "object",
-        "properties": {},
-    }
-    ui_schema = {}
-    schema["properties"] = properties = {}
-
-    for field, value in cookiecutter_json.items():
-        title = field.replace("_", " ").replace("-", " ").title()
-        if isinstance(value, str):
-            if value in bools:
-                properties[field] = {
-                    "type": "string",
-                    "default": value,
-                    "title": title,
-                    "enum": [*bools.keys()],
-                    "enumNames": ["yes", "no"],
-                }
-                ui_schema[field] = {"ui:widget": "radio"}
-                continue
-
-            value_no_tmpl = re.sub(r"{[%{].*?[%}]}", "", value)
-
-            properties[field] = {
-                "type": "string",
-                "description": f"default: {value}",
-                "default": value_no_tmpl,
-                "title": title,
-                "minLength": 1,
-            }
-            continue
-
-        if isinstance(value, dict):
-            enum = list(value.keys())
-            properties[field] = {"enum": enum, "default": enum[0], "title": title}
-            continue
-
-        if isinstance(value, list):
-            properties[field] = {"enum": value, "default": value[0], "title": title}
-            continue
-
-    schema["required"] = sorted(list(schema["properties"].keys()))
-    return schema, ui_schema

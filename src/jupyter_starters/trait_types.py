@@ -1,7 +1,7 @@
-""" some more traits
+"""Some more traits.
 
-    these are not typechecked yet, because of the impedance between traitlets,
-    JSON Schema, and mypy.
+these are not typechecked yet, because of the impedance between
+traitlets, JSON Schema, and mypy.
 """
 
 # pylint: disable=broad-except,unused-argument
@@ -11,7 +11,10 @@ from .json_ import JsonSchemaException
 
 
 class Schema(traitlets.Any):
-    """any... but validated by a :func:`jupyter_starters.json_.json_validator`"""
+    """any...
+
+    but validated by a :func:`jupyter_starters.json_.json_validator`
+    """
 
     _validator = None
 
@@ -20,7 +23,7 @@ class Schema(traitlets.Any):
         self._validator = validator
 
     def validate(self, obj, value):
-        """applies a validator"""
+        """Applies a validator."""
         try:
             self._validator(value)
         except JsonSchemaException as err:  # pragma: no cover
