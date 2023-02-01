@@ -11,8 +11,8 @@ try:
 except ImportError:  # pragma: no cover
     import json
 
-    loads = json.loads
-    dumps = json.dumps
+    loads = json.loads  # type: ignore
+    dumps = json.dumps  # type: ignore
 
 try:
     import fastjsonschema.compile as json_validator

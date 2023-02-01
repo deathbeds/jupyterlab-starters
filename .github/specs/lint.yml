@@ -1,14 +1,17 @@
 dependencies:
   - black
+  - docformatter
   - isort
   - mypy
   - pydocstyle
   - pyflakes
   - pylint
+  - pyproject-fmt
   - pytest
-  - docformatter
   - robotframework-robocop
   - robotframework-seleniumlibrary
   - robotframework-tidy
   - ruamel.yaml
   - ssort
+  - types-jsonschema
+  - types-ujson

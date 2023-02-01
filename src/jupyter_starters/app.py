@@ -65,7 +65,7 @@ class StartersListApp(StartersBaseApp):
 class StartersApp(StartersBaseApp):
     """Jupyter-starters utilities."""
 
-    name = "starters"  # type: ignore
+    name = "starters"
 
     subcommands = T.Dict(
         dict(

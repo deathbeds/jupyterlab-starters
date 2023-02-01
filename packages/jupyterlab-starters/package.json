@@ -55,18 +55,8 @@
   ],
   "jupyterlab": {
     "webpackConfig": "./webpack.config.js",
-    "discovery": {
-      "server": {
-        "base": {
-          "name": "jupyter_starters"
-        },
-        "managers": [
-          "pip"
-        ]
-      }
-    },
     "extension": "lib/plugin.js",
-    "outputDir": "../../src/jupyter_starters/labextension",
+    "outputDir": "../../src/jupyter_starters/_d/share/jupyter/labextensions/@deathbeds/jupyterlab-starters",
     "schemaDir": "schema",
     "sharedPackages": {
       "@deathbeds/jupyterlab-rjsf": {

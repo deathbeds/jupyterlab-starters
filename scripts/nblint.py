@@ -5,14 +5,11 @@ import sys
 from pathlib import Path
 
 import black
-import isort
 import nbformat
 from isort.api import sort_code_string
 
 HERE = Path(__file__).parent
 ROOT = HERE.parent
-
-SETUP_CFG = ROOT / "setup.cfg"
 
 NODE = Path(
     shutil.which("node") or shutil.which("node.exe") or shutil.which("node.cmd")
@@ -21,8 +18,6 @@ NODE_MODULES = ROOT / "node_modules"
 PRETTIER = [NODE, NODE_MODULES / ".bin/prettier"]
 
 NB_METADATA_KEYS = ["kernelspec", "language_info", "jupyter_starters"]
-
-ISORT_CONFIG = isort.settings.Config(settings_path=SETUP_CFG)
 
 
 def blacken(source):
@@ -70,7 +65,7 @@ def nblint_one(nb_node):
                 continue
             if source.startswith("%"):
                 continue
-            new = sort_code_string(source, config=ISORT_CONFIG)
+            new = sort_code_string(source)
             new = blacken(new).rstrip()
             if new != source:
                 cell["source"] = new.splitlines(True)

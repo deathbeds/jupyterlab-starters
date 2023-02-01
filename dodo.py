@@ -52,7 +52,6 @@ class C:
         *("--configure", "too-many-calls-in-test-case:max_calls:18"),
         *("--configure", "too-long-test-case:max_len:22"),
         *("--exclude", "if-can-be-used"),
-        *("--exclude", "if-can-be-merged"),
     ]
     UTEST_ARGS = safe_load(os.environ.get("UTEST_ARGS", "[]"))
     ATEST_RETRIES = int(os.environ.get("ATEST_RETRIES", "1"))
@@ -104,15 +103,14 @@ class P:
     LITE = ROOT / "lite"
     BINDER = ROOT / ".binder"
 
-    SRC = ROOT / "src"
+    SRC = ROOT / "src/jupyter_starters"
     PY_SRC = sorted(SRC.rglob("*.py"))
     PY_SCRIPTS = sorted(SCRIPTS.rglob("*.py"))
     PY_DOCS = sorted(DOCS.rglob("*.py"))
     PY_ATEST = sorted(ATEST.rglob("*.py"))
-    SETUP_CFG = ROOT / "setup.cfg"
-    SETUP_PY = ROOT / "setup.py"
+    PYPROJECT_TOML = ROOT / "pyproject.toml"
 
-    ALL_PY = [DODO, *PY_SRC, *PY_SCRIPTS, *PY_DOCS, *PY_ATEST, SETUP_PY]
+    ALL_PY = [DODO, *PY_SRC, *PY_SCRIPTS, *PY_DOCS, *PY_ATEST]
     ALL_ROBOT = [*ATEST.rglob("*.robot"), *ATEST.rglob("*.resource")]
 
     YARNRC = ROOT / ".yarnrc"
@@ -177,16 +175,17 @@ class P:
     DOCS_INDEX = DOCS_OUT_HTML / "index.html"
     DOCS_BUILDINFO = DOCS_OUT_HTML / ".buildinfo"
     DOCS_SCHEMA_INDEX = DOCS / "schema" / "index.md"
+    MYPY_CACHE = BUILD / ".mypy_cache"
 
     # js stuff
     TSBUILDINFO = PACKAGES / "_meta/.src.tsbuildinfo"
-    PY_SCHEMA = SRC / "jupyter_starters/schema"
+    PY_SCHEMA = SRC / "schema"
     PY_SCHEMA_V3 = PY_SCHEMA / "v3.json"
     ALL_PY_SCHEMA = PY_SCHEMA.glob("*.json")
     JS_SRC_SCHEMA_D_TS = PACKAGES / "jupyterlab-starters/src/_schema.d.ts"
     JS_SRC_SCHEMA = PACKAGES / "jupyterlab-starters/src/_schema.json"
     JS_LIB_SCHEMA = PACKAGES / "jupyterlab-starters/lib/_schema.json"
-    LABEXT = SRC / "jupyter_starters/labextension"
+    LABEXT = SRC / "_d/share/jupyter/labextensions/@deathbeds/jupyterlab-starters"
     EXT_PACKAGE_JSON = LABEXT / "package.json"
     EXT_REMOTE_ENTRY = LABEXT.rglob("remoteEntry*.js")
     PRETTIER_CACHE = BUILD / ".prettier-cache"
@@ -283,8 +282,8 @@ class U:
             ]
         return prefix, run_args
 
-    def run_in(env, actions, **kwargs):
-        prefix, run_args = U.run_args(env)
+    def run_in(env_, actions, **kwargs):
+        prefix, run_args = U.run_args(env_)
         history = prefix / "conda-meta/history"
         file_dep = kwargs.pop("file_dep", [])
         targets = kwargs.pop("targets", [])
@@ -575,6 +574,14 @@ class U:
             elif path.exists():
                 path.unlink()
 
+    def source_date_epoch():
+        """Fetch the git commit date for reproducible builds."""
+        return (
+            subprocess.check_output(["git", "log", "-1", "--format=%ct"])
+            .decode("utf-8")
+            .strip()
+        )
+
 
 def task_lock():
     """Generate conda locks for all envs."""
@@ -642,14 +649,16 @@ def task_lint():
         "pylint": [P.PY_SRC, [*C.PYM, "pylint", "--reports", "n", "--score", "n"]],
         "mypy": [
             P.PY_SRC,
-            [*C.PYM, "mypy", "--no-error-summary", "--config-file", P.SETUP_CFG],
+            [*C.PYM, "mypy"],
         ],
     }.items():
         file_dep, cmd = file_dep_cmd
         yield dict(
             name=f"py:{linter}",
             task_dep=["lint:py:format"],
-            **U.run_in("docs", [cmd + file_dep], file_dep=[P.SETUP_CFG, *file_dep]),
+            **U.run_in(
+                "docs", [cmd + file_dep], file_dep=[P.PYPROJECT_TOML, *file_dep]
+            ),
         )
 
     yield dict(
@@ -661,13 +670,15 @@ def task_lint():
         ),
     )
 
-    robocop = [*C.PYM, "robocop", *C.ROBOCOP_RULES]
-
-    yield dict(
-        name="rf:robocop",
-        task_dep=["lint:rf:tidy"],
-        **U.run_in("docs", [robocop + P.ALL_ROBOT], file_dep=P.ALL_ROBOT),
-    )
+    # robocop = [*C.PYM, "robocop", *C.ROBOCOP_RULES]
+    #
+    ## something broken in node.errors
+    #
+    # yield dict(
+    #     name="rf:robocop",
+    #     task_dep=["lint:rf:tidy"],
+    #     **U.run_in("docs", [robocop + P.ALL_ROBOT], file_dep=P.ALL_ROBOT),
+    # )
 
     for pkg_json in P.ALL_PACKAGE_JSON:
         yield dict(
@@ -866,19 +877,25 @@ def task_dist():
         **U.run_in(
             "build",
             [
-                [C.PY, "setup.py", "sdist"],
-                [C.PY, "setup.py", "bdist_wheel"],
+                [
+                    "flit",
+                    "--debug",
+                    "build",
+                    "--setup-py",
+                    "--format=wheel",
+                    "--format=sdist",
+                ],
                 ["twine", "check", "dist/*.whl", "dist/*.tar.gz"],
             ],
             file_dep=[
                 *P.PY_SRC,
                 P.README,
                 P.LICENSE,
-                P.SETUP_CFG,
-                P.SETUP_PY,
+                P.PYPROJECT_TOML,
                 P.EXT_PACKAGE_JSON,
             ],
             targets=[P.WHEEL, P.SDIST],
+            env=dict(**os.environ, SOURCE_DATE_EPOCH=U.source_date_epoch()),
         ),
     )
 
@@ -954,7 +971,7 @@ def task_dev():
         **U.run_in(
             "utest",
             pip_actions,
-            file_dep=[P.SETUP_CFG, P.SETUP_PY, P.EXT_PACKAGE_JSON],
+            file_dep=[P.PYPROJECT_TOML, P.EXT_PACKAGE_JSON],
         ),
     )
 
@@ -967,7 +984,7 @@ def task_dev():
                 C.FREEZE,
                 *([] if C.RTD else [C.CHECK]),
             ],
-            file_dep=[P.SETUP_CFG, P.SETUP_PY],
+            file_dep=[P.PYPROJECT_TOML],
         ),
     )
 
@@ -980,7 +997,7 @@ def task_dev():
                 ["jupyter", *app, "enable", "--sys-prefix", "--py", "jupyter_starters"]
                 for app in [["serverextension"], ["server", "extension"]]
             ],
-            file_dep=[P.SETUP_CFG, P.SETUP_PY],
+            file_dep=[P.PYPROJECT_TOML],
         ),
     )
 
@@ -990,7 +1007,7 @@ def task_dev():
         **U.run_in(
             "utest",
             [["jupyter", "labextension", "develop", ".", "--overwrite"]],
-            file_dep=[P.SETUP_CFG, P.SETUP_PY, *P.ALL_PLUGIN_SCHEMA],
+            file_dep=[P.PYPROJECT_TOML, *P.ALL_PLUGIN_SCHEMA],
         ),
     )
 
@@ -1137,7 +1154,7 @@ def task_test():
             "utest",
             [(U.clean_some, [cov_data]), utest_args],
             targets=[html_utest, cov_data],
-            file_dep=[*P.PY_SRC, P.SETUP_CFG, *P.PY_SCHEMA.glob("*.json")],
+            file_dep=[*P.PY_SRC, P.PYPROJECT_TOML, *P.PY_SCHEMA.glob("*.json")],
         ),
     )
 
@@ -1151,8 +1168,8 @@ def task_test():
 
     task_dep = ["preflight"]
 
-    if not (C.DOCS_OR_TEST_IN_CI):
-        task_dep += ["lint:rf:robocop"]
+    # if not (C.DOCS_OR_TEST_IN_CI):
+    #     task_dep += ["lint:rf:robocop"]
 
     yield dict(
         name="atest",
