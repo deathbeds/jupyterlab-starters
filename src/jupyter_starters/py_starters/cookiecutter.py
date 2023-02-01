@@ -1,5 +1,4 @@
-""" a starter that runs cookiecutter
-"""
+"""A starter that runs cookiecutter."""
 # pylint: disable=cyclic-import,duplicate-code,broad-except
 
 import re
@@ -99,7 +98,7 @@ JUPYTER_COOKIECUTTERS = {
 
 
 def cookiecutter_pantry():
-    """try to load the pantry from the cookiecutter metadata"""
+    """Try to load the pantry from the cookiecutter metadata."""
     grouped = {**JUPYTER_COOKIECUTTERS}
 
     return [
@@ -117,7 +116,7 @@ def cookiecutter_pantry():
 
 
 def cookiecutter_starters(manager: "StarterManager"):
-    """try to find some cookiecutters"""
+    """Try to find some cookiecutters."""
     if not HAS_COOKIECUTTER:
         manager.log.debug(
             "🍪 install cookiecutter to enable the cookiecutter starter. yum!"
@@ -174,7 +173,7 @@ def cookiecutter_starters(manager: "StarterManager"):
 
 
 def cookiecutter_to_schema(cookiecutter_json):
-    """convert a cookiecutter context to a JSON schema"""
+    """Convert a cookiecutter context to a JSON schema."""
     bools = {"y": True, "n": False}
     schema = {
         "title": "Cookiecutter",
@@ -224,7 +223,7 @@ def cookiecutter_to_schema(cookiecutter_json):
 
 
 async def start(name, starter, path, body, manager) -> Dict[Text, Any]:
-    """run cookiecutter"""
+    """Run cookiecutter."""
     # pylint: disable=cyclic-import,broad-except,too-many-locals,unused-variable
     template = body["template"]
     checkout = body.get("checkout")

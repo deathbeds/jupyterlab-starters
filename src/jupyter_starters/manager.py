@@ -1,5 +1,4 @@
-""" manager, for starters
-"""
+"""Manager, for starters."""
 # pylint: disable=unsubscriptable-object,fixme
 import base64
 import importlib
@@ -47,7 +46,7 @@ DEFAULT_ENV_CLS = "jinja2.sandbox.SandboxedEnvironment"
 
 
 def iter_not_ignored(root, ignore_patterns=None):
-    """yield all children under a root that do not match the ignore patterns"""
+    """Yield all children under a root that do not match the ignore patterns."""
     if not ignore_patterns:
         ignore_patterns = DEFAULT_IGNORE_PATTERNS
 
@@ -67,7 +66,7 @@ def iter_not_ignored(root, ignore_patterns=None):
 
 
 class StarterManager(LoggingConfigurable):
-    """handlers starting starters"""
+    """Handlers starting starters."""
 
     _starters = Schema(validator=STARTERS)
     jinja_env = T.Instance(jinja2.Environment)
@@ -81,22 +80,22 @@ class StarterManager(LoggingConfigurable):
 
     @property
     def contents_manager(self):
-        """use the contents manager from parent"""
+        """Use the contents manager from parent."""
         return self.parent.contents_manager
 
     @property
     def kernel_manager(self):
-        """use the kernel manager from parent"""
+        """Use the kernel manager from parent."""
         return self.parent.kernel_manager
 
     @property
     def running(self):
-        """report names of all starters that could be stopped"""
+        """Report names of all starters that could be stopped."""
         return list(self.kernel_dirs.keys())
 
     @T.default("jinja_env_extensions")
     def _default_env_extensions(self):
-        """get env extensions from extras and config"""
+        """Get env extensions from extras and config."""
         extensions = {}
         extensions.update(self.config_dict.get("extra_jinja_env_extensions", {}))
         extensions.update(self.extra_jinja_env_extensions)
@@ -121,9 +120,10 @@ class StarterManager(LoggingConfigurable):
 
     @T.default("config_dict")
     def _default_config_dict(self):
-        """load merged config from more jupyter_*_config.d files
+        """Load merged config from more jupyter_*_config.d files.
 
-        re-uses notebook loading machinery to look through more locations
+        re-uses notebook loading machinery to look through more
+        locations
         """
         config_path = jupyter_config_path()
         cwd = str(Path.cwd())
@@ -138,7 +138,7 @@ class StarterManager(LoggingConfigurable):
 
     @T.default("_starters")
     def _default_starters(self):
-        """default starters"""
+        """Default starters."""
         starters = {}
         starters.update(cookiecutter_starters(self))
         starters.update(self.config_dict.get("extra_starters", {}))
@@ -147,7 +147,7 @@ class StarterManager(LoggingConfigurable):
 
     @property
     def starters(self):
-        """augment notebook starters
+        """Augment notebook starters.
 
         TODO: caching
         """
@@ -169,11 +169,11 @@ class StarterManager(LoggingConfigurable):
 
     @property
     def starter_names(self) -> List[Text]:
-        """convenience method to get names of starters"""
+        """Convenience method to get names of starters."""
         return sorted(dict(self.starters).keys())
 
     async def start(self, name, path, body):
-        """start a starter"""
+        """Start a starter."""
         starter = self.starters[name]
         starter_type = starter["type"]
 
@@ -192,7 +192,10 @@ class StarterManager(LoggingConfigurable):
         raise NotImplementedError(starter["type"])
 
     async def stop(self, name):
-        """stop a starter. presently only works for notebooks"""
+        """stop a starter.
+
+        presently only works for notebooks
+        """
         starter = self.starters[name]
         starter_type = starter["type"]
 
@@ -202,7 +205,7 @@ class StarterManager(LoggingConfigurable):
         raise NotImplementedError(starter["type"])
 
     def resolve_src(self, starter):
-        """resolve the src of a file-based starter"""
+        """Resolve the src of a file-based starter."""
         root = Path.cwd()
         if "src" not in starter:
             self.log.error("src is required")
@@ -229,7 +232,7 @@ class StarterManager(LoggingConfigurable):
         return src
 
     async def just_copy(self, root, path):
-        """just copy, with some dummy values"""
+        """Just copy, with some dummy values."""
         await self.start_copy(
             "just-copy",
             {
@@ -242,7 +245,7 @@ class StarterManager(LoggingConfigurable):
         )
 
     async def start_copy(self, name, starter, path, body):
-        """start a copy starter"""
+        """Start a copy starter."""
         root = self.resolve_src(starter)
 
         if root is None:
@@ -275,7 +278,7 @@ class StarterManager(LoggingConfigurable):
         }
 
     async def start_content(self, name, starter, path, body):
-        """start a content starter"""
+        """Start a content starter."""
 
         dest = await self.save_content(path, starter["content"], body)
 
@@ -288,20 +291,20 @@ class StarterManager(LoggingConfigurable):
         }
 
     async def start_python(self, name, starter, path, body):
-        """start a python starter"""
+        """Start a python starter."""
         func = T.import_item(starter["callable"])
         return await func(name, starter, path, body, self)
 
     async def start_notebook(self, name, starter, path, body):
-        """delegate running the notebook to a kernel"""
+        """Delegate running the notebook to a kernel."""
         return await notebook_starter(name, starter, path, body, self)
 
     async def stop_notebook(self, name):
-        """stop running the notebook kernel"""
+        """Stop running the notebook kernel."""
         return await stop_kernel(name, self)
 
     async def save_one_file(self, src, dest):
-        """generate and save a content model for a single file/directory"""
+        """Generate and save a content model for a single file/directory."""
         stat = src.stat()
         is_dir = src.is_dir()
 
@@ -322,7 +325,7 @@ class StarterManager(LoggingConfigurable):
         await self.save_contents_model(model, dest)
 
     def _template_notebook(self, content, body):
-        """build a template notebook by manipulation"""
+        """Build a template notebook by manipulation."""
         json_text = json_.dumps(content, indent=2, sort_keys=True)
         content_tmpl = self.jinja_env.from_string(json_text)
         content_notebook = json_.loads(content_tmpl.render(**body))
@@ -398,7 +401,7 @@ class StarterManager(LoggingConfigurable):
                 await self.save_content(dest, child, body)
 
     async def save_contents_model(self, model, dest):
-        """use the contents manager to write a model"""
+        """Use the contents manager to write a model."""
         # pylint: disable=broad-except
 
         allow_hidden = None

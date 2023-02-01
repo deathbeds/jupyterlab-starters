@@ -1,5 +1,4 @@
-""" initial schema
-"""
+"""Initial schema."""
 from pathlib import Path
 
 from ..json_ import json_validator, loads

@@ -1,6 +1,6 @@
-""" check internal version consistency
+"""Check internal version consistency.
 
-    these should be quick to run (not invoke any other process)
+these should be quick to run (not invoke any other process)
 """
 # pylint: disable=redefined-outer-name,unused-variable
 import json
@@ -43,7 +43,7 @@ PY_VERSION = re.findall(r'= "(.*)"$', (_VERSION_PY).read_text())[0]
 
 @pytest.fixture(scope="module")
 def the_meta_package():
-    """load up the metapackage"""
+    """Load up the metapackage."""
     meta_path, meta = PACKAGES[META_NAME]
     return (
         meta_path,
@@ -57,7 +57,7 @@ def the_meta_package():
     "name,info", [p for p in PACKAGES.items() if p[0] != META_NAME]
 )
 def test_ts_package_integrity(name, info, the_meta_package):
-    """are the typescript packages self-consistent"""
+    """Are the typescript packages self-consistent."""
     m_path, m_pkg, m_tsconfig, m_index = the_meta_package
     path, pkg = info
 
@@ -95,7 +95,7 @@ def test_changelog_versions(pkg, version):
 
 
 def integrity():
-    """run the integrity checks"""
+    """Run the integrity checks."""
     with tempfile.TemporaryDirectory() as tmpd:
         ini = pathlib.Path(tmpd) / "pytest.ini"
         ini.write_text(pathlib.Path(ROOT / "scripts" / "fake_pytest.ini").read_text())

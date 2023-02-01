@@ -1,5 +1,4 @@
-""" tornado handler for managing and communicating with language servers
-"""
+"""Tornado handler for managing and communicating with language servers."""
 # pylint: disable=abstract-method
 from typing import TYPE_CHECKING
 
@@ -15,20 +14,20 @@ if TYPE_CHECKING:
 
 
 class BaseHandler(JupyterHandler):
-    """common base handlers"""
+    """Common base handlers."""
 
     manager: "StarterManager"
 
     def initialize(self, manager) -> None:
-        """capture the manager"""
+        """Capture the manager."""
         self.manager = manager
 
 
 class StartersHandler(BaseHandler):
-    """serves the available starters"""
+    """Serves the available starters."""
 
     async def get(self) -> None:
-        """return the starters"""
+        """Return the starters."""
         response = {
             "version": VERSION,
             "starters": self.manager.starters,
@@ -44,10 +43,10 @@ class StartersHandler(BaseHandler):
 
 
 class StarterHandler(BaseHandler):
-    """acts on a single starters"""
+    """Acts on a single starters."""
 
     async def post(self, starter, path) -> None:
-        """start a starter"""
+        """Start a starter."""
         body = None
 
         if self.request.body:
@@ -58,14 +57,14 @@ class StarterHandler(BaseHandler):
     # pylint: disable=unused-argument
 
     async def delete(self, starter, path=None) -> None:
-        """forcibly stop a starter"""
+        """Forcibly stop a starter."""
         await self.manager.stop(starter)
         self.set_status(202)
         self.finish({})
 
 
 def add_handlers(nbapp, manager) -> None:
-    """Add starter routes to the notebook server web application"""
+    """Add starter routes to the notebook server web application."""
 
     opts = {"manager": manager}
 

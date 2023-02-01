@@ -1,4 +1,4 @@
-"""development automation for jupyter[lab]-starter"""
+"""Development automation for jupyter[lab]-starter."""
 import difflib
 import json
 import os
@@ -21,7 +21,7 @@ from ruamel.yaml.main import safe_dump
 
 
 class C:
-    """constants"""
+    """Constants."""
 
     SUBDIRS = ["linux-64", "osx-64", "win-64"]
     THIS_SUBDIR = {"Linux": "linux-64", "Darwin": "osx-64", "Windows": "win-64"}[
@@ -90,7 +90,7 @@ class C:
 
 
 class P:
-    """paths"""
+    """Paths."""
 
     DODO = Path(__file__)
     ROOT = DODO.parent
@@ -248,7 +248,7 @@ class P:
 
 
 class U:
-    """utilities"""
+    """Utilities."""
 
     RE_TIMESTAMPS = [
         r"\d{4}-\d{2}-\d{2} \d{2}:\d{2} -\d*",
@@ -583,7 +583,7 @@ class U:
 
 
 def task_lock():
-    """generate conda locks for all envs"""
+    """Generate conda locks for all envs."""
     if C.CI or C.DEMO_IN_BINDER or C.RTD:
         return
 
@@ -625,15 +625,16 @@ def task_env():
 
 
 def task_lint():
-    """improve and ensure code quality"""
+    """Improve and ensure code quality."""
     if C.DOCS_OR_TEST_IN_CI or C.DEMO_IN_BINDER:
         return
 
     yield dict(
-        name="py:isort:black",
+        name="py:format",
         **U.run_in(
             "docs",
             [
+                [*C.PYM, "docformatter", "--in-place", *P.ALL_PY],
                 [*C.PYM, "ssort", *P.ALL_PY],
                 [*C.PYM, "isort", *P.ALL_PY],
                 [*C.PYM, "black", "--quiet", *P.ALL_PY],
@@ -653,7 +654,7 @@ def task_lint():
         file_dep, cmd = file_dep_cmd
         yield dict(
             name=f"py:{linter}",
-            task_dep=["lint:py:isort:black"],
+            task_dep=["lint:py:format"],
             **U.run_in("docs", [cmd + file_dep], file_dep=[P.SETUP_CFG, *file_dep]),
         )
 
@@ -800,7 +801,7 @@ def task_jlpm():
 
 
 def task_build():
-    """build intermediate artifacts"""
+    """Build intermediate artifacts."""
     if C.DOCS_OR_TEST_IN_CI:
         return
 
@@ -877,7 +878,7 @@ def task_build():
 
 
 def task_dist():
-    """prepare release artifacts"""
+    """Prepare release artifacts."""
     if C.DOCS_OR_TEST_IN_CI:
         return
 
@@ -943,7 +944,7 @@ def task_dist():
 
 
 class D:
-    """data"""
+    """Data."""
 
     def pip_specs():
         env_spec = (P.RTD_ENV).read_text(**C.UTF8)
@@ -956,7 +957,7 @@ class D:
 
 
 def task_dev():
-    """prepare local development"""
+    """Prepare local development."""
     if C.DOCS_OR_TEST_IN_CI:
         return
 
@@ -1076,7 +1077,7 @@ def task_lab():
 
 
 def task_integrity():
-    """ensure integrity of the repo"""
+    """Ensure integrity of the repo."""
     if C.DOCS_OR_TEST_IN_CI:
         return
 
@@ -1097,7 +1098,7 @@ def task_integrity():
 
 
 def task_preflight():
-    """ensure various stages are ready for development"""
+    """Ensure various stages are ready for development."""
     file_dep = [P.SCRIPTS / "preflight.py"]
     if C.DOCS_OR_TEST_IN_CI:
         task_dep = ["prod:pip:check"]
@@ -1117,7 +1118,7 @@ def task_preflight():
 
 
 def task_test():
-    """run automated tests"""
+    """Run automated tests."""
     if C.DEMO_IN_BINDER:
         return
 
@@ -1222,7 +1223,7 @@ def task_lite():
 
 
 def task_docs():
-    """build documentation"""
+    """Build documentation."""
 
     if C.TEST_IN_CI:
         return
@@ -1289,7 +1290,7 @@ def task_docs():
 
 
 def task_watch():
-    """watch for live developing"""
+    """Watch for live developing."""
     if not C.RUNNING_LOCALLY:
         return
 
@@ -1304,7 +1305,7 @@ def task_watch():
 
 
 class R(doit.reporter.ConsoleReporter):
-    """fancy reporter"""
+    """Fancy reporter."""
 
     TIMEFMT = "%H:%M:%S"
     SKIP = " " * len(TIMEFMT)

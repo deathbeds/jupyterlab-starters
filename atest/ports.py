@@ -1,5 +1,4 @@
-""" get a random port
-"""
+"""Get a random port."""
 
 import socket
 import time
@@ -24,7 +23,7 @@ def get_unused_port():
 def wait_for_url_status(
     url: str, status_code: int, interval_sec: float = 0.1, attempts: int = 100
 ) -> bool:
-    """Attempt to fetch from the URL until, or raise an"""
+    """Attempt to fetch from the URL until, or raise an."""
     response = None
 
     for i in range(attempts):

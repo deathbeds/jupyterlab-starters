@@ -1,5 +1,4 @@
-""" starters for jupyterlab
-"""
+"""Starters for jupyterlab."""
 from ._version import __version__
 from .serverextension import load_jupyter_server_extension
 

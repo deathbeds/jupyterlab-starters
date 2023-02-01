@@ -1,5 +1,4 @@
-""" antidisinformationarianism
-"""
+"""Antidisinformationarianism."""
 import os
 import re
 import shutil
@@ -92,7 +91,7 @@ def make_parser():
 
 
 def fix_schema_md():
-    """fix up generated markdown to work (somewhat better) with sphinx"""
+    """Fix up generated markdown to work (somewhat better) with sphinx."""
     if SCHEMA_README.exists():
         SCHEMA_README.unlink()
 
@@ -111,7 +110,7 @@ def fix_schema_md():
 
 
 def make_schema_index() -> int:
-    """make an index for all the schema markdown"""
+    """Make an index for all the schema markdown."""
     md_files = sorted(SCHEMA_DOCS.glob("*.md"))
     index = SCHEMA_DOCS / "index.md"
 
@@ -145,7 +144,7 @@ def make_schema_docs() -> int:
 
 
 def fix_schema_html() -> int:
-    """fix up generated HTML"""
+    """Fix up generated HTML."""
     html_files = list((DOCS_BUILD / "schema").glob("*.html"))
 
     for html_file in html_files:
@@ -160,7 +159,7 @@ def fix_schema_html() -> int:
 
 
 def run_check_links() -> int:
-    """check local links with pytest-check-links in a clean directory"""
+    """Check local links with pytest-check-links in a clean directory."""
     ini = CHECK_INI.format(extra_k="")
     # do this in a temporary directory to avoid surprises
 

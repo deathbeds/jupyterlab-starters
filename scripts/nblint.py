@@ -1,4 +1,4 @@
-"""linter and formatter of notebooks"""
+"""Linter and formatter of notebooks."""
 import shutil
 import subprocess
 import sys
@@ -26,12 +26,12 @@ ISORT_CONFIG = isort.settings.Config(settings_path=SETUP_CFG)
 
 
 def blacken(source):
-    """apply black to a source string"""
+    """Apply black to a source string."""
     return black.format_str(source, mode=black.FileMode(line_length=88))
 
 
 def nblint_one(nb_node):
-    """format/lint one notebook"""
+    """Format/lint one notebook."""
     changes = 0
     has_empty = 0
     nb_metadata_keys = list(nb_node.metadata.keys())
@@ -86,7 +86,7 @@ def nblint_one(nb_node):
 
 
 def nblint(nb_paths):
-    """lint a number of notebook paths"""
+    """Lint a number of notebook paths."""
     len_paths = len(nb_paths)
 
     for i, nb_path in enumerate(nb_paths):

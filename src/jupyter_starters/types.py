@@ -1,11 +1,10 @@
-""" some types and constants
-"""
+"""Some types and constants."""
 # pylint: disable=too-few-public-methods
 NS = "starters"
 
 
 class Status:
-    """pseudo-enum for managing statuses"""
+    """Pseudo-enum for managing statuses."""
 
     # the starter isn't done yet, and more data is required
     CONTINUING = "continuing"

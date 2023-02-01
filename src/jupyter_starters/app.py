@@ -1,4 +1,4 @@
-"""CLI for jupyter-starters"""
+"""CLI for jupyter-starters."""
 # pylint: disable=too-many-ancestors
 import textwrap
 
@@ -63,7 +63,7 @@ class StartersListApp(StartersBaseApp):
 
 
 class StartersApp(StartersBaseApp):
-    """jupyter-starters utilities"""
+    """Jupyter-starters utilities."""
 
     name = "starters"  # type: ignore
 
