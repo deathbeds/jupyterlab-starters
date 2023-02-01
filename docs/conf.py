@@ -1,13 +1,23 @@
 """Documentation configuration and workflow for jupyter-starters."""
 # pylint: disable=invalid-name,redefined-builtin,import-error
 
+import datetime
 import os
 import pathlib
 import sys
 from subprocess import check_call
 
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
+
 HERE = pathlib.Path(__file__).parent
 ROOT = HERE.parent
+PYPROJECT_TOML = ROOT / "pyproject.toml"
+PYPROJECT = tomllib.loads(PYPROJECT_TOML.read_text(encoding="utf-8"))
+
+os.environ.update(PYDEVD_DISABLE_FILE_VALIDATION="1")
 
 
 def build_finished(_app, exception):
@@ -47,14 +57,14 @@ sys.path.insert(0, str((pathlib.Path.cwd().parent / "src").resolve()))
 
 # -- Project information -----------------------------------------------------
 
-project = "JupyterStarters"
-copyright = "2022, Dead Pixels Collective"
-author = "Deathbeds"
+project = PYPROJECT["project"]["name"]
+author = PYPROJECT["project"]["authors"][0]["name"]
+copyright = f"{datetime.date.today().year}, {author}"
 
-# The short X.Y version
-version = ""
 # The full version, including alpha/beta/rc tags
-release = ""
+release = PYPROJECT["project"]["version"]
+# The short X.Y version
+version = ".".join(release.rsplit(".", 1))
 
 # -- General configuration ---------------------------------------------------
 
