@@ -6,6 +6,7 @@
 
 - [#86] adds new `content` starter for JSON-only definitions with Jinja templates
 - [#86] updates schema to `v3`
+- [#99] uses `flit` for building python packages
 
 ### `@deathbeds/jupyterlab-starters 2.0.0-alpha0`
 
@@ -14,6 +15,7 @@
   [JupyterLite]
 - [#78] adds `category` and `rank` to all starter metadata, for customizing launcher
 - [#90] adds `starter-body` and `starter-form` URL parameters
+- [#99] adds source maps, trading package install size for better info when debugging
 
 ### `@deathbeds/jupyterlab-rjsf 2.0.0-alpha0`
 
