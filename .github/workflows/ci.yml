@@ -20,7 +20,7 @@ env:
   # our stuff
   SKIP_JLPM_IF_CACHED: '1'
   CACHE_EPOCH: '4'
-  ATEST_RETRIES: '3'
+  ATEST_RETRIES: '4'
   DIST_NAME: jupyter-starters-${{ github.run_number }}-dist
 
 defaults:
