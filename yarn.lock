@@ -283,7 +283,7 @@
   integrity sha512-jwx+WCqszn53YHOfvFMJJRd/B2GqkCBt+1MJSG6o5/s8+ytHMvDZXsJgUEWLk12UnLd7HYKac4BYU5i/Ron1Cw==
 
 "@deathbeds/jupyterlab-rjsf@file:packages/jupyterlab-rjsf":
-  version "2.0.0"
+  version "2.0.0-alpha0"
   dependencies:
     "@jupyterlab/apputils" "3"
     "@jupyterlab/rendermime" "3"
@@ -293,9 +293,9 @@
     react-codemirror2 "^7.2.1"
 
 "@deathbeds/jupyterlab-starters@file:packages/jupyterlab-starters":
-  version "2.0.0"
+  version "2.0.0-alpha0"
   dependencies:
-    "@deathbeds/jupyterlab-rjsf" "~2.0.0"
+    "@deathbeds/jupyterlab-rjsf" "~2.0.0-alpha0"
     "@jupyterlab/application" "3"
     "@jupyterlab/launcher" "3"
     "@jupyterlab/notebook" "3"
@@ -5664,16 +5664,7 @@ loader-runner@^4.2.0:
   resolved "https://registry.npmjs.org/loader-runner/-/loader-runner-4.3.0.tgz#c1b4a163b99f614830353b16755e7149ac2314e1"
   integrity sha512-3R/1M+yS3j5ou80Me59j7F9IMs4PXs3VqRrm0TU3AbKPxlmpoY1TNscJV/oGJXo8qCatFGTfDbY6W6ipGOYXfg==
 
-loader-utils@1.4.0, loader-utils@^1.0.0:
-  version "1.4.0"
-  resolved "https://registry.npmjs.org/loader-utils/-/loader-utils-1.4.0.tgz#c579b5e34cb34b1a74edc6c1fb36bfa371d5a613"
-  integrity sha512-qH0WSMBtn/oHuwjy/NucEgbx5dbxxnxup9s4PVXJUDHZBQY+s0NWA9rJf53RBnQZxfch7euUui7hpoAPvALZdA==
-  dependencies:
-    big.js "^5.2.2"
-    emojis-list "^3.0.0"
-    json5 "^1.0.1"
-
-loader-utils@^2.0.0, loader-utils@~2.0.0:
+loader-utils@1.4.0, loader-utils@^1.0.0, loader-utils@^2.0.0, loader-utils@~2.0.0:
   version "2.0.4"
   resolved "https://registry.npmjs.org/loader-utils/-/loader-utils-2.0.4.tgz#8b5cb38b5c34a9a018ee1fc0e6a066d1dfcc528c"
   integrity sha512-xXqpXoINfFhgua9xiqD8fPFHgkoq1mmmpE92WlDbm9rNRd/EbRb+Gqf908T2DMfuHjjJlksiK2RbHVOdD/MqSw==

@@ -28,7 +28,8 @@
     "@rjsf/core": "^5.0.1",
     "@rjsf/utils": "^5.0.1",
     "@rjsf/validator-ajv8": "^5.0.1",
-    "prettier": "^2.8.3"
+    "prettier": "^2.8.3",
+    "loader-utils": "^2.0.0"
   },
   "devDependencies": {
     "@adobe/jsonschema2md": "^7.1.5",
