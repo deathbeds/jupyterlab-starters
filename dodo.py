@@ -568,12 +568,6 @@ class U:
         if new_data_text != old_data_text:
             dest.write_text(new_data_text)
 
-    def normalize_json(path):
-        path.write_text(
-            json.dumps(json.loads(path.read_text(**C.UTF8)), **C.JSON_FMT) + "\n",
-            **C.UTF8,
-        )
-
     def clean_some(*paths):
         for path in paths:
             if path.is_dir():
@@ -688,21 +682,6 @@ def task_lint():
         ["--write", "--list-different"] if C.RUNNING_LOCALLY else ["--check"]
     )
 
-    if C.RUNNING_LOCALLY:
-        for json_path in P.ALL_JSON:
-            if json_path in P.ALL_PACKAGE_JSON:
-                continue
-            yield dict(
-                name=f"json:{json_path.relative_to(P.ROOT)}",
-                **U.run_in(
-                    "docs",
-                    [
-                        (U.normalize_json, [json_path]),
-                        [C.JLPM, "prettier", "--write", json_path],
-                    ],
-                    file_dep=[json_path, P.YARN_INTEGRITY],
-                ),
-            )
     rel_prettier = [p.relative_to(P.ROOT) for p in P.ALL_PRETTIER]
 
     yield dict(
