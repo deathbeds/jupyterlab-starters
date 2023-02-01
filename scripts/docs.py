@@ -91,6 +91,36 @@ def make_parser():
     return parser
 
 
+def fix_schema_md():
+    """fix up generated markdown to work (somewhat better) with sphinx"""
+    if SCHEMA_README.exists():
+        SCHEMA_README.unlink()
+
+    md_files = list(SCHEMA_DOCS.glob("*.md"))
+    prettier = ["jlpm", "--silent", "prettier", "--write", "--loglevel", "silent"]
+
+    check_call([*prettier, *md_files])
+
+    for md_file in md_files:
+        md_txt = md_file.read_text()
+
+        for pattern, replacement in MD_REPLACEMENTS:
+            md_txt = re.sub(pattern, replacement, md_txt, flags=re.M)
+
+        md_file.write_text(md_txt)
+
+
+def make_schema_index() -> int:
+    """make an index for all the schema markdown"""
+    md_files = sorted(SCHEMA_DOCS.glob("*.md"))
+    index = SCHEMA_DOCS / "index.md"
+
+    index_text = INDEX_TEMPLATE.render(paths=md_files)
+    index.write_text(index_text)
+    print(index, "created")
+    return 0
+
+
 def make_schema_docs() -> int:
     if not NODE_MODULES.exists():
         check_call(["jlpm", "--frozen-lockfile"])
@@ -111,25 +141,6 @@ def make_schema_docs() -> int:
     fix_schema_md()
     return make_schema_index()
 
-
-def fix_schema_md():
-    """fix up generated markdown to work (somewhat better) with sphinx"""
-    if SCHEMA_README.exists():
-        SCHEMA_README.unlink()
-
-    md_files = list(SCHEMA_DOCS.glob("*.md"))
-    prettier = ["jlpm", "--silent", "prettier", "--write", "--loglevel", "silent"]
-
-    check_call([*prettier, *md_files])
-
-    for md_file in md_files:
-        md_txt = md_file.read_text()
-
-        for pattern, replacement in MD_REPLACEMENTS:
-            md_txt = re.sub(pattern, replacement, md_txt, flags=re.M)
-
-        md_file.write_text(md_txt)
-
     # check_call([*prettier, *md_files])
 
 
@@ -145,17 +156,6 @@ def fix_schema_html() -> int:
 
         html_file.write_text(html_txt)
 
-    return 0
-
-
-def make_schema_index() -> int:
-    """make an index for all the schema markdown"""
-    md_files = sorted(SCHEMA_DOCS.glob("*.md"))
-    index = SCHEMA_DOCS / "index.md"
-
-    index_text = INDEX_TEMPLATE.render(paths=md_files)
-    index.write_text(index_text)
-    print(index, "created")
     return 0
 
 

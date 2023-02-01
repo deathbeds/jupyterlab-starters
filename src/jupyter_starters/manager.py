@@ -46,6 +46,26 @@ DEFAULT_IGNORE_PATTERNS = [
 DEFAULT_ENV_CLS = "jinja2.sandbox.SandboxedEnvironment"
 
 
+def iter_not_ignored(root, ignore_patterns=None):
+    """yield all children under a root that do not match the ignore patterns"""
+    if not ignore_patterns:
+        ignore_patterns = DEFAULT_IGNORE_PATTERNS
+
+    if root.is_dir():
+        ignored = set()
+        for src in sorted(root.rglob("*")):
+            if ignored & set(src.parents):
+                continue
+
+            root_rel = src.relative_to(root)
+
+            if any(root_rel.match(pattern) for pattern in ignore_patterns):
+                ignored.add(src)
+                continue
+
+            yield src
+
+
 class StarterManager(LoggingConfigurable):
     """handlers starting starters"""
 
@@ -301,6 +321,28 @@ class StarterManager(LoggingConfigurable):
 
         await self.save_contents_model(model, dest)
 
+    def _template_notebook(self, content, body):
+        """build a template notebook by manipulation"""
+        json_text = json_.dumps(content, indent=2, sort_keys=True)
+        content_tmpl = self.jinja_env.from_string(json_text)
+        content_notebook = json_.loads(content_tmpl.render(**body))
+        ipynb = nbformat.v4.new_notebook(metadata=content_notebook.get("metadata", {}))
+        cells = []
+        for a_cell in content_notebook.get("cells", []):
+            cell_type = a_cell.get("cell_type", "code")
+            source = a_cell.pop("source", "")
+            if cell_type == "code":
+                cell = nbformat.v4.new_code_cell(source, **a_cell)
+            elif cell_type == "markdown":
+                cell = nbformat.v4.new_markdown_cell(source, **a_cell)
+            elif cell_type == "raw":
+                cell = nbformat.v4.new_raw_cell(source, **a_cell)
+            cells += [cell]
+        ipynb["cells"] = cells
+
+        nb_json = nbformat.v4.nbjson.writes(ipynb)
+        return json_.loads(nb_json)
+
     async def save_content(self, path, starter_model, body):
         """save a content model (and its children)"""
         body = body or {}
@@ -355,28 +397,6 @@ class StarterManager(LoggingConfigurable):
             for child in starter_model.get("content", []):
                 await self.save_content(dest, child, body)
 
-    def _template_notebook(self, content, body):
-        """build a template notebook by manipulation"""
-        json_text = json_.dumps(content, indent=2, sort_keys=True)
-        content_tmpl = self.jinja_env.from_string(json_text)
-        content_notebook = json_.loads(content_tmpl.render(**body))
-        ipynb = nbformat.v4.new_notebook(metadata=content_notebook.get("metadata", {}))
-        cells = []
-        for a_cell in content_notebook.get("cells", []):
-            cell_type = a_cell.get("cell_type", "code")
-            source = a_cell.pop("source", "")
-            if cell_type == "code":
-                cell = nbformat.v4.new_code_cell(source, **a_cell)
-            elif cell_type == "markdown":
-                cell = nbformat.v4.new_markdown_cell(source, **a_cell)
-            elif cell_type == "raw":
-                cell = nbformat.v4.new_raw_cell(source, **a_cell)
-            cells += [cell]
-        ipynb["cells"] = cells
-
-        nb_json = nbformat.v4.nbjson.writes(ipynb)
-        return json_.loads(nb_json)
-
     async def save_contents_model(self, model, dest):
         """use the contents manager to write a model"""
         # pylint: disable=broad-except
@@ -392,23 +412,3 @@ class StarterManager(LoggingConfigurable):
         finally:
             if allow_hidden is not None:
                 self.contents_manager.allow_hidden = allow_hidden
-
-
-def iter_not_ignored(root, ignore_patterns=None):
-    """yield all children under a root that do not match the ignore patterns"""
-    if not ignore_patterns:
-        ignore_patterns = DEFAULT_IGNORE_PATTERNS
-
-    if root.is_dir():
-        ignored = set()
-        for src in sorted(root.rglob("*")):
-            if ignored & set(src.parents):
-                continue
-
-            root_rel = src.relative_to(root)
-
-            if any(root_rel.match(pattern) for pattern in ignore_patterns):
-                ignored.add(src)
-                continue
-
-            yield src

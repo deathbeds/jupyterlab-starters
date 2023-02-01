@@ -23,6 +23,11 @@ DEFAULT_MSG = {
 }
 
 
+def response_from_nbjson(nbjson):
+    """get the starter response"""
+    return nbjson.get("metadata", {}).get(NBFORMAT_KEY, {})
+
+
 def response_from_notebook(src):
     """load a path and return the metadata"""
     nbp = Path(src).resolve()
@@ -38,11 +43,6 @@ def kernel_for_path(src):
     nbp = Path(src).resolve()
     nbjson = loads(nbp.read_text(encoding="utf-8"))
     return nbjson["metadata"]["kernelspec"]["name"]
-
-
-def response_from_nbjson(nbjson):
-    """get the starter response"""
-    return nbjson.get("metadata", {}).get(NBFORMAT_KEY, {})
 
 
 def starter_from_nbjson(nbjson):
@@ -72,50 +72,6 @@ async def stop_kernel(name, manager):
     if kernel_id:
         await ensure_async(manager.kernel_manager.shutdown_kernel(kernel_id, now=True))
         shutil.rmtree(tmpdir, ignore_errors=True)
-
-
-async def notebook_starter(name, starter, path, body, manager):
-    """(re)runs a notebook until its schema is correct"""
-
-    kernel, tmpdir = await get_kernel_and_tmpdir(name, starter, manager)
-
-    tmp_nb = await ensure_notebook(starter, path, body, tmpdir, manager)
-
-    nbjson = loads(tmp_nb.read_text())
-
-    await run_cells(nbjson, kernel, manager)
-
-    nb_response = response_from_notebook(tmp_nb)
-
-    nb_response.update(body=body, name=name, path=path)
-
-    schema = nb_response.get("starter", {}).get("schema")
-
-    if schema:
-        validator = json_validator(schema)
-
-        try:
-            validator(body)
-            if nb_response.get("status") is None:
-                nb_response.update(status=Status.DONE)
-        except JsonSchemaException as err:
-            manager.log.debug(f"[not valid]: {err}")
-    elif nb_response.get("status") is None:
-        nb_response.update(status=Status.DONE)
-
-    status = nb_response.get("status")
-    copy = nb_response.get("copy", False)
-
-    if status in [Status.DONE] or (status in [Status.CONTINUING] and copy):
-        await copy_files(tmp_nb, path, manager)
-
-    if status in [Status.DONE]:
-        await stop_kernel(name, manager)
-
-    if status is None:
-        nb_response["status"] = Status.CONTINUING
-
-    return nb_response
 
 
 async def ensure_notebook(starter, path, body, tmpdir, manager):
@@ -197,3 +153,47 @@ async def run_cells(nbjson, kernel, manager):
     results = await asyncio.gather(*futures.values(), return_exceptions=True)
     listening = False
     return results
+
+
+async def notebook_starter(name, starter, path, body, manager):
+    """(re)runs a notebook until its schema is correct"""
+
+    kernel, tmpdir = await get_kernel_and_tmpdir(name, starter, manager)
+
+    tmp_nb = await ensure_notebook(starter, path, body, tmpdir, manager)
+
+    nbjson = loads(tmp_nb.read_text())
+
+    await run_cells(nbjson, kernel, manager)
+
+    nb_response = response_from_notebook(tmp_nb)
+
+    nb_response.update(body=body, name=name, path=path)
+
+    schema = nb_response.get("starter", {}).get("schema")
+
+    if schema:
+        validator = json_validator(schema)
+
+        try:
+            validator(body)
+            if nb_response.get("status") is None:
+                nb_response.update(status=Status.DONE)
+        except JsonSchemaException as err:
+            manager.log.debug(f"[not valid]: {err}")
+    elif nb_response.get("status") is None:
+        nb_response.update(status=Status.DONE)
+
+    status = nb_response.get("status")
+    copy = nb_response.get("copy", False)
+
+    if status in [Status.DONE] or (status in [Status.CONTINUING] and copy):
+        await copy_files(tmp_nb, path, manager)
+
+    if status in [Status.DONE]:
+        await stop_kernel(name, manager)
+
+    if status is None:
+        nb_response["status"] = Status.CONTINUING
+
+    return nb_response
