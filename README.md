@@ -78,16 +78,16 @@ Don't like what you see here? Try these other approaches:
 - [jupyterlab_templates](https://github.com/timkpaine/jupyterlab_templates)
 
 [binder-badge]: https://mybinder.org/badge_logo.svg
-[binder]: https://mybinder.org/v2/gh/deathbeds/jupyterlab-starters/master?urlpath=lab
+[binder]: https://mybinder.org/v2/gh/deathbeds/jupyterlab-starters/main?urlpath=lab
 [changelog-badge]: https://img.shields.io/badge/docs-changelog-purple
-[changelog]: https://github.com/deathbeds/jupyterlab-starters/tree/master/CHANGELOG.md
+[changelog]: https://github.com/deathbeds/jupyterlab-starters/tree/main/CHANGELOG.md
 [ci-badge]:
   https://github.com/deathbeds/jupyterlab-starters/actions/workflows/ci.yml/badge.svg
 [ci]: https://github.com/deathbeds/jupyterlab-starters/actions/workflows/ci.yml
 [conf]:
-  https://github.com/deathbeds/jupyterlab-starters/tree/master/jupyter_server_config.json
+  https://github.com/deathbeds/jupyterlab-starters/tree/main/jupyter_server_config.json
 [contributing]:
-  https://github.com/deathbeds/jupyterlab-starters/tree/master/CONTRIBUTING.md
+  https://github.com/deathbeds/jupyterlab-starters/tree/main/CONTRIBUTING.md
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
 [docs-badge]: https://readthedocs.org/projects/jupyterstarters/badge/?version=latest
 [docs]: https://jupyterstarters.readthedocs.io/en/latest/?badge=latest
@@ -95,7 +95,7 @@ Don't like what you see here? Try these other approaches:
 [launcher]:
   https://jupyterlab.readthedocs.io/en/stable/user/files.html#creating-files-and-activities
 [license-badge]: https://img.shields.io/github/license/deathbeds/jupyterlab-starters
-[license]: https://github.com/deathbeds/jupyterlab-starters/tree/master/LICENSE
+[license]: https://github.com/deathbeds/jupyterlab-starters/tree/main/LICENSE
 [server-config]:
   https://jupyter-server.readthedocs.io/en/stable/operators/configuring-extensions.html
 [npm-badge]: https://img.shields.io/npm/v/@deathbeds/jupyterlab-starters
@@ -104,6 +104,6 @@ Don't like what you see here? Try these other approaches:
 [pypi]: https://pypi.org/project/jupyter-starters
 [python-badge]: https://img.shields.io/badge/python-3.7+-blue?logo=python
 [roadmap-badge]: https://img.shields.io/badge/docs-roadmap-purple
-[roadmap]: https://github.com/deathbeds/jupyterlab-starters/tree/master/ROADMAP.md
+[roadmap]: https://github.com/deathbeds/jupyterlab-starters/tree/main/ROADMAP.md
 [screenshot]:
-  https://raw.githubusercontent.com/deathbeds/jupyterlab-starters/master/docs/screenshot.png
+  https://raw.githubusercontent.com/deathbeds/jupyterlab-starters/main/docs/screenshot.png

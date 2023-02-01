@@ -1,5 +1,5 @@
 {
-  "$id": "https://raw.githubusercontent.com/deathbeds/jupyterlab-starters/master/src/jupyter_starters/schema/v3.json",
+  "$id": "https://raw.githubusercontent.com/deathbeds/jupyterlab-starters/main/src/jupyter_starters/schema/v3.json",
   "$schema": "http://json-schema.org/draft-07/schema",
   "anyOf": [
     {
