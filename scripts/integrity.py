@@ -5,15 +5,19 @@ these should be quick to run (not invoke any other process)
 # pylint: disable=redefined-outer-name,unused-variable
 import json
 import pathlib
-import re
 import sys
 import tempfile
 from importlib.util import find_spec
 
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
+
 import jsonschema
 import pytest
 
-ROOT = pathlib.Path.cwd()
+ROOT = pathlib.Path(__file__).parent.parent
 
 # docs
 MAIN_README = ROOT / "README.md"
@@ -37,8 +41,9 @@ RJSF_EXT_VERSION = PACKAGES[RJSF_NAME][1]["version"]
 
 # py stuff
 PY_NAME = "jupyter_starters"
-_VERSION_PY = ROOT / "src" / "jupyter_starters" / "_version.py"
-PY_VERSION = re.findall(r'= "(.*)"$', (_VERSION_PY).read_text())[0]
+PYPROJECT_TOML = ROOT / "pyproject.toml"
+PYPROJECT = tomllib.loads(PYPROJECT_TOML.read_text(encoding="utf-8"))
+PY_VERSION = PYPROJECT["project"]["version"]
 
 
 @pytest.fixture(scope="module")
