@@ -7,7 +7,7 @@
 - [#86] adds new `content` starter for JSON-only definitions with Jinja templates
 - [#86] updates schema to `v3`
 
-### `@deathbeds/jupyterlab-starters 2.0.0a0`
+### `@deathbeds/jupyterlab-starters 2.0.0-alpha0`
 
 - [#86] refactors starter providers, runners, and the router into separate plugins
 - [#86] adds a settings-backed provider for `content` starters, compatible with
@@ -15,7 +15,7 @@
 - [#78] adds `category` and `rank` to all starter metadata, for customizing launcher
 - [#90] adds `starter-body` and `starter-form` URL parameters
 
-### `@deathbeds/jupyterlab-rjsf 2.0.0a0`
+### `@deathbeds/jupyterlab-rjsf 2.0.0-alpha0`
 
 - [#99] upgrade to `@rjsf/core 5.0.1`
 
