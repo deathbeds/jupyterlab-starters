@@ -136,12 +136,13 @@ def task_lint():
                     file_dep=[json_path, P.YARN_INTEGRITY],
                 ),
             )
+    rel_prettier = [p.relative_to(P.ROOT) for p in P.ALL_PRETTIER]
 
     yield dict(
         name="prettier",
         **U.run_in(
             "docs",
-            [[*prettier, *P.ALL_PRETTIER]],
+            [[*prettier, "--cache", f"--cache-location={P.PRETTIER_CACHE}", *rel_prettier]],
             file_dep=[
                 P.YARN_INTEGRITY,
                 *P.PRETTIER_CFG,
@@ -885,6 +886,7 @@ class P:
     LABEXT = SRC / "jupyter_starters/labextension"
     EXT_PACKAGE_JSON = LABEXT / "package.json"
     EXT_REMOTE_ENTRY = LABEXT.rglob("remoteEntry*.js")
+    PRETTIER_CACHE = BUILD / ".prettier-cache"
 
     # collections of things
     ALL_TSCONFIG = [ROOT / "tsconfigbase.json", *PACKAGES.rglob("src/*/tsconfig.json")]
