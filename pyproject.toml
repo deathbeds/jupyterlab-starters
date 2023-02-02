@@ -32,7 +32,7 @@ classifiers = [
 
 [project.urls]
 "Bug Tracker" = "https://github.com/deathbeds/jupyterlab-starters/issues"
-"Changelog" = "https://github.com/deathbeds/jupyterlab-starters/blob/master/CHANGELOG.md"
+"Changelog" = "https://github.com/deathbeds/jupyterlab-starters/blob/main/CHANGELOG.md"
 "Documentation" = "https://jupyterstarters.rtfd.io"
 "Source" = "https://github.com/deathbeds/jupyterlab-starters"
 

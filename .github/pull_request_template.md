@@ -2,7 +2,7 @@
 Thanks for contributing to jupyterlab-starters!
 Please fill out the following items to submit a pull request.
 See the contributing guidelines for more information:
-https://github.com/deathbeds/jupyterlab-starters/blob/master/CONTRIBUTING.md
+https://github.com/deathbeds/jupyterlab-starters/blob/main/CONTRIBUTING.md
 -->
 
 ## References

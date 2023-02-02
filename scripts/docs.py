@@ -45,7 +45,7 @@ BUILD = ROOT / "build"
 DOCS_BUILD = BUILD / "docs"
 SCHEMA_DOCS = DOCS / "schema"
 RGH = "https://raw.githubusercontent.com"
-SCHEMA_STEM = f"{RGH}/deathbeds/jupyterlab-starters/master/src/jupyter_starters/schema/"
+SCHEMA_STEM = f"{RGH}/deathbeds/jupyterlab-starters/main/src/jupyter_starters/schema/"
 
 MD_REPLACEMENTS = [
     # # avoid lexer warnings

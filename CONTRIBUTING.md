@@ -6,7 +6,7 @@ Conduct][code-of-conduct] are welcome, and will be reviewed by the contributors,
 time-permitting.
 
 [code-of-conduct]:
-  https://github.com/jupyter/governance/blob/master/conduct/code_of_conduct.md
+  https://github.com/jupyter/governance/blob/main/conduct/code_of_conduct.md
 
 ## setting up
 

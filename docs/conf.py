@@ -287,7 +287,7 @@ html_context = {
     "display_github": True,
     "github_user": github_repo_org,
     "github_repo": github_repo_name,
-    "github_version": "master",
+    "github_version": "main",
     "conf_py_path": "/docs/",
 }
 
