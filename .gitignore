@@ -1,6 +1,7 @@
 __pycache__/
 _*.json
 _build
+.cache/
 .coverage
 .envs/
 .eslintcache

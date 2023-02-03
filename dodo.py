@@ -350,23 +350,24 @@ class U:
 
     def _lock_one(lockfile, args, specs):
         new_header = U._lock_header(specs)
+        old_header = ""
         if lockfile.exists():
             old_header = lockfile.read_text().split(C.EXPLICIT)[0].strip()
             if new_header == old_header:
                 print(f"\t\t...  {lockfile.name} is up-to-date", flush=True)
                 return True
 
-            print(
-                "\n".join(
-                    difflib.unified_diff(
-                        old_header.splitlines(),
-                        new_header.splitlines(),
-                        lockfile.name,
-                        "new",
-                    )
-                ),
-                flush=True,
-            )
+        print(
+            "\n".join(
+                difflib.unified_diff(
+                    old_header.splitlines(),
+                    new_header.splitlines(),
+                    lockfile.name,
+                    "new",
+                )
+            ),
+            flush=True,
+        )
 
         if not shutil.which("conda-lock"):
             print("conda-lock is not available")
