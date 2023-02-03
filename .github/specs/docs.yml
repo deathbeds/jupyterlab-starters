@@ -1,7 +1,6 @@
 dependencies:
   - docutils >=0.18
   - jupyterlab-myst
-  - jupyterlab-webrtc-docprovider
   - myst-nb
   - pkginfo
   - pydata-sphinx-theme
