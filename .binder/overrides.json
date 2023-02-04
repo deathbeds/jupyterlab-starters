@@ -74,6 +74,9 @@
       }
     }
   },
+  "@jupyterlab/apputils-extension:notification": {
+    "doNotDisturbMode": true
+  },
   "@jupyterlab/apputils-extension:palette": {
     "modal": false
   },

@@ -102,7 +102,7 @@ Initialize User Settings
     # obscures buttons we test
     Create File
     ...    ${SETTINGS DIR}${/}@jupyterlab${/}apputils-extension${/}notification.jupyterlab-settings
-    ...    {"fetchNews": false}
+    ...    {"doNotDisturbMode": true}
 
 Tear Down Everything
     [Documentation]    Try to clean everything up
