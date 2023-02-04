@@ -74,6 +74,10 @@
       }
     }
   },
+  "@jupyterlab/apputils-extension:notification": {
+    "doNotDisturbMode": true,
+    "fetchNews": "false"
+  },
   "@jupyterlab/apputils-extension:palette": {
     "modal": false
   },

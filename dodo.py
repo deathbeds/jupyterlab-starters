@@ -28,8 +28,16 @@ class C:
         platform.system()
     ]
     THIS_PY = "{}.{}".format(*sys.version_info)
-    PYTHONS = ["3.8", "3.11"]
+    PYTHONS = [
+        "3.8",
+        "3.11",
+    ]
+    PY_LABS = {
+        "3.8": "lab3.5",
+        "3.11": "lab3.6",
+    }
     DEFAULT_PY = PYTHONS[-1]
+    DEFAULT_LAB = PY_LABS[DEFAULT_PY]
     EXPLICIT = "@EXPLICIT"
     PIP_LOCK_LINE = "# pip "
     UTF8 = dict(encoding="utf-8")
@@ -342,23 +350,24 @@ class U:
 
     def _lock_one(lockfile, args, specs):
         new_header = U._lock_header(specs)
+        old_header = ""
         if lockfile.exists():
             old_header = lockfile.read_text().split(C.EXPLICIT)[0].strip()
             if new_header == old_header:
                 print(f"\t\t...  {lockfile.name} is up-to-date", flush=True)
                 return True
 
-            print(
-                "\n".join(
-                    difflib.unified_diff(
-                        old_header.splitlines(),
-                        new_header.splitlines(),
-                        lockfile.name,
-                        "new",
-                    )
-                ),
-                flush=True,
-            )
+        print(
+            "\n".join(
+                difflib.unified_diff(
+                    old_header.splitlines(),
+                    new_header.splitlines(),
+                    lockfile.name,
+                    "new",
+                )
+            ),
+            flush=True,
+        )
 
         if not shutil.which("conda-lock"):
             print("conda-lock is not available")
@@ -588,24 +597,25 @@ def task_lock():
     if C.CI or C.DEMO_IN_BINDER or C.RTD:
         return
 
-    yield U.lock("build", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["node", "lab", "lint"])
+    yield U.lock(
+        "build", C.DEFAULT_PY, C.DEFAULT_SUBDIR, ["node", C.DEFAULT_LAB, "lint"]
+    )
     yield U.lock(
         "binder",
         C.DEFAULT_PY,
         C.DEFAULT_SUBDIR,
-        ["run", "build", "lab", "node", "docs"],
+        ["run", "build", C.DEFAULT_LAB, "node", "docs"],
     )
 
     for subdir in C.SUBDIRS:
         for py in C.PYTHONS:
-            yield U.lock("atest", py, subdir, ["run", "lab", "utest"])
-
+            yield U.lock("atest", py, subdir, ["run", C.PY_LABS[py], "utest"])
         yield U.lock("lock", C.DEFAULT_PY, subdir)
         yield U.lock(
             "docs",
             C.DEFAULT_PY,
             subdir,
-            ["node", "build", "lint", "atest", "utest", "lab", "run"],
+            ["node", "build", "lint", "atest", "utest", C.DEFAULT_LAB, "run"],
         )
 
     yield U.lock_to_env(P.LOCKS / f"docs-linux-64-{C.DEFAULT_PY}.conda.lock", P.RTD_ENV)

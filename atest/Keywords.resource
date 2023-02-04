@@ -82,7 +82,9 @@ Setup Suite For Screenshots
 
 Initialize User Settings
     [Documentation]    Make a directory for user settings
-    Set Suite Variable    ${SETTINGS DIR}    ${OUTPUT DIR}${/}user-settings    children=${True}
+    Set Suite Variable    ${SETTINGS DIR}
+    ...    ${OUTPUT DIR}${/}user-settings
+    ...    children=${True}
     # helps screenshots
     Create File    ${SETTINGS DIR}${/}@jupyterlab${/}codemirror-extension${/}commands.jupyterlab-settings
     ...    {"styleActiveLine": true}
@@ -97,6 +99,10 @@ Initialize User Settings
     Create File
     ...    ${SETTINGS DIR}${/}@jupyterlab${/}application-extension${/}sidebar.jupyterlab-settings
     ...    {"overrides": {"jp-property-inspector": "left"}}
+    # obscures buttons we test
+    Create File
+    ...    ${SETTINGS DIR}${/}@jupyterlab${/}apputils-extension${/}notification.jupyterlab-settings
+    ...    {"doNotDisturbMode": true, "fetchNews": "false"}
 
 Tear Down Everything
     [Documentation]    Try to clean everything up

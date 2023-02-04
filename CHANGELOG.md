@@ -16,16 +16,19 @@
 - [#78] adds `category` and `rank` to all starter metadata, for customizing launcher
 - [#90] adds `starter-body` and `starter-form` URL parameters
 - [#99] adds source maps, trading package install size for better info when debugging
+- [#102] targets `es2018`
 
 ### `@deathbeds/jupyterlab-rjsf 2.0.0-alpha0`
 
 - [#99] upgrade to `@rjsf/core 5.0.1`
+- [#102] targets `es2018`
 
 [jupyterlite]: https://jupyterlite.readthedocs.io
 [#78]: https://github.com/deathbeds/jupyterlab-starters/pulls/78
 [#86]: https://github.com/deathbeds/jupyterlab-starters/pulls/86
 [#90]: https://github.com/deathbeds/jupyterlab-starters/pulls/90
 [#99]: https://github.com/deathbeds/jupyterlab-starters/pulls/99
+[#102]: https://github.com/deathbeds/jupyterlab-starters/pulls/102
 
 ## `1.1.0`
 
